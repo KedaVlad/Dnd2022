@@ -2,7 +2,7 @@ package creatingCharacter.classDnd;
 
 public class Barbarian extends ClassDnd  {
 	
-	private static int diceHits = 12;
+	private static final int diceHits = 12;
 
 	
 	public Barbarian(int lvl){

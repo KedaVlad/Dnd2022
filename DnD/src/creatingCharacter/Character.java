@@ -7,8 +7,10 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
-
+import creatingCharacter.bagDnd.Items;
 import creatingCharacter.classDnd.ClassDnd;
 import creatingCharacter.raceDnd.RaceDnd;
 
@@ -87,13 +89,12 @@ public class Character implements Serializable{
 	public int setHp() {
 		
 		int result = classDnd.getDiceHits()+statsValues[1];
-		
 		for(int i=1; i<classDnd.getLvl(); i++) {
 			result += Math.round(Math.random()*(classDnd.getDiceHits()-1) + 1);
-			result += Math.round(Math.random()*12) +2;			
+			
 		}
 		
-		return result;
+		return hp = result;
 	}
 	public int getHp() {
 		return hp;
@@ -181,25 +182,55 @@ public class Character implements Serializable{
 
 
 	public class Bag{
+		
     	
     	private int carryingWeight;
+    	List<Items> insideBag;
+    	
     	
     	public Bag() {
+    		insideBag = new ArrayList<Items>();
     	}
-
+    	
+    	
 		public int getCarryingWeight() {
 			return carryingWeight;
 		}
+		
 
 		public void setCarryingWeight() {
 			this.carryingWeight = (((statsValues[1] + statsValues[2])/4) * ((raceDnd.getWeight()*10)/raceDnd.getGrowth()))/10;
 		}
-    	
-    	
-    	
-    }
-
-}
+		
+		
+		public int freeWeigth() {
+			int occupied = 0;
+			for(int i = 0; i < insideBag.size(); i++) {
+				occupied += insideBag.get(i).getWeigth();
+			}
+			return getCarryingWeight() - occupied;
+		}
+		
+		
+		public void overloaded() {
+			if(freeWeigth()<0) System.out.println("You are overloaded on " + freeWeigth() + " kg");
+		}
+		
+		public void whatInTheBag() {
+			if(insideBag.size() == 0) {
+				System.out.println("Your bag are empty!");
+				} else {
+					for(int i = 0; i < insideBag.size(); i++) {
+						System.out.println(insideBag.get(i));
+						}
+					}
+			}
+		
+		
+		}
+	
+	
+	}
 
 
 	
