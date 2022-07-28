@@ -1,4 +1,4 @@
-package creatingCharacter.bagDnd;
+package com.dnd.creatingCharacter.bagDnd;
 
 public abstract class Items {
 	

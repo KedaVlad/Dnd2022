@@ -1,8 +1,13 @@
-package creatingCharacter.raceDnd;
+package com.dnd.creatingCharacter.raceDnd;
 
 
 public class Halfling extends RaceDnd {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	public Halfling(int age, int weight, int growth) {
 		super(age, weight, growth);
 		if(age<1 || age >150) System.out.println("Your age dosen`t corect!");

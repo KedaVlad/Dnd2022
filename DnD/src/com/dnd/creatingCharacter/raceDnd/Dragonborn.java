@@ -1,4 +1,4 @@
-package creatingCharacter.raceDnd;
+package com.dnd.creatingCharacter.raceDnd;
 
 public class Dragonborn extends RaceDnd {
 
@@ -8,6 +8,7 @@ public class Dragonborn extends RaceDnd {
 		if(weight<65 || weight > 160) System.out.println("Your weigth dosen`t corect!");
 		if(growth<4 || growth >8) System.out.println("Your growth dosen`t corect!");
 	}
+
 	public int getStr(int str) {
 		return str+2;
 	}

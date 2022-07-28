@@ -1,4 +1,4 @@
-package creatingCharacter.raceDnd;
+package com.dnd.creatingCharacter.raceDnd;
 
 
 public class DwarfHil extends Dwarf {
