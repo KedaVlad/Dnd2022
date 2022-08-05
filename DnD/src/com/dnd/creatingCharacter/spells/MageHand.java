@@ -1,25 +1,14 @@
 package com.dnd.creatingCharacter.spells;
 
-import java.util.HashMap;
-import java.util.Map;
+public class MageHand extends Spells{
 
-
-public abstract class Spells {
-	
-	private int lvlSpell;
-	private static String cast;
-	private static String superCast;
-	private static String name;
+	private int lvlSpell = 0;
+	private static String superCast = "";
+	private static String name = "Mage hand";
 	private static String description;
-	private static String applicationTime;
-	private static int distanse;
-	private static int duration;
-
-	public Spells() {
-		
-
-	}
-	
+	private static String applicationTime = "1 action";
+	private static int distanse = 30;
+	private static int duration = 1;
 	
 	public String castSpell(Spells spell, int spellSlot) {
 		String result = getCast(); 
@@ -63,15 +52,14 @@ public abstract class Spells {
 		return lvlSpell;
 	}
 
-	public static String getCast() {
-		return cast;
-	}
 
 	public static String getSuperCast() {
 		return superCast;
 	}
 
 
+	public MageHand() {
+		// TODO Auto-generated constructor stub
+	}
 
 }
-

@@ -12,12 +12,10 @@ public class Barbarian extends ClassDnd {
 	private static final int hits = 12;
 
 
-	public Barbarian(int lvl){
-		super(lvl);
-	}
 	public Barbarian(){
 		
 	}
+	
 
 	public int getDiceHits() {
 		return diceHits;

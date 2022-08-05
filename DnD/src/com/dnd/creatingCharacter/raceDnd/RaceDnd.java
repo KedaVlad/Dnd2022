@@ -17,8 +17,7 @@ abstract public class RaceDnd implements Serializable, Dise{
 	private int weight;
 	private int growth;
 	protected int speed = 30;
-
-	private Map<String, Spells> skillsRace;
+	private String[] skillsRace;
 
 
 	//Standard creating 
@@ -26,25 +25,10 @@ abstract public class RaceDnd implements Serializable, Dise{
 		this.age = age;
 		this.weight = weight;
 		this.growth = growth;
-		skillsRace = new HashMap<>();
-		
 	}
-	//Random creating 
-	RaceDnd() {
-		this.age = (int) Math.round(Math.random()*90);
-		this.weight = (int) Math.round(Math.random()*10);
-		this.growth = (int) Math.round(Math.random()*10);
-		skillsRace = new HashMap<>();
-	}
+	
 
-	public static RaceDnd randomRace() {
-		RaceDnd[] allRace = {new Gnome(),new HalflingLightfoot(20,5,5)};
-		int i = (int) Math.round(Math.random() * allRace.length) -1;
-		if(i < 0) return allRace[0];
-		return allRace[i];
-	}
-
-	public Map<String, Spells> getSkillsRace() {
+	public String[] getSkillsRace() {
 		return skillsRace;
 	}
 	
@@ -83,3 +67,17 @@ abstract public class RaceDnd implements Serializable, Dise{
 
 }
 
+//Random creating 
+	/*RaceDnd() {
+		this.age = (int) Math.round(Math.random()*90);
+		this.weight = (int) Math.round(Math.random()*10);
+		this.growth = (int) Math.round(Math.random()*10);
+		skillsRace = new HashMap<>();
+	}
+
+	public static RaceDnd randomRace() {
+		RaceDnd[] allRace = {new Gnome(),new HalflingLightfoot(20,5,5)};
+		int i = (int) Math.round(Math.random() * allRace.length) -1;
+		if(i < 0) return allRace[0];
+		return allRace[i];
+	}*/

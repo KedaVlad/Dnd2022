@@ -14,27 +14,36 @@ public class Test {
 
 		public static void main(String[] args) throws IOException, ClassNotFoundException,FileNotFoundException {
 			
+
+			Rogue rogue = new Rogue(1);
+			System.out.println(rogue.getMyArchetypeClass());
+		
+			DwarfHil dwarf = new DwarfHil(73,44,4);
 			
-			CharacterDnd x = new CharacterDnd("Vovan",new GnomeForest(84,5,5), new Barbarian(12));
-			x.setStats(13,15,13,14,15,15);
-			x.setNature(0, 0);
-			System.out.println(x.getClassDnd());
-			x.getBag().getInsideBag().add(new Greatsword());
-			x.getBag().whatInTheBag();
-			x.showSkills();
-			x.showStats();
-			System.out.println("*********************************************************************");
-			CharacterDnd y = new CharacterDnd("Andro");
-			y.setNature(2, 2);
-			y.getBag().whatInTheBag();
-			System.out.println(y.getClassDnd());
-			y.showSkills();
-			y.showStats();
+			CharacterDnd some = new CharacterDnd("billy",20);
+			some.setRaceDnd(dwarf);
+			some.setClassDnd(rogue);
+			some.showSkills();
 			
-			x.castSomeSpell("Prestidigitation");
+			System.out.println("***************************Character 2 ***************************");
 			
+			Rogue rogue2 = new Rogue(2);
+			System.out.println(rogue.getMyArchetypeClass());
+		
+			DwarfHil dwarf2 = new DwarfHil(73,44,4);
 			
+			CharacterDnd some2 = new CharacterDnd("billy",20);
+			some2.setRaceDnd(dwarf2);
+			some2.setClassDnd(rogue2);
+			some2.showSkills();
+			
+		
+			System.out.println("***************************spells ***************************");
+			some2.setSomeSpell(new MageHand());
+			some2.showSpells();
+		
 
 	}
 
 }
+
