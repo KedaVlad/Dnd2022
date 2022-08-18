@@ -1,7 +1,19 @@
 package com.dnd;
 
+import java.util.List;
+import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.telegram.telegrambots.bots.*
+import org.telegram.telegrambots.api.objects.*;
 
 import com.dnd.creatingCharacter.CharacterDnd;
 import com.dnd.creatingCharacter.bagDnd.*;
@@ -10,40 +22,34 @@ import com.dnd.creatingCharacter.raceDnd.*;
 import com.dnd.creatingCharacter.spells.*;
 
 
-public class Test {
+public class Test extends TelegramLongPollingBot {
+    @Override
+    public void onUpdateReceived(Update update) {
+        // TODO
+    }
 
-		public static void main(String[] args) throws IOException, ClassNotFoundException,FileNotFoundException {
-			
+    @Override
+    public String getBotUsername() {
+        // TODO
+        return null;
+    }
 
-			Rogue rogue = new Rogue(1);
-			System.out.println(rogue.getMyArchetypeClass());
-		
-			DwarfHil dwarf = new DwarfHil(73,44,4);
-			
-			CharacterDnd some = new CharacterDnd("billy",20);
-			some.setRaceDnd(dwarf);
-			some.setClassDnd(rogue);
-			some.showSkills();
-			
-			System.out.println("***************************Character 2 ***************************");
-			
-			Rogue rogue2 = new Rogue(2);
-			System.out.println(rogue.getMyArchetypeClass());
-		
-			DwarfHil dwarf2 = new DwarfHil(73,44,4);
-			
-			CharacterDnd some2 = new CharacterDnd("billy",20);
-			some2.setRaceDnd(dwarf2);
-			some2.setClassDnd(rogue2);
-			some2.showSkills();
-			
-		
-			System.out.println("***************************spells ***************************");
-			some2.setSomeSpell(new MageHand());
-			some2.showSpells();
-		
-
-	}
-
+    @Override
+    public String getBotToken() {
+        // TODO
+        return null;
+    }
 }
+			
+			
+				
+			
+		
+		
+
+
+
+	
+
+
 

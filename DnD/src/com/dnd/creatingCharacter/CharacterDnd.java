@@ -2,6 +2,7 @@ package com.dnd.creatingCharacter;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -9,9 +10,13 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import com.dnd.Dise;
 import com.dnd.creatingCharacter.bagDnd.*;
@@ -20,142 +25,184 @@ import com.dnd.creatingCharacter.raceDnd.*;
 import com.dnd.creatingCharacter.spells.*;
 
 
-public class CharacterDnd implements Serializable,Dise{
+public class CharacterDnd implements Dise{
 
 	//Serialize
-	private static final long serialVersionUID = 11L;
+
 
 	//CharacterDnd basic information
 	private int id = 0;
 	private String name;
-	private RaceDnd raceDnd;
-	private ClassDnd classDnd;
+	private RaceDnd myRace;
+	private ClassDnd myClass;
 	private ClassDnd multiClass;
 	private String nature;
 	private Bag bag;
-	private String fensyStuff;
 	private int speed;
-	private int lvl;
+	
+
+	
+	
+	
 	
 
 	//Game states
 	private int profisiency;
 	private int hp;
-	
-	
-	private String[][] natures = {{"Chaotic", "Neutral", "Lawful"},{"Evil","Neutral","Kind"}};
-	
 	private Map<String, String> mySkills;
 	private Map<String, Spells> mySpells;
 	private Map<String, Integer> myStats;
+	private Map<String, String> possession;
+
 	
+	//for creating
+	private static final String[][] natures = {{"Chaotic", "Neutral", "Lawful"},{"Evil","Neutral","Kind"}};
+	private static File[] allClass;
 	
-	
+	static {
+		File dir1 = new File("C:\\Users\\ALTRON\\Desktop\\dnd\\classes"); 
+		allClass = dir1.listFiles();
+	}
+
+
 	// Full creating
-	public CharacterDnd(String name, int lvl) {
+	public CharacterDnd(String name) {
 
 		this.name = name;
-		this.lvl = lvl;
+		mySkills = new LinkedHashMap<>();
 		bag = new Bag();
 		id++;
 		myStats = new HashMap<>();
-		
+
 	}
 	// For load 
 	public CharacterDnd() {
 		System.out.println("Load some character");
-		
+
 	}
-	
-	
-	
+
+
+
 	public void setRaceDnd(RaceDnd raceDnd) {
-		this.raceDnd = raceDnd;
+		this.myRace = raceDnd;
 		this.speed = raceDnd.getSpeed();
-		mySkills = new HashMap<>();
 		for(int i = 0; i < raceDnd.getSkillsRace().length; i++) {
 			getMySkills().put(raceDnd.getSkillsRace()[i], raceDnd.getSkillsRace()[i]);
 		}
 	}
-	
-	
-	
+
+
+
 	public void setClassDnd(ClassDnd classDnd) {
-		this.classDnd = classDnd;
-		for(int i = 0; i < this.lvl; i++) {
-			for(int n = 0; n < classDnd.getLvlSkills()[i].length; n++) {
-				getMySkills().put(classDnd.getLvlSkills()[i][n], classDnd.getLvlSkills()[i][n]);
-			}
-			
-			if(getMySkills().containsKey("Spell Use")||getMySkills().containsKey("Treaty Magic")) {
-				mySpells = new HashMap<>();
-			}
-		}
+		this.myClass = classDnd;
+		setClassSkills();
 	}
-	
-	
-	
+
+
+
+
 	public void setSomeSpell(Spells spell) {
-	mySpells.put(spell.getName(),spell);
-	}
-	
-	public void setLvl(int lvl){
-		if(lvl >20|| lvl <1) {
-
-			this.lvl=1;
-			System.out.println("Your lvl can`t be aboe lvl 20 or less then lvl 1. So i give you lvl " + this.lvl);
-
-
-		} else {
-			this.lvl=lvl;
-		}
-	
+		mySpells.put(spell.getName(),spell);
 	}
 
-	
-	
-	
 	public void castSomeSpell(String nameSpell) {
 		System.out.println(getMySpells().get(nameSpell));
 	}
-	
-
-
 
 	public void setStats(int str,int dex, int con, int intl,int wis,int cha) {
 
-		myStats.put("Strength", raceDnd.getStr(str));
-		myStats.put("Dexterity", raceDnd.getDex(dex));
-		myStats.put("Constitution", raceDnd.getAgl(con));
-		myStats.put("Intelligence", raceDnd.getIntl(intl));
-		myStats.put("Wisdom", raceDnd.getWis(wis));
-		myStats.put("Charisma", raceDnd.getCha(cha));
+		myStats.put("Strength", myRace.getStr(str));
+		myStats.put("Dexterity", myRace.getDex(dex));
+		myStats.put("Constitution", myRace.getAgl(con));
+		myStats.put("Intelligence", myRace.getIntl(intl));
+		myStats.put("Wisdom", myRace.getWis(wis));
+		myStats.put("Charisma", myRace.getCha(cha));
 	}
+
+
+
+	public void lvlUp() {
+		myClass.setLvl(myClass.getLvl()+1);
+		setClassSkills();
+	}
+
+
+
+	public void setClassSkills() {
+
+		File classDnd = new File("C:\\Users\\ALTRON\\Desktop\\dnd\\classes\\"+myClass+"\\"+myClass.getMyArchetypeClass()+".txt");
+		File skills = new File("C:\\Users\\ALTRON\\Desktop\\dnd\\skills\\Skills.txt");
+
+		Scanner classScanner = null;
+		Scanner skillsScaner = null;
+
+		Pattern findNameSkills = Pattern.compile("[a-zA-Z]");
+
+		try {
+			classScanner = new Scanner(classDnd);
+			boolean checkLvl = false;
+			while(classScanner.hasNextLine()&& !checkLvl) {
+				String skill = classScanner.nextLine();
+				Matcher m = findNameSkills.matcher(skill);
+				if(m.find()&&!mySkills.containsKey(skill)) {
+
+					skillsScaner = new Scanner(skills);
+					Pattern findDescriptionSkills = Pattern.compile("^"+skill+"");
+					while(skillsScaner.hasNextLine()) {
+						String c = skillsScaner.nextLine();
+
+						Matcher w = findDescriptionSkills.matcher(c);
+						if(w.find()) {
+							mySkills.put(skill, c.replaceAll("^"+skill+" (.*)","$1"));
+
+						}
+
+					}			
+				} else if(skill.contains(""+myClass.getLvl()+1)) {
+					checkLvl = true;
+				}
+			} 
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+		} finally {
+			classScanner.close();
+			skillsScaner.close();
+		}
+
+	}
+
+
+
+
+
+
+
 
 
 	public ClassDnd getClassDnd() {
-		return classDnd;
+		return myClass;
 	}
-	
+
 	public void setHp(int hp) {
 		this.hp = hp;
 	}
 
 	public int getLvl() {
-		return lvl;
+		return myClass.getLvl();
 	}
 
 	public void setHp() {
 
-		int result = classDnd.getHits()+myStats.get("Constitution");
+		int result = myClass.getHits()+myStats.get("Constitution");
 		for(int i=1; i< getLvl(); i++) {
-			result += Math.round(Math.random()*(classDnd.getDiceHits()-1) + 1);
+			result += Math.round(Math.random()*(myClass.getDiceHits()-1) + 1);
 
 		}
 
 		this.hp = result;
 	}
-	
+
 	public int getHp() {
 		return hp;
 	}
@@ -194,7 +241,7 @@ public class CharacterDnd implements Serializable,Dise{
 	public String getName() {
 		return name;
 	}
-	
+
 	public Bag getBag() {
 		return bag;
 	}
@@ -204,41 +251,28 @@ public class CharacterDnd implements Serializable,Dise{
 
 	//Shows
 	public void showSkills() {
-		//for(Map.Entry<String, String> entry: mySkills.entrySet()) {
-		//	System.out.println(entry);
-			Set<String> setKeys = getMySkills().keySet();
-            for(String k: setKeys){
-                System.out.println(getMySkills().get(k));
-            }
+		for(Map.Entry<String, String> entry: mySkills.entrySet()) {
+			System.out.println(entry);
 		}
+
+	}
 	public void showSpells() {
 		//for(Map.Entry<String, Spells> entry: mySpells.entrySet()) {
 		//System.out.println(entry.toString());
 		//}
 		Set<String> setKeys = getMySpells().keySet();
-        for(String k: setKeys){
-            System.out.println(getMySpells().get(k));
-        }
+		for(String k: setKeys){
+			System.out.println(getMySpells().get(k));
 		}
-	
-	
-	
-
-	//save and load
-	public void save(CharacterDnd characterDnd, String nameFile) throws IOException {
-		File file = new File(nameFile);
-		file.createNewFile();
-		FileOutputStream fileOutputStream = new FileOutputStream(nameFile);
-		ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-		objectOutputStream.writeObject(characterDnd);
-		objectOutputStream.close();
 	}
-	public CharacterDnd load(String nameFile) throws IOException, ClassNotFoundException {
-		FileInputStream fileInputStream = new FileInputStream(nameFile);
-		ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-		CharacterDnd loaded = (CharacterDnd) objectInputStream.readObject();
-		objectInputStream.close();
-		return loaded;
+
+
+
+
+	public static void removeInt(List list) {
+		for(int i = 0; i < 20; i ++) {
+			list.remove(""+i);
+		}
 	}
 
 
@@ -312,3 +346,20 @@ public class CharacterDnd implements Serializable,Dise{
 
 
 
+
+//save and load
+/*public void save(CharacterDnd characterDnd, String nameFile) throws IOException {
+	File file = new File(nameFile);
+	file.createNewFile();
+	FileOutputStream fileOutputStream = new FileOutputStream(nameFile);
+	ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+	objectOutputStream.writeObject(characterDnd);
+	objectOutputStream.close();
+}
+public CharacterDnd load(String nameFile) throws IOException, ClassNotFoundException {
+	FileInputStream fileInputStream = new FileInputStream(nameFile);
+	ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+	CharacterDnd loaded = (CharacterDnd) objectInputStream.readObject();
+	objectInputStream.close();
+	return loaded;
+}*/
