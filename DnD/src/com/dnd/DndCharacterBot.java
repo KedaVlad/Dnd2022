@@ -6,9 +6,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Scanner;
 
-import com.dnd.creatingCharacter.CharacterDnd;
+import telegrambots.telegrambots.bots.DefaultAbsSender;
 
-public class DndCharacterBot {
+import com.dnd.creatingCharacter.CharacterDnd;
+import com.dnd.creatingCharacter.classDnd.Rogue;
+
+public class DndCharacterBot extends DefaultAbsSender {
 	private List<CharacterDnd> myCharacters = new ArrayList<>();
 	
 	public void showMyCharacters() {
@@ -36,7 +39,26 @@ public class DndCharacterBot {
 	
 
 	public static void main(String[] args) {
-		createCharacter();
+		
+	CharacterDnd sus = new CharacterDnd("Sychara");
+	sus.setClassDnd(new Rogue(5,"Assasin"));
+	sus.setRaceDnd(new Gnome(23,6,4));
+	sus.setStats(14, 12, 14, 17, 18, 12);
+	
+	sus.setHp();
+	
+	sus.showSkills();
+
+System.out.println("*************************************************************************************");
+
+sus.getBag().whatInTheBag();
+sus.getBag().getInsideBag().add(new Greatsword());
+sus.getBag().whatInTheBag();
+System.out.println("*************************************************************************************");
+System.out.println("Your hp " + sus.getHp());
+System.out.println("Your name " + sus.getName());
+System.out.println("Your hp " + sus.getClassDnd());
+System.out.println("*************************************************************************************");
 
 	}
 

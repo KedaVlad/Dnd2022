@@ -11,21 +11,26 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 import java.util.Scanner;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.dnd.Dise;
+import com.dnd.Source;
 import com.dnd.creatingCharacter.bagDnd.*;
 import com.dnd.creatingCharacter.classDnd.*;
 import com.dnd.creatingCharacter.raceDnd.*;
+import com.dnd.creatingCharacter.skills.*;
 import com.dnd.creatingCharacter.spells.*;
+import com.dnd.factory.SkillFactory;
 
 
-public class CharacterDnd implements Dise{
+public class CharacterDnd implements Dise,Source{
 
 	//Serialize
 
@@ -35,60 +40,62 @@ public class CharacterDnd implements Dise{
 	private String name;
 	private RaceDnd myRace;
 	private ClassDnd myClass;
-	private ClassDnd multiClass;
+	private ClassDnd multiClass = null;
 	private String nature;
-	private Bag bag;
 	private int speed;
-	
 
-	
-	
-	
-	
+
+
+
+
+
 
 	//Game states
 	private int profisiency;
 	private int hp;
-	private Map<String, String> mySkills;
+	private int statsFreePoints = 0;
+	private Map<String, Skill> mySkills;
 	private Map<String, Spells> mySpells;
 	private Map<String, Integer> myStats;
 	private Map<String, String> possession;
+	private Map<String, Bag> myBags;
 
-	
+
 	//for creating
 	private static final String[][] natures = {{"Chaotic", "Neutral", "Lawful"},{"Evil","Neutral","Kind"}};
-	private static File[] allClass;
-	
-	static {
-		File dir1 = new File("C:\\Users\\ALTRON\\Desktop\\dnd\\classes"); 
-		allClass = dir1.listFiles();
-	}
+
+
+
+	//File system
+	private List<File> filePool;
+
+
+
 
 
 	// Full creating
-	public CharacterDnd(String name) {
-
+	public CharacterDnd(String name,RaceDnd raceDnd, ClassDnd classDnd) {
 		this.name = name;
+		myBags = new LinkedHashMap<>();
 		mySkills = new LinkedHashMap<>();
-		bag = new Bag();
+		satBag("Bag");
+		myStats = new LinkedHashMap<>();
+		setRaceDnd(raceDnd);
+		setClassDnd(classDnd);
 		id++;
-		myStats = new HashMap<>();
 
 	}
 	// For load 
-	public CharacterDnd() {
-		System.out.println("Load some character");
 
-	}
 
 
 
 	public void setRaceDnd(RaceDnd raceDnd) {
 		this.myRace = raceDnd;
-		this.speed = raceDnd.getSpeed();
-		for(int i = 0; i < raceDnd.getSkillsRace().length; i++) {
-			getMySkills().put(raceDnd.getSkillsRace()[i], raceDnd.getSkillsRace()[i]);
-		}
+		//this.speed = raceDnd.getSpeed();
+		//for(int i = 0; i < raceDnd.getSkillsRace().length; i++) {
+		//	getMySkills().put(raceDnd.getSkillsRace()[i], raceDnd.getSkillsRace()[i]);
+		//}
 	}
 
 
@@ -111,12 +118,13 @@ public class CharacterDnd implements Dise{
 
 	public void setStats(int str,int dex, int con, int intl,int wis,int cha) {
 
-		myStats.put("Strength", myRace.getStr(str));
-		myStats.put("Dexterity", myRace.getDex(dex));
-		myStats.put("Constitution", myRace.getAgl(con));
-		myStats.put("Intelligence", myRace.getIntl(intl));
-		myStats.put("Wisdom", myRace.getWis(wis));
-		myStats.put("Charisma", myRace.getCha(cha));
+		myStats.put("Strength", str);
+		myStats.put("Dexterity", dex);
+		myStats.put("Constitution", con);
+		myStats.put("Intelligence", intl);
+		myStats.put("Wisdom", wis);
+		myStats.put("Charisma", cha);
+
 	}
 
 
@@ -127,16 +135,40 @@ public class CharacterDnd implements Dise{
 	}
 
 
-
 	public void setClassSkills() {
+		Scanner classScanner = null;
+		Pattern findNameSkills = Pattern.compile("*[a-zA-Z]");
+		try {
+			classScanner = new Scanner(myClass.getMyClassMainFile());
+			boolean checkLvl = false;
+			while(classScanner.hasNextLine()&& !checkLvl) {
+				String skill = classScanner.nextLine();
+				Matcher m = findNameSkills.matcher(skill);
+				if(m.find()&&!mySkills.containsKey(skill)) {
 
-		File classDnd = new File("C:\\Users\\ALTRON\\Desktop\\dnd\\classes\\"+myClass+"\\"+myClass.getMyArchetypeClass()+".txt");
-		File skills = new File("C:\\Users\\ALTRON\\Desktop\\dnd\\skills\\Skills.txt");
+
+					mySkills.put(skill, SkillFactory.createSkill(skill));
+
+
+				} else if(skill.contains(""+myClass.getLvl()+1)) {
+					checkLvl = true;
+				}
+			} 
+		} catch (FileNotFoundException e) {
+
+			e.printStackTrace();
+		} finally {
+			classScanner.close();
+		}
+
+	}
+	public void setRaceSkills() {
+
+		File classDnd = new File(RaceDnd.classSource);
 
 		Scanner classScanner = null;
-		Scanner skillsScaner = null;
 
-		Pattern findNameSkills = Pattern.compile("[a-zA-Z]");
+		Pattern findNameSkills = Pattern.compile("*[a-zA-Z]");
 
 		try {
 			classScanner = new Scanner(classDnd);
@@ -146,7 +178,7 @@ public class CharacterDnd implements Dise{
 				Matcher m = findNameSkills.matcher(skill);
 				if(m.find()&&!mySkills.containsKey(skill)) {
 
-					skillsScaner = new Scanner(skills);
+					skillsScaner = new Scanner(skill);
 					Pattern findDescriptionSkills = Pattern.compile("^"+skill+"");
 					while(skillsScaner.hasNextLine()) {
 						String c = skillsScaner.nextLine();
@@ -194,7 +226,8 @@ public class CharacterDnd implements Dise{
 
 	public void setHp() {
 
-		int result = myClass.getHits()+myStats.get("Constitution");
+		int statFacktor = myStats.get("Constitution");
+		int result = myClass.getDiceHits()+statFacktor;
 		for(int i=1; i< getLvl(); i++) {
 			result += Math.round(Math.random()*(myClass.getDiceHits()-1) + 1);
 
@@ -242,17 +275,18 @@ public class CharacterDnd implements Dise{
 		return name;
 	}
 
-	public Bag getBag() {
-		return bag;
+	public Bag getBag(String bag) {
+		return myBags.get(bag);
 	}
+
 
 
 
 
 	//Shows
 	public void showSkills() {
-		for(Map.Entry<String, String> entry: mySkills.entrySet()) {
-			System.out.println(entry);
+		for(Entry<String, Skill> entry: mySkills.entrySet()) {
+			System.out.println(entry.getKey() + " " + ((Skill) entry).getDescription());
 		}
 
 	}
@@ -268,18 +302,7 @@ public class CharacterDnd implements Dise{
 
 
 
-
-	public static void removeInt(List list) {
-		for(int i = 0; i < 20; i ++) {
-			list.remove(""+i);
-		}
-	}
-
-
-
-
-
-	public Map<String, String> getMySkills() {
+	public Map<String, Skill> getMySkills() {
 		return mySkills;
 	}
 
@@ -292,23 +315,49 @@ public class CharacterDnd implements Dise{
 	}
 
 
+	public void satBag(String bagName) {
+		if(!myBags.containsKey(bagName)) {
+			myBags.put(bagName, new Bag(bagName));
+		} else {
+			System.out.println("U already got it");
+		}
+	}
 
 
 
-	public class Bag{
+	public File getFile(int num) {
+		return filePool.get(num);
+	}
 
 
+
+
+	public void setFilePool(File ... files) {
+		for(File file: files) {
+		filePool.add(file);
+	}
+	}
+
+
+
+	class Bag {
+
+
+		private String bagName;
 		private List<Items> insideBag;
 
 
-		public Bag() {
+		public Bag(String bagName) {
+			this.bagName = bagName;
 			insideBag = new ArrayList<Items>();
 		}
 
 
+
+
 		public void whatInTheBag() {
 			if(getInsideBag().size() == 0) {
-				System.out.println("Your bag are empty!");
+				System.out.println("Your bag is empty!");
 			} else {
 				for(int i = 0; i < getInsideBag().size(); i++) {
 					System.out.println(getInsideBag().get(i));

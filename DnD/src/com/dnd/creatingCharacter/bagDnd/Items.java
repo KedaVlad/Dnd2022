@@ -1,6 +1,6 @@
 package com.dnd.creatingCharacter.bagDnd;
 
-public abstract class Items {
+public abstract class Items implements ItemsSource {
 	
 	private int weigth;
 	private int cost;

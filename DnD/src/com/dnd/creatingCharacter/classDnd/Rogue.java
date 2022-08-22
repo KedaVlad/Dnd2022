@@ -8,18 +8,17 @@ public class Rogue extends ClassDnd{
 
 	private int hits = 8;
 	private int DiceHits = d8;
-	
-	private File[] classArchetype;
-	private String myArchetypeClass;
 
+	private String myArchetypeClass;
+	private File myClassMainFile;
 
 	{
-		setClassArchetype();
+		setMainFile();
 	}
-	public Rogue( int lvl) {
-		super(lvl);
-		this.myArchetypeClass = classArchetype[1].getName();
-		System.out.println("Syka 11");
+	public Rogue( int lvl, String archetype) {
+		super(lvl,archetype);
+		
+	
 	}
 
 	public String getMyArchetypeClass() {
@@ -30,10 +29,10 @@ public class Rogue extends ClassDnd{
 		return "Rogue";
 	}
 
-	public void setClassArchetype() {
-		File dir1 = new File("C:\\Users\\ALTRON\\Desktop\\dnd\\classes\\Rogue"); 
+	@Override
+	public void setMainFile() {
+		this.myClassMainFile = new File(rogueSource + myArchetypeClass + ".txt");
 		
-		this.classArchetype = dir1.listFiles();
 	}
 	
 
