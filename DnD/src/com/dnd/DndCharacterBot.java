@@ -11,7 +11,7 @@ import telegrambots.telegrambots.bots.DefaultAbsSender;
 import com.dnd.creatingCharacter.CharacterDnd;
 import com.dnd.creatingCharacter.classDnd.Rogue;
 
-public class DndCharacterBot  {
+public class DndCharacterBot extends DefaultAbsSender {
 	private List<CharacterDnd> myCharacters = new ArrayList<>();
 	
 	public void showMyCharacters() {

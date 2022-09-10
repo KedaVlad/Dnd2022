@@ -1,0 +1,29 @@
+{
+"name": "Skill file",
+"skills": [
+{
+"name": "Some Spell",
+"description": "Blablablabla"
+},
+{
+"name": "Some Spell1",
+"description": "Blablablabla"
+},
+{
+"name": "Some Spell2",
+"description": "Blablablabla"
+},
+{
+"name": "Some Spell3",
+"description": "Blablablabla"
+},
+{
+"name": "Some Spell4",
+"description": "Blablablabla"
+}
+
+
+
+]
+
+}
