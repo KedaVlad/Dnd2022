@@ -1,15 +1,16 @@
 package com.dnd.creatingCharacter.classDnd;
 
 import java.io.File;
+import java.io.Serializable;
 
 import com.dnd.Dise;
 import com.dnd.Source;
 
 
-public abstract class ClassDnd implements Dise, Source{
+public abstract class ClassDnd implements Dise, Source,Serializable{
 
-
-
+	private static final long serialVersionUID = 3219669745475635442L;
+	
 	//private final int firstLvlhits;
 	private int DiceHits;
 	private String myArchetypeClass;

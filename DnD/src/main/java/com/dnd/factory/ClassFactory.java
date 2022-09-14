@@ -23,37 +23,37 @@ import com.dnd.creatingCharacter.classDnd.*;
 public class ClassFactory implements Factory,Source 
 {
 	
-	private static File dirClass;
-	private static File dirArchetype;
-	private static String classBeck;
-	private static String archerypeBeck;
+	private static File dirClass = null;
+	private static File dirArchetype = null;
+	private static String classBeck = null;
+	private static String archerypeBeck = null;
 
 	public static ClassDnd create(int lvl) 
 	{
 		switch(getClassBeck())
 		{
 		case "Artificer":
-		return refactor(new Rogue(lvl, archerypeBeck));
+		return refactor(new Rogue(lvl, getArcherypeBeck()));
 		case "Barbarian":
-		return refactor(new Barbarian(lvl, archerypeBeck));
+		return refactor(new Barbarian(lvl, getArcherypeBeck()));
 		case "Bard":
-			return refactor(new Bard(lvl, archerypeBeck));
+			return refactor(new Bard(lvl, getArcherypeBeck()));
 		case "Blood Hunter":
-			return refactor(new BloodHunter(lvl, archerypeBeck));
+			return refactor(new BloodHunter(lvl, getArcherypeBeck()));
 		case "Cleric":
-			return refactor(new Cleric(lvl, archerypeBeck));
+			return refactor(new Cleric(lvl, getArcherypeBeck()));
 		case "Druid":
-			return refactor(new Druid(lvl, archerypeBeck));
+			return refactor(new Druid(lvl, getArcherypeBeck()));
 		case "Fighter":
-			return refactor(new Fighter(lvl, archerypeBeck));
+			return refactor(new Fighter(lvl, getArcherypeBeck()));
 		case "Monk":
-			return refactor(new Monk(lvl, archerypeBeck));
+			return refactor(new Monk(lvl, getArcherypeBeck()));
 		case "Rogue":
-			return refactor(new Rogue(lvl, archerypeBeck));
+			return refactor(new Rogue(lvl, getArcherypeBeck()));
 		case "Warlock":
-			return refactor(new Warlock(lvl, archerypeBeck));
+			return refactor(new Warlock(lvl, getArcherypeBeck()));
 		case "Wizard":
-			return refactor(new Wizard(lvl, archerypeBeck));
+			return refactor(new Wizard(lvl, getArcherypeBeck()));
 			
 		}
 		return null;
@@ -63,9 +63,9 @@ public class ClassFactory implements Factory,Source
 	{
 		List<String> pool = new ArrayList<>();
 		Scanner classScanner = null;
-		Pattern findNameSkills = Pattern.compile("*[a-zA-Z]");
-		Pattern findNameSpells = Pattern.compile(">[a-zA-Z]");
-		Pattern findNamePossession = Pattern.compile("-[a-zA-Z]");
+		Pattern findNameSkills = Pattern.compile("\\*[a-zA-Z]*");
+		Pattern findNameSpells = Pattern.compile(">[a-zA-Z]*");
+		Pattern findNamePossession = Pattern.compile("-[a-zA-Z]*");
 		try {
 			classScanner = new Scanner(classDnd.getMyClassMainFile());
 			boolean checkLvl = false;
@@ -109,15 +109,12 @@ public class ClassFactory implements Factory,Source
 	
 	public static String[] getArchetypeArray() 
 	{
-		dirArchetype = new File(classSource + getClassBeck());
+		dirArchetype = new File(classSource +"//"+ getClassBeck());
 		String[] allArchetypes = dirArchetype.list();
 		return allArchetypes;
 	}
 
-	public static void setArcherypeBeck(String archerypeBeck) 
-	{
-		ClassFactory.archerypeBeck = archerypeBeck;
-	}
+	
 
 	public static String getClassBeck() {
 		return classBeck;
@@ -125,6 +122,14 @@ public class ClassFactory implements Factory,Source
 
 	public static void setClassBeck(String classBeck) {
 		ClassFactory.classBeck = classBeck;
+	}
+
+	public static String getArcherypeBeck() {
+		return archerypeBeck;
+	}
+
+	public static void setArcherypeBeck(String archerypeBeck) {
+		ClassFactory.archerypeBeck = archerypeBeck;
 	}
 	
 

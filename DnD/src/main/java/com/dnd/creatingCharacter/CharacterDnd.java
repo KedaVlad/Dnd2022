@@ -37,6 +37,8 @@ import com.dnd.factory.WorkmanshipFactory;
 
 public class CharacterDnd implements Dise,Source,Serializable{
 
+	private static final long serialVersionUID = -7781627593661723428L;
+	
 	//CharacterDnd basic information//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	private String name;
 	private RaceDnd myRace;
@@ -55,7 +57,7 @@ public class CharacterDnd implements Dise,Source,Serializable{
 	private Map<String, Spell> mySpells;
 	private Map<String, Possession> myPossession;
 	private Map<String, Bag> myBags;
-	private static final long serialVersionUID = 1L;
+	
 
 
 	private Map<String, Integer> myStats;
@@ -243,10 +245,11 @@ public class CharacterDnd implements Dise,Source,Serializable{
 
 	//Bag///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	class Bag 
+	class Bag implements Serializable
 	{
 
-
+		private static final long serialVersionUID = -3894341880184285889L;
+		
 		private int id;
 		private String bagName;
 		private List<Items> insideBag;

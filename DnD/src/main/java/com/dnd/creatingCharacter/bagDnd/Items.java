@@ -1,6 +1,10 @@
 package com.dnd.creatingCharacter.bagDnd;
 
-public abstract class Items{
+import java.io.Serializable;
+
+public abstract class Items implements Serializable{
+	
+	private static final long serialVersionUID = -1353539867889183740L;
 	
 	private int weigth;
 	private int cost;

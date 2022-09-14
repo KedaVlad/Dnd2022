@@ -17,8 +17,9 @@ import com.dnd.creatingCharacter.CharacterDnd;
 public class CharacterFactory implements Factory,Source{
 
 
-	private static File myCharactersDir;
-	private static CharacterDnd actualGameCharacter;
+	private static File myCharactersDir = null;
+	private static CharacterDnd actualGameCharacter = null;
+	private static boolean chekHero = false;
 
 
 	public static CharacterDnd create(String name) {
@@ -32,6 +33,7 @@ public class CharacterFactory implements Factory,Source{
 
 
 	public static File getMyCharactersDir() {
+
 		return myCharactersDir;
 	}
 
@@ -48,11 +50,7 @@ public class CharacterFactory implements Factory,Source{
 	//save and load
 	public static void save(String characterName)  
 	{
-		if(CharacterFactory.getActualGameCharacter().equals(null)) 
-		{
-			actualGameCharacter = new CharacterDnd(characterName);
-		}
-		File file = new File(myCharactersDir +"\\" + actualGameCharacter.getName());
+		File file = new File(myCharactersDir +"\\" + characterName);
 		try {
 			if(!file.exists()) 
 			{
@@ -62,7 +60,7 @@ public class CharacterFactory implements Factory,Source{
 				fileOutputStream = new FileOutputStream(file);
 
 				ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-				objectOutputStream.writeObject(actualGameCharacter);
+				objectOutputStream.writeObject(new CharacterDnd(characterName));
 				objectOutputStream.close();
 			}
 			else if(file.exists() && (file.getName().equals(actualGameCharacter.getName())))
@@ -78,26 +76,46 @@ public class CharacterFactory implements Factory,Source{
 
 	}
 
-	public static void load(String nameFile) 
+	public static CharacterDnd load(String nameFile) 
 	{
-		if(CharacterFactory.getActualGameCharacter()!= null)
+		
+		
+		FileInputStream fileInputStream = null;
+		ObjectInputStream objectInputStream = null;
+		try 
 		{
-			try 
+			
+			/*if(CharacterFactory.getActualGameCharacter()!= null)
+			{*/
+
+				//CharacterFactory.save(actualGameCharacter.getName());
+				fileInputStream = new FileInputStream(myCharactersDir +"\\" +nameFile);
+				objectInputStream = new ObjectInputStream(fileInputStream);
+				return (CharacterDnd) objectInputStream.readObject();
+				
+			//}
+			/*else if(CharacterFactory.getActualGameCharacter() == null) 
 			{
-				CharacterFactory.save(actualGameCharacter.getName());
-				FileInputStream fileInputStream = new FileInputStream(nameFile);
+				FileInputStream fileInputStream = new FileInputStream(myCharactersDir +"\\" +nameFile);
 				ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 				actualGameCharacter = (CharacterDnd) objectInputStream.readObject();
 				objectInputStream.close();
-			} 
-			catch (Exception e) 
-			{
+			}*/
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try {
+				objectInputStream.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-
-
-
+return null;
 	}
 
 
@@ -108,6 +126,16 @@ public class CharacterFactory implements Factory,Source{
 
 	public static void setActualGameCharacter(CharacterDnd actualGameCharacter) {
 		CharacterFactory.actualGameCharacter = actualGameCharacter;
+	}
+
+
+	public static boolean isChekHero() {
+		return chekHero;
+	}
+
+
+	public static void setChekHero(boolean chekHero) {
+		CharacterFactory.chekHero = chekHero;
 	}
 
 }

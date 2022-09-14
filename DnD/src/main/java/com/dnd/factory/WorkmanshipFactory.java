@@ -26,34 +26,34 @@ public class WorkmanshipFactory implements Factory, Source {
 		for(int i = 0; i < workmanship.size(); i++)
 		{
 			String nameCheker;
-			if(workmanship.get(i).equals("^*[a-zA-Z]"))
+			if(workmanship.get(i).equals("^\\*[a-zA-Z]*"))
 			{
-				nameCheker = workmanship.get(i).replaceAll("^*([a-zA-Z])", "$1");
+				nameCheker = workmanship.get(i).replaceAll("^\\*([a-zA-Z]*)", "$1");
 				if(!CharacterFactory.getActualGameCharacter().getMySkills().containsKey(nameCheker))
 				{
 					CharacterFactory.getActualGameCharacter().getMySkills().put(nameCheker,(Skill)WorkmanshipFactory.createWorkmanship(workmanship.get(i)));
 				}
 			}
-			else if(workmanship.get(i).equals("^>[a-zA-Z]"))
+			else if(workmanship.get(i).equals("^>[a-zA-Z]*"))
 			{
-				nameCheker = workmanship.get(i).replaceAll("^>([a-zA-Z])", "$1");
+				nameCheker = workmanship.get(i).replaceAll("^>([a-zA-Z]*)", "$1");
 				if(!CharacterFactory.getActualGameCharacter().getMySpells().containsKey(nameCheker))
 				{
 					CharacterFactory.getActualGameCharacter().getMySpells().put(nameCheker,(Spell)WorkmanshipFactory.createWorkmanship(workmanship.get(i)));
 				}
 			}
-			else if(workmanship.get(i).equals("^<[a-zA-Z]"))
+			else if(workmanship.get(i).equals("^<[a-zA-Z]*"))
 			{
-				nameCheker = workmanship.get(i).replaceAll("^<([a-zA-Z])", "$1");
+				nameCheker = workmanship.get(i).replaceAll("^<([a-zA-Z]*)", "$1");
 				if(!CharacterFactory.getActualGameCharacter().getMyPossession().containsKey(nameCheker))
 				{
 					CharacterFactory.getActualGameCharacter().getMyPossession().put(nameCheker,(Possession)WorkmanshipFactory.createWorkmanship(workmanship.get(i)));
 				}
 				
 			}
-			else if(workmanship.get(i).equals("^-[a-zA-Z]"))
+			else if(workmanship.get(i).equals("^-[a-zA-Z]*"))
 			{
-				nameCheker = workmanship.get(i).replaceAll("^-([a-zA-Z])", "$1");
+				nameCheker = workmanship.get(i).replaceAll("^-([a-zA-Z]*)", "$1");
 				if(!CharacterFactory.getActualGameCharacter().getMySkills().containsKey(nameCheker))
 				{
 					CharacterFactory.getActualGameCharacter().getMySkills().put(nameCheker,(Trait)WorkmanshipFactory.createWorkmanship(workmanship.get(i)));
@@ -76,13 +76,13 @@ public class WorkmanshipFactory implements Factory, Source {
 
 		switch(name)
 		{
-		case "^*[a-zA-Z]":	
+		case "^\\*[a-zA-Z]*":	
 			return createSkill(new Skill(name));
-		case "^>[a-zA-Z]":	
+		case "^>[a-zA-Z]*":	
 			return createSpell(new Spell(name));
-		case "^<[a-zA-Z]":	
+		case "^<[a-zA-Z]*":	
 			return createPossession(new Possession(name));
-		case "^-[a-zA-Z]":	
+		case "^-[a-zA-Z]*":	
 			return createTrait(new Trait(name));
 		}
 

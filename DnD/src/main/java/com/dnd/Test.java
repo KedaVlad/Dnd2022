@@ -6,25 +6,28 @@ import java.util.Map;
 import com.dnd.creatingCharacter.CharacterDnd;
 import com.dnd.factory.CharacterFactory;
 
-public class Test {
-	private Map<String, String> map = new HashMap<>();
+public class Test implements KeyWallet {
+	
+	private static String str;
+	
 	public static void main(String[] args) {
 
+		setStr("sadasd");
+		System.out.println(getStr());
 
-		Test test = new Test();
-		test.getMap().put("Some key", "Some info");
-		
-		
-		System.out.println(test.getMap().get("Some key"));
-		
-			
-		
+		setStr("sadarwererwersd");
+		System.out.println(getStr());
+		setStr("sadas123123wqeqd");
+		System.out.println(getStr());
 	}
-	public Map<String, String> getMap() {
-		return map;
+
+	public static String getStr() {
+		return str;
 	}
-	public void setMap(Map<String, String> map) {
-		this.map = map;
+
+	public static void setStr(String str) {
+		Test.str = str;
 	}
+	
 
 }

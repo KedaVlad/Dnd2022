@@ -1,6 +1,10 @@
 package com.dnd.creatingCharacter.skills;
 
-public class Skill implements Workmanship{
+import java.io.Serializable;
+
+public class Skill implements Workmanship, Serializable{
+	
+	private static final long serialVersionUID = 5053270361827778941L;
 	
 	private String name;
 	private String description;

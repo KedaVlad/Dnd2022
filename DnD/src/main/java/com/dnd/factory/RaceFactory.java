@@ -15,9 +15,9 @@ import com.dnd.creatingCharacter.raceDnd.RaceDnd;
 public class RaceFactory implements Source, Factory 
 {
 
-	private static RaceDnd raceSubgect;
-	private static String archetypeBeck;
-	private static File dirRace;
+	private static RaceDnd raceSubgect = null;
+	private static String archetypeBeck = null;
+	private static File dirRace = null;
 	
 	public static RaceDnd create(String raceName) 
 	{

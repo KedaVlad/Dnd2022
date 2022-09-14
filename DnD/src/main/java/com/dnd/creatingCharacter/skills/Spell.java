@@ -1,12 +1,16 @@
 package com.dnd.creatingCharacter.skills;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 
-public class Spell implements Workmanship {
+public class Spell implements Workmanship, Serializable {
+	
+	
+	private static final long serialVersionUID = -7876613939972469105L;
 	
 	private int lvlSpell;
 	private String cast;

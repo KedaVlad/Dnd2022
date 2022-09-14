@@ -1,4 +1,4 @@
-package com.dnd;
+package com.dnd.BotTable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,6 +10,7 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMa
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
+import com.dnd.KeyWallet;
 import com.dnd.factory.CharacterFactory;
 import com.dnd.factory.ClassFactory;
 import com.dnd.factory.RaceFactory;

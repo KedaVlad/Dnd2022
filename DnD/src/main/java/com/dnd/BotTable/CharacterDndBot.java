@@ -1,10 +1,12 @@
-package com.dnd;
+package com.dnd.BotTable;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
@@ -21,6 +23,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import com.dnd.KeyWallet;
+import com.dnd.Source;
 import com.dnd.creatingCharacter.CharacterDnd;
 import com.dnd.factory.CharacterFactory;
 import com.dnd.factory.ClassFactory;
@@ -134,20 +138,21 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	{
 
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-		String[] myCreaterdCharacters = CharacterFactory.getMyCharactersDir().list();
+		
 
 		buttons.add(Arrays.asList(InlineKeyboardButton.builder()
 				.text("CREATE")
 				.callbackData(characterCreateKey)
 				.build()));
 
-		if(myCreaterdCharacters.length > 0) 
+		if(!CharacterFactory.getMyCharactersDir().list().equals(null)) 
 		{
+			String[] myCreaterdCharacters = CharacterFactory.getMyCharactersDir().list();
 			for(int i = 0; i < myCreaterdCharacters.length; i++)
 			{
 				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
 						.text(myCreaterdCharacters[i])
-						.callbackData(characterKey + myCreaterdCharacters[i])
+						.callbackData(characterKey + myCreaterdCharacters[i])						
 						.build()));
 			}
 			execute(
@@ -158,7 +163,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					.build()
 					);
 		}
-		else
+		else if(CharacterFactory.getMyCharactersDir().list().equals(null))
 		{
 			execute(
 					SendMessage.builder()
@@ -198,11 +203,11 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void finishCharStartClass(Message message)
 	{
-
+		try {
 		CharacterFactory.create(message.getText());
 		List<List<InlineKeyboardButton>> buttons;
 
-		try {
+		
 			buttons = MediatorWallet.getMediatorButtons(message);
 			execute(SendMessage.builder()
 					.text("What is your class, " + CharacterFactory.getActualGameCharacter().getName() + "?")
@@ -219,7 +224,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void finishClassStartRace(Message message)
 	{
-		int lvl = Integer.parseInt(message.getText().replaceAll(".*(\\d{1,2}).*", "$1"));
+		int lvl = Integer.parseInt(message.getText().replaceAll(keyLvl, "$1"));
 		List<List<InlineKeyboardButton>> buttons;
 		try {
 			if(lvl < 21 && lvl > 0)
@@ -261,8 +266,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void handleCallback(CallbackQuery callbackQuery) 
 	{
-		String key = callbackQuery.getData().replaceAll("(*[a-zA-Z]*) [a-zA-Z]", "$1");
-
+		String key = callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$1");
+		
 		switch (key)
 		{
 		case characterCreateKey:
@@ -290,10 +295,12 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private void creatHero(CallbackQuery callbackQuery)
 	{
 		MediatorWallet.setCharacterCreateMediator(true);
+		Message message = callbackQuery.getMessage();
 		try 
 		{
 			execute( SendMessage.builder()
 					.text("Traveler, how should I call you?!\n(Write Hero name)")
+					.chatId(message.getChatId().toString())
 					.build());
 		} 
 		catch (TelegramApiException e) 
@@ -306,14 +313,14 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void chooseArchetype(CallbackQuery callbackQuery)
 	{
-		ClassFactory.setClassBeck(callbackQuery.getData().replaceAll(""+classKey + "([a-zA-Z])", "$1"));
+		ClassFactory.setClassBeck(callbackQuery.getData().replaceAll(classKey + keyAnswer, "$1"));
 		Message message = callbackQuery.getMessage();
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
 		for(int i = 0; i < ClassFactory.getArchetypeArray().length; i++)
 		{
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-					.text(ClassFactory.getArchetypeArray()[i].replaceAll("([a-zA-Z]).txt", "$1"))
+					.text(ClassFactory.getArchetypeArray()[i].replaceAll(keyAnswer + ".txt", "$1"))
 					.callbackData(archetypeKey + ClassFactory.getArchetypeArray()[i])
 					.build()));
 		}
@@ -334,14 +341,14 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void chooseSubRace(CallbackQuery callbackQuery)
 	{
-		RaceFactory.setArcherypeBeck(callbackQuery.getData().replaceAll(""+raceKey + "([a-zA-Z])", "$1"));
+		RaceFactory.setArcherypeBeck(callbackQuery.getData().replaceAll(raceKey + keyAnswer, "$1"));
 		Message message = callbackQuery.getMessage();
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
 		for(int i = 0; i < RaceFactory.getSubRaceArray().length; i++)
 		{
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-					.text(ClassFactory.getArchetypeArray()[i].replaceAll("([a-zA-Z]).txt", "$1"))
+					.text(ClassFactory.getArchetypeArray()[i].replaceAll(keyAnswer + ".txt", "$1"))
 					.callbackData(subRaceKey + RaceFactory.getSubRaceArray()[i])
 					.build()));
 		}
@@ -373,12 +380,14 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private void finishClass(CallbackQuery callbackQuery) 
 	{
 
+		Message message = callbackQuery.getMessage();
 		ClassFactory.setArcherypeBeck(callbackQuery.getData());
 		MediatorWallet.setClassCreateMediator(true);
 		try 
 		{
 			execute(SendMessage.builder()
 					.text("What LVL of Hero?")
+					.chatId(message.getChatId().toString())
 					.build());
 		} 
 		catch (TelegramApiException e) 
@@ -396,7 +405,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void finishHero(CallbackQuery callbackQuery)
 	{
-		CharacterFactory.getActualGameCharacter().setRaceDnd(RaceFactory.create(callbackQuery.getData().replaceAll(subRaceKey + "(a-zA-Z)","$1")));
+		CharacterFactory.getActualGameCharacter().setRaceDnd(RaceFactory.create(callbackQuery.getData().replaceAll(subRaceKey + keyAnswer,"$1")));
 		CharacterFactory.save(CharacterFactory.getActualGameCharacter().getName());
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
