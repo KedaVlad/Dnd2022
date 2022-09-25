@@ -1,33 +1,21 @@
 package com.dnd;
 
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import com.dnd.creatingCharacter.CharacterDnd;
-import com.dnd.factory.CharacterFactory;
 
-public class Test implements KeyWallet {
+public class Test implements KeyWallet, Source {
+
 	
-	private static String str;
-	
-	public static void main(String[] args) {
-
-		setStr("sadasd");
-		System.out.println(getStr());
-
-		setStr("sadarwererwersd");
-		System.out.println(getStr());
-		setStr("sadas123123wqeqd");
-		System.out.println(getStr());
+	public static void main(String[] args) throws Exception {
+		
+		System.out.println(Dice.randomStat());
+		
 	}
-
-	public static String getStr() {
-		return str;
-	}
-
-	public static void setStr(String str) {
-		Test.str = str;
-	}
-	
-
 }
