@@ -1,9 +1,12 @@
 package com.dnd.dndTable.creatingDndObject.raceDnd;
 
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.Map;
 
+import com.dnd.Log;
+import com.dnd.Log.Place;
 import com.dnd.dndTable.ObjectDnd;
 
 public class RaceDnd implements Serializable, ObjectDnd{
@@ -17,6 +20,7 @@ public class RaceDnd implements Serializable, ObjectDnd{
 	private int speed;
 	private String raceName;
 	private String subRace;
+	private File raceMainFile;
 	
 	
 	//Stats baff
@@ -30,6 +34,8 @@ public class RaceDnd implements Serializable, ObjectDnd{
 	public RaceDnd(String raceName, String subRace) {
 		this.raceName = raceName;
 		this.subRace = subRace;
+		
+		Log.add(subRace + " CREATED", Place.RACE);
 		
 	}
 	
@@ -47,6 +53,16 @@ public class RaceDnd implements Serializable, ObjectDnd{
 
 	public String getSubRace() {
 		return subRace;
+	}
+
+
+	public File getRaceMainFile() {
+		return raceMainFile;
+	}
+
+
+	public void setRaceMainFile(File raceMainFile) {
+		this.raceMainFile = raceMainFile;
 	}
 
 }

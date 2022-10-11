@@ -4,11 +4,11 @@ public class CuttingBoard {
 	
 	private String classBeck;
 	private String archerypeBeck;
+	private int classLvl;
 	private String race;
 	private String subRace;
 	
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	
 	public String getClassBeck() {
 		return classBeck;
@@ -33,5 +33,11 @@ public class CuttingBoard {
 	}
 	public void setRace(String race) {
 		this.race = race;
+	}
+	public int getClassLvl() {
+		return classLvl;
+	}
+	public void setClassLvl(int classLvl) {
+		this.classLvl = classLvl;
 	}
 }

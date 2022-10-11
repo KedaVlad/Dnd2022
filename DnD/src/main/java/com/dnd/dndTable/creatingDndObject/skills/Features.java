@@ -2,23 +2,41 @@ package com.dnd.dndTable.creatingDndObject.skills;
 
 import java.io.Serializable;
 
-public class Skill implements Workmanship, Serializable{
+import com.dnd.Log;
+import com.dnd.Log.Place;
+
+public class Features implements Workmanship, Serializable{
 	
 	private static final long serialVersionUID = 5053270361827778941L;
 	
-	private String name;
+	
 	private String description;
 	
 	private String treats;
 	private int statsPointsBuff;
 	
 
-	public Skill(String name) {
+	public Features(String name) {
 		
 		this.name = name;
-		
+	}
+	
+	private int id;
+	private String name;
+	public boolean equals(Object obj) {
+		if(obj == this) return true;
+		if(obj == null || obj.getClass() != this.getClass()) return false;
+		Features characterDnd = (Features) obj;
+		return id == characterDnd.id && (name == characterDnd.name ||(name != null && name.equals(characterDnd.name)));
 	}
 
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());             
+		result = prime * result + id; 
+		return result;
+	}
 
 	
 	public String getName() {
@@ -55,6 +73,8 @@ public class Skill implements Workmanship, Serializable{
 	public String toString() {
 		return name + " - "+ description;
 	}
+	
+	
 	
 
 }

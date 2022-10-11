@@ -3,7 +3,7 @@ package com.dnd.dndTable.creatingDndObject.classDnd;
 public class Barbarian extends ClassDnd {
 
 	public Barbarian(int lvl, String arhcetype) {
-		super(lvl, arhcetype);
+		super(lvl);
 		// TODO Auto-generated constructor stub
 	}
 

@@ -8,7 +8,9 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 import com.dnd.Dice;
+import com.dnd.Log;
 import com.dnd.Source;
+import com.dnd.Log.Place;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 
@@ -22,6 +24,13 @@ public class CharacterFactory implements Factory,Source{
 		save(new CharacterDnd(name));
 		return load(name);
 
+	}
+	
+	public static CharacterDnd update(CharacterDnd characterDnd)
+	{
+		Log.add("update", Place.FACTORY, Place.CHARACTER);
+		save(characterDnd);
+		return load(characterDnd.getName());
 	}
 
 	public static File getMyCharactersDir() {
@@ -63,6 +72,27 @@ public class CharacterFactory implements Factory,Source{
 
 	}
 
+	public static void delete(CharacterDnd character)  
+	{
+		if(character == null) 
+		{
+			
+		}
+		else
+		{
+		File file = new File(myCharactersDir +"\\" + character.getName());
+		try {
+			if(file.exists())
+			{
+				file.delete();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		}
+
+	}
+
 	public static CharacterDnd load(String nameFile) 
 	{
 		CharacterDnd loadedCharacter = null;
@@ -92,11 +122,11 @@ public class CharacterFactory implements Factory,Source{
 		String answer = characterInfo.getName() + " is from the family of" 
 				+ ", the " + characterInfo.getClassDnd() 
 				+ "(" + characterInfo.getClassDnd().getMyArchetypeClass() + ") class.\r\n"
-				+ "Now let's see what you have in terms of characteristics.\\r\\n\"\r\n"
+				+ "Now let's see what you have in terms of characteristics.\r\n"
 				+ "\r\n"
-				+ "Write the value of the characteristics in order: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma.\\r\\n\"\r\n"
-				+ "1.Each stat cannot be higher than 20.\\r\\n\"\r\n"
-				+ "2. Write down stats without taking into account buffs from race / class.\\r\\n\"\r\n"
+				+ "Write the value of the characteristics in order: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma.\r\n"
+				+ "1.Each stat cannot be higher than 20.\r\n"
+				+ "2. Write down stats without taking into account buffs from race / class.\r\n"
 				+ "\r\n"
 				+ "Use the random god gift in the order you want your stats to be.\r\n"
 				+ "\r\n" + "\r\n" + godGift + "\r\n"

@@ -8,6 +8,7 @@ public class MediatorWallet implements KeyWallet{
 	private boolean characterCreateMediator = false;
 	private boolean classCreateMediator = false;
 	private boolean statMediator = false;
+	private boolean hpMediator = false;
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -24,6 +25,10 @@ public class MediatorWallet implements KeyWallet{
 			return true;
 		}
 		else if(isStatMediator())
+		{
+			return true;
+		}
+		else if(isHpMediator())
 		{
 			return true;
 		}
@@ -44,16 +49,22 @@ public class MediatorWallet implements KeyWallet{
 		}
 		else if(isStatMediator())
 		{
-			return statMediatorkey;
+			return statMediatorKey;
+		}
+		else if(isHpMediator())
+		{
+			return hpMediatorKey;
 		}
 		return null;
 	}
 
 	void mediatorBreak() 
 	{
+		
 		setCharacterCreateMediator(false);
 		setClassCreateMediator(false);
 		setStatMediator(false);
+		setHpMediator(false);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -87,6 +98,16 @@ public class MediatorWallet implements KeyWallet{
 	public void setStatMediator(boolean statMediator) 
 	{
 		this.statMediator = statMediator;
+	}
+
+	public boolean isHpMediator() 
+{
+		return hpMediator;
+	}
+
+	public void setHpMediator(boolean hpMediator) 
+{
+		this.hpMediator = hpMediator;
 	}	
 
 }

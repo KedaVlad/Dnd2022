@@ -1,21 +1,31 @@
 package com.dnd;
 
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-
 public class Test implements KeyWallet, Source {
 
 	
-	public static void main(String[] args) throws Exception {
+	public static String getStr(String str)
+	{
 		
-		System.out.println(Dice.randomStat());
+		int i = 0;
+		switch(i)
+		{
+		case 0:
+			str += "Kakaha";
+			break;
+		}
+		str += " Dura";
+		return str;
+	}
+	
+	public static void main(String[] args) throws Exception {
+
+
+		System.out.println(Test.getStr("Biba "));
+		
 		
 	}
-}
+	}
+
+	
+

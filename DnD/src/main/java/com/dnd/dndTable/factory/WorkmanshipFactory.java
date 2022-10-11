@@ -10,16 +10,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.dnd.KeyWallet;
+import com.dnd.Log;
 import com.dnd.Source;
-import com.dnd.dndTable.*;
+import com.dnd.Log.Place;
 import com.dnd.dndTable.creatingDndObject.*;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
+import com.dnd.dndTable.creatingDndObject.skills.Features;
 import com.dnd.dndTable.creatingDndObject.skills.Possession;
-import com.dnd.dndTable.creatingDndObject.skills.Skill;
 import com.dnd.dndTable.creatingDndObject.skills.Spell;
 import com.dnd.dndTable.creatingDndObject.skills.Trait;
-import com.dnd.dndTable.creatingDndObject.skills.Workmanship;
 
 
 public class WorkmanshipFactory implements Factory, Source, KeyWallet {
@@ -27,47 +27,50 @@ public class WorkmanshipFactory implements Factory, Source, KeyWallet {
 
 	private final static File[] workmanship = {new File(skillsSource), new File(spellsSource), new File(possessionsSource), new File(traitsSource)};
 
-	public static void getWorkmanship(CharacterDnd character, List<String> workmanship)
-	{
-		for(int i = 0; i < workmanship.size(); i++)
+	public static CharacterDnd getWorkmanship(CharacterDnd character, List<String> workmanship)
+	{ 
+		Log.add("getWorkmanship", Place.DND, Place.FACTORY, Place.WORKMANSHIP);
+
+		String cleanName;
+
+		for(String name: workmanship)
 		{
-			String nameCheker;
-			if(workmanship.get(i).equals(skillKey))
+			
+			cleanName = name.replaceAll(workmanshipKey, "$2");
+			
+			if(name.contains(skillKey))
 			{
-				nameCheker = workmanship.get(i).replaceAll(workmanshipKey, "$1");
-				if(!character.getMySkills().containsKey(nameCheker))
+				
+				if(!character.getGameEngine().getMyWorkmanship().getMyFeatures().contains(new Features(cleanName)))
 				{
-					character.getMySkills().put(nameCheker,(Skill)WorkmanshipFactory.createWorkmanship(workmanship.get(i)));
-				}
-			}
-			else if(workmanship.get(i).equals(spellKey))
-			{
-				nameCheker = workmanship.get(i).replaceAll(workmanshipKey, "$1");
-				if(!character.getMySpells().containsKey(nameCheker))
-				{
-					character.getMySpells().put(nameCheker,(Spell)WorkmanshipFactory.createWorkmanship(workmanship.get(i)));
-				}
-			}
-			else if(workmanship.get(i).equals(possessionKey))
-			{
-				nameCheker = workmanship.get(i).replaceAll(workmanshipKey, "$1");
-				if(!character.getMyPossession().containsKey(nameCheker))
-				{
-					character.getMyPossession().put(nameCheker,(Possession)WorkmanshipFactory.createWorkmanship(workmanship.get(i)));
+					character.getGameEngine().getMyWorkmanship().getMyFeatures().add((Features)WorkmanshipFactory.createFeatures(cleanName));
+
 				}
 
 			}
-			else if(workmanship.get(i).equals(traitKey))
+			else if(name.contains(spellKey))
 			{
-				nameCheker = workmanship.get(i).replaceAll(workmanshipKey, "$1");
-				if(!character.getMySkills().containsKey(nameCheker))
+				if(!character.getGameEngine().getMyWorkmanship().getMySpells().contains(new Spell(cleanName)))
 				{
-					character.getMySkills().put(nameCheker,(Trait)WorkmanshipFactory.createWorkmanship(workmanship.get(i)));
+					character.getGameEngine().getMyWorkmanship().getMySpells().add((Spell)WorkmanshipFactory.createSpell(cleanName));
 				}
-
 			}
-
+			else if(name.contains(possessionKey))
+			{
+				if(!character.getGameEngine().getMyWorkmanship().getMyPossession().contains(new Possession(cleanName)))
+				{
+					character.getGameEngine().getMyWorkmanship().getMyPossession().add((Possession)WorkmanshipFactory.createPossession(name));
+				}
+			}
+			else if(name.contains(traitKey))
+			{
+				if(!character.getGameEngine().getMyWorkmanship().getMyFeatures().contains(new Trait(cleanName)))
+				{
+					character.getGameEngine().getMyWorkmanship().getMyFeatures().add((Trait)WorkmanshipFactory.createTrait(cleanName));
+				}
+			}
 		}
+		return character;
 	}
 
 	public static List<String> getWorkmanshipClass(ClassDnd classDnd)
@@ -93,12 +96,18 @@ public class WorkmanshipFactory implements Factory, Source, KeyWallet {
 					checkLvl = true;
 				}
 			} 
-		} catch (FileNotFoundException e) {
+
+		}
+		catch (FileNotFoundException e) 
+		{
 
 			e.printStackTrace();
-		} finally {
+		}
+		finally 
+		{
 			classScanner.close();
 		}
+		
 		return pool;
 	}
 
@@ -121,10 +130,14 @@ public class WorkmanshipFactory implements Factory, Source, KeyWallet {
 					pool.add(workmanship);
 				} 
 			} 
-		} catch (FileNotFoundException e) {
+		}
+		catch (FileNotFoundException e) 
+		{
 
 			e.printStackTrace();
-		} finally {
+		}
+		finally 
+		{
 			classScanner.close();
 		}
 		return pool;
@@ -137,49 +150,30 @@ public class WorkmanshipFactory implements Factory, Source, KeyWallet {
 		getWorkmanship(character, pool);
 	}
 
-	private static Workmanship createWorkmanship(String name) 
+	private static Trait createTrait(String trait) 
 	{
-
-		switch(name)
-		{
-		case "^\\*[a-zA-Z]*":	
-			return createSkill(new Skill(name));
-		case "^>[a-zA-Z]*":	
-			return createSpell(new Spell(name));
-		case "^<[a-zA-Z]*":	
-			return createPossession(new Possession(name));
-		case "^-[a-zA-Z]*":	
-			return createTrait(new Trait(name));
-		}
-
-		return null;	
-
+		return new Trait(trait);
 	}
 
-	private static Trait createTrait(Trait trait) 
-	{
-		return trait;
-	}
-
-	private static Possession createPossession(Possession possession) 
+	private static Possession createPossession(String possession) 
 	{
 
-		return possession;
+		return new Possession(possession);
 	}
 
-	private static Spell createSpell(Spell spell) 
+	private static Spell createSpell(String spell) 
 	{
 
-		return spell;
+		return new Spell(spell);
 	}
 
-	private static Skill createSkill(Skill skill) 
+	private static Features createFeatures(String skill) 
 	{
-
-		return skill;
+		return new Features(skill);
 	}
 
-	public static File[] getWorkmanship() {
+	public static File[] getWorkmanship() 
+	{
 		return workmanship;
 	}
 

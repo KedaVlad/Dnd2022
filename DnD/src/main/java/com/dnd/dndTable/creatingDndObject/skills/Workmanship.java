@@ -6,4 +6,7 @@ import com.dnd.Source;
 
 public interface Workmanship {
 	
+	public boolean equals(Object obj);
+	public int hashCode();
+
 }
