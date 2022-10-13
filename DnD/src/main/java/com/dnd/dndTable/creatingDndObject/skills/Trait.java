@@ -2,7 +2,7 @@ package com.dnd.dndTable.creatingDndObject.skills;
 
 import java.io.Serializable;
 
-public class Trait extends Features implements Workmanship, Serializable {
+public class Trait extends Feature implements Serializable {
 
 	private static final long serialVersionUID = -8115502742156146242L;
 

@@ -1,29 +1,28 @@
 package com.dnd;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class Test implements KeyWallet, Source {
 
 	
-	public static String getStr(String str)
+	
+	public void someMethod(Map<String, Integer> map)
 	{
-		
-		int i = 0;
-		switch(i)
-		{
-		case 0:
-			str += "Kakaha";
-			break;
-		}
-		str += " Dura";
-		return str;
+		map.put("Dura", 75);
 	}
 	
 	public static void main(String[] args) throws Exception {
 
+Test test = new Test();
+Test2 test2 = new Test2();
 
-		System.out.println(Test.getStr("Biba "));
+test2.getSomeMap().put("Daun", 122);
+
+		test.someMethod(test2.getSomeMap());
+		 
 		
-		
+		System.out.println(test2.getSomeMap());
 	}
 	}
 

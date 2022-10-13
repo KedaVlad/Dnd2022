@@ -26,11 +26,11 @@ public class CharacterFactory implements Factory,Source{
 
 	}
 	
-	public static CharacterDnd update(CharacterDnd characterDnd)
+	public static void update(CharacterDnd characterDnd)
 	{
 		Log.add("update", Place.FACTORY, Place.CHARACTER);
 		save(characterDnd);
-		return load(characterDnd.getName());
+		characterDnd = load(characterDnd.getName());
 	}
 
 	public static File getMyCharactersDir() {

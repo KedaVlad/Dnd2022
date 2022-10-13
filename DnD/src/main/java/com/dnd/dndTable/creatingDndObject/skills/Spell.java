@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 
-public class Spell implements Workmanship, Serializable {
+public class Spell implements Serializable {
 	
 	
 	private static final long serialVersionUID = -7876613939972469105L;

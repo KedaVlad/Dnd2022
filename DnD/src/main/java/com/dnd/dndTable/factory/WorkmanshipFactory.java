@@ -16,7 +16,7 @@ import com.dnd.Log.Place;
 import com.dnd.dndTable.creatingDndObject.*;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
-import com.dnd.dndTable.creatingDndObject.skills.Features;
+import com.dnd.dndTable.creatingDndObject.skills.Feature;
 import com.dnd.dndTable.creatingDndObject.skills.Possession;
 import com.dnd.dndTable.creatingDndObject.skills.Spell;
 import com.dnd.dndTable.creatingDndObject.skills.Trait;
@@ -27,7 +27,7 @@ public class WorkmanshipFactory implements Factory, Source, KeyWallet {
 
 	private final static File[] workmanship = {new File(skillsSource), new File(spellsSource), new File(possessionsSource), new File(traitsSource)};
 
-	public static CharacterDnd getWorkmanship(CharacterDnd character, List<String> workmanship)
+	public static void getWorkmanship(CharacterDnd character, List<String> workmanship)
 	{ 
 		Log.add("getWorkmanship", Place.DND, Place.FACTORY, Place.WORKMANSHIP);
 
@@ -41,36 +41,36 @@ public class WorkmanshipFactory implements Factory, Source, KeyWallet {
 			if(name.contains(skillKey))
 			{
 				
-				if(!character.getGameEngine().getMyWorkmanship().getMyFeatures().contains(new Features(cleanName)))
+				if(!character.getWorkmanship().getMyFeatures().contains(new Feature(cleanName)))
 				{
-					character.getGameEngine().getMyWorkmanship().getMyFeatures().add((Features)WorkmanshipFactory.createFeatures(cleanName));
+					character.getWorkmanship().getMyFeatures().add((Feature)WorkmanshipFactory.createFeatures(cleanName));
 
 				}
 
 			}
 			else if(name.contains(spellKey))
 			{
-				if(!character.getGameEngine().getMyWorkmanship().getMySpells().contains(new Spell(cleanName)))
+				if(!character.getWorkmanship().getMySpells().contains(new Spell(cleanName)))
 				{
-					character.getGameEngine().getMyWorkmanship().getMySpells().add((Spell)WorkmanshipFactory.createSpell(cleanName));
+					character.getWorkmanship().getMySpells().add((Spell)WorkmanshipFactory.createSpell(cleanName));
 				}
 			}
 			else if(name.contains(possessionKey))
 			{
-				if(!character.getGameEngine().getMyWorkmanship().getMyPossession().contains(new Possession(cleanName)))
+				if(!character.getWorkmanship().getMyPossessions().contains(new Possession(cleanName)))
 				{
-					character.getGameEngine().getMyWorkmanship().getMyPossession().add((Possession)WorkmanshipFactory.createPossession(name));
+					character.getWorkmanship().getMyPossessions().add((Possession)WorkmanshipFactory.createPossession(name));
 				}
 			}
 			else if(name.contains(traitKey))
 			{
-				if(!character.getGameEngine().getMyWorkmanship().getMyFeatures().contains(new Trait(cleanName)))
+				if(!character.getWorkmanship().getMyFeatures().contains(new Trait(cleanName)))
 				{
-					character.getGameEngine().getMyWorkmanship().getMyFeatures().add((Trait)WorkmanshipFactory.createTrait(cleanName));
+					character.getWorkmanship().getMyFeatures().add((Trait)WorkmanshipFactory.createTrait(cleanName));
 				}
 			}
 		}
-		return character;
+	
 	}
 
 	public static List<String> getWorkmanshipClass(ClassDnd classDnd)
@@ -167,9 +167,9 @@ public class WorkmanshipFactory implements Factory, Source, KeyWallet {
 		return new Spell(spell);
 	}
 
-	private static Features createFeatures(String skill) 
+	private static Feature createFeatures(String skill) 
 	{
-		return new Features(skill);
+		return new Feature(skill);
 	}
 
 	public static File[] getWorkmanship() 

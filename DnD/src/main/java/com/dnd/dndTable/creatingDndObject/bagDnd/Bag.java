@@ -1,12 +1,10 @@
-package com.dnd.dndTable.gameEngine;
+package com.dnd.dndTable.creatingDndObject.bagDnd;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
-
-class Bag implements Serializable
+public class Bag implements Serializable
 {
 
 	private static final long serialVersionUID = -3894341880184285889L;

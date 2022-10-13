@@ -15,7 +15,7 @@ public class ClassFactory implements Factory,Source
 	private final static File dirClass = new File(classSource);;
 	private static File dirArchetype;
 
-	public static CharacterDnd create(CharacterDnd character, String className, int lvl, String archetype) 
+	public static void create(CharacterDnd character, String className, int lvl, String archetype) 
 	{
 		Log.add("Class " + className +" " + archetype + " create", Place.FACTORY, Place.CLASS);
 		switch(className)
@@ -63,8 +63,8 @@ public class ClassFactory implements Factory,Source
 			character.setClassDnd(refactor(className, archetype, new Wizard(lvl, archetype)));
 			break;
 		}
-		 character = WorkmanshipFactory.getWorkmanship(character, WorkmanshipFactory.getWorkmanshipClass(character.getClassDnd()));
-		return character;
+		WorkmanshipFactory.getWorkmanship(character, WorkmanshipFactory.getWorkmanshipClass(character.getClassDnd()));
+	
 	}
 
 	private static ClassDnd refactor(String className, String archetype, ClassDnd classDnd)

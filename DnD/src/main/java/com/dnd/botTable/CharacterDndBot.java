@@ -29,7 +29,7 @@ import com.dnd.Log;
 import com.dnd.Log.Place;
 import com.dnd.Source;
 import com.dnd.botTable.TrashCan.Circle;
-import com.dnd.dndTable.creatingDndObject.skills.Features;
+import com.dnd.dndTable.creatingDndObject.skills.Feature;
 import com.dnd.dndTable.factory.CharacterFactory;
 import com.dnd.dndTable.factory.ClassFactory;
 import com.dnd.dndTable.factory.RaceFactory;
@@ -192,7 +192,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		replyKeyboardMarkup.setResizeKeyboard(true);
 		execute(
 				SendMessage.builder()
-				.text("Greetings!\r\n" + "/myCharacters - This command leads to your character library, where you can create and choose which character you play.")
+				.text("Greetings!\r\n" + "/myCharacters - This command leads to your character library,"
+				+ " where you can create and choose which character you play.")
 				.replyMarkup(replyKeyboardMarkup)
 				.chatId(message.getChatId().toString())
 				.build()
@@ -260,7 +261,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 		case classMediatorKey:
 
-			finishClass(message); 	
+			finishClass(message); 
 			Log.add("finishClass", Place.BOT, Place.MEDIATOR, Place.CREATING);
 			return;
 
@@ -308,7 +309,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			e.printStackTrace();
 		}
 
-		gameTable.update(gameTable.getActualGameCharacter());
+		gameTable.update();
 	}
 
 	private void finishClass(Message message)
@@ -337,7 +338,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				gameTable.createClass();
 
 				Message botAnswer = execute(SendMessage.builder()
-						.text(lvl+"??? I see you're new here. Let's start with lvl 1. Are you satisfied with this option? If not, select another option above." + "\r\n"+ ClassFactory.getObgectInfo(gameTable.getActualGameCharacter().getClassDnd()))
+						.text(lvl+"??? I see you're new here. Let's start with lvl 1. Are you satisfied with this option? If not,"
+								+ " select another option above." + "\r\n"+ ClassFactory.getObgectInfo(gameTable.getActualGameCharacter().getClassDnd()))
 						.chatId(message.getChatId().toString())
 						.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 						.build()
@@ -353,7 +355,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				gameTable.createClass();
 
 				Message botAnswer = execute(SendMessage.builder()
-						.text("Are you satisfied with this option? If not, select another option above." + "\r\n"+ ClassFactory.getObgectInfo(gameTable.getActualGameCharacter().getClassDnd()))
+						.text("Are you satisfied with this option? If not, select another option above." + "\r\n" 
+								+ ClassFactory.getObgectInfo(gameTable.getActualGameCharacter().getClassDnd()))
 						.chatId(message.getChatId().toString())
 						.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 						.build()
@@ -404,8 +407,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			}
 			else
 			{
-				gameTable.getActualGameCharacter().getGameEngine().getMyStat()
-				.setStartStat(stats.get(0), stats.get(1), stats.get(2), stats.get(3), stats.get(4), stats.get(5));
+				gameTable.getActualGameCharacter().setMyStat(stats.get(0), stats.get(1), stats.get(2), stats.get(3), stats.get(4), stats.get(5));
 				gameTable.update();
 				gameTable.getMediatorWallet().mediatorBreak();
 
@@ -445,7 +447,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			e.printStackTrace();
 		}
-		gameTable.update();
 	}
 
 	private void finishHp(Message message)
@@ -455,9 +456,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		Matcher matcher = pat.matcher(message.getText());
 		while (matcher.find()) 
 		{
-			gameTable.getActualGameCharacter().getGameEngine().setHp((int) Integer.parseInt(matcher.group()));
+			gameTable.getActualGameCharacter().setHp((int) Integer.parseInt(matcher.group()));
 		}
-		gameTable.update();
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
 		buttons.add(Arrays.asList(InlineKeyboardButton.builder()
@@ -503,7 +503,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			Log.add("downloadHero", Place.BOT, Place.CALLBACK);
 			return;
 
-			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		case characterCreateKey:
 			startCreateHero(callbackQuery);
 			Log.add("startCreateHero", Place.BOT, Place.CALLBACK, Place.CREATING);
@@ -548,7 +548,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			startStats(callbackQuery);
 			Log.add("startStats", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
-			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		case menuKey:
 			characterMenu(callbackQuery);
 			Log.add("characterMenu", Place.BOT, Place.CALLBACK, Place.PLAY);
@@ -575,7 +575,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			CharacterFactory.save(gameTable.getActualGameCharacter());
 			gameTable.setActualGameCharacter(CharacterFactory.load(callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2"))); 
-			gameTable.update();
 			characterMenu(callbackQuery);
 
 		}
@@ -583,7 +582,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			gameTable.setChekChar(true);
 			gameTable.setActualGameCharacter(CharacterFactory.load(callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2"))); 
-			gameTable.update();
 			characterMenu(callbackQuery);
 		}
 	}
@@ -658,7 +656,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
 					.text(ClassFactory.getArchetypeArray(gameTable.getCuttingBoard().getClassBeck())[i].replaceAll(keyAnswer + ".txt", "$1"))
-					.callbackData(archetypeKey + ClassFactory.getArchetypeArray(gameTable.getCuttingBoard().getClassBeck())[i].replaceAll(keyAnswer + ".txt", "$1"))
+					.callbackData(archetypeKey + ClassFactory.getArchetypeArray(gameTable.getCuttingBoard().getClassBeck())[i]
+							.replaceAll(keyAnswer + ".txt", "$1"))
 					.build()));
 		}
 		try 
@@ -879,7 +878,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		Matcher matcher = pat.matcher(callbackQuery.getData());
 		while (matcher.find()) 
 		{
-			gameTable.getActualGameCharacter().getGameEngine().setHp((int) Integer.parseInt(matcher.group()));
+			gameTable.getActualGameCharacter().setHp((int) Integer.parseInt(matcher.group()));
 		}
 
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
@@ -1024,19 +1023,19 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
 		String answer = "Choose spell \n";
-		if(gameTable.getActualGameCharacter().getGameEngine().getMyWorkmanship().getMyFeatures().isEmpty())
+		if(gameTable.getActualGameCharacter().getWorkmanship().getMyFeatures().isEmpty())
 		{
 			Log.add("0 size:(", Place.BOT);
 		}
 		else
 		{
-			Log.add(gameTable.getActualGameCharacter().getGameEngine().getMyWorkmanship().getMyFeatures().size() + 
-					gameTable.getActualGameCharacter().getGameEngine().getMyWorkmanship().getMyFeatures().get(1).getName(),
+			Log.add(gameTable.getActualGameCharacter().getWorkmanship().getMyFeatures().size() + 
+					gameTable.getActualGameCharacter().getWorkmanship().getMyFeatures().get(1).getName(),
 					Place.BOT, Place.PLAY);
-			for (Features skill: gameTable.getActualGameCharacter().getGameEngine().getMyWorkmanship().getMyFeatures())
+			for (Feature skill: gameTable.getActualGameCharacter().getWorkmanship().getMyFeatures())
 			{
-				Log.add(gameTable.getActualGameCharacter().getGameEngine().getMyWorkmanship().getMyFeatures().size() + 
-						gameTable.getActualGameCharacter().getGameEngine().getMyWorkmanship().getMyFeatures().get(2).getName(),
+				Log.add(gameTable.getActualGameCharacter().getWorkmanship().getMyFeatures().size() + 
+						gameTable.getActualGameCharacter().getWorkmanship().getMyFeatures().get(2).getName(),
 						Place.BOT, Place.PLAY);
 				Log.add("createButtonSkill", Place.BOT);
 

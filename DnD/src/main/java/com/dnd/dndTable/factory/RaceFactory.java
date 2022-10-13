@@ -15,10 +15,10 @@ public class RaceFactory implements Source, Factory
 	private static File subRace;
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public static CharacterDnd create(CharacterDnd character, String raceName, String subRace) 
+	public static void create(CharacterDnd character, String raceName, String subRace) 
 	{
 		character.setRaceDnd(refactor(character, new RaceDnd(raceName,subRace)));
-		return character;
+		
 	}
 
 	private static RaceDnd refactor(CharacterDnd character, RaceDnd raceDnd)

@@ -1,7 +1,7 @@
 package com.dnd;
 
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.gameEngine.Stats.StatName;
+import com.dnd.dndTable.creatingDndObject.Stats.StatName;
 
 public class Dice {
 
@@ -78,7 +78,7 @@ public class Dice {
 
 
 		int start = characterDnd.getClassDnd().getDiceHits();
-		int con = ((int) characterDnd.getGameEngine().getMyStat().getStats().get(StatName.CONSTITUTION) - 10)/2;
+		int con = (characterDnd.getMyStat().getValue(0, 2) - 10)/2;
 		switch(start)
 		{
 		case 6:
@@ -117,7 +117,7 @@ public class Dice {
 	{
 
 		int start = characterDnd.getClassDnd().getDiceHits();
-		int con = ((int) characterDnd.getGameEngine().getMyStat().getStats().get(StatName.CONSTITUTION) - 10)/2;
+		int con = (characterDnd.getMyStat().getValue(0, 2) - 10)/2;
 		switch(start)
 		{
 		case 6:

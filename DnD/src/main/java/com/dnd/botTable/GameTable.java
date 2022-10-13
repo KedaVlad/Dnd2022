@@ -4,6 +4,7 @@ package com.dnd.botTable;
 import com.dnd.Log;
 import com.dnd.Log.Place;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.factory.CharacterFactory;
 import com.dnd.dndTable.factory.ClassFactory;
 import com.dnd.dndTable.factory.RaceFactory;
@@ -22,25 +23,27 @@ public class GameTable {
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
  	public void createClass()
 	{
-		this.actualGameCharacter = ClassFactory.create(actualGameCharacter, cuttingBoard.getClassBeck(), cuttingBoard.getClassLvl() , cuttingBoard.getArcherypeBeck());
+		ClassFactory.create(actualGameCharacter, cuttingBoard.getClassBeck(), cuttingBoard.getClassLvl() , cuttingBoard.getArcherypeBeck());
 		update();
 	}
 
 	public void createRace()
 	{
-		this.actualGameCharacter = RaceFactory.create(actualGameCharacter, cuttingBoard.getRace(), cuttingBoard.getSubRace());
+		RaceFactory.create(actualGameCharacter, cuttingBoard.getRace(), cuttingBoard.getSubRace());
 		update();
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void update(CharacterDnd characterDnd)
+	public void lvlUp()
 	{
-		this.actualGameCharacter = CharacterFactory.update(characterDnd);
+		
+		
 	}
+	
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void update()
 	{
-		this.actualGameCharacter = CharacterFactory.update(actualGameCharacter);
+		CharacterFactory.update(actualGameCharacter);
 		Log.add("update", Place.BOT, Place.GAMETABLE, Place.METHOD);
 	}
 

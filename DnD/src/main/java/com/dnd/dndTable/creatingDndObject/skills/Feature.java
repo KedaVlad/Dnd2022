@@ -5,7 +5,7 @@ import java.io.Serializable;
 import com.dnd.Log;
 import com.dnd.Log.Place;
 
-public class Features implements Workmanship, Serializable{
+public class Feature implements Serializable{
 	
 	private static final long serialVersionUID = 5053270361827778941L;
 	
@@ -16,7 +16,7 @@ public class Features implements Workmanship, Serializable{
 	private int statsPointsBuff;
 	
 
-	public Features(String name) {
+	public Feature(String name) {
 		
 		this.name = name;
 	}
@@ -26,7 +26,7 @@ public class Features implements Workmanship, Serializable{
 	public boolean equals(Object obj) {
 		if(obj == this) return true;
 		if(obj == null || obj.getClass() != this.getClass()) return false;
-		Features characterDnd = (Features) obj;
+		Feature characterDnd = (Feature) obj;
 		return id == characterDnd.id && (name == characterDnd.name ||(name != null && name.equals(characterDnd.name)));
 	}
 
