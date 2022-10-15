@@ -9,7 +9,7 @@ import com.dnd.dndTable.*;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.*;
 
-public class ClassFactory implements Factory,Source 
+abstract class ClassFactory implements Source 
 {
 
 	private final static File dirClass = new File(classSource);;

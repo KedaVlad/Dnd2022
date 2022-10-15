@@ -5,9 +5,7 @@ import com.dnd.Log;
 import com.dnd.Log.Place;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
-import com.dnd.dndTable.factory.CharacterFactory;
-import com.dnd.dndTable.factory.ClassFactory;
-import com.dnd.dndTable.factory.RaceFactory;
+import com.dnd.dndTable.factory.ControlPanel;
 
 
 public class GameTable {
@@ -16,21 +14,21 @@ public class GameTable {
 	private CharacterDnd actualGameCharacter;
 	private boolean chekChar = false;
 
-	private CuttingBoard cuttingBoard = new CuttingBoard();
+	private ControlPanel controlPanel = new ControlPanel();
 	private MediatorWallet mediatorWallet = new MediatorWallet();
 	private TrashCan trashCan = new TrashCan();
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
  	public void createClass()
 	{
-		ClassFactory.create(actualGameCharacter, cuttingBoard.getClassBeck(), cuttingBoard.getClassLvl() , cuttingBoard.getArcherypeBeck());
-		update();
+ 		getControlPanel().createClass(actualGameCharacter);
+	
 	}
 
 	public void createRace()
 	{
-		RaceFactory.create(actualGameCharacter, cuttingBoard.getRace(), cuttingBoard.getSubRace());
-		update();
+		getControlPanel().createRace(actualGameCharacter);
+		
 	}
 
 	public void lvlUp()
@@ -43,10 +41,20 @@ public class GameTable {
 
 	public void update()
 	{
-		CharacterFactory.update(actualGameCharacter);
+		getControlPanel().save(actualGameCharacter);
 		Log.add("update", Place.BOT, Place.GAMETABLE, Place.METHOD);
 	}
 
+	public void abort()
+	{
+		if(actualGameCharacter != null)
+		{
+			if(!actualGameCharacter.isFinished())
+			{
+				controlPanel.delete(actualGameCharacter);
+			}
+		}
+	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public CharacterDnd getActualGameCharacter() 
 	{
@@ -57,11 +65,6 @@ public class GameTable {
 	{
 		this.actualGameCharacter = actualGameCharacter;
 
-	}
-
-	public CuttingBoard getCuttingBoard() 
-	{
-		return cuttingBoard;
 	}
 
 	public MediatorWallet getMediatorWallet() 
@@ -82,6 +85,7 @@ public class GameTable {
 	public void setChatId(long chatId) 
 	{
 		this.chatId = chatId;
+		controlPanel.setMyCharactersDir("" + getChatId());
 	}
 
 	public TrashCan getTrashCan() 
@@ -100,6 +104,10 @@ public class GameTable {
 
 	public void setChekChar(boolean chekChar) {
 		this.chekChar = chekChar;
+	}
+
+	public ControlPanel getControlPanel() {
+		return controlPanel;
 	}
 
 }

@@ -14,40 +14,18 @@ import com.dnd.Log.Place;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 
-public class CharacterFactory implements Factory,Source{
+abstract class CharacterFactory implements Source
+{
 
+	public static CharacterDnd create(String name, File myCharactersDir) {
 
-	private static File myCharactersDir;
+		save(new CharacterDnd(name), myCharactersDir);
+		return load(name, myCharactersDir);
 
-	public static CharacterDnd create(String name) {
-
-		save(new CharacterDnd(name));
-		return load(name);
-
-	}
-	
-	public static void update(CharacterDnd characterDnd)
-	{
-		Log.add("update", Place.FACTORY, Place.CHARACTER);
-		save(characterDnd);
-		characterDnd = load(characterDnd.getName());
-	}
-
-	public static File getMyCharactersDir() {
-
-		return myCharactersDir;
-	}
-
-	public static void setMyCharactersDir(String userName) {
-
-		CharacterFactory.myCharactersDir = new File(userSource + userName);
-		if(!myCharactersDir.exists()) {
-			myCharactersDir.mkdir();
-		}
 	}
 
 	//save and load
-	public static void save(CharacterDnd character)  
+	public static void save(CharacterDnd character, File myCharactersDir)  
 	{
 		File file = new File(myCharactersDir +"\\" + character.getName());
 		try {
@@ -72,13 +50,10 @@ public class CharacterFactory implements Factory,Source{
 
 	}
 
-	public static void delete(CharacterDnd character)  
+	public static void delete(CharacterDnd character, File myCharactersDir)  
 	{
-		if(character == null) 
-		{
-			
-		}
-		else
+
+		if(character != null)
 		{
 		File file = new File(myCharactersDir +"\\" + character.getName());
 		try {
@@ -89,11 +64,12 @@ public class CharacterFactory implements Factory,Source{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		}
-
+	}
 	}
 
-	public static CharacterDnd load(String nameFile) 
+
+
+	public static CharacterDnd load(String nameFile, File myCharactersDir) 
 	{
 		CharacterDnd loadedCharacter = null;
 		try 

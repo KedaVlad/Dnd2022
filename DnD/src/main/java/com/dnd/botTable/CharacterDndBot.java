@@ -30,17 +30,16 @@ import com.dnd.Log.Place;
 import com.dnd.Source;
 import com.dnd.botTable.TrashCan.Circle;
 import com.dnd.dndTable.creatingDndObject.skills.Feature;
-import com.dnd.dndTable.factory.CharacterFactory;
-import com.dnd.dndTable.factory.ClassFactory;
-import com.dnd.dndTable.factory.RaceFactory;
+import com.dnd.dndTable.factory.ControlPanel;
+import com.dnd.dndTable.factory.ControlPanel.ObjectType;
 
 public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet,Source 
 {
 
 	private GameTable gameTable = new GameTable();
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void onUpdateReceived(Update update) 
 	{ 
@@ -111,8 +110,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void handleMessage(Message message) throws TelegramApiException ///<-
 	{
@@ -174,10 +173,10 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private void startCase(Message message) throws TelegramApiException
 	{
 		gameTable.setChatId(message.getChatId());
-		CharacterFactory.setMyCharactersDir("" + gameTable.getChatId());
-
 		gameTable.getMediatorWallet().mediatorBreak();
 		gameTable.setChekChar(false);
+		gameTable.abort();
+		gameTable.getControlPanel().cleanLocalData();
 		clean(gameTable.getTrashCan().getCircle(Circle.ALL));
 
 		ReplyKeyboardMarkup replyKeyboardMarkup = new ReplyKeyboardMarkup();
@@ -193,7 +192,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		execute(
 				SendMessage.builder()
 				.text("Greetings!\r\n" + "/myCharacters - This command leads to your character library,"
-				+ " where you can create and choose which character you play.")
+						+ " where you can create and choose which character you play.")
 				.replyMarkup(replyKeyboardMarkup)
 				.chatId(message.getChatId().toString())
 				.build()
@@ -204,6 +203,9 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private void characterCase(Message message) throws TelegramApiException 
 	{
 
+		gameTable.abort();
+		gameTable.getControlPanel().cleanLocalData();
+		
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
 		buttons.add(Arrays.asList(InlineKeyboardButton.builder()
@@ -211,9 +213,9 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				.callbackData(characterCreateKey)
 				.build()));
 
-		if(!CharacterFactory.getMyCharactersDir().list().equals(null)) 
+		if(!gameTable.getControlPanel().getMyCharactersDir().list().equals(null)) 
 		{
-			String[] myCreaterdCharacters = CharacterFactory.getMyCharactersDir().list();
+			String[] myCreaterdCharacters = gameTable.getControlPanel().getMyCharactersDir().list();
 			for(int i = 0; i < myCreaterdCharacters.length; i++)
 			{
 				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
@@ -230,7 +232,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					);
 			gameTable.getTrashCan().toMainСircle(toTrash.getMessageId());
 		}
-		else if(CharacterFactory.getMyCharactersDir().list().equals(null))
+		else if(gameTable.getControlPanel().getMyCharactersDir().list().equals(null))
 		{
 			Message toTrash = execute(
 					SendMessage.builder()
@@ -243,8 +245,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void hendlerMediator(Message message) ///<-
 	{
@@ -283,8 +285,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void finishCharacter(Message message)
 	{
-		if(gameTable.isChekChar() == false) CharacterFactory.delete(gameTable.getActualGameCharacter());
-		gameTable.setActualGameCharacter(CharacterFactory.create(message.getText()));
+		if(gameTable.isChekChar() == false) gameTable.getControlPanel().delete(gameTable.getActualGameCharacter());
+		gameTable.setActualGameCharacter(gameTable.getControlPanel().createCharecter(message.getText()));
 		gameTable.getActualGameCharacter().setMyMemoirs(gameTable.getActualGameCharacter().getName() + "\n\n");
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
@@ -334,12 +336,14 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			if(lvl < 1 || lvl > 20)
 			{
 
-				gameTable.getCuttingBoard().setClassLvl(1);
+				gameTable.getControlPanel().setClassLvl(1);
+				gameTable.getControlPanel().load(gameTable.getActualGameCharacter().getName());
 				gameTable.createClass();
 
 				Message botAnswer = execute(SendMessage.builder()
-						.text(lvl+"??? I see you're new here. Let's start with lvl 1. Are you satisfied with this option? If not,"
-								+ " select another option above." + "\r\n"+ ClassFactory.getObgectInfo(gameTable.getActualGameCharacter().getClassDnd()))
+						.text(lvl+"??? I see you're new here. Let's start with lvl 1. Are you satisfied with this option?"
+								+ " If not, select another option above." + "\r\n"
+								+ ControlPanel.getObjectInfo(gameTable.getActualGameCharacter().getClassDnd(), ObjectType.CLASS))
 						.chatId(message.getChatId().toString())
 						.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 						.build()
@@ -351,18 +355,17 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			else
 			{
 
-				gameTable.getCuttingBoard().setClassLvl(lvl);
+				gameTable.getControlPanel().setClassLvl(lvl);
 				gameTable.createClass();
 
 				Message botAnswer = execute(SendMessage.builder()
-						.text("Are you satisfied with this option? If not, select another option above." + "\r\n" 
-								+ ClassFactory.getObgectInfo(gameTable.getActualGameCharacter().getClassDnd()))
+						.text("Are you satisfied with this option? If not, select another option above." + "\r\n"
+								+ ControlPanel.getObjectInfo(gameTable.getActualGameCharacter().getClassDnd(),ObjectType.CLASS))
 						.chatId(message.getChatId().toString())
 						.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 						.build()
 						);
 
-				gameTable.getActualGameCharacter().setMyMemoirs(ClassFactory.getObgectInfo(gameTable.getActualGameCharacter().getClassDnd()));
 				gameTable.getTrashCan().toSmallСircle(message.getMessageId());
 				gameTable.getTrashCan().toSmallСircle(botAnswer.getMessageId());
 			} 
@@ -374,13 +377,14 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 		Log.add("Class " + gameTable.getActualGameCharacter().getClassDnd().getMyArchetypeClass(), Place.BOT);
 
-		Log.add("Class back " + gameTable.getCuttingBoard().getArcherypeBeck(), Place.BOT);
+		Log.add("Class back " + gameTable.getControlPanel().getArcherypeBeck(), Place.BOT);
 
 	}
 
 	private void finishStat(Message message)
 	{
-		gameTable.getActualGameCharacter().setMyMemoirs(RaceFactory.getObgectInfo(gameTable.getActualGameCharacter().getMyRace()));
+		gameTable.getActualGameCharacter().setMyMemoirs(
+				ControlPanel.getObjectInfo(gameTable.getActualGameCharacter().getMyRace(), ObjectType.RACE));
 		List<Integer> stats = new ArrayList<>();
 		Pattern pat = Pattern.compile("[-]?[0-9]+(.[0-9]+)?");
 		Matcher matcher = pat.matcher(message.getText());
@@ -486,13 +490,12 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void handleCallback(CallbackQuery callbackQuery)  ///<-
 	{
 		String key = callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$1");
-
 
 		switch (key)
 		{
@@ -503,52 +506,55 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			Log.add("downloadHero", Place.BOT, Place.CALLBACK);
 			return;
 
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		case characterCreateKey:
 			startCreateHero(callbackQuery);
 			Log.add("startCreateHero", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
 
 		case startClassKey:
+			gameTable.update();
 			startCreateClass(callbackQuery);
 			Log.add("startCreateClass", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
 
-		case classKey:
+		case chooseArchetypeClassKey:
 			chooseArchetype(callbackQuery);
 			Log.add("chooseArchetype", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
 
-		case archetypeKey:
+		case finishClassKey:
 			chooseLvlClass(callbackQuery);
 			Log.add("chooseLvlClass", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
 
 		case startRaceKey:
+			gameTable.update();
 			startCreateRace(callbackQuery);
 			Log.add("startCreateRace", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
 
-		case raceKey:
+		case chooseSubRaceKey:
 			chooseSubRace(callbackQuery);
 			Log.add("chooseSubRace", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
 
-		case subRaceKey:
+		case finishRaceKey:
 			finishRace(callbackQuery);
 			Log.add("finishRace", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
 
 		case hpMediatorKey:
-			startHp(callbackQuery);
+			finishHp(callbackQuery.getMessage());
 			Log.add("startHp", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
 
-		case finishHeroKey:
+		case startStatsKey:
+			gameTable.update();
 			startStats(callbackQuery);
 			Log.add("startStats", Place.BOT, Place.CALLBACK, Place.CREATING);
 			return;
-			//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		case menuKey:
 			characterMenu(callbackQuery);
 			Log.add("characterMenu", Place.BOT, Place.CALLBACK, Place.PLAY);
@@ -573,25 +579,25 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 		if(gameTable.isChekChar())
 		{
-			CharacterFactory.save(gameTable.getActualGameCharacter());
-			gameTable.setActualGameCharacter(CharacterFactory.load(callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2"))); 
+			gameTable.getControlPanel().save(gameTable.getActualGameCharacter());
+			gameTable.setActualGameCharacter(gameTable.getControlPanel().load(callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2"))); 
 			characterMenu(callbackQuery);
 
 		}
 		else 
 		{
 			gameTable.setChekChar(true);
-			gameTable.setActualGameCharacter(CharacterFactory.load(callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2"))); 
+			gameTable.setActualGameCharacter(gameTable.getControlPanel().load(callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2"))); 
 			characterMenu(callbackQuery);
 		}
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void startCreateHero(CallbackQuery callbackQuery)
 	{
 		gameTable.getMediatorWallet().mediatorBreak();
-		clean(gameTable.getTrashCan().getCircle(Circle.MAIN));
+		clean(gameTable.getTrashCan().getCircle(Circle.ALL));
 		gameTable.getMediatorWallet().setCharacterCreateMediator(true);
 
 		Message message = callbackQuery.getMessage();
@@ -621,11 +627,11 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		Message message = callbackQuery.getMessage();
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-		for(int i = 0; i < ClassFactory.getClassArray().length; i++)
+		for(int i = 0; i < gameTable.getControlPanel().getArray(ObjectType.CLASS).length; i++)
 		{
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-					.text(ClassFactory.getClassArray()[i])
-					.callbackData(classKey + ClassFactory.getClassArray()[i])
+					.text(gameTable.getControlPanel().getArray(ObjectType.CLASS)[i])
+					.callbackData(chooseArchetypeClassKey + gameTable.getControlPanel().getArray(ObjectType.CLASS)[i])
 					.build()));
 		}		
 		try 
@@ -648,15 +654,15 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void chooseArchetype(CallbackQuery callbackQuery)
 	{
-		gameTable.getCuttingBoard().setClassBeck(callbackQuery.getData().replaceAll(classKey + keyAnswer, "$1"));
+		gameTable.getControlPanel().setClassBeck(callbackQuery.getData().replaceAll(chooseArchetypeClassKey + keyAnswer, "$1"));
 		Message message = callbackQuery.getMessage();
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-		for(int i = 0; i < ClassFactory.getArchetypeArray(gameTable.getCuttingBoard().getClassBeck()).length; i++)
+		for(int i = 0; i < gameTable.getControlPanel().getArray(ObjectType.ARCHETYPE).length; i++)
 		{
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-					.text(ClassFactory.getArchetypeArray(gameTable.getCuttingBoard().getClassBeck())[i].replaceAll(keyAnswer + ".txt", "$1"))
-					.callbackData(archetypeKey + ClassFactory.getArchetypeArray(gameTable.getCuttingBoard().getClassBeck())[i]
+					.text(gameTable.getControlPanel().getArray(ObjectType.ARCHETYPE)[i].replaceAll(keyAnswer + ".txt", "$1"))
+					.callbackData(finishClassKey + gameTable.getControlPanel().getArray(ObjectType.ARCHETYPE)[i]
 							.replaceAll(keyAnswer + ".txt", "$1"))
 					.build()));
 		}
@@ -664,7 +670,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			Message toTrash = execute(
 					SendMessage.builder()
-					.text(gameTable.getCuttingBoard().getClassBeck() + ", realy? Which one?")
+					.text(gameTable.getControlPanel().getClassBeck() + ", realy? Which one?")
 					.chatId(message.getChatId().toString())
 					.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 					.build());
@@ -680,7 +686,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void chooseLvlClass(CallbackQuery callbackQuery) 
 	{
-		gameTable.getCuttingBoard().setArcherypeBeck(callbackQuery.getData().replaceAll(archetypeKey + keyAnswer, "$1"));
+		gameTable.getControlPanel().setArcherypeBeck(callbackQuery.getData().replaceAll(finishClassKey + keyAnswer, "$1"));
 		gameTable.getMediatorWallet().mediatorBreak();
 		gameTable.getMediatorWallet().setClassCreateMediator(true);
 		Message message = callbackQuery.getMessage();
@@ -705,34 +711,37 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private void startCreateRace(CallbackQuery callbackQuery)
 	{
 		gameTable.getMediatorWallet().mediatorBreak();
+		gameTable.getActualGameCharacter().setMyMemoirs(
+				ControlPanel.getObjectInfo(gameTable.getActualGameCharacter().getClassDnd(), ObjectType.CLASS));
 		clean(gameTable.getTrashCan().getCircle(Circle.MAIN));
 
 		Message message = callbackQuery.getMessage();
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-		for(int i = 1; i <= RaceFactory.getRaceArray().length; i += 3)
+		for(int i = 1; i <= gameTable.getControlPanel().getArray(ObjectType.RACE).length; i += 3)
 		{
-			if(((i + 1) > RaceFactory.getRaceArray().length)&&((i + 2) > RaceFactory.getRaceArray().length)) 
+			if(((i + 1) > gameTable.getControlPanel().getArray(ObjectType.RACE).length)
+					&&((i + 2) > gameTable.getControlPanel().getArray(ObjectType.RACE).length)) 
 			{
 				buttons.add(Arrays.asList(
 
 						InlineKeyboardButton.builder()
-						.text(RaceFactory.getRaceArray()[i-1])
-						.callbackData(raceKey + RaceFactory.getRaceArray()[i-1])
+						.text(gameTable.getControlPanel().getArray(ObjectType.RACE)[i-1])
+						.callbackData(chooseSubRaceKey + gameTable.getControlPanel().getArray(ObjectType.RACE)[i-1])
 						.build()));
 				break;
 			}
-			else if((i + 2) > RaceFactory.getRaceArray().length)
+			else if((i + 2) > gameTable.getControlPanel().getArray(ObjectType.RACE).length)
 			{
 				buttons.add(Arrays.asList(
 
 						InlineKeyboardButton.builder()
-						.text(RaceFactory.getRaceArray()[i-1])
-						.callbackData(raceKey + RaceFactory.getRaceArray()[i-1])
+						.text(gameTable.getControlPanel().getArray(ObjectType.RACE)[i-1])
+						.callbackData(chooseSubRaceKey + gameTable.getControlPanel().getArray(ObjectType.RACE)[i-1])
 						.build(),
 						InlineKeyboardButton.builder()
-						.text(RaceFactory.getRaceArray()[i])
-						.callbackData(raceKey + RaceFactory.getRaceArray()[i])
+						.text(gameTable.getControlPanel().getArray(ObjectType.RACE)[i])
+						.callbackData(chooseSubRaceKey + gameTable.getControlPanel().getArray(ObjectType.RACE)[i])
 						.build()));
 				break;
 			}
@@ -741,16 +750,16 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				buttons.add(Arrays.asList(
 
 						InlineKeyboardButton.builder()
-						.text(RaceFactory.getRaceArray()[i-1])
-						.callbackData(raceKey + RaceFactory.getRaceArray()[i-1])
+						.text(gameTable.getControlPanel().getArray(ObjectType.RACE)[i-1])
+						.callbackData(chooseSubRaceKey + gameTable.getControlPanel().getArray(ObjectType.RACE)[i-1])
 						.build(),
 						InlineKeyboardButton.builder()
-						.text(RaceFactory.getRaceArray()[i])
-						.callbackData(raceKey + RaceFactory.getRaceArray()[i])
+						.text(gameTable.getControlPanel().getArray(ObjectType.RACE)[i])
+						.callbackData(chooseSubRaceKey + gameTable.getControlPanel().getArray(ObjectType.RACE)[i])
 						.build(),
 						InlineKeyboardButton.builder()
-						.text(RaceFactory.getRaceArray()[i+1])
-						.callbackData(raceKey + RaceFactory.getRaceArray()[i+1])
+						.text(gameTable.getControlPanel().getArray(ObjectType.RACE)[i+1])
+						.callbackData(chooseSubRaceKey + gameTable.getControlPanel().getArray(ObjectType.RACE)[i+1])
 						.build()));
 			}
 
@@ -783,22 +792,22 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void chooseSubRace(CallbackQuery callbackQuery)
 	{
-		gameTable.getCuttingBoard().setRace(callbackQuery.getData().replaceAll(raceKey + keyAnswer, "$1"));
+		gameTable.getControlPanel().setRace(callbackQuery.getData().replaceAll(chooseSubRaceKey + keyAnswer, "$1"));
 		Message message = callbackQuery.getMessage();
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-		for(int i = 0; i < RaceFactory.getSubRaceArray(gameTable.getCuttingBoard().getRace()).length; i++)
+		for(int i = 0; i < gameTable.getControlPanel().getArray(ObjectType.SUBRACE).length; i++)
 		{
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-					.text(RaceFactory.getSubRaceArray(gameTable.getCuttingBoard().getRace())[i].replaceAll(keyAnswer + ".txt", "$1"))
-					.callbackData(subRaceKey + RaceFactory.getSubRaceArray(gameTable.getCuttingBoard().getRace())[i].replaceAll(keyAnswer + ".txt", "$1"))
+					.text(gameTable.getControlPanel().getArray(ObjectType.SUBRACE)[i].replaceAll(keyAnswer + ".txt", "$1"))
+					.callbackData(finishRaceKey + gameTable.getControlPanel().getArray(ObjectType.SUBRACE)[i].replaceAll(keyAnswer + ".txt", "$1"))
 					.build()));
 		}
 		try 
 		{
 			Message toTrash = execute(
 					SendMessage.builder()
-					.text(gameTable.getCuttingBoard().getRace() + "? More specifically?")
+					.text(gameTable.getControlPanel().getRace() + "? More specifically?")
 					.chatId(message.getChatId().toString())
 					.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 					.build());
@@ -816,13 +825,14 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	{
 		Message message = callbackQuery.getMessage();
 
-		gameTable.getCuttingBoard().setSubRace(callbackQuery.getData().replaceAll(subRaceKey + keyAnswer,"$1"));
+		gameTable.getControlPanel().setSubRace(callbackQuery.getData().replaceAll(finishRaceKey + keyAnswer,"$1"));
+		gameTable.getControlPanel().load(gameTable.getActualGameCharacter().getName());
 		gameTable.createRace();
 
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 		buttons.add(Arrays.asList(InlineKeyboardButton.builder()
 				.text("Yes that's right")
-				.callbackData(finishHeroKey)
+				.callbackData(startStatsKey)
 				.build()));
 
 
@@ -830,7 +840,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			Message botAnswer = execute(SendMessage.builder()
 					.text("Are you satisfied with this option? If not, select another option above." 
-							+ "\r\n"+ RaceFactory.getObgectInfo(gameTable.getActualGameCharacter().getMyRace()))
+							+ "\r\n"+ ControlPanel.getObjectInfo(gameTable.getActualGameCharacter().getMyRace(), ObjectType.RACE))
 					.chatId(message.getChatId().toString())
 					.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 					.build()
@@ -853,7 +863,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		try 
 		{
 			Message toTrash = execute( SendMessage.builder()
-					.text(CharacterFactory.getCharacterStatInfo(gameTable.getActualGameCharacter()))
+					.text(ControlPanel.getObjectInfo(gameTable.getActualGameCharacter(), ObjectType.STATS))
 					.chatId(message.getChatId().toString())
 					.build());
 
@@ -875,7 +885,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		Message message = callbackQuery.getMessage();
 
 		Pattern pat = Pattern.compile("[-]?[0-9]+(.[0-9]+)?");
-		Matcher matcher = pat.matcher(callbackQuery.getData());
+		Matcher matcher = pat.matcher(callbackQuery.getMessage().getText());
 		while (matcher.find()) 
 		{
 			gameTable.getActualGameCharacter().setHp((int) Integer.parseInt(matcher.group()));
@@ -911,12 +921,12 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void characterMenu(CallbackQuery callbackQuery) 
 	{
 
-
+		gameTable.update();
 		gameTable.getMediatorWallet().mediatorBreak();
 		clean(gameTable.getTrashCan().getCircle(Circle.ALL));
 
@@ -1066,8 +1076,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 	}
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public String getBotUsername() 
 	{

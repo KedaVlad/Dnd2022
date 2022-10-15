@@ -9,7 +9,6 @@ import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
 import com.dnd.dndTable.creatingDndObject.skills.Possession;
-import com.dnd.dndTable.factory.WorkmanshipFactory;
 
 public class CharacterDnd implements Serializable, ObjectDnd
 {
@@ -22,7 +21,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	private String nature;
 	private int speed;
 	private boolean multiClassStatus = false;
-
+    private boolean finished = false;
 	private RaceDnd myRace;
 	private ClassDnd myClass;
 	private ClassDnd multiClass;
@@ -45,7 +44,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	public void lvlUp(CharacterDnd character) 
 	{
 		myClass.setLvl(myClass.getLvl()+1);
-		WorkmanshipFactory.getWorkmanship(character, WorkmanshipFactory.getWorkmanshipClass(myClass));
+		
 	}
 
 	public ClassDnd getClassDnd() 
@@ -132,6 +131,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	public void setHp(int hp) {
 		this.hp = hp;
+		finished = true;
 	}
 
 	public String getNature() {
@@ -198,6 +198,10 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	public void setMyBag(Bag myBag) {
 		this.myBag = myBag;
+	}
+
+	public boolean isFinished() {
+		return finished;
 	}
 
 

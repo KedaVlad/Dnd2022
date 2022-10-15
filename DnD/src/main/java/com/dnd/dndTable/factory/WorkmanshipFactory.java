@@ -22,7 +22,7 @@ import com.dnd.dndTable.creatingDndObject.skills.Spell;
 import com.dnd.dndTable.creatingDndObject.skills.Trait;
 
 
-public class WorkmanshipFactory implements Factory, Source, KeyWallet {
+abstract class WorkmanshipFactory implements Source, KeyWallet {
 
 
 	private final static File[] workmanship = {new File(skillsSource), new File(spellsSource), new File(possessionsSource), new File(traitsSource)};

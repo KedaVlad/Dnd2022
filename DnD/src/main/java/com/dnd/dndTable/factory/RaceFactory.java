@@ -9,10 +9,10 @@ import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
 
 
 
-public class RaceFactory implements Source, Factory 
+abstract class RaceFactory implements Source
 {
-	private static final File dirRace = new File(raceSource);
-	private static File subRace;
+	private static File dirRace = new File(raceSource);
+	
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public static void create(CharacterDnd character, String raceName, String subRace) 
@@ -36,7 +36,7 @@ public class RaceFactory implements Source, Factory
 
 	public static String[] getSubRaceArray(String race)
 	{
-		subRace = new File(raceSource + race);
+		File subRace = new File(raceSource + race);
 		String[] allSubRace = subRace.list();
 		return allSubRace;
 	}
