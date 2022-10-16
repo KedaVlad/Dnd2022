@@ -1,6 +1,8 @@
 package com.dnd.botTable;
 
 
+import com.dnd.Dice;
+import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Log.Place;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
@@ -8,7 +10,7 @@ import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.factory.ControlPanel;
 
 
-public class GameTable {
+public class GameTable implements KeyWallet{
 
 	private long chatId = 0;
 	private CharacterDnd actualGameCharacter;
@@ -45,15 +47,25 @@ public class GameTable {
 		Log.add("update", Place.BOT, Place.GAMETABLE, Place.METHOD);
 	}
 
-	public void abort()
+	public String readinessСheck()
 	{
-		if(actualGameCharacter != null)
+		if(actualGameCharacter.getClassDnd() == null)
 		{
-			if(!actualGameCharacter.isFinished())
-			{
-				controlPanel.delete(actualGameCharacter);
-			}
+			return startClassKey;
 		}
+		else if(actualGameCharacter.getMyRace() == null)
+		{
+			return startRaceKey;
+		}
+		else if(actualGameCharacter.getMyStat() == null)
+		{
+			return startStatsKey;
+		}
+		else if(actualGameCharacter.getHp() == 0)
+		{
+			Dice.stableHp(actualGameCharacter);
+		}
+		return menuKey;
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	public CharacterDnd getActualGameCharacter() 

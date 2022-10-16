@@ -36,8 +36,11 @@ public interface KeyWallet {
 	final static String hpMediatorKey = ">shktyawefwefasasdcvjwme>";
 
 	///FOR SCRIPTS////////////////////////////////////////////////////////////////////////////////////
+	
+	final static String searchingScript = "^&";
+	final static String influencingScript = "^@";
 	final static String workmanshipKey = "^(.)([a-zA-Z]*)";
-	final static String skillKey = "=";
+	final static String featureKey = "=";
 	final static String spellKey = ">";
 	final static String possessionKey = "<";
 	final static String traitKey = "-";

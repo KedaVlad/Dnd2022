@@ -89,16 +89,13 @@ abstract class CharacterFactory implements Source
 		return loadedCharacter;
 	}
 
-	public static String getCharacterStatInfo(ObjectDnd objectDnd) {
+	public static String getCharacterStatInfo() {
 
-		CharacterDnd characterInfo = (CharacterDnd)objectDnd;
+		
 
 		String godGift = Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20();
 
-		String answer = characterInfo.getName() + " is from the family of" 
-				+ ", the " + characterInfo.getClassDnd() 
-				+ "(" + characterInfo.getClassDnd().getMyArchetypeClass() + ") class.\r\n"
-				+ "Now let's see what you have in terms of characteristics.\r\n"
+		String answer =  "Now let's see what you have in terms of characteristics.\r\n"
 				+ "\r\n"
 				+ "Write the value of the characteristics in order: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma.\r\n"
 				+ "1.Each stat cannot be higher than 20.\r\n"

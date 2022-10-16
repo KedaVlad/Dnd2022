@@ -1,6 +1,8 @@
 package com.dnd.dndTable.factory;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import com.dnd.Source;
 import com.dnd.dndTable.ObjectDnd;
@@ -17,14 +19,32 @@ abstract class RaceFactory implements Source
 
 	public static void create(CharacterDnd character, String raceName, String subRace) 
 	{
-		character.setRaceDnd(refactor(character, new RaceDnd(raceName,subRace)));
+		character.setRaceDnd(refactor(character, new RaceDnd(raceName,subRace),
+				new File(raceSource + "\\" + raceName + "\\" + subRace + ".txt")));
+		
 		
 	}
 
-	private static RaceDnd refactor(CharacterDnd character, RaceDnd raceDnd)
+	private static RaceDnd refactor(CharacterDnd character, RaceDnd raceDnd, File file)
 	{
-		WorkmanshipFactory.getWorkmanship(character, WorkmanshipFactory.getWorkmanshipRace(raceDnd));
-
+		character.setRaceDnd(raceDnd);
+		Scanner scanner = null;
+		try {
+			scanner = new Scanner(file);
+			String nextLine = scanner.nextLine();
+			while(scanner.hasNextLine())
+			{
+				ScriptReader.execute(character, nextLine);
+			}
+		}
+		catch (FileNotFoundException e) 
+		{
+			e.printStackTrace();
+		}
+		finally 
+		{
+			scanner.close();
+		}
 		return raceDnd;
 	}
 
@@ -41,9 +61,9 @@ abstract class RaceFactory implements Source
 		return allSubRace;
 	}
 	
-	public static String getObgectInfo(ObjectDnd objectDnd) {
+	public static String getObgectInfo(String race, String subRace) {
 		// TODO Auto-generated method stub
-		return "";
+		return race + subRace;
 	}
 
 }

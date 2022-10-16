@@ -27,95 +27,52 @@ abstract class WorkmanshipFactory implements Source, KeyWallet {
 
 	private final static File[] workmanship = {new File(skillsSource), new File(spellsSource), new File(possessionsSource), new File(traitsSource)};
 
-	public static void getWorkmanship(CharacterDnd character, List<String> workmanship)
-	{ 
-		Log.add("getWorkmanship", Place.DND, Place.FACTORY, Place.WORKMANSHIP);
 
-		String cleanName;
-
-		for(String name: workmanship)
-		{
-			
-			cleanName = name.replaceAll(workmanshipKey, "$2");
-			
-			if(name.contains(skillKey))
-			{
-				
-				if(!character.getWorkmanship().getMyFeatures().contains(new Feature(cleanName)))
-				{
-					character.getWorkmanship().getMyFeatures().add((Feature)WorkmanshipFactory.createFeatures(cleanName));
-
-				}
-
-			}
-			else if(name.contains(spellKey))
-			{
-				if(!character.getWorkmanship().getMySpells().contains(new Spell(cleanName)))
-				{
-					character.getWorkmanship().getMySpells().add((Spell)WorkmanshipFactory.createSpell(cleanName));
-				}
-			}
-			else if(name.contains(possessionKey))
-			{
-				if(!character.getWorkmanship().getMyPossessions().contains(new Possession(cleanName)))
-				{
-					character.getWorkmanship().getMyPossessions().add((Possession)WorkmanshipFactory.createPossession(name));
-				}
-			}
-			else if(name.contains(traitKey))
-			{
-				if(!character.getWorkmanship().getMyFeatures().contains(new Trait(cleanName)))
-				{
-					character.getWorkmanship().getMyFeatures().add((Trait)WorkmanshipFactory.createTrait(cleanName));
-				}
-			}
-		}
-	
-	}
-
-	public static List<String> getWorkmanshipClass(ClassDnd classDnd)
+	private static Object reader(File file, String name) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 	{
-		List<String> pool = new ArrayList<>();
-		Scanner classScanner = null;
-		Pattern findNameSkills = Pattern.compile(skillKey);
-		Pattern findNameSpells = Pattern.compile(spellKey);
-		Pattern findNamePossession = Pattern.compile(possessionKey);
-		try {
-			classScanner = new Scanner(classDnd.getMyClassMainFile());
-			boolean checkLvl = false;
-			while(classScanner.hasNextLine()&& !checkLvl) {
-				String workmanship = classScanner.nextLine();
-				Matcher rightSkill = findNameSkills.matcher(workmanship);
-				Matcher rightSpell = findNameSpells.matcher(workmanship);
-				Matcher rightPossession = findNamePossession.matcher(workmanship);
-				if(rightSkill.find()||rightSpell.find()||rightPossession.find()) 
+		Scanner scanner = null;
+		Pattern findObject = Pattern.compile(name);
+		Pattern nextObject = Pattern.compile(name.replaceAll(workmanshipKey, "$1"));
+		
+		
+		try
+		{
+			scanner = new Scanner(file);
+			String nextLine = scanner.nextLine();
+			while(scanner.hasNextLine())
+			{
+				Matcher rightObject = findObject.matcher(nextLine);
+				if(rightObject.find())
 				{
-					pool.add(workmanship);
-
-				} else if(workmanship.contains(classDnd.getLvl()+ 1 + "")) {
-					checkLvl = true;
+					Matcher next = nextObject.matcher(nextLine);
+					if(next.find())
+					{
+						break;
+					}
 				}
-			} 
-
+			}
+			
 		}
 		catch (FileNotFoundException e) 
 		{
-
 			e.printStackTrace();
 		}
 		finally 
 		{
-			classScanner.close();
+			scanner.close();
 		}
 		
-		return pool;
+		
+		return null;
 	}
+
+	
 
 	public static List<String> getWorkmanshipRace(RaceDnd raceDnd)
 	{
 		List<String> pool = new ArrayList<>();
 		Scanner classScanner = null;
-		Pattern findNameSkills = Pattern.compile(skillKey);
+		Pattern findNameSkills = Pattern.compile(featureKey);
 		Pattern findNameSpells = Pattern.compile(spellKey);
 		Pattern findNamePossession = Pattern.compile(possessionKey);
 		try {
@@ -143,36 +100,42 @@ abstract class WorkmanshipFactory implements Source, KeyWallet {
 		return pool;
 	}
 
-	public void addSomeWorkmanship(CharacterDnd character,String... nameWorkmanship) 
+	static void createTrait(CharacterDnd character, String trait) 
 	{
-
-		List<String> pool = Arrays.asList(nameWorkmanship);
-		getWorkmanship(character, pool);
+		if(!character.getWorkmanship().getMyFeatures().contains(new Trait(trait)))
+		{
+			character.getWorkmanship().getMyFeatures().add(new Trait(trait));
+		}
+		
 	}
 
-	private static Trait createTrait(String trait) 
+	static void createPossession(CharacterDnd character, String possession) 
 	{
-		return new Trait(trait);
+		if(!character.getWorkmanship().getMyPossessions().contains(new Possession(possession)))
+		{
+			character.getWorkmanship().getMyPossessions().add(new Possession(possession));
+		}
 	}
 
-	private static Possession createPossession(String possession) 
+	static void createSpell(CharacterDnd character, String spell) 
 	{
-
-		return new Possession(possession);
+		if(!character.getWorkmanship().getMySpells().contains(new Spell(spell)))
+		{
+			character.getWorkmanship().getMySpells().add(new Spell(spell));
+		}
 	}
 
-	private static Spell createSpell(String spell) 
+	static void createFeatures(CharacterDnd character, String skill) 
 	{
+		
+		if(!character.getWorkmanship().getMyFeatures().contains(new Feature(skill)))
+		{
+			character.getWorkmanship().getMyFeatures().add(new Feature(skill));
 
-		return new Spell(spell);
+		}
 	}
 
-	private static Feature createFeatures(String skill) 
-	{
-		return new Feature(skill);
-	}
-
-	public static File[] getWorkmanship() 
+	static File[] getWorkmanship() 
 	{
 		return workmanship;
 	}

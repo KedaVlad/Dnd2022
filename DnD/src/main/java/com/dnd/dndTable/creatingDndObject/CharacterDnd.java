@@ -20,8 +20,6 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	private int hp;
 	private String nature;
 	private int speed;
-	private boolean multiClassStatus = false;
-    private boolean finished = false;
 	private RaceDnd myRace;
 	private ClassDnd myClass;
 	private ClassDnd multiClass;
@@ -75,7 +73,6 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	public void setMultiClass(ClassDnd multiClass) 
 	{
 		this.multiClass = multiClass;
-		multiClassStatus = true;
 	}
 
 	public void setRaceDnd(RaceDnd raceDnd) 
@@ -115,7 +112,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	public void setLvl() {
 
-		if(multiClassStatus == true)
+		if(multiClass != null)
 		{
 			lvl = myClass.getLvl() + multiClass.getLvl();
 		}
@@ -131,7 +128,6 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	public void setHp(int hp) {
 		this.hp = hp;
-		finished = true;
 	}
 
 	public String getNature() {
@@ -200,9 +196,6 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		this.myBag = myBag;
 	}
 
-	public boolean isFinished() {
-		return finished;
-	}
-
+	
 
 }

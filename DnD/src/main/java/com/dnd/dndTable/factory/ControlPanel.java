@@ -16,7 +16,7 @@ public class ControlPanel implements KeyWallet, Source {
 
 	private File myCharactersDir;
 	private String classBeck;
-	private String archerypeBeck;
+	private String archetypeBeck;
 	private int classLvl;
 	private String race;
 	private String subRace;	
@@ -50,7 +50,7 @@ public class ControlPanel implements KeyWallet, Source {
 
 	public void createClass(CharacterDnd character)
 	{
-		ClassFactory.create(character, classBeck, classLvl, archerypeBeck);
+		ClassFactory.create(character, classBeck, classLvl, archetypeBeck);
 	}
 	
 	public void createRace(CharacterDnd character)
@@ -77,16 +77,17 @@ public class ControlPanel implements KeyWallet, Source {
 		return null;
 	}
 
-    public static String getObjectInfo(ObjectDnd object, ObjectType type) 
+    public String getObjectInfo(ObjectType type) 
     {
 		switch(type)
 		{
 		case CLASS:
-			return ClassFactory.getObgectInfo(object);
+				return ClassFactory.getObgectInfo(classBeck, archetypeBeck);
+			
 		case RACE:
-			return RaceFactory.getObgectInfo(object);
+			return RaceFactory.getObgectInfo(race, subRace);
 		case STATS:
-			return CharacterFactory.getCharacterStatInfo(object);
+			return CharacterFactory.getCharacterStatInfo();
 		default:
 			Log.add("getObjectInfo(ERROR not valid ObjectType", Place.ERROR , Place.DND, Place.CONTROLPANEL);
 			break;
@@ -95,11 +96,10 @@ public class ControlPanel implements KeyWallet, Source {
 	}
 	
     ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-    public void cleanLocalData()
+     public void cleanLocalData()
     {
     	classBeck = null;
-    	archerypeBeck = null;
+    	archetypeBeck = null;
     	classLvl = 0;
     	race = null;
     	subRace = null;	
@@ -132,14 +132,14 @@ public class ControlPanel implements KeyWallet, Source {
 		this.classBeck = classBeck;
 	}
 
-	public String getArcherypeBeck() 
+	public String getArchetypeBeck() 
 	{
-		return archerypeBeck;
+		return archetypeBeck;
 	}
 
-	public void setArcherypeBeck(String archerypeBeck) 
+	public void setArchetypeBeck(String archerypeBeck) 
 	{
-		this.archerypeBeck = archerypeBeck;
+		this.archetypeBeck = archerypeBeck;
 	}
 
 	public String getSubRace()
@@ -181,4 +181,5 @@ public class ControlPanel implements KeyWallet, Source {
 	{
 		this.subRaceDir = subRaceDir;
 	}
+
 }
