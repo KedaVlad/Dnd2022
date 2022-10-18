@@ -6,7 +6,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class Stats implements Serializable {
+import com.dnd.Names;
+
+public class Stats implements Serializable, Names {
 	
 	private static final long serialVersionUID = 7901749239721687760L;
 
@@ -14,25 +16,18 @@ public class Stats implements Serializable {
 	private List<Article> skills;
     private List<Article> saveRolls;
 	
-	Map<StatName[], Integer> FreeStat = new LinkedHashMap<>();
-	
-	public enum StatName
-	{
-		STRENGTH, DEXTERITY, CONSTITUTION, INTELLIGENSE, WISDOM, CHARISMA
-	}
-	
 	Stats(int str, int dex, int con, int intl, int wis, int cha) 
 	{
 		stats = new ArrayList<>();
 		skills = new ArrayList<>();
 		saveRolls = new ArrayList<>();
 		
-		stats.add(new Article("Strength", str));
-		stats.add(new Article("Dexterity", dex));
-		stats.add(new Article("Constitution", con));
-		stats.add(new Article("Intelligense", intl));
-		stats.add(new Article("Wisdom", wis));
-		stats.add(new Article("Charisma", cha));
+		stats.add(new Article(Stat.STRENGTH.toString(), str));
+		stats.add(new Article(Stat.DEXTERITY.toString(), dex));
+		stats.add(new Article(Stat.CONSTITUTION.toString(), con));
+		stats.add(new Article(Stat.INTELLIGENSE.toString(), intl));
+		stats.add(new Article(Stat.WISDOM.toString(), wis));
+		stats.add(new Article(Stat.CHARISMA.toString(), cha));
 		
 		
 		setStartSkills();
@@ -78,7 +73,7 @@ public class Stats implements Serializable {
 		return stats;
 	}
 	
-	public void setStat(String name, Integer number) 
+	public void setStat(String name, int number) 
 	{
 	
 		switch(name)
@@ -104,14 +99,9 @@ public class Stats implements Serializable {
 		}
 	}
 	
-	public Map<StatName[], Integer> getFreeStat() {
-		return FreeStat;
-	}
-
-
-	public void setFreeStat(Integer number, StatName... name) 
+	public void buff(String name, int value)
 	{
-			FreeStat.put(name, number);	
+		
 	}
 
 	public List<Article> getSkills() {

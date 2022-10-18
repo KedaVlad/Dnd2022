@@ -75,9 +75,10 @@ abstract class ClassFactory implements Source
 		Scanner scanner = null;
 		try {
 			scanner = new Scanner(classDnd.getMyClassMainFile());
-			String nextLine = scanner.nextLine();
 			while(scanner.hasNextLine())
 			{
+				String nextLine = scanner.nextLine();
+				
 				if(nextLine.equals(character.getLvl() + 1 + ""))
 				{
 					break;

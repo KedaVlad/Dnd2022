@@ -8,22 +8,28 @@ import java.util.regex.Pattern;
 
 public class Test implements KeyWallet, Source {
 
-	
-	
-	
+	enum Some{
+		
+		SOME("Some"), BAM("Bam");
+
+		String title;
+		Some(String string) {
+			title = string;
+		}
+		public String toString()
+		{
+			return title;
+		}
+	}
+
 	public static void main(String[] args) throws Exception {
 
-		int i = 0;
+		String some = "Some";
 		
-		while(true)
-		{
-		    i++;
-		    System.out.println(i);
-		    if(i == 10) break;
-		}
+		System.out.println(Some.SOME);
 		
 	}
-	}
+}
 
-	
+
 

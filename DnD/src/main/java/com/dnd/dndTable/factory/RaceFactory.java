@@ -31,9 +31,9 @@ abstract class RaceFactory implements Source
 		Scanner scanner = null;
 		try {
 			scanner = new Scanner(file);
-			String nextLine = scanner.nextLine();
 			while(scanner.hasNextLine())
 			{
+				String nextLine = scanner.nextLine();
 				ScriptReader.execute(character, nextLine);
 			}
 		}

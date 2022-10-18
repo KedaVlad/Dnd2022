@@ -316,7 +316,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private void finishClass(Message message)
 	{
 		int lvl = 0;
-		Pattern pat = Pattern.compile("[-]?[0-9]+(.[0-9]+)?");
+		Pattern pat = Pattern.compile(keyNumber);
 		Matcher matcher = pat.matcher(message.getText());
 		while (matcher.find()) 
 		{
@@ -383,7 +383,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		gameTable.getActualGameCharacter().setMyMemoirs(
 				gameTable.getControlPanel().getObjectInfo(ObjectType.RACE));
 		List<Integer> stats = new ArrayList<>();
-		Pattern pat = Pattern.compile("[-]?[0-9]+(.[0-9]+)?");
+		Pattern pat = Pattern.compile(keyNumber);
 		Matcher matcher = pat.matcher(message.getText());
 		while (matcher.find()) 
 		{
@@ -453,7 +453,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private void finishHp(Message message)
 	{
 
-		Pattern pat = Pattern.compile("[-]?[0-9]+(.[0-9]+)?");
+		Pattern pat = Pattern.compile(keyNumber);
 		Matcher matcher = pat.matcher(message.getText());
 		int answer = 0;
 		while (matcher.find()) 

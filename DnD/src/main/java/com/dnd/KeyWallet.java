@@ -4,6 +4,7 @@ public interface KeyWallet {
 
 	///FOR CALLBACK///////////////////////////////////////////////////////////////////////////////////
 	//MAIN KEYS
+	final static String keyNumber = "[-]?[0-9]+(.[0-9]+)?";
 	final static String keyCheck = "(>.+>)";
 	final static String keyAnswer = "(.*)";
 	final static String characterCaseKey = ">shktymhgccnie>";
@@ -17,9 +18,9 @@ public interface KeyWallet {
 	final static String finishRaceKey = ">dsgrnyukuwefdvhgvd>";
 	final static String startStatsKey = ">dsgrnfinishHeroKeywefdvhgvd>";
 	//SELECT
-	final static String selectionConfirmation = ">Bdsaopl;,qfq21[];'as./'>";
+	final static String selectionConfirmation = ">Bdsaopl;,qfqwer[];'as./'>";
 	//CHARACTER MENU
-	final static String menuKey = ">regwrgvujfke3l-0opfcvwev>";
+	final static String menuKey = ">regwrgvujfkeeflfewwopfcvwev>"; //in this key dose not use numbers
 	final static String skillMenu = ">regwrgvcz23fewdsgwsgk7ujyh>";
 	final static String spellMenu = ">wef3ggdsgs4htvdcvwev>";
 	final static String bagMenu = ">regwr23ewfhlkijygrrgrgf4b4tev>";
@@ -37,12 +38,16 @@ public interface KeyWallet {
 
 	///FOR SCRIPTS////////////////////////////////////////////////////////////////////////////////////
 	
-	final static String searchingScript = "^&";
-	final static String influencingScript = "^@";
+	final static String searchingScript = "&";
+	final static String influencingScript = "@";
+	final static String cloudScript = "~";
+	
+	final static String valueScript = ".*([1-5]).*";
 	final static String workmanshipKey = "^(.)([a-zA-Z]*)";
 	final static String featureKey = "=";
 	final static String spellKey = ">";
 	final static String possessionKey = "<";
 	final static String traitKey = "-";
-	final static String keyLvl = "[-]?[0-9]+(.[0-9]+)?";
+	final static String statKey = "+";
+	
 }

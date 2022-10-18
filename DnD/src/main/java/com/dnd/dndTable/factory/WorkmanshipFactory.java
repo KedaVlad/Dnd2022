@@ -100,6 +100,16 @@ abstract class WorkmanshipFactory implements Source, KeyWallet {
 		return pool;
 	}
 
+	static void createFeature(CharacterDnd character, String skill) 
+	{
+		
+		if(!character.getWorkmanship().getMyFeatures().contains(new Feature(skill)))
+		{
+			character.getWorkmanship().getMyFeatures().add(new Feature(skill));
+			Log.add(skill + " " + character.getWorkmanship().getMyFeatures() , Place.FACTORY, Place.WORKMANSHIP, Place.CREATING);
+		}
+	}
+
 	static void createTrait(CharacterDnd character, String trait) 
 	{
 		if(!character.getWorkmanship().getMyFeatures().contains(new Trait(trait)))
@@ -122,16 +132,6 @@ abstract class WorkmanshipFactory implements Source, KeyWallet {
 		if(!character.getWorkmanship().getMySpells().contains(new Spell(spell)))
 		{
 			character.getWorkmanship().getMySpells().add(new Spell(spell));
-		}
-	}
-
-	static void createFeatures(CharacterDnd character, String skill) 
-	{
-		
-		if(!character.getWorkmanship().getMyFeatures().contains(new Feature(skill)))
-		{
-			character.getWorkmanship().getMyFeatures().add(new Feature(skill));
-
 		}
 	}
 
