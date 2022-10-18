@@ -42,8 +42,13 @@ public interface KeyWallet {
 	final static String influencingScript = "@";
 	final static String cloudScript = "~";
 	
+	final static String secondKey = ".(.)";
+	
+	final static String cloudPattern = "[a-zA-z ']+";
 	final static String valueScript = ".*([1-5]).*";
 	final static String workmanshipKey = "^(.)([a-zA-Z]*)";
+	
+	final static String itemkey = "*";
 	final static String featureKey = "=";
 	final static String spellKey = ">";
 	final static String possessionKey = "<";

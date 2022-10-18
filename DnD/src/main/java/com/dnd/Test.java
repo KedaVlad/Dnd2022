@@ -1,8 +1,7 @@
 package com.dnd;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -24,10 +23,17 @@ public class Test implements KeyWallet, Source {
 
 	public static void main(String[] args) throws Exception {
 
-		String some = "Some";
+
+String str = "adklaskd;a;dksad~ sdsdfs wefsd~ wrwvwefd~jjkkk kk";
+Pattern ptr = Pattern.compile(cloudPattern);
+		Matcher mm = ptr.matcher(str);
+		List<String> l = new ArrayList<>();
+		while(mm.find())
+		{
+			l.add(mm.group());
+		}
 		
-		System.out.println(Some.SOME);
-		
+		System.out.println(l);
 	}
 }
 

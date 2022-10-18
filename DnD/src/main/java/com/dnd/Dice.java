@@ -1,7 +1,6 @@
 package com.dnd;
 
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.creatingDndObject.Stats.StatName;
 
 public class Dice {
 

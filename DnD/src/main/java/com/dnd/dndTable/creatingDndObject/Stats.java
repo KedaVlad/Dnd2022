@@ -2,106 +2,149 @@ package com.dnd.dndTable.creatingDndObject;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.dnd.Names;
 
 public class Stats implements Serializable, Names {
-	
+
 	private static final long serialVersionUID = 7901749239721687760L;
 
 	private List<Article> stats;
 	private List<Article> skills;
-    private List<Article> saveRolls;
-	
+	private List<Article> saveRolls;
+
 	Stats(int str, int dex, int con, int intl, int wis, int cha) 
 	{
 		stats = new ArrayList<>();
 		skills = new ArrayList<>();
 		saveRolls = new ArrayList<>();
-		
-		stats.add(new Article(Stat.STRENGTH.toString(), str));
-		stats.add(new Article(Stat.DEXTERITY.toString(), dex));
-		stats.add(new Article(Stat.CONSTITUTION.toString(), con));
-		stats.add(new Article(Stat.INTELLIGENSE.toString(), intl));
-		stats.add(new Article(Stat.WISDOM.toString(), wis));
-		stats.add(new Article(Stat.CHARISMA.toString(), cha));
-		
-		
+
+		stats.add(new Article(Stat.STRENGTH.toString(), Stat.STRENGTH, str));
+		stats.add(new Article(Stat.DEXTERITY.toString(), Stat.DEXTERITY, dex));
+		stats.add(new Article(Stat.CONSTITUTION.toString(), Stat.CONSTITUTION, con));
+		stats.add(new Article(Stat.INTELLIGENSE.toString(), Stat.INTELLIGENSE, intl));
+		stats.add(new Article(Stat.WISDOM.toString(), Stat.WISDOM, wis));
+		stats.add(new Article(Stat.CHARISMA.toString(), Stat.CHARISMA, cha));
+
+
 		setStartSkills();
 		setStartSaveRoll();
-		
+		updateAll();
+
 	}
 
 	private void setStartSkills()
 	{
-		skills.add(new Article("Acrobatics", stats.get(1).value));
-		skills.add(new Article("Animal Handing", stats.get(4).value));
-		skills.add(new Article("Arcana", stats.get(3).value));
-		skills.add(new Article("Athletix", stats.get(0).value));
-		skills.add(new Article("Deception", stats.get(5).value));
-		skills.add(new Article("History", stats.get(3).value));
-		skills.add(new Article("Insight", stats.get(4).value));
-		skills.add(new Article("Intimidation", stats.get(5).value));
-		skills.add(new Article("Investigation", stats.get(3).value));
-		skills.add(new Article("Medicine", stats.get(4).value));
-		skills.add(new Article("Nature", stats.get(3).value));
-		skills.add(new Article("Perception", stats.get(4).value));
-		skills.add(new Article("Performance", stats.get(5).value));
-		skills.add(new Article("Persuasion", stats.get(5).value));
-		skills.add(new Article("Religion", stats.get(3).value));
-		skills.add(new Article("Sleight of Hand", stats.get(1).value));
-		skills.add(new Article("Stealth", stats.get(1).value));
-		skills.add(new Article("Survival", stats.get(4).value));
-		
+		skills.add(new Article(Skill.ACROBATICS.toString(), Stat.DEXTERITY));
+		skills.add(new Article(Skill.ANIMAL_HANDING.toString(), Stat.WISDOM));
+		skills.add(new Article(Skill.ARCANA.toString(), Stat.INTELLIGENSE));
+		skills.add(new Article(Skill.ATHLETIX.toString(), Stat.STRENGTH));
+		skills.add(new Article(Skill.DECEPTION.toString(), Stat.CHARISMA));
+		skills.add(new Article(Skill.HISTORY.toString(), Stat.INTELLIGENSE));
+		skills.add(new Article(Skill.INSIGHT.toString(), Stat.WISDOM));
+		skills.add(new Article(Skill.INTIMIDATION.toString(), Stat.CHARISMA));
+		skills.add(new Article(Skill.INVESTIGATION.toString(), Stat.INTELLIGENSE));
+		skills.add(new Article(Skill.MEDICINE.toString(), Stat.WISDOM));
+		skills.add(new Article(Skill.NATURE.toString(), Stat.INTELLIGENSE));
+		skills.add(new Article(Skill.PERCEPTION.toString(), Stat.WISDOM));
+		skills.add(new Article(Skill.PERFORMANCE.toString(), Stat.CHARISMA));
+		skills.add(new Article(Skill.PERSUASION.toString(), Stat.CHARISMA));
+		skills.add(new Article(Skill.RELIGION.toString(), Stat.INTELLIGENSE));
+		skills.add(new Article(Skill.SLEIGHT_OF_HAND.toString(), Stat.DEXTERITY));
+		skills.add(new Article(Skill.STELTH.toString(), Stat.DEXTERITY));
+		skills.add(new Article(Skill.SURVIVAL.toString(), Stat.WISDOM));
+
 	}
-	
+
 	private void setStartSaveRoll()
 	{
-		saveRolls.add(new Article("SR Strength", stats.get(0).value));
-		saveRolls.add(new Article("SR Dexterity", stats.get(1).value));
-		saveRolls.add(new Article("SR Constitution", stats.get(2).value));
-		saveRolls.add(new Article("SR Intelligense" , stats.get(3).value));
-		saveRolls.add(new Article("SR Wisdom" , stats.get(4).value));
-		saveRolls.add(new Article("SR Charisma" , stats.get(5).value));
+		saveRolls.add(new Article(SaveRoll.SR_STRENGTH.toString(), Stat.STRENGTH));
+		saveRolls.add(new Article(SaveRoll.SR_DEXTERITY.toString(), Stat.DEXTERITY));
+		saveRolls.add(new Article(SaveRoll.SR_CONSTITUTION.toString(), Stat.CONSTITUTION));
+		saveRolls.add(new Article(SaveRoll.SR_INTELLIGENSE.toString(), Stat.INTELLIGENSE));
+		saveRolls.add(new Article(SaveRoll.SR_WISDOM.toString(), Stat.WISDOM));
+		saveRolls.add(new Article(SaveRoll.SR_CHARISMA.toString(), Stat.CHARISMA));
 	}
 
 	public List<Article> getStats() 
 	{
 		return stats;
 	}
-	
-	public void setStat(String name, int number) 
-	{
-	
-		switch(name)
-		{
-		case "Strength":
-			stats.get(0).value += number;
-			break;
-		case "Dexterity":
-			stats.get(1).value += number;
-			break;
-		case "Constitution":
-			stats.get(2).value += number;
-			break;
-		case "Intelligense":
-			stats.get(3).value += number;
-			break;
-		case "Wisdom":
-			stats.get(4).value += number;
-			break;
-		case "Charisma":
-			stats.get(5).value += number;
-			break;
-		}
-	}
-	
+
 	public void buff(String name, int value)
 	{
-		
+		boolean breaker = false;
+		if(breaker == false) 
+		{
+			for(int i = 0; i < saveRolls.size(); i++)
+			{
+				if(name.contains(saveRolls.get(i).name))
+				{
+					saveRolls.get(i).setElseBuff(value);
+					breaker = true;
+					break;
+				}
+			}
+		}
+		else if(breaker == false) 
+		{
+			for(int i = 0; i < stats.size(); i++)
+			{
+				if(name.contains(stats.get(i).name))
+				{
+					stats.get(i).up(value);
+					breaker = true;
+					updateSome(stats.get(i).depends);
+					break;
+				}
+			}
+		}
+		else if(breaker == false) 
+		{
+			for(int i = 0; i < skills.size(); i++)
+			{
+				if(name.contains(skills.get(i).name))
+				{
+					skills.get(i).setElseBuff(value);
+					breaker = true;
+					break;
+				}
+			}
+		}	
+	}
+
+	private void updateAll()
+	{
+		updateSome(Stat.STRENGTH);
+		updateSome(Stat.DEXTERITY);
+		updateSome(Stat.CONSTITUTION);
+		updateSome(Stat.INTELLIGENSE);
+		updateSome(Stat.WISDOM);
+		updateSome(Stat.CHARISMA);
+	}
+
+	private void updateSome(Stat stat)
+	{
+		for(Article base: stats)
+		{
+			for(Article article: saveRolls)
+			{
+				if(base.depends.equals(article.depends))
+
+				{
+					article.up(base.base - article.base);
+				}
+			}
+			for(Article article: skills)
+			{
+				if(base.depends.equals(article.depends))
+
+				{
+					article.up(base.base - article.base);
+				}
+			}
+		}
 	}
 
 	public List<Article> getSkills() {
@@ -111,7 +154,7 @@ public class Stats implements Serializable, Names {
 	public List<Article> getSaveRolls() {
 		return saveRolls;
 	}
-	
+
 	public int getValue(int place, int article)
 	{
 		switch(place)
@@ -125,41 +168,93 @@ public class Stats implements Serializable, Names {
 		}
 		return 0;
 	}
-	
+
 	class Article implements Serializable
 	{
-	
+
 		private static final long serialVersionUID = 8492783248077356748L;
-		
+
 		final String name;
 		int value;
+		int base;
 		int prof;
-		
-		
-		
-		Article(String name, int value)
+		int elseBuff;
+		Stat depends;
+
+		Article(String name, Stat depends, int base)
 		{
 			this.name = name;
-			this.value = value;
+			this.base = base;
+			this.depends = depends;
+			update();
 		}
-		
+
+		Article(String name, Stat depends)
+		{
+			this.name = name;
+			this.depends = depends;
+
+			switch(depends)
+			{
+			case STRENGTH:
+				base = stats.get(0).base;
+				break;
+
+			case DEXTERITY:
+				base = stats.get(1).base;
+				break;
+
+			case CONSTITUTION:
+				base = stats.get(2).base;
+				break;
+
+			case INTELLIGENSE:
+				base = stats.get(3).base;
+				break;
+
+			case WISDOM:
+				base = stats.get(4).base;
+				break;
+
+			case CHARISMA:
+				base = stats.get(5).base;
+				break;
+			}	
+			update();
+		}
 
 		void setProfBuf(int prof) 
-{
-			
+		{
+
 			if(this.prof == 0)
 			{
-			this.prof = prof;
-			value += this.prof;
+				this.prof = prof;
 			}
 			else
 			{
-			this.prof += prof - this.prof;
-			value += prof - this.prof;
+				this.prof += prof - this.prof;
 			}
+			update();
+		}
+
+		void setElseBuff(int elseBuff)
+		{
+			this.elseBuff = elseBuff;
+			update();
+		}
+
+		void up(int value)
+		{
+			base += value;
+			update();
+		}
+
+		void update()
+		{
+			value = base + prof + elseBuff;
 		}
 	}
-	
-	
+
+
 
 }

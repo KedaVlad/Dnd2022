@@ -1,5 +1,10 @@
 package com.dnd.dndTable.factory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Log.Place;
@@ -58,20 +63,37 @@ abstract class ScriptReader implements KeyWallet, Names
 		
 	}
 	
-	private static void cloud(CharacterDnd character, String comand)
-	{
-		
-	}
-	
 	private static void influenceStat(CharacterDnd character, String comand)
 	{
 		int value =  (int) Integer.parseInt(comand.replaceAll(valueScript, "$1"));
 		
-		for(int i = 0; i < character.getMyStat().getSaveRolls().size(); i++)
+		character.getMyStat().buff(comand, value);
+	}
+
+	
+	private static void cloud(CharacterDnd character, String comand)
+	{
+		if(comand.contains(statKey))
 		{
-			character.getMyStat().getSaveRolls().get(i).
+			cloudStat(character, comand);
+		}
+	}
+	
+	protected static void cloudStat(CharacterDnd character, String comand)
+	{
+		int value =  (int) Integer.parseInt(comand.replaceAll(valueScript, "$1"));
+		List<String> cloud = new ArrayList<>();
+		
+		Pattern pattern = Pattern.compile(cloudPattern);
+		Matcher matcher = pattern.matcher(comand);
+		
+		while(matcher.find())
+		{
+			cloud.add(matcher.group());
 		}
 		
+	character.getCloud().setPerformans(comand.replaceAll(secondKey, "$1") + value, cloud);
 	}
+
 	
 }

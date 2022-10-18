@@ -8,7 +8,6 @@ import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
-import com.dnd.dndTable.creatingDndObject.skills.Possession;
 
 public class CharacterDnd implements Serializable, ObjectDnd
 {
@@ -26,6 +25,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	private Stats myStats;
 	private Workmanship myWorkmanship;
 	private Bag myBag;
+    private PerformanceCloud cloud;
 
 	private List<String> myMemoirs;
 
@@ -35,6 +35,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		this.name = name;
 		myWorkmanship = new Workmanship();
 		myMemoirs = new ArrayList<>();	
+		cloud = new PerformanceCloud();
 
 
 	}
@@ -194,6 +195,10 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	public void setMyBag(Bag myBag) {
 		this.myBag = myBag;
+	}
+
+	public PerformanceCloud getCloud() {
+		return cloud;
 	}
 
 	
