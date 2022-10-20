@@ -4,9 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.KeyWallet;
 import com.dnd.Names;
 
-public class Stats implements Serializable, Names {
+public class Stats implements Serializable, Names, KeyWallet {
 
 	private static final long serialVersionUID = 7901749239721687760L;
 
@@ -72,8 +73,9 @@ public class Stats implements Serializable, Names {
 		return stats;
 	}
 
-	public void buff(String name, int value)
+	public void buff(String name)
 	{
+		int value =  (int) Integer.parseInt(name.replaceAll(valueScript, "$1"));
 		boolean breaker = false;
 		if(breaker == false) 
 		{
@@ -113,6 +115,76 @@ public class Stats implements Serializable, Names {
 			}
 		}	
 	}
+
+	public void spesialize(String buff)
+	{
+
+		boolean breaker = false;
+
+		if(breaker == false)
+		{
+			for(Article saveRoll: this.saveRolls)
+			{
+				if(buff.contains(saveRoll.name))
+				{
+					saveRoll.spesial.add(buff);
+					breaker = true;
+					break;
+				}
+			}
+		}
+
+		if(breaker == false)
+		{
+			for(Article stat: this.stats)
+			{
+				if(buff.contains(stat.name))
+				{
+					stat.spesial.add(buff);
+					breaker = true;
+					break;
+				}
+			}
+		}
+
+		if(breaker == false)
+		{
+			for(Article skill: this.skills)
+			{
+				if(buff.contains(skill.name))
+				{
+					skill.spesial.add(buff);
+					breaker = true;
+					break;
+				}
+			}
+		}
+	}
+
+	public void setSpesial(SaveRoll saveRoll, String buff)
+	{
+		for(Article saveRolls: this.saveRolls)
+		{
+			if(saveRolls.name.contains(saveRoll.toString()))
+			{
+				saveRolls.spesial.add(buff);
+				break;
+			}
+		}
+	}
+
+	public void setSpesial(Stat stat, String buff)
+	{
+		for(Article stats: this.stats)
+		{
+			if(stats.name.contains(stat.toString()))
+			{
+				stats.spesial.add(buff);
+				break;
+			}
+		}
+	}
+
 
 	private void updateAll()
 	{
@@ -179,6 +251,7 @@ public class Stats implements Serializable, Names {
 		int base;
 		int prof;
 		int elseBuff;
+		List <String> spesial;
 		Stat depends;
 
 		Article(String name, Stat depends, int base)
@@ -186,7 +259,9 @@ public class Stats implements Serializable, Names {
 			this.name = name;
 			this.base = base;
 			this.depends = depends;
+			spesial = new ArrayList<>();
 			update();
+
 		}
 
 		Article(String name, Stat depends)

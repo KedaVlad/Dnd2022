@@ -6,8 +6,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.dnd.KeyWallet;
-import com.dnd.Log;
-import com.dnd.Log.Place;
 import com.dnd.Names;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 
@@ -56,19 +54,17 @@ abstract class ScriptReader implements KeyWallet, Names
 	
 	private static void influence(CharacterDnd character, String comand)
 	{
+		if(comand.contains(statKey) && comand.contains(spesialKey))
+		{
+			character.getMyStat().spesialize(comand);
+		}
 		if(comand.contains(statKey))
 		{
-			influenceStat(character, comand);
+			character.getMyStat().buff(comand);
 		}
 		
 	}
-	
-	private static void influenceStat(CharacterDnd character, String comand)
-	{
-		int value =  (int) Integer.parseInt(comand.replaceAll(valueScript, "$1"));
-		
-		character.getMyStat().buff(comand, value);
-	}
+
 
 	
 	private static void cloud(CharacterDnd character, String comand)

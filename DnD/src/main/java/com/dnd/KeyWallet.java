@@ -47,12 +47,17 @@ public interface KeyWallet {
 	final static String cloudPattern = "[a-zA-z ']+";
 	final static String valueScript = ".*([1-5]).*";
 	final static String workmanshipKey = "^(.)([a-zA-Z]*)";
-	
+	final static String spesialKey = "#";
 	final static String itemkey = "*";
 	final static String featureKey = "=";
 	final static String spellKey = ">";
 	final static String possessionKey = "<";
 	final static String traitKey = "-";
 	final static String statKey = "+";
+	
+	public static String allAfterKey(String key)
+	{
+		return key + "([a-zA-Z` ]*)";
+	}
 	
 }
