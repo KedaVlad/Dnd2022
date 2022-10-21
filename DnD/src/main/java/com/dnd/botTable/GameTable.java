@@ -1,6 +1,9 @@
 package com.dnd.botTable;
 
 
+import java.io.File;
+import java.io.Serializable;
+
 import com.dnd.Dice;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
@@ -8,37 +11,45 @@ import com.dnd.Log.Place;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.factory.ControlPanel;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
-public class GameTable implements KeyWallet{
+public class GameTable implements KeyWallet, Serializable{
 
-	private long chatId = 0;
+	private static final long serialVersionUID = 1L;
+
+	private long chatId;
+	private File conector = new File("new File(\"conector.json\")");
 	private CharacterDnd actualGameCharacter;
+	@JsonIgnore
 	private boolean chekChar = false;
-
+	@JsonIgnore
 	private ControlPanel controlPanel = new ControlPanel();
+	@JsonIgnore
 	private MediatorWallet mediatorWallet = new MediatorWallet();
+	@JsonIgnore
 	private TrashCan trashCan = new TrashCan();
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
- 	public void createClass()
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	}
+
+	public void createClass()
 	{
- 		getControlPanel().createClass(actualGameCharacter);
-	
+		getControlPanel().createClass(actualGameCharacter);
+
 	}
 
 	public void createRace()
 	{
 		getControlPanel().createRace(actualGameCharacter);
-		
+
 	}
 
 	public void lvlUp()
 	{
-		
-		
+
+
 	}
-	
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public void update()
@@ -120,6 +131,19 @@ public class GameTable implements KeyWallet{
 
 	public ControlPanel getControlPanel() {
 		return controlPanel;
+	}
+
+	public static GameTable create(long chatId) {
+		
+		GameTable gameTable = new GameTable();
+		
+		gameTable.setChatId(chatId);
+		gameTable.getMediatorWallet().mediatorBreak();
+		gameTable.setChekChar(false);
+		gameTable.getControlPanel().cleanLocalData();
+		
+		return gameTable;
+				
 	}
 
 }

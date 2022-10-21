@@ -1,5 +1,6 @@
 package com.dnd.dndTable.creatingDndObject;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +15,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	private static final long serialVersionUID = -7781627593661723428L;
 
+	private File root;
 	private String name;
 	private int lvl;
 	private int hp;
@@ -199,6 +201,14 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	public PerformanceCloud getCloud() {
 		return cloud;
+	}
+
+	public File getRoot() {
+		return root;
+	}
+
+	public void setRoot(File root) {
+		this.root = root;
 	}
 
 	

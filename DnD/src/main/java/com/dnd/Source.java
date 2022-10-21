@@ -2,9 +2,14 @@ package com.dnd;
 
 public interface Source {
  
+	
+
+	
 final static String source = "C:\\Dnd\\";
 
 final static String userSource = source + "users\\";
+
+final static String userSource1 = "file.json";
 
 final static String raceSource = source + "race\\";
 

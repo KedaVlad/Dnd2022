@@ -15,6 +15,8 @@ import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 public class ControlPanel implements KeyWallet, Source {
 
 	private File myCharactersDir;
+	
+	private File mainFile;
 	private String classBeck;
 	private String archetypeBeck;
 	private int classLvl;
@@ -111,7 +113,8 @@ public class ControlPanel implements KeyWallet, Source {
 		myCharactersDir = new File(userSource + userName);
 		if(!myCharactersDir.exists()) {
 			myCharactersDir.mkdir();
-		}	
+		}
+		
 	}
 
 	public File getMyCharactersDir() 
@@ -180,6 +183,14 @@ public class ControlPanel implements KeyWallet, Source {
 	public void setSubRaceDir(File subRaceDir) 
 	{
 		this.subRaceDir = subRaceDir;
+	}
+
+	public File getMainFile() {
+		return mainFile;
+	}
+
+	public void setMainFile(File mainFile) {
+		this.mainFile = mainFile;
 	}
 
 }

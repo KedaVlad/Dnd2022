@@ -54,14 +54,14 @@ abstract class ScriptReader implements KeyWallet, Names
 	
 	private static void influence(CharacterDnd character, String comand)
 	{
-		if(comand.contains(statKey) && comand.contains(spesialKey))
+		/*if(comand.contains(statKey) && comand.contains(spesialKey))
 		{
 			character.getMyStat().spesialize(comand);
 		}
 		if(comand.contains(statKey))
 		{
 			character.getMyStat().buff(comand);
-		}
+		}*/
 		
 	}
 

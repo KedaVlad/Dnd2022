@@ -19,11 +19,18 @@ abstract class CharacterFactory implements Source
 
 	public static CharacterDnd create(String name, File myCharactersDir) {
 
-		save(new CharacterDnd(name), myCharactersDir);
+		save(refactor(new CharacterDnd(name)), myCharactersDir);
 		return load(name, myCharactersDir);
 
 	}
 
+	private static CharacterDnd refactor(CharacterDnd character)
+	{
+		
+		File root = new File(character.getName());
+		character.setRoot(root);
+		return character;
+	}
 	//save and load
 	public static void save(CharacterDnd character, File myCharactersDir)  
 	{

@@ -8,7 +8,7 @@ import com.dnd.Log.Place;
 
 public class TrashCan {
 
-	enum Circle 
+	public enum Circle 
 	{
 		SMALL, MAIN, BIG, ALL
 	}
