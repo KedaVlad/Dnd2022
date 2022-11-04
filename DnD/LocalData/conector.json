@@ -1,0 +1,21 @@
+{
+
+"name" : "conector",
+"comands" : [
+
+{
+"field_cloud":false,"field_searching":false,"field_influencing":true,"field_comands":[["Wisdom"],[2]]
+},
+
+{
+"field_cloud":true,"field_searching":false,"field_influencing":true,"field_comands":[["Separ"],[22]]
+},
+{
+"field_cloud":false,"field_searching":true,"field_influencing":true,"field_comands":[["Wisdomedo"],[0]]
+},
+{
+"field_cloud":false,"field_searching":false,"field_influencing":true,"field_comands":[["calambur"],[3000]]
+}
+]
+
+}

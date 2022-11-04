@@ -5,10 +5,12 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Log;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
+
 
 public class CharacterDnd implements Serializable, ObjectDnd
 {
@@ -27,7 +29,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	private Stats myStats;
 	private Workmanship myWorkmanship;
 	private Bag myBag;
-    private PerformanceCloud cloud;
+    private СhoiceCloud cloud;
 
 	private List<String> myMemoirs;
 
@@ -37,7 +39,8 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		this.name = name;
 		myWorkmanship = new Workmanship();
 		myMemoirs = new ArrayList<>();	
-		cloud = new PerformanceCloud();
+		cloud = new СhoiceCloud();
+		myStats = new Stats();
 
 
 	}
@@ -182,9 +185,11 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	}
 
 	public void setMyStat(int str, int dex, int con, int intl, int wis, int cha) {
-		myStats = new Stats(str, dex, con, intl, wis, cha);
+		
+		myStats.setStats(str, dex, con, intl, wis, cha); 
 		setProfisiency();
 		
+		Log.add("Character stat" + myStats.getStats());
 	}
 
 	public Workmanship getWorkmanship() {
@@ -199,7 +204,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		this.myBag = myBag;
 	}
 
-	public PerformanceCloud getCloud() {
+	public СhoiceCloud getCloud() {
 		return cloud;
 	}
 

@@ -1,0 +1,382 @@
+{
+   "myArchetypeClass":"Assasin",
+   "growMap":[
+      [
+         {
+            "cloud":false,
+            "key":"<",
+            "comand":[
+               [
+                  "Light Armor"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"<",
+            "comand":[
+               [
+                  "Simple Weapon"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"<",
+            "comand":[
+               [
+                  "Hand Crossbows"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"<",
+            "comand":[
+               [
+                  "Long Swords"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"<",
+            "comand":[
+               [
+                  "Rapiers"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"<",
+            "comand":[
+               [
+                  "Short Swords"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"<",
+            "comand":[
+               [
+                  "Thieves' Tools"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"<",
+            "comand":[
+               [
+                  "SR Dexterity"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"<",
+            "comand":[
+               [
+                  "SR Intelligense"
+               ]
+            ]
+         },
+         {
+            "cloud":true,
+            "key":"<",
+            "comand":[
+               [
+                  4,
+                  "Choose skill"
+               ],
+               [
+                  "Acrobatics",
+                  "Investigation",
+                  "Athletics",
+                  "Mindfulness",
+                  "Performance",
+                  "Intimidation",
+                  "Sleight of hand",
+                  "Deception",
+                  "Insight",
+                  "Stelth",
+                  "Persuasion"
+               ]
+            ]
+         },
+         {
+            "cloud":true,
+            "key":"*",
+            "comand":[
+               [
+                  1,
+                  "Choose item"
+               ],
+               [
+                  "Rapier",
+                  "Shortsword"
+               ]
+            ]
+         },
+         {
+            "cloud":true,
+            "key":"*",
+            "comand":[
+               [
+                  1,
+                  "Choose item"
+               ],
+               [
+                  "Shortbow and 20 Arrows",
+                  "Shortsword"
+               ]
+            ]
+         },
+         {
+            "cloud":true,
+            "key":"*",
+            "comand":[
+               [
+                  1,
+                  "Choose item"
+               ],
+               [
+                  "Dungeoneer's Pack",
+                  "Burglar's Pack",
+                  "Explorer's Pack"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"*",
+            "comand":[
+               [
+                  "Leather Armor"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"*",
+            "comand":[
+               [
+                  "Dagger"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"*",
+            "comand":[
+               [
+                  "Thieves' Tools"
+               ]
+            ]
+         }
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Competence"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Sneak Attack"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Thieves Jargon"
+               ]
+            ]
+         }
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Tricky Action"
+               ]
+            ]
+         }
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Additional Holdings"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Liquidation"
+               ]
+            ]
+         },
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Precise Aiming"
+               ]
+            ]
+         }
+      ],
+      [
+         
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Incredible Evasion"
+               ]
+            ]
+         }
+      ],
+      [
+         
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Evasiveness"
+               ]
+            ]
+         }
+      ],
+      [
+         
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Penetration Master"
+               ]
+            ]
+         }
+      ],
+      [
+         
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Reliable Talent"
+               ]
+            ]
+         }
+      ],
+      [
+         
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Impostor"
+               ]
+            ]
+         }
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Blind Sight"
+               ]
+            ]
+         }
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Slippery Mind"
+               ]
+            ]
+         }
+      ],
+      [
+         
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Death Blow"
+               ]
+            ]
+         }
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Intangibility"
+               ]
+            ]
+         }
+      ],
+      [
+         
+      ],
+      [
+         {
+            "cloud":false,
+            "key":"=",
+            "comand":[
+               [
+                  "Luck"
+               ]
+            ]
+         }
+      ]
+   ],
+   "myClassMainFile":null
+}

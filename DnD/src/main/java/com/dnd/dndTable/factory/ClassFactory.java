@@ -1,15 +1,16 @@
 package com.dnd.dndTable.factory;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.io.IOException;
 
 import com.dnd.Log;
 import com.dnd.Source;
-import com.dnd.Log.Place;
-import com.dnd.dndTable.*;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.*;
+import com.dnd.localData.Json;
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.databind.DatabindException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 abstract class ClassFactory implements Source 
 {
@@ -17,84 +18,77 @@ abstract class ClassFactory implements Source
 	private final static File dirClass = new File(classSource);;
 	private static File dirArchetype;
 
+
+
 	static void create(CharacterDnd character, String className, int lvl, String archetype) 
 	{
-		Log.add("Class " + className +" " + archetype + " create", Place.FACTORY, Place.CLASS);
-		switch(className)
-		{
-		case "Artificer":
-			refactor(character, className, archetype, new Rogue(lvl, archetype));
-			
-		case "Barbarian":
-			refactor(character, className, archetype, new Barbarian(lvl, archetype));
-			break;
-			
-		case "Bard":
-			refactor(character, className, archetype, new Bard(lvl, archetype));
-			break;
-			
-		case "Blood Hunter":
-			refactor(character, className, archetype, new BloodHunter(lvl, archetype));
-			break;
-			
-		case "Cleric":
-			refactor(character, className, archetype, new Cleric(lvl, archetype));
-			break;
-			
-		case "Druid":
-			refactor(character, className, archetype, new Druid(lvl, archetype));
-			break;
-			
-		case "Fighter":
-			refactor(character, className, archetype, new Fighter(lvl, archetype));
-			break;
-			
-		case "Monk":
-			refactor(character, className, archetype, new Monk(lvl, archetype));
-			
-		case "Rogue":
-			refactor(character, className, archetype, new Rogue(lvl, archetype));
-			break;
-			
-		case "Warlock":
-			refactor(character, className, archetype, new Warlock(lvl, archetype));
-			break;
-			
-		case "Wizard":
-			refactor(character, className, archetype, new Wizard(lvl, archetype));
-			break;
-		}
-	
-	}
 
-	private static void refactor(CharacterDnd character, String className, String archetype, ClassDnd classDnd)
-	{
-		
-		classDnd.setMainFile(new File(classSource + className + "\\" + archetype + ".txt"));
-		character.setClassDnd(classDnd);
-		Scanner scanner = null;
-		try {
-			scanner = new Scanner(classDnd.getMyClassMainFile());
-			while(scanner.hasNextLine())
+		try
+		{
+			switch(className)
 			{
-				String nextLine = scanner.nextLine();
-				
-				if(nextLine.equals(character.getLvl() + 1 + ""))
-				{
-					break;
-				}
-				ScriptReader.execute(character, nextLine);
+			case "Artificer":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Artificer.class));
+
+			case "Barbarian":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Barbarian.class));
+				break;
+
+			case "Bard":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Bard.class));
+				break;
+
+			case "Blood Hunter":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, BloodHunter.class));
+				break;
+
+			case "Cleric":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Cleric.class));
+				break;
+
+			case "Druid":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Druid.class));
+				break;
+
+			case "Fighter":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Fighter.class));
+				break;
+
+			case "Monk":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Monk.class));
+				break;
+
+			case "Rogue":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Rogue.class));
+				break;
+
+			case "Warlock":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Warlock.class));
+				break;
+
+			case "Wizard":
+				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Wizard.class));
+				break;
 			}
-		}
-		catch (FileNotFoundException e) 
+		} 
+		catch (IOException e) 
 		{
 			e.printStackTrace();
 		}
-		finally 
+		character.getClassDnd().setLvl(lvl);
+		character.setLvl();
+		for(int i = 0; i < lvl; i++)
 		{
-			scanner.close();
+			for(InerComand comand: character.getClassDnd().getGrowMap().get(i))
+			{	
+				Log.add("ClassFactory complate inner comand " + comand);
+				ScriptReader.execute(character, comand);
+			}
 		}
+
 	}
+
+
 
 	static String[] getClassArray() 
 	{
@@ -110,8 +104,8 @@ abstract class ClassFactory implements Source
 	}
 
 	static String getObgectInfo(String classDnd, String archetype) {
-		
-	String answer = classDnd + archetype;
+
+		String answer = classDnd + archetype;
 		return answer;
 	}
 

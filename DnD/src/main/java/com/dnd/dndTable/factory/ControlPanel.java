@@ -6,7 +6,6 @@ import java.util.Map;
 
 import com.dnd.KeyWallet;
 import com.dnd.Log;
-import com.dnd.Log.Place;
 import com.dnd.Source;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
@@ -30,7 +29,10 @@ public class ControlPanel implements KeyWallet, Source {
 		CLASS, ARCHETYPE, RACE, SUBRACE, ITEM, STATS;
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 	public CharacterDnd createCharecter(String name)
+ 	
+	
+	
+	public CharacterDnd createCharecter(String name)
 	{
 		return CharacterFactory.create(name, myCharactersDir);
 	}
@@ -53,11 +55,14 @@ public class ControlPanel implements KeyWallet, Source {
 	public void createClass(CharacterDnd character)
 	{
 		ClassFactory.create(character, classBeck, classLvl, archetypeBeck);
+		Log.add("CP " +character.getClass() + " " + character.getWorkmanship().getMyFeatures());
+		
 	}
 	
 	public void createRace(CharacterDnd character)
 	{
 		RaceFactory.create(character, race, subRace);
+		Log.add("CP " +character.getMyRace() + " " + character.getWorkmanship().getMyFeatures());
 	}
 
 	public String[] getArray(ObjectType type)
@@ -73,7 +78,7 @@ public class ControlPanel implements KeyWallet, Source {
 		case SUBRACE:
 			return RaceFactory.getSubRaceArray(race);
 		default:
-			Log.add("getArray(ERROR not valid ObjectType", Place.ERROR , Place.DND, Place.CONTROLPANEL);
+			Log.add("getArray(ERROR not valid ObjectType");
 			break;
 		}
 		return null;
@@ -91,7 +96,7 @@ public class ControlPanel implements KeyWallet, Source {
 		case STATS:
 			return CharacterFactory.getCharacterStatInfo();
 		default:
-			Log.add("getObjectInfo(ERROR not valid ObjectType", Place.ERROR , Place.DND, Place.CONTROLPANEL);
+			Log.add("getObjectInfo(ERROR not valid ObjectType");
 			break;
 		}
 		return null;
@@ -131,7 +136,7 @@ public class ControlPanel implements KeyWallet, Source {
 	public void setClassBeck(String classBeck) 
 	{
 		
-		Log.add(this.classBeck + " " + classBeck, Place.CONTROLPANEL, Place.COMMAND);
+		Log.add("CP " + this.classBeck + " " + classBeck);
 		this.classBeck = classBeck;
 	}
 

@@ -7,7 +7,6 @@ import java.io.Serializable;
 import com.dnd.Dice;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
-import com.dnd.Log.Place;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.factory.ControlPanel;
@@ -55,7 +54,7 @@ public class GameTable implements KeyWallet, Serializable{
 	public void update()
 	{
 		getControlPanel().save(actualGameCharacter);
-		Log.add("update", Place.BOT, Place.GAMETABLE, Place.METHOD);
+		Log.add("GameTable update");
 	}
 
 	public String readinessСheck()

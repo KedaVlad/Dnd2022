@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Source;
-import com.dnd.Log.Place;
 import com.dnd.dndTable.creatingDndObject.*;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
@@ -106,7 +105,6 @@ abstract class WorkmanshipFactory implements Source, KeyWallet {
 		if(!character.getWorkmanship().getMyFeatures().contains(new Feature(skill)))
 		{
 			character.getWorkmanship().getMyFeatures().add(new Feature(skill));
-			Log.add(skill + " " + character.getWorkmanship().getMyFeatures() , Place.FACTORY, Place.WORKMANSHIP, Place.CREATING);
 		}
 	}
 

@@ -29,7 +29,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import com.dnd.Dice;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
-import com.dnd.Log.Place;
 import com.dnd.Source;
 import com.dnd.botTable.TrashCan.Circle;
 import com.dnd.dndTable.creatingDndObject.skills.Feature;
@@ -43,7 +42,15 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private static Long beacon(Update update)
 	{
-		return update.getMessage().getChatId();
+		if(update.hasCallbackQuery())
+		{
+			return update.getCallbackQuery().getMessage().getChatId();
+		}
+		else
+		{
+			return update.getMessage().getChatId();
+		}
+		
 	}
 
 	private static Long beacon(Message message)
@@ -62,55 +69,34 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	public void onUpdateReceived(Update update) 
 	{ 
 
-		if(gameTable.get(beacon(update)) != null) clean(Circle.SMALL, beacon(update));
-
-
-
-		if(update.hasCallbackQuery())
+		try 
 		{
-
-			try 
+			if(gameTable.get(beacon(update)) == null)
 			{
-
-				handleCallback(update.getCallbackQuery());
-
-			} 
-			catch (Exception e) 
-			{		
-				e.printStackTrace();		
+				startCase(update.getMessage());
 			}
+			else
+			{
+				clean(Circle.SMALL, beacon(update));
 
+				if(update.hasCallbackQuery())
+				{
+					handleCallback(update.getCallbackQuery());
+				}
+				else if(update.hasMessage() && (gameTable.get(beacon(update)).getMediatorWallet().checkMediator() == true)) 
+				{
+					hendlerMediator(update.getMessage());
+				}		
+				else if(update.hasMessage()) 
+				{
+					handleMessage(update.getMessage());
+				}
+			}
+		}	
+		catch (Exception e) 
+		{		
+			e.printStackTrace();		
 		}
-		else if(update.hasMessage() && (gameTable.get(beacon(update)).getMediatorWallet().checkMediator() == true)) 
-		{
-
-			try 
-			{
-
-				hendlerMediator(update.getMessage());
-
-			} 
-			catch (Exception e) 
-			{				
-				e.printStackTrace();		
-			}
-
-		}		
-		else if(update.hasMessage()) 
-		{
-
-			try 
-			{
-
-				handleMessage(update.getMessage());
-
-			} 
-			catch (Exception e) 
-			{
-				e.printStackTrace();
-			}
-
-		}		
 	}
 
 	private void clean(Circle circle, Long beacon)
@@ -162,19 +148,19 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				case "/start":
 					clean(Circle.ALL, beacon(message));
 					startCase(message);
-					Log.add("/start", Place.BOT, Place.COMMAND);
+					Log.add("/start");
 					return;
 				case "/myCharacters":
 					clean(Circle.MAIN, beacon(message));
 					characterCase(message);
-					Log.add("/myCharacters", Place.BOT, Place.COMMAND);
+					Log.add("/myCharacters");
 					return;
 				}
 			}
 		}
 		else
 		{
-			Log.add("try add Memoir", Place.BOT, Place.COMMAND);
+			Log.add("try add Memoir");
 			if(gameTable.get(beacon(message)).isChekChar())
 			{
 				gameTable.get(beacon(message)).getActualGameCharacter().setMyMemoirs(message.getText());
@@ -287,25 +273,25 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		case characterMediatorKey:
 
 			finishCharacter(message);
-			Log.add("finishCharacter", Place.BOT, Place.MEDIATOR, Place.CREATING);
+			Log.add("finishCharacter bot");
 			return;
 
 		case classMediatorKey:
 
 			finishClass(message); 
-			Log.add("finishClass", Place.BOT, Place.MEDIATOR, Place.CREATING);
+			Log.add("finishClass bot");
 			return;
 
 		case statMediatorKey:
 
 			finishStat(message);
-			Log.add("finishStat", Place.BOT, Place.MEDIATOR, Place.CREATING);
+			Log.add("finishStat bot");
 			return;
 
 		case hpMediatorKey:
 
 			finishHp(message);
-			Log.add("finishHp", Place.BOT, Place.MEDIATOR, Place.CREATING);
+			Log.add("finishHp bot");
 			return;
 
 
@@ -548,71 +534,71 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		case characterCaseKey:
 
 			downloadHero(callbackQuery);
-			Log.add("downloadHero", Place.BOT, Place.CALLBACK);
+			Log.add("downloadHero bot");
 			return;
 
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		case characterCreateKey:
 			startCreateHero(callbackQuery);
-			Log.add("startCreateHero", Place.BOT, Place.CALLBACK, Place.CREATING);
+			Log.add("startCreateHero bot");
 			return;
 
 		case startClassKey:
 			gameTable.get(beacon(callbackQuery));
 			startCreateClass(callbackQuery);
-			Log.add("startCreateClass", Place.BOT, Place.CALLBACK, Place.CREATING);
+			Log.add("startCreateClass bot");
 			return;
 
 		case chooseArchetypeClassKey:
 			chooseArchetype(callbackQuery);
-			Log.add("chooseArchetype", Place.BOT, Place.CALLBACK, Place.CREATING);
+			Log.add("chooseArchetype bot");
 			return;
 
 		case finishClassKey:
 			chooseLvlClass(callbackQuery);
-			Log.add("chooseLvlClass", Place.BOT, Place.CALLBACK, Place.CREATING);
+			Log.add("chooseLvlClass bot");
 			return;
 
 		case startRaceKey:
 			gameTable.get(beacon(callbackQuery));
 			startCreateRace(callbackQuery);
-			Log.add("startCreateRace", Place.BOT, Place.CALLBACK, Place.CREATING);
+			Log.add("startCreateRace bot");
 			return;
 
 		case chooseSubRaceKey:
 			chooseSubRace(callbackQuery);
-			Log.add("chooseSubRace", Place.BOT, Place.CALLBACK, Place.CREATING);
+			Log.add("chooseSubRace bot");
 			return;
 
 		case finishRaceKey:
 			finishRace(callbackQuery);
-			Log.add("finishRace", Place.BOT, Place.CALLBACK, Place.CREATING);
+			Log.add("finishRace bot");
 			return;
 
 		case hpMediatorKey:
 			finishHp(callbackQuery.getMessage());
-			Log.add("startHp", Place.BOT, Place.CALLBACK, Place.CREATING);
+			Log.add("startHp bot");
 			return;
 
 		case startStatsKey:
 			gameTable.get(beacon(callbackQuery));
 			startStats(callbackQuery);
-			Log.add("startStats", Place.BOT, Place.CALLBACK, Place.CREATING);
+			Log.add("startStats bot");
 			return;
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		case menuKey:
 			characterMenu(callbackQuery);
-			Log.add("characterMenu", Place.BOT, Place.CALLBACK, Place.PLAY);
+			Log.add("characterMenu bot");
 			return;
 
 		case skillMenu:
 			skillMenu(callbackQuery);
-			Log.add("skillMenu", Place.BOT, Place.CALLBACK, Place.PLAY);
+			Log.add("skillMenu bot");
 			return;
 
 		case memoirsMenu:
 			memoirsMenu(callbackQuery);
-			Log.add("memoirsMenu", Place.BOT, Place.CALLBACK, Place.PLAY);
+			Log.add("memoirsMenu bot");
 			return;
 
 		}
@@ -710,7 +696,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		for(int i = 0; i < gameTable.get(beacon(callbackQuery)).getControlPanel().getArray(ObjectType.ARCHETYPE).length; i++)
 		{
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-					.text(gameTable.get(beacon(callbackQuery)).getControlPanel().getArray(ObjectType.ARCHETYPE)[i].replaceAll(keyAnswer + ".txt", "$1"))
+					.text(gameTable.get(beacon(callbackQuery)).getControlPanel().getArray(ObjectType.ARCHETYPE)[i].replaceAll(keyAnswer + ".json", "$1"))
 					.callbackData(finishClassKey + gameTable.get(beacon(callbackQuery)).getControlPanel().getArray(ObjectType.ARCHETYPE)[i]
 							.replaceAll(keyAnswer + ".txt", "$1"))
 					.build()));
@@ -850,7 +836,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		for(int i = 0; i < gameTable.get(beacon(callbackQuery)).getControlPanel().getArray(ObjectType.SUBRACE).length; i++)
 		{
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-					.text(gameTable.get(beacon(callbackQuery)).getControlPanel().getArray(ObjectType.SUBRACE)[i].replaceAll(keyAnswer + ".txt", "$1"))
+					.text(gameTable.get(beacon(callbackQuery)).getControlPanel().getArray(ObjectType.SUBRACE)[i].replaceAll(keyAnswer + ".json", "$1"))
 					.callbackData(finishRaceKey + gameTable.get(beacon(callbackQuery))
 					.getControlPanel().getArray(ObjectType.SUBRACE)[i].replaceAll(keyAnswer + ".txt", "$1"))
 					.build()));
@@ -1047,20 +1033,13 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		String answer = "Choose spell \n";
 		if(gameTable.get(beacon(callbackQuery)).getActualGameCharacter().getWorkmanship().getMyFeatures().isEmpty())
 		{
-			Log.add("0 size:(", Place.BOT);
+			Log.add("skillMenu 0 size:(");
 		}
 		else
 		{
-			Log.add(gameTable.get(beacon(callbackQuery)).getActualGameCharacter().getWorkmanship().getMyFeatures().size() + 
-					gameTable.get(beacon(callbackQuery)).getActualGameCharacter().getWorkmanship().getMyFeatures().get(1).getName(),
-					Place.BOT, Place.PLAY);
+			
 			for (Feature skill: gameTable.get(beacon(callbackQuery)).getActualGameCharacter().getWorkmanship().getMyFeatures())
 			{
-				Log.add(gameTable.get(beacon(callbackQuery)).getActualGameCharacter().getWorkmanship().getMyFeatures().size() + 
-						gameTable.get(beacon(callbackQuery)).getActualGameCharacter().getWorkmanship().getMyFeatures().get(2).getName(),
-						Place.BOT, Place.PLAY);
-				Log.add("createButtonSkill", Place.BOT);
-
 				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
 						.text( skill.getName())
 						.callbackData(skillMenu)

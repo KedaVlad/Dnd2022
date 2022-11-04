@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Log;
-import com.dnd.Log.Place;
 
 public class TrashCan {
 
@@ -47,7 +46,7 @@ public class TrashCan {
 		List<Integer> big = new ArrayList<>();
 		big.addAll(bigСircle);
 		bigСircle.clear();
-		Log.add("BIG", Place.BOT, Place.GAMETABLE, Place.TRASHCAN );
+		Log.add("TrashCan BIG");
 		return big;
 	}
 
@@ -61,7 +60,7 @@ public class TrashCan {
 		List<Integer> main = new ArrayList<>();
 		main.addAll(mainСircle);
 		mainСircle.clear();
-		Log.add("MAIN", Place.BOT, Place.GAMETABLE, Place.TRASHCAN );
+		Log.add("TrashCan MAIN");
 		return main;
 	}
 
@@ -75,7 +74,7 @@ public class TrashCan {
 		List<Integer> small = new ArrayList<>();
 		small.addAll(smallСircle);	
 		smallСircle.clear();
-		Log.add("SMALL", Place.BOT, Place.GAMETABLE, Place.TRASHCAN );
+		Log.add("TrashCan SMALL");
 		return small;
 	}
 

@@ -10,7 +10,6 @@ import java.io.ObjectOutputStream;
 import com.dnd.Dice;
 import com.dnd.Log;
 import com.dnd.Source;
-import com.dnd.Log.Place;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 

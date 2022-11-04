@@ -1,0 +1,72 @@
+{
+   "speed":25,
+   "raceName":"Gnome",
+   "subRace":"Forest",
+   "specials":[
+      {
+         "cloud":false,
+         "key":"+",
+         "comand":[
+            [
+               2,
+               "Intelligence"
+            ]
+         ]
+      },
+      {
+         "cloud":false,
+         "key":"+",
+         "comand":[
+            [
+               1,
+               "Dexterity"
+            ]
+         ]
+      },
+      {
+         "cloud":false,
+         "key":"=",
+         "comand":[
+            [
+               "Natural Illusion"
+            ]
+         ]
+      },
+      {
+         "cloud":false,
+         "key":"=",
+         "comand":[
+            [
+               "Natural Illusion"
+            ]
+         ]
+      },
+      {
+         "cloud":false,
+         "key":"=",
+         "comand":[
+            [
+               "Communication with small animals"
+            ]
+         ]
+      },
+      {
+         "cloud":false,
+         "key":"=",
+         "comand":[
+            [
+               "Dark vision"
+            ]
+         ]
+      },
+      {
+         "cloud":false,
+         "key":"=",
+         "comand":[
+            [
+               "Dwarven cunning"
+            ]
+         ]
+      }
+   ]
+}

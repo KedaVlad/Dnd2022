@@ -3,7 +3,6 @@ package com.dnd.dndTable.creatingDndObject.skills;
 import java.io.Serializable;
 
 import com.dnd.Log;
-import com.dnd.Log.Place;
 
 public class Feature implements Serializable{
 	
@@ -19,6 +18,7 @@ public class Feature implements Serializable{
 	public Feature(String name) {
 		
 		this.name = name;
+		Log.add("feature construct" + name);
 	}
 	
 	private int id;

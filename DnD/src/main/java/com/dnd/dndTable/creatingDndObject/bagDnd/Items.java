@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.dnd.dndTable.ObjectDnd;
 
-public abstract class Items implements Serializable, ObjectDnd{
+public class Items implements Serializable, ObjectDnd{
 	
 	private static final long serialVersionUID = -1353539867889183740L;
 	
@@ -12,7 +12,12 @@ public abstract class Items implements Serializable, ObjectDnd{
 	private int cost;
 	private String name;
 	
+	public Items(String name)
+	{
+		this.name = name;
+	}
 	
+	public Items() {}
 
 	public int getWeigth() {
 		return weigth;

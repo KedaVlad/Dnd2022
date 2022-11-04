@@ -6,90 +6,87 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import com.dnd.KeyWallet;
+import com.dnd.Log;
 import com.dnd.Names;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.dndTable.creatingDndObject.skills.Feature;
+import com.dnd.dndTable.creatingDndObject.skills.Possession;
+import com.dnd.dndTable.creatingDndObject.skills.Spell;
+import com.dnd.localData.Json;
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 abstract class ScriptReader implements KeyWallet, Names
 {
 
-	static void execute(CharacterDnd character, String comand)
+	static void execute(CharacterDnd character, InerComand comand)
 	{
-		
-		if(comand.contains(searchingScript))
-		{
-			search(character, comand);
-		}
-		else if(comand.contains(influencingScript))
-		{
-			influence(character, comand);
-		}
-		else if(comand.contains(cloudScript))
+		Log.add("ScriptReader execute " + comand);
+
+		if(comand.isCloud())
 		{
 			cloud(character, comand);
 		}
-	
+		else 
+		{
+			influence(character, comand);
+		}
 	}
-	
-	private static void search(CharacterDnd character, String comand)
+
+	private static void cloud(CharacterDnd character, InerComand comand)
 	{
-		
-		if(comand.contains(featureKey))
+		if(comand.getKey().contains(statKey))
 		{
-			WorkmanshipFactory.createFeature(character, comand);
+			cloudStat(character, comand.getKey(), comand.getComand());
 		}
-		else if(comand.contains(spellKey))
+		else if(comand.getKey().contains(workmanshipKey))
 		{
-			WorkmanshipFactory.createSpell(character, comand);
+			cloudWorkmanship(character, comand.getKey(), comand.getComand());
 		}
-		else if(comand.contains(possessionKey))
-		{
-			WorkmanshipFactory.createPossession(character, comand);
-		}
-		else if(comand.contains(traitKey))
-		{
-			WorkmanshipFactory.createTrait(character, comand);
-		}
-		
-	}
-	
-	private static void influence(CharacterDnd character, String comand)
-	{
-		/*if(comand.contains(statKey) && comand.contains(spesialKey))
-		{
-			character.getMyStat().spesialize(comand);
-		}
-		if(comand.contains(statKey))
-		{
-			character.getMyStat().buff(comand);
-		}*/
-		
+
 	}
 
 
-	
-	private static void cloud(CharacterDnd character, String comand)
+	protected static void cloudWorkmanship(CharacterDnd character, String key, List<List<Object>> comand)
 	{
-		if(comand.contains(statKey))
-		{
-			cloudStat(character, comand);
-		}
-	}
-	
-	protected static void cloudStat(CharacterDnd character, String comand)
-	{
-		int value =  (int) Integer.parseInt(comand.replaceAll(valueScript, "$1"));
-		List<String> cloud = new ArrayList<>();
-		
-		Pattern pattern = Pattern.compile(cloudPattern);
-		Matcher matcher = pattern.matcher(comand);
-		
-		while(matcher.find())
-		{
-			cloud.add(matcher.group());
-		}
-		
-	character.getCloud().setPerformans(comand.replaceAll(secondKey, "$1") + value, cloud);
+		int lifeTime = ((Integer) Integer.parseInt(comand.get(0).get(0).toString()));
+		String term = comand.get(0).get(1).toString();
+		List<Object> performans = comand.get(1);
+		character.getCloud().setPerforman(key, lifeTime, term, performans);
 	}
 
-	
+	protected static void cloudStat(CharacterDnd character, String key, List<List<Object>> comand)
+	{
+
+		int lifeTime = ((Integer) Integer.parseInt(comand.get(0).get(0).toString()));
+		String term = comand.get(0).get(1).toString();
+		List<Object> performans = comand.get(1);
+		character.getCloud().setPerforman(key, lifeTime, term, performans);
+
+	}
+
+	private static void influence(CharacterDnd character, InerComand comand)
+	{
+		try {
+			if(comand.getKey().contains(statKey))
+			{
+				character.getMyStat().buff(comand.getComand().get(0).get(1).toString(),
+						(Integer)Integer.parseInt(comand.getComand().get(0).get(0).toString()));
+			}
+			else if(comand.getKey().contains(featureKey))
+			{
+				WorkmanshipFactory.createFeature(character, comand.getComand().get(0).get(0).toString());
+			}	
+			else if(comand.getKey().contains(spellKey))
+			{
+				WorkmanshipFactory.createSpell(character, comand.getComand().get(0).get(0).toString());
+			}
+			else if(comand.getKey().contains(possessionKey))
+			{
+				WorkmanshipFactory.createPossession(character, comand.getComand().get(0).get(0).toString());
+			}
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

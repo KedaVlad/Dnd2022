@@ -48,7 +48,7 @@ public interface KeyWallet {
 	final static String valueScript = ".*([1-5]).*";
 	final static String workmanshipKey = "^(.)([a-zA-Z]*)";
 	final static String spesialKey = "#";
-	final static String itemkey = "*";
+	final static String itemKey = "*";
 	final static String featureKey = "=";
 	final static String spellKey = ">";
 	final static String possessionKey = "<";

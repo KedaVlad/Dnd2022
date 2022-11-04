@@ -15,24 +15,34 @@ public class Stats implements Serializable, Names, KeyWallet {
 	private List<Article> skills;
 	private List<Article> saveRolls;
 
-	Stats(int str, int dex, int con, int intl, int wis, int cha) 
+	Stats() 
 	{
 		stats = new ArrayList<>();
 		skills = new ArrayList<>();
 		saveRolls = new ArrayList<>();
 
-		stats.add(new Article(Stat.STRENGTH.toString(), Stat.STRENGTH, str));
-		stats.add(new Article(Stat.DEXTERITY.toString(), Stat.DEXTERITY, dex));
-		stats.add(new Article(Stat.CONSTITUTION.toString(), Stat.CONSTITUTION, con));
-		stats.add(new Article(Stat.INTELLIGENSE.toString(), Stat.INTELLIGENSE, intl));
-		stats.add(new Article(Stat.WISDOM.toString(), Stat.WISDOM, wis));
-		stats.add(new Article(Stat.CHARISMA.toString(), Stat.CHARISMA, cha));
+		stats.add(new Article(Stat.STRENGTH.toString(), Stat.STRENGTH, 0));
+		stats.add(new Article(Stat.DEXTERITY.toString(), Stat.DEXTERITY, 0));
+		stats.add(new Article(Stat.CONSTITUTION.toString(), Stat.CONSTITUTION, 0));
+		stats.add(new Article(Stat.INTELLIGENSE.toString(), Stat.INTELLIGENSE, 0));
+		stats.add(new Article(Stat.WISDOM.toString(), Stat.WISDOM, 0));
+		stats.add(new Article(Stat.CHARISMA.toString(), Stat.CHARISMA, 0));
 
 
 		setStartSkills();
 		setStartSaveRoll();
 		updateAll();
 
+	}
+	
+	void setStats(int str, int dex, int con, int intl, int wis, int cha)
+	{
+		buff(Stat.STRENGTH.toString(), str);
+		buff(Stat.DEXTERITY.toString(), dex);
+		buff(Stat.CONSTITUTION.toString(), con);
+		buff(Stat.INTELLIGENSE.toString(), intl);
+		buff(Stat.WISDOM.toString(), wis);
+		buff(Stat.CHARISMA.toString(), cha);
 	}
 
 	private void setStartSkills()
@@ -73,9 +83,8 @@ public class Stats implements Serializable, Names, KeyWallet {
 		return stats;
 	}
 
-	public void buff(String name)
+	public void buff(String name, int value)
 	{
-		int value =  (int) Integer.parseInt(name.replaceAll(valueScript, "$1"));
 		boolean breaker = false;
 		if(breaker == false) 
 		{
