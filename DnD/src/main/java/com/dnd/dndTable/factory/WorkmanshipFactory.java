@@ -26,82 +26,8 @@ abstract class WorkmanshipFactory implements Source, KeyWallet {
 
 	private final static File[] workmanship = {new File(skillsSource), new File(spellsSource), new File(possessionsSource), new File(traitsSource)};
 
-
-	private static Object reader(File file, String name) //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	{
-		Scanner scanner = null;
-		Pattern findObject = Pattern.compile(name);
-		Pattern nextObject = Pattern.compile(name.replaceAll(workmanshipKey, "$1"));
-		
-		
-		try
-		{
-			scanner = new Scanner(file);
-			String nextLine = scanner.nextLine();
-			while(scanner.hasNextLine())
-			{
-				Matcher rightObject = findObject.matcher(nextLine);
-				if(rightObject.find())
-				{
-					Matcher next = nextObject.matcher(nextLine);
-					if(next.find())
-					{
-						break;
-					}
-				}
-			}
-			
-		}
-		catch (FileNotFoundException e) 
-		{
-			e.printStackTrace();
-		}
-		finally 
-		{
-			scanner.close();
-		}
-		
-		
-		return null;
-	}
-
-	
-
-	public static List<String> getWorkmanshipRace(RaceDnd raceDnd)
-	{
-		List<String> pool = new ArrayList<>();
-		Scanner classScanner = null;
-		Pattern findNameSkills = Pattern.compile(featureKey);
-		Pattern findNameSpells = Pattern.compile(spellKey);
-		Pattern findNamePossession = Pattern.compile(possessionKey);
-		try {
-			classScanner = new Scanner(new File(raceSource + raceDnd.getRaceName() + "\\" + raceDnd.getSubRace() + ".txt"));
-			while(classScanner.hasNextLine()) {
-				String workmanship = classScanner.nextLine();
-				Matcher rightSkill = findNameSkills.matcher(workmanship);
-				Matcher rightSpell = findNameSpells.matcher(workmanship);
-				Matcher rightPossession = findNamePossession.matcher(workmanship);
-				if(rightSkill.find()||rightSpell.find()||rightPossession.find()) 
-				{
-					pool.add(workmanship);
-				} 
-			} 
-		}
-		catch (FileNotFoundException e) 
-		{
-
-			e.printStackTrace();
-		}
-		finally 
-		{
-			classScanner.close();
-		}
-		return pool;
-	}
-
 	static void createFeature(CharacterDnd character, String skill) 
-	{
-		
+	{	
 		if(!character.getWorkmanship().getMyFeatures().contains(new Feature(skill)))
 		{
 			character.getWorkmanship().getMyFeatures().add(new Feature(skill));
@@ -114,7 +40,6 @@ abstract class WorkmanshipFactory implements Source, KeyWallet {
 		{
 			character.getWorkmanship().getMyFeatures().add(new Trait(trait));
 		}
-		
 	}
 
 	static void createPossession(CharacterDnd character, String possession) 

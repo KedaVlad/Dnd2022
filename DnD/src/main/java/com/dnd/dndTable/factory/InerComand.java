@@ -22,28 +22,33 @@ public class InerComand implements Serializable {
 	
 	public InerComand() {}
 
-	public boolean isCloud() {
+	public boolean isCloud() 
+	{
 		return cloud;
 	}
 
-	public void setCloud(boolean cloud) {
+	public void setCloud(boolean cloud) 
+	{
 		this.cloud = cloud;
 	}
 
-
-	public String getKey() {
+	public String getKey() 
+	{
 		return key;
 	}
 
-	public void setKey(String key) {
+	public void setKey(String key) 
+	{
 		this.key = key;
 	}
 
-	public List<List<Object>> getComand() {
+	public List<List<Object>> getComand() 
+	{
 		return comand;
 	}
 
-	public void setComand(List<List<Object>> comand) {
+	public void setComand(List<List<Object>> comand) 
+	{
 		this.comand = comand;
 	}
 

@@ -12,7 +12,6 @@ import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.skills.Feature;
 import com.dnd.dndTable.creatingDndObject.skills.Possession;
 import com.dnd.dndTable.creatingDndObject.skills.Spell;
-import com.dnd.localData.Json;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 abstract class ScriptReader implements KeyWallet, Names

@@ -13,7 +13,7 @@ import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.skills.Feature;
 import com.dnd.dndTable.creatingDndObject.skills.Possession;
 import com.dnd.dndTable.factory.InerComand;
-import com.dnd.localData.Json;
+import com.dnd.dndTable.factory.Json;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
@@ -28,11 +28,11 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 	private String myArchetypeClass;
 	@JsonIgnore
 	private int lvl;
-	
-	
+
+
 	private List<List<InerComand>> growMap;
 
-	private File myClassMainFile;
+
 	//Standard creating 
 	public ClassDnd(int lvl) {		
 		this.lvl = lvl;
@@ -44,110 +44,101 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 	}
 
 	@JsonIgnore
-	public int getDiceHits() {
-		return 0;
+	public int getDiceHits() 
+	{
+		return 8;
 	}
 
-
-	public String getMyArchetypeClass() {
+	public String getMyArchetypeClass() 
+	{
 		return myArchetypeClass;
 	}
 
-
-
-
-	public int getLvl() {
+	public int getLvl() 
+	{
 		return lvl;
 	}
 
-	public void setLvl(int lvl) {
+	public void setLvl(int lvl) 
+	{
 		this.lvl = lvl;
 	}
 
-	public void setMainFile(File file) {
-		this.myClassMainFile = file;
-		
-	}
-
-
-	public File getMyClassMainFile() {
-		return myClassMainFile;
-	}
-
-
-	public List<List<InerComand>> getGrowMap() {
+	public List<List<InerComand>> getGrowMap() 
+	{
 		return growMap;
 	}
 
-
-	public void setGrowMap(List<List<InerComand>> growMap) {
+	public void setGrowMap(List<List<InerComand>> growMap) 
+	{
 		this.growMap = growMap;
 	}
 
-
-	public void setMyArchetypeClass(String myArchetypeClass) {
+	public void setMyArchetypeClass(String myArchetypeClass) 
+	{
 		this.myArchetypeClass = myArchetypeClass;
 	}
 
-	public static void main(String[] args) throws JsonProcessingException {
-		
+	public static void main(String[] args) throws JsonProcessingException 
+	{
+
 		ClassDnd assasin = new Rogue();
-		
+
 		List<List<InerComand>> pool = new ArrayList<>();
-		
+
 		List<InerComand> lvl0= new ArrayList<>();
-		
+
 		InerComand c1 = new InerComand(false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Light Armor");
 		lvl0.add(c1);
-		
+
 		c1 = new InerComand(false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Simple Weapon");
-		
+
 		lvl0.add(c1);
 		c1 = new InerComand(false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Hand Crossbows");
-		
+
 		lvl0.add(c1);
 		c1 = new InerComand(false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Long Swords");
-		
+
 		lvl0.add(c1);
 		c1 = new InerComand(false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Rapiers");
-		
+
 		lvl0.add(c1);
 		c1 = new InerComand(false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Short Swords");
-		
+
 		lvl0.add(c1);
 		c1 = new InerComand(false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Thieves' Tools");
-		
+
 		lvl0.add(c1);
 		c1 = new InerComand(false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("SR Dexterity");
-		
+
 		lvl0.add(c1);
 		c1 = new InerComand(false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("SR Intelligense");
-		
+
 		lvl0.add(c1);
 		c1 = new InerComand(true, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(4);
 		c1.getComand().get(0).add("Choose skill");
-		
+
 		c1.getComand().get(1).add("Acrobatics");
 		c1.getComand().get(1).add("Investigation");
 		c1.getComand().get(1).add("Athletics");
@@ -159,43 +150,43 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		c1.getComand().get(1).add("Insight");
 		c1.getComand().get(1).add("Stelth");
 		c1.getComand().get(1).add("Persuasion");
-		
+
 		lvl0.add(c1);	
-		
+
 		c1 = new InerComand(true, itemKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(1);
 		c1.getComand().get(0).add("Choose item");
-		
+
 		c1.getComand().get(1).add("Rapier");
 		c1.getComand().get(1).add("Shortsword");
-		
+
 		lvl0.add(c1);
-		
+
 		c1 = new InerComand(true, itemKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(1);
 		c1.getComand().get(0).add("Choose item");
-		
+
 		c1.getComand().get(1).add("Shortbow and 20 Arrows");
 		c1.getComand().get(1).add("Shortsword");
-		
+
 		lvl0.add(c1);
-		
+
 		c1 = new InerComand(true, itemKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(1);
 		c1.getComand().get(0).add("Choose item");
-		
+
 		c1.getComand().get(1).add("Dungeoneer's Pack");
 		c1.getComand().get(1).add("Burglar's Pack");
 		c1.getComand().get(1).add("Explorer's Pack");
-		
+
 		lvl0.add(c1);
-		
+
 		c1 = new InerComand(false, itemKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Leather Armor");
@@ -208,35 +199,35 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Thieves' Tools");
 		lvl0.add(c1);
-		
+
 		List<InerComand> lvl1 = new ArrayList<>();
-		
+
 		c1 = new InerComand(false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Competence");
 		lvl1.add(c1);
-		
+
 		c1 = new InerComand(false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Sneak Attack");
 		lvl1.add(c1);
-		
+
 		c1 = new InerComand(false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Thieves Jargon");
 		lvl1.add(c1);
-		
-		
+
+
 		List<InerComand> lvl2 = new ArrayList<>();
-		
+
 		c1 = new InerComand(false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Tricky Action");
 		lvl2.add(c1);
-		
-		
+
+
 		List<InerComand> lvl3 = new ArrayList<>();
-		
+
 		c1 = new InerComand(false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Additional Holdings");
@@ -249,7 +240,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Precise Aiming");
 		lvl3.add(c1);
-		
+
 		List<InerComand> lvl4 = new ArrayList<>();
 		List<InerComand> lvl5 = new ArrayList<>();
 		c1 = new InerComand(false, featureKey);
@@ -263,22 +254,22 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		c1.getComand().get(0).add(("Evasiveness"));
 		lvl7.add(c1);
 		List<InerComand> lvl8 = new ArrayList<>();
-		
+
 		List<InerComand> lvl9 = new ArrayList<>();
-		
+
 		c1 = new InerComand(false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Penetration Master");
 		lvl9.add(c1);
-		
+
 		List<InerComand> lvl10 = new ArrayList<>();
 		List<InerComand> lvl11 = new ArrayList<>();
-		
+
 		c1 = new InerComand(false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Reliable Talent");
 		lvl11.add(c1);
-		
+
 		List<InerComand> lvl12 = new ArrayList<>();
 		List<InerComand> lvl13 = new ArrayList<>();
 		c1 = new InerComand(false, featureKey);
@@ -296,7 +287,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		c1.getComand().get(0).add("Slippery Mind");
 		lvl15.add(c1);
 		List<InerComand> lvl16 = new ArrayList<>();
-		
+
 		List<InerComand> lvl17 = new ArrayList<>();
 		c1 = new InerComand(false, featureKey);
 		c1.getComand().add(new ArrayList<>());
@@ -313,7 +304,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Luck");
 		lvl20.add(c1);
-		
+
 		pool.add(lvl0);
 		pool.add(lvl1);
 		pool.add(lvl2);
@@ -335,37 +326,37 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		pool.add(lvl18);
 		pool.add(lvl19);
 		pool.add(lvl20);
-		
-		
+
+
 		assasin.setGrowMap(pool);
-		
+
 		assasin.setMyArchetypeClass("Assasin");
-		
-	
+
+
 		String json = Json.stingify(Json.toJson(assasin));
-	System.out.println(json);
-	System.out.println(Json.parse(json));
-	
+		System.out.println(json);
+		System.out.println(Json.parse(json));
+
 		Rogue r = Json.fromJson(Json.parse(json), Rogue.class);
-		
+
 		System.out.println(r);
 		System.out.println(r.getGrowMap());
 		System.out.println(r.getGrowMap().get(0).get(0));
-		
-	for(int i = 0; i < r.getGrowMap().size(); i++)
-	{
-		for(InerComand comand: r.getGrowMap().get(i))
+
+		for(int i = 0; i < r.getGrowMap().size(); i++)
 		{
-		
-		System.out.println(comand.getComand().get(0).get(0).toString());
-		
-	}
-	}
-	System.out.println(Json.parse(r.getGrowMap().get(0).get(0).toString()));
-	String jj = r.getGrowMap().get(0).get(0).toString();
-	System.out.println(jj);
-	Possession pp = Json.fromJson(Json.parse(jj), Possession.class);
-	System.out.println(pp);
+			for(InerComand comand: r.getGrowMap().get(i))
+			{
+
+				System.out.println(comand.getComand().get(0).get(0).toString());
+
+			}
+		}
+		System.out.println(Json.parse(r.getGrowMap().get(0).get(0).toString()));
+		String jj = r.getGrowMap().get(0).get(0).toString();
+		System.out.println(jj);
+		Possession pp = Json.fromJson(Json.parse(jj), Possession.class);
+		System.out.println(pp);
 	}
 }
 

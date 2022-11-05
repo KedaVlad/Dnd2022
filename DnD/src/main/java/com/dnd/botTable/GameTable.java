@@ -3,6 +3,8 @@ package com.dnd.botTable;
 
 import java.io.File;
 import java.io.Serializable;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.dnd.Dice;
 import com.dnd.KeyWallet;
@@ -13,12 +15,16 @@ import com.dnd.dndTable.factory.ControlPanel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
-public class GameTable implements KeyWallet, Serializable{
+public class GameTable implements KeyWallet, Serializable
+{
 
 	private static final long serialVersionUID = 1L;
 
 	private long chatId;
-	private File conector = new File("new File(\"conector.json\")");
+	
+	
+	private Map<String, CharacterDnd> savedCharacter = new LinkedHashMap<>();
+	@JsonIgnore
 	private CharacterDnd actualGameCharacter;
 	@JsonIgnore
 	private boolean chekChar = false;
@@ -29,18 +35,16 @@ public class GameTable implements KeyWallet, Serializable{
 	@JsonIgnore
 	private TrashCan trashCan = new TrashCan();
 
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	}
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
 	public void createClass()
 	{
 		getControlPanel().createClass(actualGameCharacter);
-
 	}
 
 	public void createRace()
 	{
 		getControlPanel().createRace(actualGameCharacter);
-
 	}
 
 	public void lvlUp()
@@ -48,6 +52,9 @@ public class GameTable implements KeyWallet, Serializable{
 
 
 	}
+	
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -143,6 +150,14 @@ public class GameTable implements KeyWallet, Serializable{
 		
 		return gameTable;
 				
+	}
+
+	public Map<String, CharacterDnd> getSavedCharacter() {
+		return savedCharacter;
+	}
+
+	public void save() {
+		savedCharacter.put(actualGameCharacter.getName(), actualGameCharacter);
 	}
 
 }

@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import com.dnd.Dice;
 import com.dnd.Log;
 import com.dnd.Source;
+import com.dnd.botTable.GameTable;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 
@@ -50,6 +51,24 @@ abstract class CharacterFactory implements Source
 				objectOutputStream.writeObject(character);
 				objectOutputStream.close();
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	public static void save(CharacterDnd character, GameTable gameTable)  
+	{
+		
+		File file = new File("");
+		
+		try {
+			
+				FileOutputStream fileOutputStream = new FileOutputStream(file);
+				ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+				objectOutputStream.writeObject(character);
+				objectOutputStream.close();
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

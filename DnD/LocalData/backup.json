@@ -1,0 +1,859 @@
+{
+   "lvl":0,
+   "myBag":null,
+   "nature":null,
+   "classDnd":null,
+   "hp":0,
+   "workmanship":{
+      "profisiency":0,
+      "myFeatures":[
+         
+      ],
+      "mySpells":[
+         
+      ],
+      "myPossessions":[
+         
+      ]
+   },
+   "menu":"bebta",
+   "myRace":null,
+   "speed":0,
+   "cloud":{
+      "cloud":[
+         
+      ]
+   },
+   "myStat":{
+      "stats":[
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         }
+      ],
+      "skills":[
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         }
+      ],
+      "saveRolls":[
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         },
+         {
+            
+         }
+      ]
+   },
+   "multiClass":null,
+   "387100384":{
+      "chatId":387100384,
+      "savedCharacter":{
+         "cccccccccccceraaaaaa":{
+            "root":"C:\\Users\\ALTRON\\git\\Dnd2022\\DnD\\cccccccccccceraaaaaa",
+            "name":"cccccccccccceraaaaaa",
+            "lvl":20,
+            "hp":3,
+            "nature":null,
+            "speed":0,
+            "myRace":{
+               "speed":25,
+               "raceName":"Gnome",
+               "subRace":"Forest",
+               "specials":[
+                  {
+                     "cloud":false,
+                     "key":"+",
+                     "comand":[
+                        [
+                           2,
+                           "Intelligence"
+                        ]
+                     ]
+                  },
+                  {
+                     "cloud":false,
+                     "key":"+",
+                     "comand":[
+                        [
+                           1,
+                           "Dexterity"
+                        ]
+                     ]
+                  },
+                  {
+                     "cloud":false,
+                     "key":"=",
+                     "comand":[
+                        [
+                           "Natural Illusion"
+                        ]
+                     ]
+                  },
+                  {
+                     "cloud":false,
+                     "key":"=",
+                     "comand":[
+                        [
+                           "Natural Illusion"
+                        ]
+                     ]
+                  },
+                  {
+                     "cloud":false,
+                     "key":"=",
+                     "comand":[
+                        [
+                           "Communication with small animals"
+                        ]
+                     ]
+                  },
+                  {
+                     "cloud":false,
+                     "key":"=",
+                     "comand":[
+                        [
+                           "Dark vision"
+                        ]
+                     ]
+                  },
+                  {
+                     "cloud":false,
+                     "key":"=",
+                     "comand":[
+                        [
+                           "Dwarven cunning"
+                        ]
+                     ]
+                  }
+               ]
+            },
+            "multiClass":null,
+            "myBag":null,
+            "cloud":{
+               "cloud":[
+                  
+               ]
+            },
+            "myMemoirs":"cccccccccccceraaaaaa\n\n\nRogueAssasin.json\nGnomeForest.json\n",
+            "classDnd":{
+               "myArchetypeClass":"Assasin",
+               "growMap":[
+                  [
+                     {
+                        "cloud":false,
+                        "key":"<",
+                        "comand":[
+                           [
+                              "Light Armor"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"<",
+                        "comand":[
+                           [
+                              "Simple Weapon"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"<",
+                        "comand":[
+                           [
+                              "Hand Crossbows"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"<",
+                        "comand":[
+                           [
+                              "Long Swords"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"<",
+                        "comand":[
+                           [
+                              "Rapiers"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"<",
+                        "comand":[
+                           [
+                              "Short Swords"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"<",
+                        "comand":[
+                           [
+                              "Thieves' Tools"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"<",
+                        "comand":[
+                           [
+                              "SR Dexterity"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"<",
+                        "comand":[
+                           [
+                              "SR Intelligense"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":true,
+                        "key":"<",
+                        "comand":[
+                           [
+                              4,
+                              "Choose skill"
+                           ],
+                           [
+                              "Acrobatics",
+                              "Investigation",
+                              "Athletics",
+                              "Mindfulness",
+                              "Performance",
+                              "Intimidation",
+                              "Sleight of hand",
+                              "Deception",
+                              "Insight",
+                              "Stelth",
+                              "Persuasion"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":true,
+                        "key":"*",
+                        "comand":[
+                           [
+                              1,
+                              "Choose item"
+                           ],
+                           [
+                              "Rapier",
+                              "Shortsword"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":true,
+                        "key":"*",
+                        "comand":[
+                           [
+                              1,
+                              "Choose item"
+                           ],
+                           [
+                              "Shortbow and 20 Arrows",
+                              "Shortsword"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":true,
+                        "key":"*",
+                        "comand":[
+                           [
+                              1,
+                              "Choose item"
+                           ],
+                           [
+                              "Dungeoneer's Pack",
+                              "Burglar's Pack",
+                              "Explorer's Pack"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"*",
+                        "comand":[
+                           [
+                              "Leather Armor"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"*",
+                        "comand":[
+                           [
+                              "Dagger"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"*",
+                        "comand":[
+                           [
+                              "Thieves' Tools"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Competence"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Sneak Attack"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Thieves Jargon"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Tricky Action"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Additional Holdings"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Liquidation"
+                           ]
+                        ]
+                     },
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Precise Aiming"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Incredible Evasion"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Evasiveness"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Penetration Master"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Reliable Talent"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Impostor"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Blind Sight"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Slippery Mind"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Death Blow"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Intangibility"
+                           ]
+                        ]
+                     }
+                  ],
+                  [
+                     
+                  ],
+                  [
+                     {
+                        "cloud":false,
+                        "key":"=",
+                        "comand":[
+                           [
+                              "Luck"
+                           ]
+                        ]
+                     }
+                  ]
+               ]
+            },
+            "workmanship":{
+               "profisiency":5,
+               "myFeatures":[
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Competence"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Sneak Attack"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Thieves Jargon"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Tricky Action"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Additional Holdings"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Liquidation"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Precise Aiming"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Incredible Evasion"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Evasiveness"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Penetration Master"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Reliable Talent"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Impostor"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Blind Sight"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Slippery Mind"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Death Blow"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Intangibility"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Natural Illusion"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Communication with small animals"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Dark vision"
+                  },
+                  {
+                     "description":null,
+                     "treats":null,
+                     "statsPointsBuff":0,
+                     "name":"Dwarven cunning"
+                  }
+               ],
+               "mySpells":[
+                  
+               ],
+               "myPossessions":[
+                  {
+                     "name":"Light Armor"
+                  },
+                  {
+                     "name":"Simple Weapon"
+                  },
+                  {
+                     "name":"Hand Crossbows"
+                  },
+                  {
+                     "name":"Long Swords"
+                  },
+                  {
+                     "name":"Rapiers"
+                  },
+                  {
+                     "name":"Short Swords"
+                  },
+                  {
+                     "name":"Thieves' Tools"
+                  },
+                  {
+                     "name":"SR Dexterity"
+                  },
+                  {
+                     "name":"SR Intelligense"
+                  }
+               ]
+            },
+            "menu":"cccccccccccceraaaaaa",
+            "myStat":{
+               "stats":[
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  }
+               ],
+               "skills":[
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  }
+               ],
+               "saveRolls":[
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  },
+                  {
+                     
+                  }
+               ]
+            }
+         }
+      }
+   },
+   "root":null,
+   "name":"bebta",
+   "myMemoirs":""
+}

@@ -17,7 +17,7 @@ import com.dnd.dndTable.creatingDndObject.classDnd.Rogue;
 import com.dnd.dndTable.creatingDndObject.skills.Feature;
 import com.dnd.dndTable.creatingDndObject.skills.Possession;
 import com.dnd.dndTable.factory.InerComand;
-import com.dnd.localData.Json;
+import com.dnd.dndTable.factory.Json;
 import com.fasterxml.jackson.core.JsonProcessingException;
 public class RaceDnd implements Serializable, ObjectDnd, Source, KeyWallet{
 

@@ -15,6 +15,7 @@ public class Stats implements Serializable, Names, KeyWallet {
 	private List<Article> skills;
 	private List<Article> saveRolls;
 
+	
 	Stats() 
 	{
 		stats = new ArrayList<>();
@@ -255,7 +256,7 @@ public class Stats implements Serializable, Names, KeyWallet {
 
 		private static final long serialVersionUID = 8492783248077356748L;
 
-		final String name;
+		String name;
 		int value;
 		int base;
 		int prof;
@@ -263,6 +264,8 @@ public class Stats implements Serializable, Names, KeyWallet {
 		List <String> spesial;
 		Stat depends;
 
+		Article(){}
+		
 		Article(String name, Stat depends, int base)
 		{
 			this.name = name;
