@@ -31,8 +31,8 @@ import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Source;
 import com.dnd.botTable.TrashCan.Circle;
+import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.skills.Feature;
-import com.dnd.dndTable.factory.ControlPanel;
 import com.dnd.dndTable.factory.ControlPanel.ObjectType;
 import com.dnd.dndTable.factory.Json;
 
@@ -162,7 +162,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		else
 		{
 			Log.add("try add Memoir");
-			if(getGameTable().get(beacon(message)).isChekChar())
+			if(getGameTable().get(beacon(message)).isCheckChar())
 			{
 				getGameTable().get(beacon(message)).getActualGameCharacter().setMyMemoirs(message.getText());
 				Message toTrash = execute(SendMessage.builder()
@@ -228,17 +228,20 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				.text("CREATE")
 				.callbackData(characterCreateKey)
 				.build()));
-
-		if(!getGameTable().get(beacon(message)).getControlPanel().getMyCharactersDir().list().equals(null)) 
+		Log.add("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
+		Log.add(getGameTable().get(beacon(message)).getSavedCharacter());
+		if(getGameTable().get(beacon(message)).getSavedCharacter().size() != 0) 
 		{
-			String[] myCreaterdCharacters = getGameTable().get(beacon(message)).getControlPanel().getMyCharactersDir().list();
-			for(int i = 0; i < myCreaterdCharacters.length; i++)
+			Log.add("111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
+			Log.add(getGameTable().get(beacon(message)).getSavedCharacter());
+			for(String name: getGameTable().get(beacon(message)).getSavedCharacter().keySet())
 			{
 				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-						.text(myCreaterdCharacters[i])
-						.callbackData(characterCaseKey + myCreaterdCharacters[i])						
+						.text(name)
+						.callbackData(characterCaseKey + name)						
 						.build()));
 			}
+
 			Message toTrash = execute(
 					SendMessage.builder()
 					.text("Choose a Hero or CREATE new one.")
@@ -248,7 +251,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					);
 			getGameTable().get(beacon(message)).getTrashCan().toMainСircle(toTrash.getMessageId());
 		}
-		else if(getGameTable().get(beacon(message)).getControlPanel().getMyCharactersDir().list().equals(null))
+		else if(getGameTable().get(beacon(message)).getSavedCharacter().size() == 0)
 		{
 			Message toTrash = execute(
 					SendMessage.builder()
@@ -301,11 +304,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void finishCharacter(Message message)
 	{
-		if(getGameTable().get(beacon(message)).isChekChar() == false)
-		{
-			getGameTable().get(beacon(message)).getControlPanel().delete(getGameTable().get(beacon(message)).getActualGameCharacter());
-		}
-		getGameTable().get(beacon(message)).setActualGameCharacter(getGameTable().get(beacon(message)).getControlPanel().createCharecter(message.getText()));
+		getGameTable().get(beacon(message)).setActualGameCharacter(CharacterDnd.create(message.getText()));
 		getGameTable().get(beacon(message)).getActualGameCharacter().setMyMemoirs(getGameTable().get(beacon(message)).getActualGameCharacter().getName() + "\n\n");
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
@@ -330,7 +329,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			e.printStackTrace();
 		}
 
-		getGameTable().get(beacon(message)).update();
 	}
 
 	private void finishClass(Message message)
@@ -356,8 +354,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			{
 
 				getGameTable().get(beacon(message)).getControlPanel().setClassLvl(1);
-				getGameTable().get(beacon(message)).getControlPanel().load(getGameTable().get(message.getChatId()).getActualGameCharacter().getName());
-
 
 				Message botAnswer = execute(SendMessage.builder()
 						.text(lvl+"??? I see you're new here. Let's start with lvl 1. Are you satisfied with this option?"
@@ -429,9 +425,11 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			else
 			{
 				getGameTable().get(beacon(message)).getActualGameCharacter().setMyStat(stats.get(0), stats.get(1), stats.get(2), stats.get(3), stats.get(4), stats.get(5));
-				getGameTable().get(beacon(message)).update();
 				getGameTable().get(beacon(message)).getMediatorWallet().mediatorBreak();
 
+				Log.add(gameTable.get(beacon(message)).getActualGameCharacter().getMyStat().getStats());
+				Log.add(gameTable.get(beacon(message)).getActualGameCharacter().getMyStat().getSkills());
+				Log.add(gameTable.get(beacon(message)).getActualGameCharacter().getMyStat().getSaveRolls());
 				int stableHp = Dice.stableHp(getGameTable().get(beacon(message)).getActualGameCharacter());
 				int randomHp = Dice.randomHp(getGameTable().get(beacon(message)).getActualGameCharacter());
 
@@ -475,6 +473,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 		Pattern pat = Pattern.compile(keyNumber);
 		Matcher matcher = pat.matcher(message.getText());
+		Log.add(message.getText() + " finishHp !!!!!!!!!!!!!!!!!!!!!!!");
 		int answer = 0;
 		while (matcher.find()) 
 		{
@@ -507,8 +506,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					.chatId(message.getChatId().toString())
 					.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 					.build());
-
-			getGameTable().get(beacon(message)).getTrashCan().toMainСircle(message.getMessageId());
+			
+			getGameTable().get(beacon(message)).getTrashCan().toMainСircle(message.getMessageId()); //<- if from callback provoke error 404
 			getGameTable().get(beacon(message)).getTrashCan().toMainСircle(toTrash.getMessageId());
 
 
@@ -517,7 +516,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			e.printStackTrace();
 		}
-		getGameTable().get(beacon(message)).update();
+
 		getGameTable().get(beacon(message)).getMediatorWallet().mediatorBreak();
 
 	}
@@ -610,31 +609,16 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void downloadHero(CallbackQuery callbackQuery) 
 	{
-
-		if(getGameTable().get(beacon(callbackQuery)).isChekChar())
-		{
-			getGameTable().get(beacon(callbackQuery)).getControlPanel().save(getGameTable().get(beacon(callbackQuery)).getActualGameCharacter());
-			getGameTable().get(beacon(callbackQuery)).setActualGameCharacter(getGameTable().get(beacon(callbackQuery))
-					.getControlPanel().load(callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2"))); 
-			callbackQuery.setData(getGameTable().get(beacon(callbackQuery)).readinessСheck());
-			handleCallback(callbackQuery);
-
-		}
-		else 
-		{
-			getGameTable().get(beacon(callbackQuery)).setChekChar(true);
-			getGameTable().get(beacon(callbackQuery)).setActualGameCharacter(getGameTable().get(beacon(callbackQuery))
-					.getControlPanel().load(callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2"))); 
-			callbackQuery.setData(getGameTable().get(beacon(callbackQuery)).readinessСheck());
-			handleCallback(callbackQuery);
-		}
+		getGameTable().get(beacon(callbackQuery)).load(callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2"));
+		callbackQuery.setData(getGameTable().get(beacon(callbackQuery)).readinessСheck());
+		handleCallback(callbackQuery);
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void startCreateHero(CallbackQuery callbackQuery)
 	{
-		getGameTable().get(beacon(callbackQuery)).getMediatorWallet().mediatorBreak();
+		getGameTable().get(beacon(callbackQuery)).save();
 		clean(Circle.ALL, beacon(callbackQuery));
 		getGameTable().get(beacon(callbackQuery)).getMediatorWallet().setCharacterCreateMediator(true);
 
@@ -659,6 +643,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void startCreateClass(CallbackQuery callbackQuery)
 	{
+		getGameTable().get(beacon(callbackQuery)).setCheсkChar(true);
+		getGameTable().get(beacon(callbackQuery)).save();
 		getGameTable().get(beacon(callbackQuery)).getMediatorWallet().mediatorBreak();
 		clean(Circle.MAIN, beacon(callbackQuery));
 
@@ -725,9 +711,9 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private void chooseLvlClass(CallbackQuery callbackQuery) 
 	{
 		getGameTable().get(beacon(callbackQuery)).getControlPanel().setArchetypeBeck(callbackQuery.getData().replaceAll(finishClassKey + keyAnswer, "$1"));
-		getGameTable().get(beacon(callbackQuery)).getMediatorWallet().mediatorBreak();
 		getGameTable().get(beacon(callbackQuery)).getMediatorWallet().setClassCreateMediator(true);
 		Message message = callbackQuery.getMessage();
+
 		try 
 		{
 			Message toTrash = execute( SendMessage.builder()
@@ -736,21 +722,16 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					.build());
 
 			getGameTable().get(beacon(callbackQuery)).getTrashCan().toSmallСircle(toTrash.getMessageId());
-
-
 		} 
 		catch (TelegramApiException e) 
 		{
 			e.printStackTrace();
 		}
-
-
 	}
 
 	private void startCreateRace(CallbackQuery callbackQuery)
 	{ 
 		getGameTable().get(beacon(callbackQuery)).createClass();
-		getGameTable().get(beacon(callbackQuery)).getMediatorWallet().mediatorBreak();
 		getGameTable().get(beacon(callbackQuery)).getActualGameCharacter().setMyMemoirs(
 				getGameTable().get(beacon(callbackQuery)).getControlPanel().getObjectInfo(ObjectType.CLASS));
 		clean(Circle.MAIN, beacon(callbackQuery));
@@ -867,7 +848,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		Message message = callbackQuery.getMessage();
 
 		getGameTable().get(beacon(callbackQuery)).getControlPanel().setSubRace(callbackQuery.getData().replaceAll(finishRaceKey + keyAnswer,"$1"));
-		getGameTable().get(beacon(callbackQuery)).getControlPanel().load(getGameTable().get(beacon(callbackQuery)).getActualGameCharacter().getName());
 
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 		buttons.add(Arrays.asList(InlineKeyboardButton.builder()
@@ -890,13 +870,11 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		catch (TelegramApiException e) {
 			e.printStackTrace();
 		}
-		getGameTable().get(beacon(callbackQuery)).update();
 	}
 
 	private void startStats(CallbackQuery callbackQuery)
 	{
 		getGameTable().get(beacon(callbackQuery)).createRace();
-		getGameTable().get(beacon(callbackQuery)).getMediatorWallet().mediatorBreak();
 		clean(Circle.MAIN, beacon(callbackQuery));
 		getGameTable().get(beacon(callbackQuery)).getMediatorWallet().setStatMediator(true);
 
@@ -922,32 +900,19 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	{
 
 	}
+
 	///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void characterMenu(CallbackQuery callbackQuery) 
 	{
 
-		getGameTable().get(beacon(callbackQuery)).update();
 		getGameTable().get(beacon(callbackQuery)).getMediatorWallet().mediatorBreak();
 		clean(Circle.ALL, beacon(callbackQuery));
-
 		Message message = callbackQuery.getMessage();
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-
 		boolean spell = true;
-		/*Pattern pat = Pattern.compile("Using Spells");
-		String name;
-		Matcher find;
-		for(int i = 0; i < gameTable.getActualGameCharacter().getMySkills().size(); i++)
-		{
-			name = gameTable.getActualGameCharacter().getMySkills().get(i).getName();
-			find = pat.matcher(name);
-			if(find.find()) 
-			{
-				spell = true;
-			}
-		}*/
+		if(getGameTable().get(beacon(callbackQuery)).getActualGameCharacter().getWorkmanship().getMySpells().size() == 0) spell = false;
 
 		if(spell == true) {
 
@@ -956,7 +921,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					.callbackData(spellMenu)
 					.build(),
 					InlineKeyboardButton.builder()
-					.text("SKILLS")
+					.text("FETURE")
 					.callbackData(skillMenu)
 					.build(),
 					InlineKeyboardButton.builder()
@@ -964,10 +929,10 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					.callbackData(possessionMenu)
 					.build()));
 		} 
-		else if(spell = false)
+		else if(spell == false)
 		{
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-					.text("SKILLS")
+					.text("FEATURE")
 					.callbackData(skillMenu)
 					.build(),
 					InlineKeyboardButton.builder()
@@ -1033,7 +998,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		Message message = callbackQuery.getMessage();
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-		String answer = "Choose spell \n";
+		String answer = "Those is your feture \n";
 		if(getGameTable().get(beacon(callbackQuery)).getActualGameCharacter().getWorkmanship().getMyFeatures().isEmpty())
 		{
 			Log.add("skillMenu 0 size:(");
@@ -1047,7 +1012,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 						.text( skill.getName())
 						.callbackData(skillMenu)
 						.build()));
-				answer += skill;
+			
 			}
 
 		}
@@ -1084,36 +1049,30 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		return "5776409987:AAFh67JoMqwPJqt1daCgEqE9nbxnKl3GPKg";
 	}
 
-	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws TelegramApiException, IOException, InterruptedException 
 	{
-
-
-
 		CharacterDndBot bot = new  CharacterDndBot();
 		TelegramBotsApi telegramBotsApi;
 
 		telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
 		telegramBotsApi.registerBot(bot);
-		bot.setGameTable(Json.fromFileJson("C:\\Users\\ALTRON\\git\\Dnd2022\\DnD\\LocalData\\backup.json", bot.getGameTable().getClass()));
+		bot.setGameTable(Json.restor());
 
 		while(true)
 		{
-			Json.backUp("C:\\Users\\ALTRON\\git\\Dnd2022\\DnD\\LocalData\\backup.json", bot.getGameTable());
-			Thread.sleep(1000); 
+			Json.backup(bot.getGameTable());
+			Thread.sleep(5000); 
 			System.out.println("*********************************************************************************************************************");
 		}
-
-
-
-
 	}
 
-	public Map<Long, GameTable> getGameTable() {
+	public Map<Long, GameTable> getGameTable() 
+	{
 		return gameTable;
 	}
 
-	public void setGameTable(Map<Long, GameTable> gameTable) {
+	public void setGameTable(Map<Long, GameTable> gameTable) 
+	{
 		this.gameTable = gameTable;
 	}
 

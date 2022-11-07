@@ -17,7 +17,6 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	private static final long serialVersionUID = -7781627593661723428L;
 
-	private File root;
 	private String name;
 	private int lvl;
 	private int hp;
@@ -116,7 +115,8 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		return name;
 	}
 
-	public void setLvl() {
+	public void setLvl() 
+	{
 
 		if(multiClass != null)
 		{
@@ -128,23 +128,28 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		}
 	}
 
-	public int getHp() {
+	public int getHp() 
+	{
 		return hp;
 	}
 
-	public void setHp(int hp) {
+	public void setHp(int hp)
+	{
 		this.hp = hp;
 	}
 
-	public String getNature() {
+	public String getNature() 
+	{
 		return nature;
 	}
 
-	public void setNature(String nature) {
+	public void setNature(String nature) 
+	{
 		this.nature = nature;
 	}
 
-	private void setProfisiency() {
+	private void setProfisiency() 
+	{
 
 		int result = 0;
 
@@ -172,19 +177,23 @@ public class CharacterDnd implements Serializable, ObjectDnd
        
 	}
 	
- 	public int getSpeed() {
+ 	public int getSpeed()
+ 	{
 		return speed;
 	}
 
-	public void setSpeed(int speed) {
+	public void setSpeed(int speed) 
+	{
 		this.speed = speed;
 	}
 
-	public Stats getMyStat() {
+	public Stats getMyStat() 
+	{
 		return myStats;
 	}
 
-	public void setMyStat(int str, int dex, int con, int intl, int wis, int cha) {
+	public void setMyStat(int str, int dex, int con, int intl, int wis, int cha) 
+	{
 		
 		myStats.setStats(str, dex, con, intl, wis, cha); 
 		setProfisiency();
@@ -192,30 +201,29 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		Log.add("Character stat" + myStats.getStats());
 	}
 
-	public Workmanship getWorkmanship() {
+	public Workmanship getWorkmanship() 
+	{
 		return myWorkmanship;
 	}
 
-	public Bag getMyBag() {
+	public Bag getMyBag() 
+	{
 		return myBag;
 	}
 
-	public void setMyBag(Bag myBag) {
+	public void setMyBag(Bag myBag)
+	{
 		this.myBag = myBag;
 	}
 
-	public СhoiceCloud getCloud() {
+	public СhoiceCloud getCloud() 
+	{
 		return cloud;
 	}
 
-	public File getRoot() {
-		return root;
+	public static CharacterDnd create(String name)
+	{
+		return new CharacterDnd(name);
 	}
-
-	public void setRoot(File root) {
-		this.root = root;
-	}
-
-	
 
 }

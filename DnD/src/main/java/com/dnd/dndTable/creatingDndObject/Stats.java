@@ -38,13 +38,15 @@ public class Stats implements Serializable, Names, KeyWallet {
 	
 	void setStats(int str, int dex, int con, int intl, int wis, int cha)
 	{
-		buff(Stat.STRENGTH.toString(), str);
-		buff(Stat.DEXTERITY.toString(), dex);
-		buff(Stat.CONSTITUTION.toString(), con);
-		buff(Stat.INTELLIGENSE.toString(), intl);
-		buff(Stat.WISDOM.toString(), wis);
-		buff(Stat.CHARISMA.toString(), cha);
+		stats.get(0).up(str);
+		stats.get(1).up(dex);
+		stats.get(2).up(con);
+		stats.get(3).up(intl);
+		stats.get(4).up(wis);
+		stats.get(5).up(cha);
 	}
+	
+	
 
 	private void setStartSkills()
 	{
@@ -340,6 +342,8 @@ public class Stats implements Serializable, Names, KeyWallet {
 		{
 			value = base + prof + elseBuff;
 		}
+
+		
 	}
 
 

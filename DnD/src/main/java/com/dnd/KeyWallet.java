@@ -33,7 +33,7 @@ public interface KeyWallet {
 	final static String classMediatorKey = ">regwrgvczvwevdcvwevwewe>";
 	final static String characterMediatorKey = ">shktymhgccniewewe>";
 	final static String raceMediatorKey= ">ewefwewego6ll,ik5ujyhfdvhgvd>";
-	final static String statMediatorKey = ">shktyasdvy5il;kjhfewe>";
+	final static String statMediatorKey = ">shktyasdvyil;kjhfewe>";
 	final static String hpMediatorKey = ">shktyawefwefasasdcvjwme>";
 
 	///FOR SCRIPTS////////////////////////////////////////////////////////////////////////////////////

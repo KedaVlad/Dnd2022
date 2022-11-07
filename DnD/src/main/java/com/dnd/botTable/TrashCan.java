@@ -1,11 +1,15 @@
 package com.dnd.botTable;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Log;
 
-public class TrashCan {
+public class TrashCan implements Serializable {
+
+	
+	private static final long serialVersionUID = 8314826671814530779L;
 
 	public enum Circle 
 	{

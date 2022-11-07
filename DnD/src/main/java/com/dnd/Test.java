@@ -1,8 +1,10 @@
 package com.dnd;
 
 import java.io.IOException;
+import java.util.Map;
 
 import com.dnd.botTable.CharacterDndBot;
+import com.dnd.botTable.GameTable;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.Rogue;
@@ -29,12 +31,12 @@ public class Test implements Source {
 	
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+CharacterDndBot bot = new CharacterDndBot();
 
-		CharacterDnd b = new CharacterDnd("bebta");
-		
-		String s = Json.stingify(Json.toJson(b));
-		
-		System.out.println(s);
+	
+	Json.backup(bot.getGameTable());
+	System.out.println("0//////////////////////////////////////////////");
+	
 	}
 
 }

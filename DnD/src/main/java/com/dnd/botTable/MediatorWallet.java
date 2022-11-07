@@ -1,10 +1,12 @@
 package com.dnd.botTable;
 
+import java.io.Serializable;
+
 import com.dnd.KeyWallet;
 
-public class MediatorWallet implements KeyWallet{
+public class MediatorWallet implements KeyWallet, Serializable{
 
-
+	private static final long serialVersionUID = -5414437962917485661L;
 	private boolean characterCreateMediator = false;
 	private boolean classCreateMediator = false;
 	private boolean statMediator = false;
@@ -61,10 +63,10 @@ public class MediatorWallet implements KeyWallet{
 	void mediatorBreak() 
 	{
 		
-		setCharacterCreateMediator(false);
-		setClassCreateMediator(false);
-		setStatMediator(false);
-		setHpMediator(false);
+		characterCreateMediator = false;
+		classCreateMediator = false;
+		statMediator = false;
+		hpMediator = false;
 	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +79,7 @@ public class MediatorWallet implements KeyWallet{
 
 	public void setCharacterCreateMediator(boolean characterCreateMediator) 
 	{
+		mediatorBreak();
 		this.characterCreateMediator = characterCreateMediator;
 	}
 
@@ -87,6 +90,7 @@ public class MediatorWallet implements KeyWallet{
 
 	public void setClassCreateMediator(boolean classCreateMediator) 
 	{
+		mediatorBreak();
 		this.classCreateMediator = classCreateMediator;
 	}
 

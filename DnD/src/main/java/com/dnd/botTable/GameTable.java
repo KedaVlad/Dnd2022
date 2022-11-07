@@ -18,11 +18,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 public class GameTable implements KeyWallet, Serializable
 {
 
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -8448308501857106456L;
+
 
 	private long chatId;
-	
-	
+
+
 	private Map<String, CharacterDnd> savedCharacter = new LinkedHashMap<>();
 	@JsonIgnore
 	private CharacterDnd actualGameCharacter;
@@ -40,11 +42,15 @@ public class GameTable implements KeyWallet, Serializable
 	public void createClass()
 	{
 		getControlPanel().createClass(actualGameCharacter);
+		save();
+		getMediatorWallet().mediatorBreak();
 	}
 
 	public void createRace()
 	{
 		getControlPanel().createRace(actualGameCharacter);
+		save();
+		getMediatorWallet().mediatorBreak();
 	}
 
 	public void lvlUp()
@@ -52,17 +58,11 @@ public class GameTable implements KeyWallet, Serializable
 
 
 	}
-	
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public void update()
-	{
-		getControlPanel().save(actualGameCharacter);
-		Log.add("GameTable update");
-	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	public String readinessСheck()
 	{
@@ -93,7 +93,6 @@ public class GameTable implements KeyWallet, Serializable
 	public void setActualGameCharacter(CharacterDnd actualGameCharacter) 
 	{
 		this.actualGameCharacter = actualGameCharacter;
-
 	}
 
 	public MediatorWallet getMediatorWallet() 
@@ -114,7 +113,6 @@ public class GameTable implements KeyWallet, Serializable
 	public void setChatId(long chatId) 
 	{
 		this.chatId = chatId;
-		controlPanel.setMyCharactersDir("" + getChatId());
 	}
 
 	public TrashCan getTrashCan() 
@@ -127,11 +125,19 @@ public class GameTable implements KeyWallet, Serializable
 		this.trashCan = trashCan;
 	}
 
-	public boolean isChekChar() {
-		return chekChar;
+	public boolean isCheckChar() {
+
+		if(actualGameCharacter == null)
+		{
+			return false;
+		}
+		else
+		{
+			return chekChar;
+		}
 	}
 
-	public void setChekChar(boolean chekChar) {
+	public void setCheсkChar(boolean chekChar) {
 		this.chekChar = chekChar;
 	}
 
@@ -140,24 +146,46 @@ public class GameTable implements KeyWallet, Serializable
 	}
 
 	public static GameTable create(long chatId) {
-		
+
 		GameTable gameTable = new GameTable();
-		
+
 		gameTable.setChatId(chatId);
 		gameTable.getMediatorWallet().mediatorBreak();
-		gameTable.setChekChar(false);
+		gameTable.setCheсkChar(false);
 		gameTable.getControlPanel().cleanLocalData();
-		
+
 		return gameTable;
-				
+
 	}
 
-	public Map<String, CharacterDnd> getSavedCharacter() {
+	public Map<String, CharacterDnd> getSavedCharacter()
+	{
 		return savedCharacter;
 	}
 
-	public void save() {
-		savedCharacter.put(actualGameCharacter.getName(), actualGameCharacter);
+	public void load(String name)
+	{
+		save();
+		actualGameCharacter = savedCharacter.get(name);
+		setCheсkChar(true);
+		getMediatorWallet().mediatorBreak();
+	}
+
+	public void save() 
+	{
+		Log.add(isCheckChar() + "Сюда смотри");
+		Log.add(actualGameCharacter);
+		
+		if(isCheckChar())
+		{
+			Log.add("Save Complate");
+			savedCharacter.put(actualGameCharacter.getName(), actualGameCharacter);
+		}
+	}
+
+	public void delete(String name) 
+	{
+		savedCharacter.remove(name);
 	}
 
 }

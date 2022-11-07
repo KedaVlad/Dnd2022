@@ -1,9 +1,11 @@
 package com.dnd.dndTable.factory;
 
 import java.io.File;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.dnd.Dice;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Source;
@@ -11,10 +13,9 @@ import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 
-public class ControlPanel implements KeyWallet, Source {
+public class ControlPanel implements KeyWallet, Source, Serializable {
 
-	private File myCharactersDir;
-	
+	private static final long serialVersionUID = -231330030795056098L;
 	private File mainFile;
 	private String classBeck;
 	private String archetypeBeck;
@@ -29,36 +30,15 @@ public class ControlPanel implements KeyWallet, Source {
 		CLASS, ARCHETYPE, RACE, SUBRACE, ITEM, STATS;
 	}
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
- 	
-	
-	
-	public CharacterDnd createCharecter(String name)
-	{
-		return CharacterFactory.create(name, myCharactersDir);
-	}
 
-	public void save(CharacterDnd character)
-	{
-		CharacterFactory.save(character, myCharactersDir);
-	}
-
-	public CharacterDnd load(String name)
-	{
-		return CharacterFactory.load(name, myCharactersDir);
-	}
-
-	public void delete(CharacterDnd character)
-	{
-		CharacterFactory.delete(character, myCharactersDir);
-	}
 
 	public void createClass(CharacterDnd character)
 	{
 		ClassFactory.create(character, classBeck, classLvl, archetypeBeck);
 		Log.add("CP " +character.getClass() + " " + character.getWorkmanship().getMyFeatures());
-		
+
 	}
-	
+
 	public void createRace(CharacterDnd character)
 	{
 		RaceFactory.create(character, race, subRace);
@@ -84,48 +64,48 @@ public class ControlPanel implements KeyWallet, Source {
 		return null;
 	}
 
-    public String getObjectInfo(ObjectType type) 
-    {
+	public String getObjectInfo(ObjectType type) 
+	{
 		switch(type)
 		{
 		case CLASS:
-				return ClassFactory.getObgectInfo(classBeck, archetypeBeck);
-			
+			return ClassFactory.getObgectInfo(classBeck, archetypeBeck);
+
 		case RACE:
 			return RaceFactory.getObgectInfo(race, subRace);
+			
 		case STATS:
-			return CharacterFactory.getCharacterStatInfo();
+
+			String godGift = Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20();
+
+			String answer =  "Now let's see what you have in terms of characteristics.\r\n"
+					+ "\r\n"
+					+ "Write the value of the characteristics in order: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma.\r\n"
+					+ "1.Each stat cannot be higher than 20.\r\n"
+					+ "2. Write down stats without taking into account buffs from race / class.\r\n"
+					+ "\r\n"
+					+ "Use the random god gift in the order you want your stats to be.\r\n"
+					+ "\r\n" + "\r\n" + godGift + "\r\n"
+					+ "\r\n"
+					+ "Or write down those values that are agreed with your game master.";
+			return answer;
+			
 		default:
 			Log.add("getObjectInfo(ERROR not valid ObjectType");
 			break;
 		}
 		return null;
 	}
-	
-    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-     public void cleanLocalData()
-    {
-    	classBeck = null;
-    	archetypeBeck = null;
-    	classLvl = 0;
-    	race = null;
-    	subRace = null;	
-    	subRaceDir = null;
-    }
-    
-	public void setMyCharactersDir(String userName) 
-	{
-		myCharactersDir = new File(userSource + userName);
-		if(!myCharactersDir.exists()) {
-			myCharactersDir.mkdir();
-		}
-		
-	}
 
-	public File getMyCharactersDir() 
+	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	public void cleanLocalData()
 	{
-
-		return myCharactersDir;
+		classBeck = null;
+		archetypeBeck = null;
+		classLvl = 0;
+		race = null;
+		subRace = null;	
+		subRaceDir = null;
 	}
 
 	public String getClassBeck() 
@@ -135,7 +115,7 @@ public class ControlPanel implements KeyWallet, Source {
 
 	public void setClassBeck(String classBeck) 
 	{
-		
+
 		Log.add("CP " + this.classBeck + " " + classBeck);
 		this.classBeck = classBeck;
 	}
