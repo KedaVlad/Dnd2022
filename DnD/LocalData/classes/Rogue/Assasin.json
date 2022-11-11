@@ -261,7 +261,36 @@
          }
       ],
       [
-         
+         {
+            "cloud":true,
+            "key":"sdkfwfwmsd",
+            "comand":[
+               [
+                  2,
+                  "Competency 2. Warning!!! If you choose the same positions as on the first level, you will not get anything. Choose your two skill proficiencies or one skill proficiency and thieves' tools proficiency.Your proficiency bonus is doubled for all ability checks you make using any of the chosen proficiencies."
+               ],
+               [
+                  "Acrobatics",
+                  "Animal Handing",
+                  "Arcana",
+                  "Athletix",
+                  "Deception",
+                  "History",
+                  "Insight",
+                  "Intimidation",
+                  "Investigation",
+                  "Medicine",
+                  "Nature",
+                  "Perception",
+                  "Performance",
+                  "Persuasion",
+                  "Religion",
+                  "Sleigth of Hand",
+                  "Stelth",
+                  "Survival"
+               ]
+            ]
+         } 
       ],
       [
          {

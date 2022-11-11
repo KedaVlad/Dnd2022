@@ -127,6 +127,48 @@ public class Stats implements Serializable, Names, KeyWallet {
 			}
 		}	
 	}
+	
+	public void buffCompetense(String name)
+	{
+		boolean breaker = false;
+		if(breaker == false) 
+		{
+			for(int i = 0; i < saveRolls.size(); i++)
+			{
+				if(name.contains(saveRolls.get(i).name))
+				{
+					saveRolls.get(i).competense = true;
+					breaker = true;
+					break;
+				}
+			}
+		}
+		else if(breaker == false) 
+		{
+			for(int i = 0; i < stats.size(); i++)
+			{
+				if(name.contains(stats.get(i).name))
+				{
+					stats.get(i).competense = true;;
+					breaker = true;
+					updateSome(stats.get(i).depends);
+					break;
+				}
+			}
+		}
+		else if(breaker == false) 
+		{
+			for(int i = 0; i < skills.size(); i++)
+			{
+				if(name.contains(skills.get(i).name))
+				{
+					skills.get(i).competense = true;
+					breaker = true;
+					break;
+				}
+			}
+		}	
+	}
 
 	public void spesialize(String buff)
 	{
@@ -263,6 +305,7 @@ public class Stats implements Serializable, Names, KeyWallet {
 		int base;
 		int prof;
 		int elseBuff;
+		boolean competense;
 		List <String> spesial;
 		Stat depends;
 
@@ -340,7 +383,14 @@ public class Stats implements Serializable, Names, KeyWallet {
 
 		void update()
 		{
+			if(competense = true)
+			{
+				value = base + (prof*2) + elseBuff;
+			}
+			else
+			{
 			value = base + prof + elseBuff;
+			}
 		}
 
 		

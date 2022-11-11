@@ -32,7 +32,7 @@ import com.dnd.Log;
 import com.dnd.Source;
 import com.dnd.botTable.TrashCan.Circle;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.creatingDndObject.skills.Feature;
+import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.factory.ControlPanel.ObjectType;
 import com.dnd.dndTable.factory.Json;
 

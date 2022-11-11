@@ -27,10 +27,10 @@ public interface Source {
 	final static String wizardSource = classSource + "Wizard\\";
 	final static String homeBrewSource = classSource + "HomeBrew\\";
 
-	final static String skillsSource = source + "workmanship\\skills.txt";
-	final static String spellsSource = source + "workmanship\\spells.txt";
-	final static String possessionsSource = source + "workmanship\\possession.txt";
-	final static String traitsSource = source + "workmanship\\trait.tst";
+	final static String featuresSource = source + "workmanship\\features.json";
+	final static String spellsSource = source + "workmanship\\spells.json";
+	final static String possessionsSource = source + "workmanship\\possession.json";
+	final static String traitsSource = source + "workmanship\\trait.json";
 
 }
 

@@ -8,12 +8,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
 import com.dnd.Source;
 import com.dnd.botTable.CharacterDndBot;
 import com.dnd.botTable.GameTable;
+import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.databind.DatabindException;
@@ -31,6 +33,7 @@ public class Json implements Source {
 	public static JsonNode parse(String src) throws JsonMappingException, JsonProcessingException
 	{
 		return mapper.readTree(src);
+			
 	}
 
 	public static <T> T fromJson(JsonNode node, Class<T> clazz) throws JsonProcessingException, IllegalArgumentException
@@ -57,6 +60,23 @@ public class Json implements Source {
 		String json = Files.readString(filePath) ;
 		return fromJson(parse(json), clazz);
 
+	}
+	
+	public static Map<String, Feature> getFeatures() 
+	{
+		Feature[] features;
+		Map<String, Feature> featuresMap = new HashMap<>();
+		try {
+			features = fromFileJson(featuresSource, Feature[].class);
+			for(Feature feature: features)
+			{
+				featuresMap.put(feature.getName(), feature);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return featuresMap;
 	}
 
 	@SuppressWarnings("unchecked")

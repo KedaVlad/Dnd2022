@@ -1,4 +1,4 @@
-package com.dnd.dndTable.creatingDndObject.skills;
+package com.dnd.dndTable.creatingDndObject.workmanship;
 
 import java.io.Serializable;
 import java.util.ArrayList;

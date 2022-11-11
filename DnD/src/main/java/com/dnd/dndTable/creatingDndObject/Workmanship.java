@@ -4,9 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.dndTable.creatingDndObject.skills.Feature;
-import com.dnd.dndTable.creatingDndObject.skills.Possession;
-import com.dnd.dndTable.creatingDndObject.skills.Spell;
+import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
+import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
+import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 
 
 public class Workmanship implements Serializable 

@@ -9,9 +9,9 @@ import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Names;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.creatingDndObject.skills.Feature;
-import com.dnd.dndTable.creatingDndObject.skills.Possession;
-import com.dnd.dndTable.creatingDndObject.skills.Spell;
+import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
+import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
+import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.fasterxml.jackson.core.JsonProcessingException;
 
 abstract class ScriptReader implements KeyWallet, Names
@@ -19,8 +19,8 @@ abstract class ScriptReader implements KeyWallet, Names
 
 	static void execute(CharacterDnd character, InerComand comand)
 	{
-		Log.add("ScriptReader execute " + comand);
 
+		Log.add("ScriptReader execute " + comand);
 		if(comand.isCloud())
 		{
 			cloud(character, comand);
@@ -29,6 +29,7 @@ abstract class ScriptReader implements KeyWallet, Names
 		{
 			influence(character, comand);
 		}
+
 	}
 
 	private static void cloud(CharacterDnd character, InerComand comand)
@@ -70,6 +71,10 @@ abstract class ScriptReader implements KeyWallet, Names
 			{
 				character.getMyStat().buff(comand.getComand().get(0).get(1).toString(),
 						(Integer)Integer.parseInt(comand.getComand().get(0).get(0).toString()));
+			}
+			else if(comand.getKey().contains(competenseKey))
+			{
+				character.getMyStat().buffCompetense(comand.getComand().get(0).get(1).toString());
 			}
 			else if(comand.getKey().contains(featureKey))
 			{
