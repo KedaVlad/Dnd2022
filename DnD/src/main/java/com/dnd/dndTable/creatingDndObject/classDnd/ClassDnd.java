@@ -44,10 +44,9 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 	}
 
 	@JsonIgnore
-	public int getDiceHits() 
-	{
-		return 8;
-	}
+	public abstract int getDiceHits(); 
+	@JsonIgnore
+	public abstract List<String> getPermanentBuffs();
 
 	public String getMyArchetypeClass() 
 	{
@@ -246,6 +245,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		c1 = new InerComand(false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Incredible Evasion");
+		
 		lvl5.add(c1);
 		List<InerComand> lvl6 = new ArrayList<>();
 		List<InerComand> lvl7 = new ArrayList<>();

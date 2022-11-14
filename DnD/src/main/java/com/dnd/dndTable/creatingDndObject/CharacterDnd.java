@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Body;
 import com.dnd.Log;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
@@ -27,9 +28,11 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	private ClassDnd multiClass;
 	private Stats myStats;
 	private Workmanship myWorkmanship;
-	private Bag myBag;
+	private Body body;
     private СhoiceCloud cloud;
 
+    private List<String> permanentBuffs;
+    private List<String> timesBuffs;
 	private List<String> myMemoirs;
 
 
@@ -40,6 +43,9 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		myMemoirs = new ArrayList<>();	
 		cloud = new СhoiceCloud();
 		myStats = new Stats();
+		body = new Body();
+		permanentBuffs = new ArrayList<>();
+		timesBuffs = new ArrayList<>();
 
 
 	}
@@ -206,16 +212,6 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		return myWorkmanship;
 	}
 
-	public Bag getMyBag() 
-	{
-		return myBag;
-	}
-
-	public void setMyBag(Bag myBag)
-	{
-		this.myBag = myBag;
-	}
-
 	public СhoiceCloud getCloud() 
 	{
 		return cloud;
@@ -225,5 +221,32 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	{
 		return new CharacterDnd(name);
 	}
+	
+	public List<String> getPermanentBuffs() {
+	
+		List<String> answer = permanentBuffs;
+		if(multiClass != null)
+		{
+		answer.addAll(myClass.getPermanentBuffs());
+		answer.addAll(multiClass.getPermanentBuffs());
+		}
+		else
+		{
+			answer.addAll(myClass.getPermanentBuffs());
+		}
+		
+		
+		return answer;
+	}
+
+	public List<String> getTimesBuffs() {
+		return timesBuffs;
+	}
+
+	public Body getBody() {
+		return body;
+	}
+
+	
 
 }

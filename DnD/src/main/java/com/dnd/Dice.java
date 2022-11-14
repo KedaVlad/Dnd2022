@@ -1,8 +1,151 @@
 package com.dnd;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 
-public class Dice {
+public class Dice
+{
+	private List<Roll> combo;
+
+	public Dice(Roll... combo)
+	{
+		this.combo = new ArrayList<>();
+		setCombo(combo);
+	}
+
+	public void setCombo(Roll... combo)
+	{
+		for(Roll roll: combo)
+		{
+			this.combo.add(roll);
+		}
+	}
+
+	public List<Roll> getCombo()
+	{
+		return combo;
+	}
+
+	public static String execute(Dice dice)
+	{
+		if(dice.combo.size() == 1)
+		{ 
+			return roll(dice.combo.get(0)) + "";
+		}
+		else
+		{
+			String answer = "";
+			boolean start = true;
+			int finalResult = 0;
+			for(Roll roll: dice.combo)
+			{
+				if(start == true)
+				{
+					answer = "" + roll(roll);
+					start = false;
+				}
+				else 
+				{
+					answer += " + " + roll(roll);
+				}
+
+				finalResult += roll(roll);
+
+			}
+
+			return answer + " = " + finalResult;
+		}
+	}
+
+	public static String execute(Dice dice, int... buff)
+	{
+		if(dice.combo.size() == 1)
+		{ 
+			String answer = roll(dice.combo.get(0)) + "";
+			int finalResult = roll(dice.combo.get(0));
+			for(int value: buff)
+			{
+				if(value < 0)
+				{
+					answer += " - " + value;
+					finalResult += value;
+				}
+				else
+				{
+				answer += " + " + value;
+				finalResult += value;
+				}
+			}
+			
+			return answer + " = " + finalResult;
+		}
+		else
+		{
+			String answer = "";
+			boolean start = true;
+			int finalResult = 0;
+			for(Roll roll: dice.combo)
+			{
+				if(start == true)
+				{
+					answer = "" + roll(roll);
+					start = false;
+				}
+				else 
+				{
+					answer += " + " + roll(roll);
+				}
+
+				finalResult += roll(roll);
+
+			}
+			for(int value: buff)
+			{
+				if(value < 0)
+				{
+					answer += " - " + value;
+					finalResult += value;
+				}
+				else
+				{
+				answer += " + " + value;
+				finalResult += value;
+				}
+			}
+
+			return answer + " = " + finalResult;
+		}
+	}
+	
+	public enum Roll
+	{
+		D4, D6, D8, D10, D12, D20, D100
+	}
+
+	public static int roll(Roll roll)
+	{
+		switch(roll)
+		{
+		case D4:
+			return d4();
+		case D6:
+			return d6();
+		case D8:
+			return d8();
+		case D10:
+			return d10();
+		case D12:
+			return d12();
+		case D20:
+			return d20();
+		case D100:
+			return d100();
+		}
+
+		return 0;
+	}
 
 	public static int d4()
 	{

@@ -1,6 +1,8 @@
 package com.dnd.dndTable.creatingDndObject.classDnd;
 
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class Rogue extends ClassDnd {
@@ -29,6 +31,11 @@ public class Rogue extends ClassDnd {
 	
 	public String toString() {
 		return "Rogue";
+	}
+	@Override
+	public List<String> getPermanentBuffs() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }

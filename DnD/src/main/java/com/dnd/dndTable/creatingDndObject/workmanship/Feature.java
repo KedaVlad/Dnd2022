@@ -8,6 +8,7 @@ import java.util.Map;
 
 import com.dnd.KeyWallet;
 import com.dnd.Log;
+import com.dnd.Names.SaveRoll;
 import com.dnd.Names.Skill;
 import com.dnd.Names.Stat;
 import com.dnd.dndTable.factory.InerComand;
@@ -20,10 +21,18 @@ public class Feature implements Serializable, KeyWallet
 	
 	private static final long serialVersionUID = 5053270361827778941L;
 	
-	
 	private String name;
 	private String description;
-	private String act;
+	private boolean active;
+	private Cast cast;
+
+	enum For 
+	{
+		BATTLE, SPELL, OTHER
+	}
+	
+	private For depend;
+	
 	private List<InerComand> inerComands;
 	
 
@@ -52,14 +61,6 @@ public class Feature implements Serializable, KeyWallet
 	public String toString() 
 	{
 		return name + " - "+ description;
-	}
-
-	public String getAct() {
-		return act;
-	}
-
-	public void setAct(String act) {
-		this.act = act;
 	}
 
 	public List<InerComand> getInerComands() {
@@ -112,11 +113,47 @@ public class Feature implements Serializable, KeyWallet
 		
 		Feature feature = new Feature();
 		
-		feature.name = "Precise Aiming";
-		feature.description = "As a bonus action, you can give yourself advantage on your next attack roll this turn. You can use this bonus action only if you didn't move during this turn, and after using the bonus action, your speed will be 0 until the end of the current turn"
-				+ "";
+		feature.name = "Luck";
+		feature.description = "If your attack misses a target that is within range, you can change the miss to a hit. Alternatively, if you fail an ability check, you can change the result rolled on a d20 to \"20\". Once you use this skill, you cannot use it again until you complete a short or long rest.";
+				/*InerComand c1 = new InerComand(false, possessionKey);
+		c1.getComand().add(new ArrayList<>());
+		c1.getComand().get(0).add(SaveRoll.SR_WISDOM.toString());
+		feature.inerComands = new ArrayList<>();
+		feature.inerComands.add(c1);*/
 		System.out.println( Json.stingify(Json.toJson(feature)));
 		
+	}
+
+	public For[] getDepend() {
+		return depend;
+	}
+
+	public void setDepend(For[] depend) {
+		this.depend = depend;
+	}
+
+	public Type getType() {
+		return type;
+	}
+
+	public void setType(Type type) {
+		this.type = type;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
+	}
+
+	public Cast getCast() {
+		return cast;
+	}
+
+	public void setCast(Cast cast) {
+		this.cast = cast;
 	}
 	
 

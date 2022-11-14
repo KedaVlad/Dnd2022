@@ -56,6 +56,7 @@ public interface KeyWallet {
 	final static String statKey = "+";
 	final static String competenseKey = "sdkfwfwmsd";
 	
+	
 	public static String allAfterKey(String key)
 	{
 		return key + "([a-zA-Z` ]*)";

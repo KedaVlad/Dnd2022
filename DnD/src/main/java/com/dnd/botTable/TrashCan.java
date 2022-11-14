@@ -16,6 +16,8 @@ public class TrashCan implements Serializable {
 		SMALL, MAIN, BIG, ALL
 	}
 
+	private List<Integer> heroCircle = new ArrayList<>();
+	
 	private List<Integer> bigСircle = new ArrayList<>();
 	private List<Integer> mainСircle = new ArrayList<>();
 	private List<Integer> smallСircle = new ArrayList<>();
@@ -42,6 +44,7 @@ public class TrashCan implements Serializable {
 		all.addAll(getBigСircle());
 		all.addAll(getMainСircle());
 		all.addAll(getSmallСircle());
+		all.addAll(getAndClenHeroCircle());
 		return all;
 	}
 
@@ -86,5 +89,25 @@ public class TrashCan implements Serializable {
 	{
 		smallСircle.add(messageId);	
 	}
+
+	public List<Integer> getHeroCircle() 
+	{
+		return heroCircle;
+	}
+	
+	public List<Integer> getAndClenHeroCircle() 
+	{
+		List<Integer> main = new ArrayList<>();
+		main.addAll(heroCircle);
+		heroCircle.clear();
+		Log.add("TrashCan hero");
+		return main;
+	}
+	
+	public void toHeroСircle(Integer messageId) 
+	{
+		heroCircle.add(messageId);
+	}
+
 
 }

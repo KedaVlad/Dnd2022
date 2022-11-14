@@ -228,12 +228,9 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				.text("CREATE")
 				.callbackData(characterCreateKey)
 				.build()));
-		Log.add("0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000");
 		Log.add(getGameTable().get(beacon(message)).getSavedCharacter());
 		if(getGameTable().get(beacon(message)).getSavedCharacter().size() != 0) 
 		{
-			Log.add("111111111111111111111111111111111111111111111111111111111111111111111111111111111111111");
-			Log.add(getGameTable().get(beacon(message)).getSavedCharacter());
 			for(String name: getGameTable().get(beacon(message)).getSavedCharacter().keySet())
 			{
 				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
@@ -506,7 +503,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					.chatId(message.getChatId().toString())
 					.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 					.build());
-			
+
 			getGameTable().get(beacon(message)).getTrashCan().toMainСircle(message.getMessageId()); //<- if from callback provoke error 404
 			getGameTable().get(beacon(message)).getTrashCan().toMainСircle(toTrash.getMessageId());
 
@@ -954,16 +951,29 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				.build()));
 
 
+		String permanentBuff = "";
+		for(String buff: getGameTable().get(beacon(callbackQuery)).getActualGameCharacter().getPermanentBuffs())
+		{
+			permanentBuff += buff + "\n";
+		}
+		
 		try 
 		{
-			Message toTrash = execute(
+			Message permanentBuffBlock = execute( 
+					SendMessage.builder()
+					.text(permanentBuff)
+					.chatId(message.getChatId().toString())
+					.build());
+
+			Message mainBlock = execute(
 					SendMessage.builder()
 					.text(getGameTable().get(beacon(callbackQuery)).getActualGameCharacter().getMenu())
 					.chatId(message.getChatId().toString())
 					.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
 					.build());
 
-			getGameTable().get(beacon(callbackQuery)).getTrashCan().toBigСircle(toTrash.getMessageId());
+			getGameTable().get(beacon(callbackQuery)).getTrashCan().toHeroСircle(permanentBuffBlock.getMessageId());
+			getGameTable().get(beacon(callbackQuery)).getTrashCan().toHeroСircle(mainBlock.getMessageId());
 
 		} 
 		catch (TelegramApiException e) 
@@ -1012,7 +1022,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 						.text( skill.getName())
 						.callbackData(skillMenu)
 						.build()));
-			
+
 			}
 
 		}

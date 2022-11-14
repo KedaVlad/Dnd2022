@@ -26,15 +26,15 @@ public class GameTable implements KeyWallet, Serializable
 
 
 	private Map<String, CharacterDnd> savedCharacter = new LinkedHashMap<>();
-	@JsonIgnore
+	
 	private CharacterDnd actualGameCharacter;
-	@JsonIgnore
+	
 	private boolean chekChar = false;
-	@JsonIgnore
+	
 	private ControlPanel controlPanel = new ControlPanel();
-	@JsonIgnore
+	
 	private MediatorWallet mediatorWallet = new MediatorWallet();
-	@JsonIgnore
+	
 	private TrashCan trashCan = new TrashCan();
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	

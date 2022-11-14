@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Dice;
+import com.dnd.Dice.Roll;
 import com.dnd.KeyWallet;
 import com.dnd.Names;
 
@@ -15,8 +17,8 @@ public class Stats implements Serializable, Names, KeyWallet {
 	private List<Article> skills;
 	private List<Article> saveRolls;
 
-	
-	Stats() 
+
+	public Stats() 
 	{
 		stats = new ArrayList<>();
 		skills = new ArrayList<>();
@@ -35,7 +37,7 @@ public class Stats implements Serializable, Names, KeyWallet {
 		updateAll();
 
 	}
-	
+
 	void setStats(int str, int dex, int con, int intl, int wis, int cha)
 	{
 		stats.get(0).up(str);
@@ -45,8 +47,8 @@ public class Stats implements Serializable, Names, KeyWallet {
 		stats.get(4).up(wis);
 		stats.get(5).up(cha);
 	}
-	
-	
+
+
 
 	private void setStartSkills()
 	{
@@ -127,7 +129,7 @@ public class Stats implements Serializable, Names, KeyWallet {
 			}
 		}	
 	}
-	
+
 	public void buffCompetense(String name)
 	{
 		boolean breaker = false;
@@ -239,6 +241,33 @@ public class Stats implements Serializable, Names, KeyWallet {
 		}
 	}
 
+	public String roll(String name)
+	{
+		for(int i = 0; i < saveRolls.size(); i++)
+		{
+			if(name.contains(saveRolls.get(i).name))
+			{
+				return Dice.execute(saveRolls.get(i).dice, saveRolls.get(i).value);
+
+			}
+		}
+		for(int i = 0; i < stats.size(); i++)
+		{
+			if(name.contains(stats.get(i).name))
+			{
+				return Dice.execute(stats.get(i).dice, stats.get(i).value);
+			}
+		}
+
+		for(int i = 0; i < skills.size(); i++)
+		{
+			if(name.contains(skills.get(i).name))
+			{
+				return Dice.execute(skills.get(i).dice, skills.get(i).value);
+			}
+		}
+		return null;
+	}
 
 	private void updateAll()
 	{
@@ -308,15 +337,16 @@ public class Stats implements Serializable, Names, KeyWallet {
 		boolean competense;
 		List <String> spesial;
 		Stat depends;
+		Dice dice;
 
-		Article(){}
-		
+
 		Article(String name, Stat depends, int base)
 		{
 			this.name = name;
 			this.base = base;
 			this.depends = depends;
 			spesial = new ArrayList<>();
+			dice = new Dice(Roll.D20);
 			update();
 
 		}
@@ -389,11 +419,11 @@ public class Stats implements Serializable, Names, KeyWallet {
 			}
 			else
 			{
-			value = base + prof + elseBuff;
+				value = base + prof + elseBuff;
 			}
 		}
 
-		
+
 	}
 
 

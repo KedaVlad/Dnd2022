@@ -39,26 +39,15 @@ public class Test implements Source {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		Test test = new Test();
-		test.setName("bebra");
-		test.setAge(5);
-		test.setB(false);
+		InerComand comand = new InerComand();
+		comand.setCloud(true);
+		comand.setKey("-+");
 		
-		Test test2 = new Test();
-		test2.setName("Bimbom");
-		test2.setAge(222);
-		test2.setB(true);
 		
-		Test[] tt = {test, test2};
-		JsonNode j = Json.toJson(tt);
-		System.out.println(j);
-		String name = "Bimbom";
-	System.out.println(j.findValue("name"));
-	
-	System.out.println(j.get(name));
-	
-	System.out.println(j.findParent("name"));
-	
+	if(comand.getClass().equals(Object.class))
+	{
+		System.out.println("YeeeahRight");
+	}
 	
 	
 	}
