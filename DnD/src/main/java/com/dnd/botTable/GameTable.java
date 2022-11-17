@@ -4,12 +4,14 @@ package com.dnd.botTable;
 import java.io.File;
 import java.io.Serializable;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.dnd.Dice;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.factory.ControlPanel;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -61,6 +63,12 @@ public class GameTable implements KeyWallet, Serializable
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+	public List<String> chooseAttack(Weapon weapon)
+	{
+		
+		
+		return null;
+	}
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 

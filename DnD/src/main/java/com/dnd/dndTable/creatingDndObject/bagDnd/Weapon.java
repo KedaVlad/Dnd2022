@@ -2,8 +2,16 @@ package com.dnd.dndTable.creatingDndObject.bagDnd;
 
 import com.dnd.Dice;
 
-public class Weapon 
+public class Weapon extends Items
 {
+
+
+	
+	public Weapon(String name) {
+		super(name);
+	}
+
+	private static final long serialVersionUID = 3883278765106047552L;
 
 	public enum WeaponProperties
 	{
@@ -11,7 +19,7 @@ public class Weapon
 	}
 
 	private WeaponProperties[] properties;
-	private Dice[] damage;
+	private Dice damage;
 	private int bonusAtack;
 	private int bonusHit;
 
@@ -25,12 +33,12 @@ public class Weapon
 		this.properties = properties;
 	}
 
-	public Dice[] getDamage() 
+	public Dice getDamage() 
 	{
 		return damage;
 	}
 
-	public void setDamage(Dice[] damage)
+	public void setDamage(Dice damage)
 	{
 		this.damage = damage;
 	}

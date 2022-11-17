@@ -39,16 +39,12 @@ public class Test implements Source {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		InerComand comand = new InerComand();
-		comand.setCloud(true);
-		comand.setKey("-+");
+		String heading1 ="Exam_Name";
+		String heading2 = "Exam_Grade";
 		
-		
-	if(comand.getClass().equals(Object.class))
-	{
-		System.out.println("YeeeahRight");
-	}
-	
+		  StringBuilder sb = new StringBuilder("%-15s %15s %n", heading1, heading2);
+		String headingw = "%-15s %15s %n", heading1, heading2;
+		System.out.printf("%-15s %15s %n", heading1, heading2);
 	
 	}
 	

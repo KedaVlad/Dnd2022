@@ -5,10 +5,12 @@ import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 public class AttackModification 
 {
 
-	private WeaponProperties[] properties;
-	private int damage;
-	private Dice[] dice;
-	private String[] effects;
+	private String name; //heavy attack
+	private WeaponProperties[] properties; // heavy, melee
+	private int attack; // -5
+	private int damage; // +10
+	private Dice[] dice; // -
+	private String effects; // if he dead you can attack again
 	
 	public int getDamage() 
 	{
@@ -46,6 +48,22 @@ public class AttackModification
 
 	public void setProperties(WeaponProperties[] properties) {
 		this.properties = properties;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public int getAttack() {
+		return attack;
+	}
+
+	public void setAttack(int attack) {
+		this.attack = attack;
 	}
 	
 	

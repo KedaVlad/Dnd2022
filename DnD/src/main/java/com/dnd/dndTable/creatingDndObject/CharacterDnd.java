@@ -11,6 +11,7 @@ import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
+import com.dnd.dndTable.rolls.Rolls;
 
 
 public class CharacterDnd implements Serializable, ObjectDnd
@@ -26,7 +27,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	private RaceDnd myRace;
 	private ClassDnd myClass;
 	private ClassDnd multiClass;
-	private Stats myStats;
+	private Rolls rolls;
 	private Workmanship myWorkmanship;
 	private Body body;
     private СhoiceCloud cloud;
@@ -42,7 +43,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		myWorkmanship = new Workmanship();
 		myMemoirs = new ArrayList<>();	
 		cloud = new СhoiceCloud();
-		myStats = new Stats();
+		rolls = new Rolls();
 		body = new Body();
 		permanentBuffs = new ArrayList<>();
 		timesBuffs = new ArrayList<>();
@@ -178,7 +179,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
        if(result != myWorkmanship.getProfisiency())
        {
     	   myWorkmanship.setProfisiency(result);
-    	   myWorkmanship.giveProfisiencyToStats(myStats);
+    	   myWorkmanship.giveProfisiencyToStats(rolls);
        }
        
 	}
@@ -195,16 +196,16 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	public Stats getMyStat() 
 	{
-		return myStats;
+		return rolls;
 	}
 
 	public void setMyStat(int str, int dex, int con, int intl, int wis, int cha) 
 	{
 		
-		myStats.setStats(str, dex, con, intl, wis, cha); 
+		rolls.setStats(str, dex, con, intl, wis, cha); 
 		setProfisiency();
 		
-		Log.add("Character stat" + myStats.getStats());
+		Log.add("Character stat" + rolls.getStats());
 	}
 
 	public Workmanship getWorkmanship() 

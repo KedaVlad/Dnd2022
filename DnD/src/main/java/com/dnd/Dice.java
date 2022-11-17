@@ -1,22 +1,86 @@
 package com.dnd;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Dice.Roll;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 
-public class Dice
+public class Dice implements Serializable
 {
+	private static final long serialVersionUID = 1L;
+
+	public enum Roll
+	{
+		D4, D6, D8, D10, D12, D20, D100, NO_ROLL
+	}
+
+	private String name;
+	private int buff;
 	private List<Roll> combo;
 
-	public Dice(Roll... combo)
+	public Dice(String name, int buff, Roll... combo)
 	{
+		this.setName(name);
+		this.setBuff(buff);
 		this.combo = new ArrayList<>();
 		setCombo(combo);
 	}
 
-	public void setCombo(Roll... combo)
+	public String execute()
 	{
+		String answer = this.name + ": ";
+		boolean start = true;
+		for(Roll roll: this.combo)
+		{
+			if(start == true)
+			{
+				answer = "" + roll(roll);
+				start = false;
+			}
+			else 
+			{
+				answer += " + " + roll(roll);
+			}	
+		}
+
+		if(this.buff < 0)
+		{
+			answer += " - " + this.buff;
+		}
+		else if(this.buff > 0);
+		{
+			answer += " + " + this.buff;
+		}
+
+
+		return answer + " = " + roll();
+	}
+
+	public int roll()
+	{
+		if(this.combo.contains(Roll.NO_ROLL))
+		{
+			return this.buff;
+		}
+		else
+		{
+			int answer = 0;
+			for(Roll roll: this.combo)
+			{
+				answer += roll(roll);
+			}
+			return answer + this.buff;
+		}
+	}
+
+	public void setCombo(Roll... combo)
+	{ 
+		if(this.combo.contains(Roll.NO_ROLL))
+		{
+			this.combo.clear();
+		}
 		for(Roll roll: combo)
 		{
 			this.combo.add(roll);
@@ -26,102 +90,6 @@ public class Dice
 	public List<Roll> getCombo()
 	{
 		return combo;
-	}
-
-	public static String execute(Dice dice)
-	{
-		if(dice.combo.size() == 1)
-		{ 
-			return roll(dice.combo.get(0)) + "";
-		}
-		else
-		{
-			String answer = "";
-			boolean start = true;
-			int finalResult = 0;
-			for(Roll roll: dice.combo)
-			{
-				if(start == true)
-				{
-					answer = "" + roll(roll);
-					start = false;
-				}
-				else 
-				{
-					answer += " + " + roll(roll);
-				}
-
-				finalResult += roll(roll);
-
-			}
-
-			return answer + " = " + finalResult;
-		}
-	}
-
-	public static String execute(Dice dice, int... buff)
-	{
-		if(dice.combo.size() == 1)
-		{ 
-			String answer = roll(dice.combo.get(0)) + "";
-			int finalResult = roll(dice.combo.get(0));
-			for(int value: buff)
-			{
-				if(value < 0)
-				{
-					answer += " - " + value;
-					finalResult += value;
-				}
-				else
-				{
-				answer += " + " + value;
-				finalResult += value;
-				}
-			}
-			
-			return answer + " = " + finalResult;
-		}
-		else
-		{
-			String answer = "";
-			boolean start = true;
-			int finalResult = 0;
-			for(Roll roll: dice.combo)
-			{
-				if(start == true)
-				{
-					answer = "" + roll(roll);
-					start = false;
-				}
-				else 
-				{
-					answer += " + " + roll(roll);
-				}
-
-				finalResult += roll(roll);
-
-			}
-			for(int value: buff)
-			{
-				if(value < 0)
-				{
-					answer += " - " + value;
-					finalResult += value;
-				}
-				else
-				{
-				answer += " + " + value;
-				finalResult += value;
-				}
-			}
-
-			return answer + " = " + finalResult;
-		}
-	}
-	
-	public enum Roll
-	{
-		D4, D6, D8, D10, D12, D20, D100
 	}
 
 	public static int roll(Roll roll)
@@ -142,6 +110,8 @@ public class Dice
 			return d20();
 		case D100:
 			return d100();
+		default:
+			break;
 		}
 
 		return 0;
@@ -220,7 +190,7 @@ public class Dice
 
 
 		int start = characterDnd.getClassDnd().getDiceHits();
-		int con = (characterDnd.getMyStat().getValue(0, 2) - 10)/2;
+		int con = characterDnd.;
 		switch(start)
 		{
 		case 6:
@@ -296,6 +266,20 @@ public class Dice
 		return start;
 	}
 
+	public String getName() {
+		return name;
+	}
 
+	public void setName(String name) {
+		this.name = name;
+	}
 
+	public int getBuff() {
+		return buff;
+	}
+
+	public void setBuff(int buff) {
+		this.buff = buff;
+	}
+	
 }
