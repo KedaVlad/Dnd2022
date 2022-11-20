@@ -33,11 +33,7 @@ public class Barbarian extends ClassDnd {
 
 
 
-	@Override
-	public int getDiceHits() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
+	
 
 
 
@@ -47,6 +43,16 @@ public class Barbarian extends ClassDnd {
 	public List<String> getPermanentBuffs() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+
+
+
+
+	@Override
+	public int getFirstHp() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	
 

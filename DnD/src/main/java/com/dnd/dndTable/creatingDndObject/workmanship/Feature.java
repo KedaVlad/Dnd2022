@@ -124,22 +124,6 @@ public class Feature implements Serializable, KeyWallet
 		
 	}
 
-	public For[] getDepend() {
-		return depend;
-	}
-
-	public void setDepend(For[] depend) {
-		this.depend = depend;
-	}
-
-	public Type getType() {
-		return type;
-	}
-
-	public void setType(Type type) {
-		this.type = type;
-	}
-
 	public boolean isActive() {
 		return active;
 	}

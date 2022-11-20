@@ -10,16 +10,17 @@ public class Artificer  extends ClassDnd  {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public int getDiceHits() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
+	
 	@Override
 	public List<String> getPermanentBuffs() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public int getFirstHp() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

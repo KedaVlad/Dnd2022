@@ -1,15 +1,10 @@
 package com.dnd.dndTable.creatingDndObject.bagDnd;
 
 import com.dnd.Dice;
+import com.dnd.dndTable.rolls.AttackModification;
 
 public class Weapon extends Items
 {
-
-
-	
-	public Weapon(String name) {
-		super(name);
-	}
 
 	private static final long serialVersionUID = 3883278765106047552L;
 
@@ -19,9 +14,13 @@ public class Weapon extends Items
 	}
 
 	private WeaponProperties[] properties;
+	private Dice attack;
 	private Dice damage;
-	private int bonusAtack;
-	private int bonusHit;
+	private AttackModification secondType;
+
+	public Weapon(String name) {
+		super(name);
+	}
 
 	public WeaponProperties[] getProperties() 
 	{
@@ -43,20 +42,20 @@ public class Weapon extends Items
 		this.damage = damage;
 	}
 
-	public int getBonusAtack() {
-		return bonusAtack;
+	public Dice getAttack() {
+		return attack;
 	}
 
-	public void setBonusAtack(int bonusAtack) {
-		this.bonusAtack = bonusAtack;
+	public void setAttack(Dice attack) {
+		this.attack = attack;
 	}
 
-	public int getBonusHit() {
-		return bonusHit;
+	public AttackModification getSecondType() {
+		return secondType;
 	}
 
-	public void setBonusHit(int bonusHit) {
-		this.bonusHit = bonusHit;
+	public void setSecondType(AttackModification secondType) {
+		this.secondType = secondType;
 	}
 
 }

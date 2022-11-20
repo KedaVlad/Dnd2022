@@ -424,11 +424,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				getGameTable().get(beacon(message)).getActualGameCharacter().setMyStat(stats.get(0), stats.get(1), stats.get(2), stats.get(3), stats.get(4), stats.get(5));
 				getGameTable().get(beacon(message)).getMediatorWallet().mediatorBreak();
 
-				Log.add(gameTable.get(beacon(message)).getActualGameCharacter().getMyStat().getStats());
-				Log.add(gameTable.get(beacon(message)).getActualGameCharacter().getMyStat().getSkills());
-				Log.add(gameTable.get(beacon(message)).getActualGameCharacter().getMyStat().getSaveRolls());
-				int stableHp = Dice.stableHp(getGameTable().get(beacon(message)).getActualGameCharacter());
-				int randomHp = Dice.randomHp(getGameTable().get(beacon(message)).getActualGameCharacter());
+				int stableHp = Dice.stableStartHp(getGameTable().get(beacon(message)).getActualGameCharacter());
+				int randomHp = Dice.randomStartHp(getGameTable().get(beacon(message)).getActualGameCharacter());
 
 
 				List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
@@ -477,7 +474,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			answer = (int) Integer.parseInt(matcher.group());
 		}
 		if(answer <= 0) {
-			answer = (int) Dice.stableHp(getGameTable().get(message.getChatId()).getActualGameCharacter()); 
+			answer = (int) Dice.stableStartHp(getGameTable().get(message.getChatId()).getActualGameCharacter()); 
 			Message niceTry = null;
 			try {
 				niceTry = execute(SendMessage.builder()

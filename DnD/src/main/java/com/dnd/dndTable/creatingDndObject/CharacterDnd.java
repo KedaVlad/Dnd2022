@@ -29,7 +29,6 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	private ClassDnd multiClass;
 	private Rolls rolls;
 	private Workmanship myWorkmanship;
-	private Body body;
     private СhoiceCloud cloud;
 
     private List<String> permanentBuffs;
@@ -44,7 +43,6 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		myMemoirs = new ArrayList<>();	
 		cloud = new СhoiceCloud();
 		rolls = new Rolls();
-		body = new Body();
 		permanentBuffs = new ArrayList<>();
 		timesBuffs = new ArrayList<>();
 
@@ -157,7 +155,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	private void setProfisiency() 
 	{
-
+		
 		int result = 0;
 
 		if(lvl>16) 
@@ -176,10 +174,9 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		{
 			result = 2;
 		}
-       if(result != myWorkmanship.getProfisiency())
+       if(result != rolls.getProficiency().getBuff())
        {
-    	   myWorkmanship.setProfisiency(result);
-    	   myWorkmanship.giveProfisiencyToStats(rolls);
+    	  rolls.getProficiency().setBuff(result);
        }
        
 	}
@@ -194,20 +191,18 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		this.speed = speed;
 	}
 
-	public Stats getMyStat() 
-	{
-		return rolls;
-	}
 
 	public void setMyStat(int str, int dex, int con, int intl, int wis, int cha) 
 	{
-		
 		rolls.setStats(str, dex, con, intl, wis, cha); 
 		setProfisiency();
-		
-		Log.add("Character stat" + rolls.getStats());
 	}
 
+	public Rolls getRolls()
+	{
+		return rolls;
+	}
+	
 	public Workmanship getWorkmanship() 
 	{
 		return myWorkmanship;
@@ -244,9 +239,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		return timesBuffs;
 	}
 
-	public Body getBody() {
-		return body;
-	}
+
 
 	
 

@@ -37,5 +37,10 @@ public class Rogue extends ClassDnd {
 		// TODO Auto-generated method stub
 		return null;
 	}
+	@Override
+	public int getFirstHp() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 }

@@ -185,101 +185,55 @@ public class Dice implements Serializable
 
 	}
 
-	public static int stableHp(CharacterDnd characterDnd)
+	public static int stableStartHp(CharacterDnd character)
 	{ 
+		int start = character.getClassDnd().getFirstHp();
 
-
-		int start = characterDnd.getClassDnd().getDiceHits();
-		int con = characterDnd.;
-		switch(start)
+		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
 		{
-		case 6:
-			start = start + con;
-			for(int i = 0; i < characterDnd.getClassDnd().getLvl(); i++)
-			{
-				start += 4 + con;
-			}
-			break;
-		case 8:
-			start = start + con;
-			for(int i = 0; i < characterDnd.getClassDnd().getLvl(); i++)
-			{
-				start += 5 + con;
-			}
-			break;
-		case 10:
-			start = start + con;
-			for(int i = 0; i < characterDnd.getClassDnd().getLvl(); i++)
-			{
-				start += 6 + con;
-			}
-			break;
-		case 12:
-			start = start + con;
-			for(int i = 0; i < characterDnd.getClassDnd().getLvl(); i++)
-			{
-				start += 7 + con;
-			}
-			break;
+			start += character.getRolls().getHp(character.getClassDnd(), false);
 		}
+
 		return start;
 	}
 
-	public static int randomHp(CharacterDnd characterDnd)
+	public static int randomStartHp(CharacterDnd character)
 	{
 
-		int start = characterDnd.getClassDnd().getDiceHits();
-		int con = (characterDnd.getMyStat().getValue(0, 2) - 10)/2;
-		switch(start)
-		{
-		case 6:
-			start = start + con;
-			for(int i = 0; i < characterDnd.getClassDnd().getLvl(); i++)
-			{
-				start += d6() + con;
-			}
-			break;
-		case 8:
-			start = start + con;
-			for(int i = 0; i < characterDnd.getClassDnd().getLvl(); i++)
-			{
-				start += d8() + con;
-			}
-			break;
-		case 10:
-			start = start + con;
-			for(int i = 0; i < characterDnd.getClassDnd().getLvl(); i++)
-			{
-				start += d10() + con;
-			}
-			break;
-		case 12:
-			start = start + con;
-			for(int i = 0; i < characterDnd.getClassDnd().getLvl(); i++)
-			{
-				start += d12() + con;
-			}
-			break;
+		int start = character.getClassDnd().getFirstHp();
 
+		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
+		{
+			start += character.getRolls().getHp(character.getClassDnd(), true);
 		}
 
 		return start;
 	}
 
-	public String getName() {
+	public String getName() 
+	{
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) 
+	{
 		this.name = name;
 	}
 
-	public int getBuff() {
+	public int getBuff() 
+	{
 		return buff;
 	}
 
-	public void setBuff(int buff) {
+	public void setBuff(int buff) 
+	{
 		this.buff = buff;
 	}
 	
+	public void addBuff(int buff)
+	{
+		this.buff += buff;
+	}
+
 }
+

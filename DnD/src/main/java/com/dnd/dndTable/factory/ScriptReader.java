@@ -69,12 +69,12 @@ abstract class ScriptReader implements KeyWallet, Names
 		try {
 			if(comand.getKey().contains(statKey))
 			{
-				character.getMyStat().buff(comand.getComand().get(0).get(1).toString(),
+				character.getRolls().up(Json.convertor(comand.getComand().get(0).get(1), Stat.class),
 						(Integer)Integer.parseInt(comand.getComand().get(0).get(0).toString()));
 			}
 			else if(comand.getKey().contains(competenseKey))
 			{
-				character.getMyStat().buffCompetense(comand.getComand().get(0).get(1).toString());
+				character.getRolls().toCompetense(comand.getComand().get(0).get(1).toString());
 			}
 			else if(comand.getKey().contains(featureKey))
 			{

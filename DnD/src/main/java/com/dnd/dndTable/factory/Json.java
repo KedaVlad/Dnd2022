@@ -33,12 +33,29 @@ public class Json implements Source {
 	public static JsonNode parse(String src) throws JsonMappingException, JsonProcessingException
 	{
 		return mapper.readTree(src);
-			
 	}
 
 	public static <T> T fromJson(JsonNode node, Class<T> clazz) throws JsonProcessingException, IllegalArgumentException
 	{
 		return mapper.treeToValue(node, clazz);
+	}
+	
+	public static <T> T fromFileJson(String file, Class<T> clazz) throws IOException
+	{
+		Path filePath = Path.of(file);
+		String json = Files.readString(filePath) ;
+		return fromJson(parse(json), clazz);
+	}
+	
+	public static <T>T convertor(Object object, Class<T> subject)
+	{
+		JsonNode prepear = Json.toJson(object);
+		try {
+			return Json.fromJson(prepear, subject);
+		} catch (JsonProcessingException | IllegalArgumentException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public static JsonNode toJson(Object object)
@@ -51,15 +68,6 @@ public class Json implements Source {
 		ObjectWriter objectWriter = mapper.writer();
 
 		return objectWriter.writeValueAsString(node);
-	}
-
-	public static <T> T fromFileJson(String file, Class<T> clazz) throws IOException
-	{
-
-		Path filePath = Path.of(file);
-		String json = Files.readString(filePath) ;
-		return fromJson(parse(json), clazz);
-
 	}
 	
 	public static Map<String, Feature> getFeatures() 
@@ -139,6 +147,9 @@ public class Json implements Source {
 			System.out.println("uncleaned");
 		}
 	}
+	
+	
+	
 	public static void main(String[] args) throws IOException {
 		
 		cleanReserve();

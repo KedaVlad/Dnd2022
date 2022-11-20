@@ -5,6 +5,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Dice.Roll;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Source;
@@ -28,6 +29,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 	private String myArchetypeClass;
 	@JsonIgnore
 	private int lvl;
+	private Roll diceHp;
 
 
 	private List<List<InerComand>> growMap;
@@ -44,7 +46,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 	}
 
 	@JsonIgnore
-	public abstract int getDiceHits(); 
+	public abstract int getFirstHp(); 
 	@JsonIgnore
 	public abstract List<String> getPermanentBuffs();
 
@@ -357,6 +359,14 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		System.out.println(jj);
 		Possession pp = Json.fromJson(Json.parse(jj), Possession.class);
 		System.out.println(pp);
+	}
+
+	public Roll getDiceHp() {
+		return diceHp;
+	}
+
+	public void setDiceHp(Roll diceHp) {
+		this.diceHp = diceHp;
 	}
 }
 

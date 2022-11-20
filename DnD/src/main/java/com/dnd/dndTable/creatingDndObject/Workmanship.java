@@ -7,6 +7,7 @@ import java.util.List;
 import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
+import com.google.common.math.Stats;
 
 
 public class Workmanship implements Serializable 
@@ -14,39 +15,11 @@ public class Workmanship implements Serializable
 	
 	private static final long serialVersionUID = -6541873819810645125L;
 	
-	private int profisiency;
 	
 	private List<Feature> myFeatures; 
 	private List<Spell> mySpells;
 	private List<Possession> myPossessions;
 	
-	
-	void giveProfisiencyToStats(Stats stats)
-	{
-		for(Possession possession:myPossessions)
-		{
-			for(int i = 0; i < stats.getSkills().size(); i++)
-			{
-				if(stats.getSkills().get(i).name.equals(possession.getName()))
-				{
-					if(stats.getSkills().get(i).prof != profisiency)
-					{
-						stats.getSkills().get(i).setProfBuf(profisiency);
-					}	
-				}
-			}
-			for(int i = 0; i < stats.getSaveRolls().size(); i++)
-			{
-				if(stats.getSaveRolls().get(i).name.equals(possession.getName()))
-				{
-					if(stats.getSaveRolls().get(i).prof != profisiency)
-					{
-						stats.getSaveRolls().get(i).setProfBuf(profisiency);
-					}
-				}
-			}
-		}
-	}
 	
 	public Workmanship()
 	{
@@ -119,14 +92,6 @@ public class Workmanship implements Serializable
 				break;
 			}
 		}
-	}
-
-	public int getProfisiency() {
-		return profisiency;
-	}
-
-	public void setProfisiency(int profisiency) {
-		this.profisiency = profisiency;
 	}
 	
 }

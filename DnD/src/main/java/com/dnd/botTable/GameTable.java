@@ -82,13 +82,13 @@ public class GameTable implements KeyWallet, Serializable
 		{
 			return startRaceKey;
 		}
-		else if(actualGameCharacter.getMyStat() == null)
+		else if(actualGameCharacter.getRolls() == null)
 		{
 			return startStatsKey;
 		}
 		else if(actualGameCharacter.getHp() == 0)
 		{
-			Dice.stableHp(actualGameCharacter);
+			Dice.stableStartHp(actualGameCharacter);
 		}
 		return menuKey;
 	}

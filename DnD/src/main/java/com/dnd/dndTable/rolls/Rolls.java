@@ -10,31 +10,244 @@ import com.dnd.Names;
 import com.dnd.Dice.Roll;
 import com.dnd.Formula;
 import com.dnd.Names.Stat;
+import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 
 public class Rolls implements Serializable, Names, KeyWallet {
 
 	private static final long serialVersionUID = 7901749239721687760L;
 
 	private Dice proficiency;
+	private Dice hp;
 	private Article initiative;
 	private List<MainStat> stats;
 	private List<Article> skills;
 	private List<Article> saveRolls;
-
+	private AttackMachine attackMachine;
+	private Attack targetAttack;
 
 	public Rolls() 
 	{
 		proficiency = new Dice("Proficiency bonus", 2, Roll.NO_ROLL);
+		hp = new Dice("Hp roll", 0, Roll.NO_ROLL);
 		stats = new ArrayList<>();
 		skills = new ArrayList<>();
 		saveRolls = new ArrayList<>();
 		initiative = new Article("Initiative", Stat.DEXTERITY);
-		setStartStats();
-		setStartSkills();
-		setStartSaveRoll();
+		attackMachine = new AttackMachine();
+		buildStats();
+		buildSkills();
+		buildSaveRoll();
+	}
+	public int getHp(ClassDnd clazz, boolean random)
+	{
+		if(random == true)
+		{
+			Dice dice = hp;
+			dice.setCombo(clazz.getDiceHp());
+			dice.setBuff(getValue(Stat.CONSTITUTION).getBuff());
+			return dice.roll();	
+		}
+		else
+		{
+			switch(clazz.getDiceHp())
+			{
+			case D6:
+				return 4 + getValue(Stat.CONSTITUTION).getBuff() + hp.roll();
+			case D8:
+				return 5 + getValue(Stat.CONSTITUTION).getBuff() + hp.roll();
+			case D10:
+				return 6 + getValue(Stat.CONSTITUTION).getBuff() + hp.roll();
+			case D12:
+				return 7 + getValue(Stat.CONSTITUTION).getBuff() + hp.roll();
+			default:
+				return 0;
+			}
+		}
 	}
 
-	void setStats(int str, int dex, int con, int intl, int wis, int cha)
+	public Formula attack(int target)
+	{
+		this.targetAttack = attackMachine.getAttacks().get(target);
+		return buildFormula(targetAttack.attack);
+	}
+
+	public Formula hit()
+	{
+		Formula answer = new Formula(targetAttack.hit.name);
+		answer.getFormula().add(buildValue(targetAttack.hit));
+		answer.getFormula().addAll(targetAttack.hit.permanentBuff);
+		return answer;
+	}
+
+	public Dice getDice(Stat name)
+	{
+		switch(name)
+		{
+		case CHARISMA:
+			return stats.get(0).dice;
+		case CONSTITUTION:
+			return stats.get(1).dice;
+		case DEXTERITY:
+			return stats.get(2).dice;
+		case INTELLIGENSE:
+			return stats.get(3).dice;
+		case STRENGTH:
+			return stats.get(4).dice;
+		case WISDOM:
+			return stats.get(5).dice;
+		default:
+			return null;
+		}
+	}
+
+	public Formula getFormula(String name)
+	{
+		Article targetArticle = null;
+		boolean breaker = false;
+		if(initiative.name.equals(name))
+		{
+			targetArticle = initiative;
+		}
+		else if(breaker == false)
+		{
+			for(Article article: saveRolls)
+			{
+				if(article.name.equals(name))
+				{
+					targetArticle = article;
+					breaker = true;
+					break;
+				}
+			}
+		}
+		else if(breaker == false)
+		{
+			for(Article article: skills)
+			{
+				if(article.name.equals(name))
+				{
+					targetArticle = article;
+					breaker = true;
+					break;
+				}
+			}
+		}
+
+		return buildFormula(targetArticle);
+	}
+
+	private Formula buildFormula(Article targetArticle)
+	{
+		Formula answer = new Formula(targetArticle.name);
+		answer.getFormula().add(getDice(targetArticle.depends));
+
+		if(targetArticle.competense == true)
+		{
+			Dice changeProf = proficiency;
+			changeProf.setBuff(changeProf.getBuff()*2);
+			answer.getFormula().add(changeProf);
+		}
+		else if(targetArticle.proficiency == true)
+		{
+			answer.getFormula().add(proficiency);
+		}
+		else if(targetArticle.halfProf == true)
+		{
+			Dice changeProf = proficiency;
+			changeProf.setBuff(changeProf.getBuff()*2);
+			answer.getFormula().add(changeProf);
+		}
+		answer.getFormula().addAll(targetArticle.permanentBuff);
+		return answer;
+	}
+
+	public Dice getValue(Stat stat)
+	{
+
+		Dice answer = new Dice(stat.name(),0, Roll.NO_ROLL);
+		switch(stat)
+		{
+		case STRENGTH:
+			answer.setBuff(stats.get(0).dice.getBuff());
+			break;
+		case DEXTERITY:
+			answer.setBuff(stats.get(1).dice.getBuff());
+			break;
+		case CONSTITUTION:
+			answer.setBuff(stats.get(2).dice.getBuff());
+			break;
+		case INTELLIGENSE:
+			answer.setBuff(stats.get(3).dice.getBuff());
+			break;
+		case WISDOM:
+			answer.setBuff(stats.get(4).dice.getBuff());
+			break;
+		case CHARISMA:
+			answer.setBuff(stats.get(5).dice.getBuff());
+			break;
+		default:
+			break;
+		}
+		return answer;
+	}
+
+	public Dice getValue(String name)
+	{
+		Dice answer = null;
+		boolean breaker = false;
+		if(initiative.name.equals(name))
+		{
+			answer = buildValue(initiative);
+		}
+		else if(breaker == false)
+		{
+			for(Article article: saveRolls)
+			{
+				if(article.name.equals(name))
+				{
+					answer = buildValue(article);
+					breaker = true;
+					break;
+				}
+			}
+		}
+		else if(breaker == false)
+		{
+			for(Article article: skills)
+			{
+				if(article.name.equals(name))
+				{
+					answer = buildValue(article);
+					breaker = true;
+					break;
+				}
+			}
+		}
+		return answer;
+	}
+
+	private Dice buildValue(Article targetArticle)
+	{
+		Dice answer = new Dice(targetArticle.name,0, Roll.NO_ROLL);
+
+		answer.setBuff(getDice(targetArticle.depends).getBuff());
+
+		if(targetArticle.competense == true)
+		{
+			answer.setBuff(proficiency.getBuff()*2);
+		}
+		else if(targetArticle.proficiency == true)
+		{
+			answer.setBuff(proficiency.getBuff());
+		}
+		else if(targetArticle.halfProf == true)
+		{
+			answer.setBuff(proficiency.getBuff()/2);
+		}
+		return answer;
+	}
+
+	public void setStats(int str, int dex, int con, int intl, int wis, int cha)
 	{
 		stats.get(0).up(str);
 		stats.get(1).up(dex);
@@ -44,7 +257,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		stats.get(5).up(cha);
 	}
 
-	private void setStartStats()
+	private void buildStats()
 	{
 		stats.add(new MainStat(Stat.STRENGTH));
 		stats.add(new MainStat(Stat.DEXTERITY));
@@ -54,7 +267,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		stats.add(new MainStat(Stat.CHARISMA));
 	}
 
-	private void setStartSkills()
+	private void buildSkills()
 	{
 		skills.add(new Article(Skill.ACROBATICS.toString(), Stat.DEXTERITY));
 		skills.add(new Article(Skill.ANIMAL_HANDING.toString(), Stat.WISDOM));
@@ -77,7 +290,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 
 	}
 
-	private void setStartSaveRoll()
+	private void buildSaveRoll()
 	{
 		saveRolls.add(new Article(SaveRoll.SR_STRENGTH.toString(), Stat.STRENGTH));
 		saveRolls.add(new Article(SaveRoll.SR_DEXTERITY.toString(), Stat.DEXTERITY));
@@ -275,106 +488,6 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		}
 	}
 
-	public Dice roll(Stat name)
-	{
-		switch(name)
-		{
-		case CHARISMA:
-			return stats.get(0).dice;
-		case CONSTITUTION:
-			return stats.get(1).dice;
-		case DEXTERITY:
-			return stats.get(2).dice;
-		case INTELLIGENSE:
-			return stats.get(3).dice;
-		case STRENGTH:
-			return stats.get(4).dice;
-		case WISDOM:
-			return stats.get(5).dice;
-		default:
-			return null;
-		}
-	}
-
-	public Formula roll(String name)
-	{
-		Article targetArticle = null;
-		Formula answer = new Formula(name);
-
-		boolean breaker = false;
-		if(initiative.name.equals(name))
-		{
-			targetArticle = initiative;
-		}
-		else if(breaker == false)
-		{
-			for(Article article: saveRolls)
-			{
-				if(article.name.equals(name))
-				{
-					targetArticle = article;
-					breaker = true;
-					break;
-				}
-			}
-		}
-		else if(breaker == false)
-		{
-			for(Article article: skills)
-			{
-				if(article.name.equals(name))
-				{
-					targetArticle = article;
-					breaker = true;
-					break;
-				}
-			}
-		}
-
-		switch(targetArticle.depends)
-		{
-		case STRENGTH:
-			answer.getFormula().add(stats.get(0).dice);
-			break;
-		case DEXTERITY:
-			answer.getFormula().add(stats.get(1).dice);
-			break;
-		case CONSTITUTION:
-			answer.getFormula().add(stats.get(2).dice);
-			break;
-		case INTELLIGENSE:
-			answer.getFormula().add(stats.get(3).dice);
-			break;
-		case WISDOM:
-			answer.getFormula().add(stats.get(4).dice);
-			break;
-		case CHARISMA:
-			answer.getFormula().add(stats.get(5).dice);
-			break;
-		default:
-			break;
-		}
-
-		if(targetArticle.competense == true)
-		{
-			Dice changeProf = proficiency;
-			changeProf.setBuff(changeProf.getBuff()*2);
-			answer.getFormula().add(changeProf);
-		}
-		else if(targetArticle.proficiency == true)
-		{
-			answer.getFormula().add(proficiency);
-		}
-		else if(targetArticle.halfProf == true)
-		{
-			Dice changeProf = proficiency;
-			changeProf.setBuff(changeProf.getBuff()*2);
-			answer.getFormula().add(changeProf);
-		}
-		answer.getFormula().addAll(targetArticle.permanentBuff);
-		return answer;
-	}
-
 	public List<Article> getSkills() 
 	{
 		return skills;
@@ -408,47 +521,12 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			this.value += value;
 			dice.setBuff((value - 10)/2);
 		}
-		
+
 		public String toString()
 		{
 			return name.toString() + " : " + dice.getBuff();
 		}
-		
+
 	}
 
-}
-
-
-
-class Article implements Serializable
-{
-	private static final long serialVersionUID = 1L;
-	String name;
-	Stat depends;
-	boolean proficiency;
-	boolean halfProf;
-	boolean competense;
-	List <String> spesial;
-	List <Dice> permanentBuff;
-
-	Article(String name, Stat depends)
-	{
-		this.name = name;
-		this.depends = depends;
-		spesial = new ArrayList<>();
-		permanentBuff = new ArrayList<>();
-	}
-
-	public void setProficiency(boolean proficiency) {
-		this.proficiency = proficiency;
-	}
-
-	public void setHalfProf(boolean halfProf) {
-		this.halfProf = halfProf;
-	}
-
-	public void setCompetense(boolean competense) {
-		this.competense = competense;
-	}
-	
 }

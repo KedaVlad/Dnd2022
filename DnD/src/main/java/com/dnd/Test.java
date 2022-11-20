@@ -39,12 +39,7 @@ public class Test implements Source {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
-		String heading1 ="Exam_Name";
-		String heading2 = "Exam_Grade";
 		
-		  StringBuilder sb = new StringBuilder("%-15s %15s %n", heading1, heading2);
-		String headingw = "%-15s %15s %n", heading1, heading2;
-		System.out.printf("%-15s %15s %n", heading1, heading2);
 	
 	}
 	
