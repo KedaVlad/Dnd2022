@@ -1,44 +1,56 @@
 package com.dnd.dndTable.factory;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
 
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Names;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
-import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
-import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
-abstract class ScriptReader implements KeyWallet, Names
+abstract class ScriptReader implements Script, Names
 {
 
 	static void execute(CharacterDnd character, InerComand comand)
 	{
 
 		Log.add("ScriptReader execute " + comand);
-		if(comand.isCloud())
+		if(comand.isCloud() && comand.isEffect())
+		{
+			act(character, comand);
+		}
+		else if(comand.isCloud())
 		{
 			cloud(character, comand);
 		}
-		else 
+		else if(comand.isEffect())
 		{
-			influence(character, comand);
+			change(character, comand);
+		}
+		else
+		{
+			build(character, comand);
 		}
 
 	}
 
+	private static void change(CharacterDnd character, InerComand comand) {
+		
+		
+	}
+
+	private static void act(CharacterDnd character, InerComand comand) {
+		
+		
+	}
+
 	private static void cloud(CharacterDnd character, InerComand comand)
 	{
-		if(comand.getKey().contains(statKey))
+		if(comand.getKey().contains(lvlUpScript))
 		{
 			cloudStat(character, comand.getKey(), comand.getComand());
 		}
-		else if(comand.getKey().contains(workmanshipKey))
+		else
 		{
 			cloudWorkmanship(character, comand.getKey(), comand.getComand());
 		}
@@ -64,7 +76,7 @@ abstract class ScriptReader implements KeyWallet, Names
 
 	}
 
-	private static void influence(CharacterDnd character, InerComand comand)
+	private static void build(CharacterDnd character, InerComand comand)
 	{
 		try {
 			if(comand.getKey().contains(statKey))

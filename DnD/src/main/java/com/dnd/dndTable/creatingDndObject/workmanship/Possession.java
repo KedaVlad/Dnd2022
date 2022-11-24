@@ -2,12 +2,15 @@ package com.dnd.dndTable.creatingDndObject.workmanship;
 
 import java.io.Serializable;
 
+import com.dnd.dndTable.factory.InerComand;
+
 public class Possession implements Serializable {
 
 	private static final long serialVersionUID = 863271851968078819L;
 
 	private int id;
 	private String name;
+	private InerComand inerComand;
 	
 	public Possession(String name) 
 	{
@@ -34,5 +37,13 @@ public class Possession implements Serializable {
 
 	public String getName() {
 		return name;
+	}
+
+	public InerComand getInerComand() {
+		return inerComand;
+	}
+
+	public void setInerComand(InerComand inerComand) {
+		this.inerComand = inerComand;
 	}
 }

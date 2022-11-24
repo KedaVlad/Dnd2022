@@ -5,13 +5,13 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.dnd.Dice;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Source;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
+import com.dnd.dndTable.rolls.Dice;
 
 public class ControlPanel implements KeyWallet, Source, Serializable {
 

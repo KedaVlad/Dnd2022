@@ -21,7 +21,7 @@ public interface KeyWallet {
 	final static String selectionConfirmation = ">Bdsaopl;,qfqwer[];'as./'>";
 	//CHARACTER MENU
 	final static String menuKey = ">regwrgvujfkeeflfewwopfcvwev>"; //in this key dose not use numbers
-	final static String skillMenu = ">regwrgvcz23fewdsgwsgk7ujyh>";
+	final static String featureMenu = ">regwrgvcz23fewdsgwsgk7ujyh>";
 	final static String spellMenu = ">wef3ggdsgs4htvdcvwev>";
 	final static String bagMenu = ">regwr23ewfhlkijygrrgrgf4b4tev>";
 	final static String possessionMenu = ">regwrasfafsdpossessionMenu3fewdsgk7ujyh>";
@@ -36,26 +36,8 @@ public interface KeyWallet {
 	final static String statMediatorKey = ">shktyasdvyil;kjhfewe>";
 	final static String hpMediatorKey = ">shktyawefwefasasdcvjwme>";
 
-	///FOR SCRIPTS////////////////////////////////////////////////////////////////////////////////////
-	
-	final static String searchingScript = "&";
-	final static String influencingScript = "@";
-	final static String cloudScript = "~";
-	
-	final static String secondKey = ".(.)";
-	
-	final static String cloudPattern = "[a-zA-z ']+";
-	final static String valueScript = ".*([1-5]).*";
-	final static String workmanshipKey = "^(.)([a-zA-Z]*)";
-	final static String spesialKey = "#";
-	final static String itemKey = "*";
-	final static String featureKey = "=";
-	final static String spellKey = ">";
-	final static String possessionKey = "<";
-	final static String traitKey = "-";
-	final static String statKey = "+";
-	final static String competenseKey = "sdkfwfwmsd";
-	
+	final static String start = ">regwrweffwvwevwfewefewe>";
+	final static String dock = ">rffasdsadenmfdgtrjeooiue>";
 	
 	public static String allAfterKey(String key)
 	{

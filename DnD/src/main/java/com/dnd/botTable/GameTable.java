@@ -7,13 +7,13 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.dnd.Dice;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.factory.ControlPanel;
+import com.dnd.dndTable.rolls.Dice;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
@@ -37,7 +37,9 @@ public class GameTable implements KeyWallet, Serializable
 	
 	private MediatorWallet mediatorWallet = new MediatorWallet();
 	
-	private TrashCan trashCan = new TrashCan();
+	//private TrashCan trashCan = new TrashCan();
+	
+	ActMachine script = new ActMachine();
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -123,7 +125,7 @@ public class GameTable implements KeyWallet, Serializable
 		this.chatId = chatId;
 	}
 
-	public TrashCan getTrashCan() 
+	/*public TrashCan getTrashCan() 
 	{
 		return trashCan;
 	}
@@ -131,7 +133,7 @@ public class GameTable implements KeyWallet, Serializable
 	public void setTrashCan(TrashCan trashCan) 
 	{
 		this.trashCan = trashCan;
-	}
+	}*/
 
 	public boolean isCheckChar() {
 
@@ -181,7 +183,6 @@ public class GameTable implements KeyWallet, Serializable
 
 	public void save() 
 	{
-		Log.add(isCheckChar() + "Сюда смотри");
 		Log.add(actualGameCharacter);
 		
 		if(isCheckChar())

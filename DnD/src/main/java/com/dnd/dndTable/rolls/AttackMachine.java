@@ -4,11 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Dice;
-import com.dnd.Dice.Roll;
 import com.dnd.Names.Stat;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
+import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class AttackMachine implements Serializable
 {
@@ -18,7 +17,7 @@ public class AttackMachine implements Serializable
 
 	private Dice noWeapon = new Dice("No weapon attack", 1, Roll.NO_ROLL);
 
-	private List<Attack> attacks;
+	private List<Action> attacks;
 
 	private Weapon targetWeapon;
 
@@ -43,14 +42,14 @@ public class AttackMachine implements Serializable
 
 	private void setAttacks()
 	{
-		List<Attack> attacks = new ArrayList<>();
+		List<Action> attacks = new ArrayList<>();
 		Article attack = new Article("Attack", checkStat(targetWeapon.getProperties()));
 		attack.proficiency = checkProf(targetWeapon.getProperties());
 		attack.permanentBuff.add(targetWeapon.getAttack());
 		Article hit = new Article(targetWeapon.getName(), checkStat(targetWeapon.getProperties()));
 		hit.permanentBuff.add(targetWeapon.getDamage());
 		hit.permanentBuff.addAll(buffs);
-		attacks.add(new Attack(targetWeapon.getName(), attack, hit));
+		attacks.add(new Action(targetWeapon.getName(), attack, hit));
 
 		for(AttackModification elseAttack: getElseAttack())
 		{
@@ -58,7 +57,7 @@ public class AttackMachine implements Serializable
 			attack.permanentBuff.add(elseAttack.getAttack());
 			hit.name = elseAttack.getName();
 			hit.permanentBuff.add(elseAttack.getDamage());
-			attacks.add(new Attack(elseAttack.getName(), attack, hit));
+			attacks.add(new Action(elseAttack.getName(), attack, hit));
 		}
 		
 		if(targetWeapon.getSecondType() != null)
@@ -72,7 +71,7 @@ public class AttackMachine implements Serializable
 			hit.permanentBuff.clear();
 			hit.permanentBuff.add(targetWeapon.getSecondType().getDamage());
 			hit.permanentBuff.addAll(buffs);
-			attacks.add(new Attack(targetWeapon.getSecondType().getName(), attack, hit));
+			attacks.add(new Action(targetWeapon.getSecondType().getName(), attack, hit));
 		}
 
 		this.attacks = attacks;
@@ -144,9 +143,14 @@ public class AttackMachine implements Serializable
 		setAttacks();
 	}
 
-	public List<Attack> getAttacks() 
+	public List<Action> getAttacks() 
 	{
 		return attacks;
+	}
+	
+	public Action getAttacks(int target) 
+	{
+		return attacks.get(target);
 	}
 
 	public Dice getNoWeapon() {
@@ -158,31 +162,6 @@ public class AttackMachine implements Serializable
 	}
 
 
-}
-
-class Attack 
-{
-
-	String name;
-	Article attack;
-	Article hit;
-	List<String> spesials;
-	
-	Attack(String name, Article attack, Article hit, List<String> spesials)
-	{
-		this.name = name;
-		this.attack = attack;
-		this.hit = hit;
-		this.spesials = spesials;
-	}
-	
-	Attack(String name, Article attack, Article hit)
-	{
-		this.name = name;
-		this.attack = attack;
-		this.hit = hit;
-	}
-	
 }
 
 

@@ -11,6 +11,7 @@ import com.dnd.Log;
 import com.dnd.Names.SaveRoll;
 import com.dnd.Names.Skill;
 import com.dnd.Names.Stat;
+import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Effect;
 import com.dnd.dndTable.factory.InerComand;
 import com.dnd.dndTable.factory.Json;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -24,7 +25,8 @@ public class Feature implements Serializable, KeyWallet
 	private String name;
 	private String description;
 	private boolean active;
-	private Cast cast;
+	private List<Effect> cast;
+	
 
 	enum For 
 	{
@@ -132,12 +134,12 @@ public class Feature implements Serializable, KeyWallet
 		this.active = active;
 	}
 
-	public Cast getCast() {
-		return cast;
+	public For getDepend() {
+		return depend;
 	}
 
-	public void setCast(Cast cast) {
-		this.cast = cast;
+	public void setDepend(For depend) {
+		this.depend = depend;
 	}
 	
 

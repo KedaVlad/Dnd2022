@@ -1,4 +1,4 @@
-package com.dnd;
+package com.dnd.dndTable.rolls;
 
 import java.io.Serializable;
 import java.util.ArrayList;

@@ -2,7 +2,6 @@ package com.dnd.dndTable.rolls;
 
 import java.io.Serializable;
 
-import com.dnd.Dice;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 
 public class AttackModification implements Serializable

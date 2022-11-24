@@ -10,6 +10,7 @@ public class InerComand implements Serializable {
 	private static final long serialVersionUID = -5446546498879076199L;
 	
 	private boolean cloud;
+	private boolean effect;
 	private String key;
 	
 	private List<List<Object>> comand = new ArrayList<>();
@@ -50,6 +51,14 @@ public class InerComand implements Serializable {
 	public void setComand(List<List<Object>> comand) 
 	{
 		this.comand = comand;
+	}
+
+	public boolean isEffect() {
+		return effect;
+	}
+
+	public void setEffect(boolean effect) {
+		this.effect = effect;
 	}
 
 }

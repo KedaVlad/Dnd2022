@@ -1,7 +1,7 @@
 package com.dnd.dndTable.creatingDndObject.bagDnd;
 
-import com.dnd.Dice;
 import com.dnd.dndTable.rolls.AttackModification;
+import com.dnd.dndTable.rolls.Dice;
 
 public class Weapon extends Items
 {

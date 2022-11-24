@@ -4,13 +4,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Dice;
 import com.dnd.KeyWallet;
 import com.dnd.Names;
-import com.dnd.Dice.Roll;
-import com.dnd.Formula;
 import com.dnd.Names.Stat;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
+import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class Rolls implements Serializable, Names, KeyWallet {
 
@@ -23,7 +21,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	private List<Article> skills;
 	private List<Article> saveRolls;
 	private AttackMachine attackMachine;
-	private Attack targetAttack;
+	private Action targetAct;
 
 	public Rolls() 
 	{
@@ -33,7 +31,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		skills = new ArrayList<>();
 		saveRolls = new ArrayList<>();
 		initiative = new Article("Initiative", Stat.DEXTERITY);
-		attackMachine = new AttackMachine();
+		setAttackMachine(new AttackMachine());
 		buildStats();
 		buildSkills();
 		buildSaveRoll();
@@ -65,17 +63,17 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		}
 	}
 
-	public Formula attack(int target)
+	public Formula attack(Action act)
 	{
-		this.targetAttack = attackMachine.getAttacks().get(target);
-		return buildFormula(targetAttack.attack);
+		this.targetAct = act;
+		return buildFormula(targetAct.attack);
 	}
 
 	public Formula hit()
 	{
-		Formula answer = new Formula(targetAttack.hit.name);
-		answer.getFormula().add(buildValue(targetAttack.hit));
-		answer.getFormula().addAll(targetAttack.hit.permanentBuff);
+		Formula answer = new Formula(targetAct.hit.name);
+		answer.getFormula().add(buildValue(targetAct.hit));
+		answer.getFormula().addAll(targetAct.hit.permanentBuff);
 		return answer;
 	}
 
@@ -500,6 +498,13 @@ public class Rolls implements Serializable, Names, KeyWallet {
 
 	public Dice getProficiency() {
 		return proficiency;
+	}
+
+	public AttackMachine getAttackMachine() {
+		return attackMachine;
+	}
+	public void setAttackMachine(AttackMachine attackMachine) {
+		this.attackMachine = attackMachine;
 	}
 
 	class MainStat implements Serializable

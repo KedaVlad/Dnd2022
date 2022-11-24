@@ -1,11 +1,11 @@
-package com.dnd;
+package com.dnd.dndTable.rolls;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Dice.Roll;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class Dice implements Serializable
 {

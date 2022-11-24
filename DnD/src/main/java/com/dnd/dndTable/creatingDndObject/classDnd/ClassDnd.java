@@ -5,7 +5,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Dice.Roll;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Source;
@@ -15,6 +14,7 @@ import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.factory.InerComand;
 import com.dnd.dndTable.factory.Json;
+import com.dnd.dndTable.rolls.Dice.Roll;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;

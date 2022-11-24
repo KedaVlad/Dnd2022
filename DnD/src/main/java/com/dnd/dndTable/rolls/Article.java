@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Dice;
 import com.dnd.Names.Stat;
 
 public class Article implements Serializable
@@ -26,6 +25,16 @@ public class Article implements Serializable
 		permanentBuff = new ArrayList<>();
 	}
 
+	public String getSpesial()
+	{
+		String answer = "";
+		for(String string: spesial)
+		{
+			answer += string + "\n";
+		}
+		return answer;
+	}
+	
 	public void setProficiency(boolean proficiency) {
 		this.proficiency = proficiency;
 	}
