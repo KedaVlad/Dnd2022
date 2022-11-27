@@ -183,11 +183,9 @@ public class GameTable implements KeyWallet, Serializable
 
 	public void save() 
 	{
-		Log.add(actualGameCharacter);
 		
 		if(isCheckChar())
 		{
-			Log.add("Save Complate");
 			savedCharacter.put(actualGameCharacter.getName(), actualGameCharacter);
 		}
 	}

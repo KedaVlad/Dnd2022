@@ -24,9 +24,10 @@ public class Feature implements Serializable, KeyWallet
 	
 	private String name;
 	private String description;
-	private boolean active;
-	private List<Effect> cast;
-	
+	private Effect cast;
+    private boolean active;
+	private Effect effect;
+	private List<InerComand> inerComands;
 
 	enum For 
 	{
@@ -35,8 +36,10 @@ public class Feature implements Serializable, KeyWallet
 	
 	private For depend;
 	
-	private List<InerComand> inerComands;
-	
+	public Effect cast()
+	{
+		return effect;
+	}
 
 	public Feature(String name)
 	{
@@ -44,11 +47,6 @@ public class Feature implements Serializable, KeyWallet
 	}
 	
 	public Feature() {}
-	
-	public String cast()
-	{
-		return null;
-	}
 	
 	public String getName() 
 	{
@@ -140,6 +138,22 @@ public class Feature implements Serializable, KeyWallet
 
 	public void setDepend(For depend) {
 		this.depend = depend;
+	}
+
+	public Effect getCast() {
+		return cast;
+	}
+
+	public void setCast(Effect cast) {
+		this.cast = cast;
+	}
+
+	public Effect getEffect() {
+		return effect;
+	}
+
+	public void setEffect(Effect effect) {
+		this.effect = effect;
 	}
 	
 

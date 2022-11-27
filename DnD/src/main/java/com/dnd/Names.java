@@ -3,6 +3,11 @@ package com.dnd;
 public interface Names 
 {
 
+	public enum Refresh
+	{
+		FULL, HALF
+	}
+	
 	public enum Stat
 	{
 		STRENGTH("Strength"), 

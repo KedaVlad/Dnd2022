@@ -7,6 +7,8 @@ import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Names;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
+import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 
 abstract class ScriptReader implements Script, Names
 {
@@ -14,7 +16,6 @@ abstract class ScriptReader implements Script, Names
 	static void execute(CharacterDnd character, InerComand comand)
 	{
 
-		Log.add("ScriptReader execute " + comand);
 		if(comand.isCloud() && comand.isEffect())
 		{
 			act(character, comand);
@@ -34,15 +35,16 @@ abstract class ScriptReader implements Script, Names
 
 	}
 
-	private static void change(CharacterDnd character, InerComand comand) {
+	private static void act(CharacterDnd character, InerComand comand) 
+	{
+			
+	}
 		
-		
+	private static void change(CharacterDnd character, InerComand comand) 
+	{
+		addPossession(character, comand);
 	}
 
-	private static void act(CharacterDnd character, InerComand comand) {
-		
-		
-	}
 
 	private static void cloud(CharacterDnd character, InerComand comand)
 	{
@@ -55,6 +57,38 @@ abstract class ScriptReader implements Script, Names
 			cloudWorkmanship(character, comand.getKey(), comand.getComand());
 		}
 
+	}
+	
+	private static void build(CharacterDnd character, InerComand comand)
+	{
+		try {
+			if(comand.getKey().contains(statKey))
+			{
+				character.getRolls().up(Json.convertor(comand.getComand().get(0).get(1), Stat.class),
+						(Integer)Integer.parseInt(comand.getComand().get(0).get(0).toString()));
+			}
+			else if(comand.getKey().contains(competenseKey))
+			{
+				character.getRolls().toCompetense(comand.getComand().get(0).get(1).toString());
+			}
+			else if(comand.getKey().contains(featureKey))
+			{
+				Possession target = Json.convertor(comand.getComand().get(0).get(0), Possession.class);
+				character.getWorkmanship().addPossession(target);
+				WorkmanshipFactory.createFeature(character, comand.getComand().get(0).get(0).toString());
+			}	
+			else if(comand.getKey().contains(spellKey))
+			{
+				WorkmanshipFactory.createSpell(character, comand.getComand().get(0).get(0).toString());
+			}
+			else if(comand.getKey().contains(possessionKey))
+			{
+				WorkmanshipFactory.createPossession(character, comand.getComand().get(0).get(0).toString());
+			}
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 
@@ -76,33 +110,17 @@ abstract class ScriptReader implements Script, Names
 
 	}
 
-	private static void build(CharacterDnd character, InerComand comand)
-	{
-		try {
-			if(comand.getKey().contains(statKey))
-			{
-				character.getRolls().up(Json.convertor(comand.getComand().get(0).get(1), Stat.class),
-						(Integer)Integer.parseInt(comand.getComand().get(0).get(0).toString()));
-			}
-			else if(comand.getKey().contains(competenseKey))
-			{
-				character.getRolls().toCompetense(comand.getComand().get(0).get(1).toString());
-			}
-			else if(comand.getKey().contains(featureKey))
-			{
-				WorkmanshipFactory.createFeature(character, comand.getComand().get(0).get(0).toString());
-			}	
-			else if(comand.getKey().contains(spellKey))
-			{
-				WorkmanshipFactory.createSpell(character, comand.getComand().get(0).get(0).toString());
-			}
-			else if(comand.getKey().contains(possessionKey))
-			{
-				WorkmanshipFactory.createPossession(character, comand.getComand().get(0).get(0).toString());
-			}
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	private static void addPossession(CharacterDnd character, InerComand comand) {
+		
+		if(comand.getKey().contains(weaponKey))
+		{
+			character.getRolls().getAttackMachine().setPossession(Json.convertor(comand.getComand().get(0).get(0), WeaponProperties.class));
 		}
+		else if(comand.getKey().contains(skillKey))
+		{
+			character.getRolls().toProficiency(comand.getComand().get(0).get(0).toString());
+		}
+		
 	}
+	
 }

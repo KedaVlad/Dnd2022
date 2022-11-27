@@ -67,7 +67,6 @@ public class TrashCan implements Serializable {
 		List<Integer> main = new ArrayList<>();
 		main.addAll(mainСircle);
 		mainСircle.clear();
-		Log.add("TrashCan MAIN");
 		return main;
 	}
 
@@ -81,7 +80,6 @@ public class TrashCan implements Serializable {
 		List<Integer> small = new ArrayList<>();
 		small.addAll(smallСircle);	
 		smallСircle.clear();
-		Log.add("TrashCan SMALL");
 		return small;
 	}
 
@@ -100,7 +98,6 @@ public class TrashCan implements Serializable {
 		List<Integer> main = new ArrayList<>();
 		main.addAll(heroCircle);
 		heroCircle.clear();
-		Log.add("TrashCan hero");
 		return main;
 	}
 	

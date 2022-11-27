@@ -7,6 +7,7 @@ import java.util.List;
 import com.dnd.Names.Stat;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class AttackMachine implements Serializable
@@ -23,6 +24,7 @@ public class AttackMachine implements Serializable
 
 	private List<AttackModification> typeAttacks;
 	private List<WeaponProperties> possession;
+	private List<WeaponType> typePossession;
 	private boolean warlock;
 	private List<WeaponProperties> dexteritys;
 	private List<Dice> buffs;
@@ -32,6 +34,7 @@ public class AttackMachine implements Serializable
 		typeAttacks = new ArrayList<>();
 		buffs = new ArrayList<>();
 		possession = new ArrayList<>();
+		typePossession = new ArrayList<>();
 		dexteritys = new ArrayList<>();
 		dexteritys.add(WeaponProperties.THROWING);
 		dexteritys.add(WeaponProperties.AMMUNITION);
@@ -43,31 +46,31 @@ public class AttackMachine implements Serializable
 	private void setAttacks()
 	{
 		List<Action> attacks = new ArrayList<>();
-		Article attack = new Article("Attack", checkStat(targetWeapon.getProperties()));
-		attack.proficiency = checkProf(targetWeapon.getProperties());
-		attack.permanentBuff.add(targetWeapon.getAttack());
-		Article hit = new Article(targetWeapon.getName(), checkStat(targetWeapon.getProperties()));
-		hit.permanentBuff.add(targetWeapon.getDamage());
+		Article attack = new Article("Attack", checkStat((targetWeapon.getFirstType().getProperties())));
+		attack.setProficiency(checkProf(targetWeapon.getFirstType()));
+		attack.permanentBuff.add(targetWeapon.getFirstType().getAttack());
+		Article hit = new Article(targetWeapon.getName(), attack.getDepends());
+		hit.permanentBuff.add(targetWeapon.getFirstType().getDamage());
 		hit.permanentBuff.addAll(buffs);
 		attacks.add(new Action(targetWeapon.getName(), attack, hit));
 
 		for(AttackModification elseAttack: getElseAttack())
 		{
-			attack.name = elseAttack.getName();
+			attack.setName(elseAttack.getName());
 			attack.permanentBuff.add(elseAttack.getAttack());
-			hit.name = elseAttack.getName();
+			hit.setName(elseAttack.getName());
 			hit.permanentBuff.add(elseAttack.getDamage());
 			attacks.add(new Action(elseAttack.getName(), attack, hit));
 		}
 		
 		if(targetWeapon.getSecondType() != null)
 		{
-			attack.name = targetWeapon.getSecondType().getName();
-			attack.depends = checkStat(targetWeapon.getSecondType().getProperties());
-			attack.proficiency = checkProf(targetWeapon.getSecondType().getProperties());
+			attack.setName(targetWeapon.getSecondType().getName());
+			attack.setDepends(checkStat(targetWeapon.getSecondType().getProperties()));
+			attack.setProficiency(checkProf(targetWeapon.getSecondType()));
 			attack.permanentBuff.add(targetWeapon.getSecondType().getAttack());
-			hit.name = targetWeapon.getSecondType().getName();
-			hit.depends = checkStat(targetWeapon.getSecondType().getProperties());
+			hit.setName(targetWeapon.getSecondType().getName());
+			hit.setDepends(checkStat(targetWeapon.getSecondType().getProperties()));
 			hit.permanentBuff.clear();
 			hit.permanentBuff.add(targetWeapon.getSecondType().getDamage());
 			hit.permanentBuff.addAll(buffs);
@@ -82,10 +85,10 @@ public class AttackMachine implements Serializable
 		List<AttackModification> answer = new ArrayList<>();
 		for(AttackModification type: typeAttacks)
 		{
-			int condition = type.getProperties().length;
+			int condition = type.getProperties().size();
 			for(WeaponProperties properties: type.getProperties())
 			{
-				for(WeaponProperties need: targetWeapon.getProperties())
+				for(WeaponProperties need: targetWeapon.getFirstType().getProperties())
 				{
 					if(properties.equals(need))
 					{
@@ -103,7 +106,7 @@ public class AttackMachine implements Serializable
 		return answer;
 	}
 	
-	private Stat checkStat(WeaponProperties[] weapon)
+	private Stat checkStat(List<WeaponProperties> weapon)
 	{
 		Stat target = Stat.STRENGTH;
 		for(WeaponProperties properties: dexteritys)
@@ -120,21 +123,19 @@ public class AttackMachine implements Serializable
 		return target;
 	}
 
-	private boolean checkProf(WeaponProperties[] weapon)
+	private boolean checkProf(AttackModification weapon)
 	{
-		boolean target = false;
-		for(WeaponProperties properties: possession)
+		if(getPossession().contains(WeaponProperties.MILITARY) 
+				|| (weapon.getProperties().contains(WeaponProperties.SIMPLE) 
+						&& getPossession().contains(WeaponProperties.SIMPLE))
+				|| typePossession.contains(weapon.getType()))
 		{
-			for(WeaponProperties properti: weapon)
-			{
-				if(properties.equals(properti))
-				{
-					target = true;
-					break;
-				}
-			}
+			return true;
 		}
-		return target;
+		else
+		{
+			return false;
+		}
 	}
 
 	public void setTargetWeapon(Weapon targetWeapon) 
@@ -159,6 +160,22 @@ public class AttackMachine implements Serializable
 
 	public void setNoWeapon(Dice noWeapon) {
 		this.noWeapon = noWeapon;
+	}
+
+	public List<WeaponProperties> getPossession() {
+		return possession;
+	}
+
+	public void setPossession(WeaponProperties possession) {
+		this.possession.add(possession);
+	}
+
+	public List<WeaponType> getTypePossession() {
+		return typePossession;
+	}
+
+	public void setTypePossession(WeaponType possession) {
+		this.typePossession.add(possession);
 	}
 
 

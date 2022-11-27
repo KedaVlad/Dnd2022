@@ -80,7 +80,6 @@ abstract class ClassFactory implements Source
 		{
 			for(InerComand comand: character.getClassDnd().getGrowMap().get(i))
 			{	
-				Log.add("ClassFactory complate inner comand " + comand);
 				ScriptReader.execute(character, comand);
 			}
 		}

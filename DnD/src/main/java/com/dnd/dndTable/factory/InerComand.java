@@ -11,14 +11,18 @@ public class InerComand implements Serializable {
 	
 	private boolean cloud;
 	private boolean effect;
+	private boolean back;
 	private String key;
 	
-	private List<List<Object>> comand = new ArrayList<>();
+	private List<List<Object>> comand;
 	
-	public InerComand(boolean cloud, String key) 
+	public InerComand(boolean cloud, boolean effect, String key) 
 	{
 		this.cloud = cloud;
+		this.effect = effect;
 		this.key = key;
+		comand = new ArrayList<>();
+		comand.add(new ArrayList<>());
 	}
 	
 	public InerComand() {}
@@ -59,6 +63,14 @@ public class InerComand implements Serializable {
 
 	public void setEffect(boolean effect) {
 		this.effect = effect;
+	}
+
+	public boolean isBack() {
+		return back;
+	}
+
+	public void setBack(boolean back) {
+		this.back = back;
 	}
 
 }

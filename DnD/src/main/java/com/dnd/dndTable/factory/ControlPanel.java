@@ -35,14 +35,12 @@ public class ControlPanel implements KeyWallet, Source, Serializable {
 	public void createClass(CharacterDnd character)
 	{
 		ClassFactory.create(character, classBeck, classLvl, archetypeBeck);
-		Log.add("CP " +character.getClass() + " " + character.getWorkmanship().getMyFeatures());
 
 	}
 
 	public void createRace(CharacterDnd character)
 	{
 		RaceFactory.create(character, race, subRace);
-		Log.add("CP " +character.getMyRace() + " " + character.getWorkmanship().getMyFeatures());
 	}
 
 	public String[] getArray(ObjectType type)
@@ -115,8 +113,6 @@ public class ControlPanel implements KeyWallet, Source, Serializable {
 
 	public void setClassBeck(String classBeck) 
 	{
-
-		Log.add("CP " + this.classBeck + " " + classBeck);
 		this.classBeck = classBeck;
 	}
 

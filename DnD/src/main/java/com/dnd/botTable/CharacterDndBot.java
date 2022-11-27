@@ -29,7 +29,6 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Source;
-import com.dnd.botTable.TrashCan.Circle;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.factory.ControlPanel.ObjectType;
@@ -72,17 +71,25 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void clean(Long beacon) throws InterruptedException, TelegramApiException
 	{
-		Log.add("Clean");
 
+		
 		if(game(beacon).script.getTrash().size() > 0)
 		{
-			for(Integer message: game(beacon).script.throwAwayTrash())
+			List<Integer> target = game(beacon).script.throwAwayTrash();
+			Log.add(target);
+			for(Integer message: target)
 			{
+				Log.add("Clean" + message);
 				execute(DeleteMessage.builder()
 						.chatId(beacon.toString())
 						.messageId(message)
 						.build());
+				
 			}
+		}
+		else
+		{
+			game(beacon).script.throwAwayTrash();
 		}
 	}
 
@@ -94,13 +101,11 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 		try 
 		{
-			clean(beacon(update));
-
 			if(update.hasCallbackQuery())
 			{
 				handleCallback(update.getCallbackQuery());
 			}
-			else if(update.hasMessage() && (getGameTable().get(beacon(update)).getMediatorWallet().checkMediator() == true)) 
+			else if(gameTable.containsKey(beacon(update)) && update.hasMessage() && (game(beacon(update)).getMediatorWallet().checkMediator() == true)) 
 			{
 				hendlerMediator(update.getMessage());
 			}		
@@ -109,7 +114,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				handleMessage(update.getMessage());
 			}
 
-
+			clean(beacon(update));
+			Log.add(game(beacon(update)).script);
 			/************************************************************************************************		
 
 			if(getGameTable().get(beacon(update)) == null)
@@ -193,19 +199,17 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				case "/start":
 					//clean(Circle.ALL, beacon(message));
 					startCase(message);
-					Log.add("/start");
 					return;
 				case "/myCharacters":
 					//clean(Circle.MAIN, beacon(message));
 					characterCase(message);
-					Log.add("/myCharacters");
-					return;
+									return;
 				}
 			}
 		}
 		else
 		{
-			Log.add("try add Memoir");
+			
 
 			if(game(beacon(message)).isCheckChar())
 			{
@@ -324,8 +328,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				.build()));
 
 
-		Log.add(game(beacon(message)).getSavedCharacter());
-
 		Message act = null;
 
 		if(game(beacon(message)).getSavedCharacter().size() != 0) 
@@ -356,7 +358,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					.build());
 
 		}
-		game(message.getChatId()).script.goTo(dock, false);
+		game(message.getChatId()).script.goTo(start, dock);
 		game(message.getChatId()).script.toAct(act.getMessageId());
 	}
 
@@ -373,25 +375,21 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		case characterMediatorKey:
 
 			finishCharacter(message);
-			Log.add("finishCharacter bot");
 			return;
 
 		case classMediatorKey:
 
 			finishClass(message); 
-			Log.add("finishClass bot");
 			return;
 
 		case statMediatorKey:
 
 			finishStat(message);
-			Log.add("finishStat bot");
 			return;
 
 		case hpMediatorKey:
 
 			finishHp(message);
-			Log.add("finishHp bot");
 			return;
 
 
@@ -538,7 +536,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void finishHp(Message message) throws TelegramApiException
 	{
-		Log.add(message.getText() + " finishHp !!!!!!!!!!!!!!!!!!!!!!!");
 
 		Pattern pat = Pattern.compile(keyNumber);
 		Matcher matcher = pat.matcher(message.getText());
@@ -592,73 +589,57 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		case characterCaseKey:
 
 			downloadHero(callbackQuery);
-			Log.add("downloadHero bot");
 			return;
 
 			////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		case characterCreateKey:
 			startCreateHero(callbackQuery);
-			Log.add("startCreateHero bot");
 			return;
 
 		case startClassKey:
-			getGameTable().get(beacon(callbackQuery));
 			startCreateClass(callbackQuery);
-			Log.add("startCreateClass bot");
 			return;
 
 		case chooseArchetypeClassKey:
 			chooseArchetype(callbackQuery);
-			Log.add("chooseArchetype bot");
 			return;
 
 		case finishClassKey:
 			chooseLvlClass(callbackQuery);
-			Log.add("chooseLvlClass bot");
 			return;
 
 		case startRaceKey:
-			getGameTable().get(beacon(callbackQuery));
 			startCreateRace(callbackQuery);
-			Log.add("startCreateRace bot");
 			return;
 
 		case chooseSubRaceKey:
 			chooseSubRace(callbackQuery);
-			Log.add("chooseSubRace bot");
 			return;
 
 		case finishRaceKey:
 			finishRace(callbackQuery);
-			Log.add("finishRace bot");
 			return;
 
 		case hpMediatorKey:
 			finishHp(callbackQuery.getMessage());
-			Log.add("startHp bot");
 			return;
 
 		case startStatsKey:
-			getGameTable().get(beacon(callbackQuery));
 			startStats(callbackQuery);
-			Log.add("startStats bot");
 			return;
 			/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 		case menuKey:
 			characterMenu(callbackQuery);
 
 			gameTable.get(beacon(callbackQuery)).save();
-			Log.add("characterMenu bot");
 			return;
 
 		case featureMenu:
 			featureMenu(callbackQuery);
-			Log.add("skillMenu bot");
 			return;
 
 		case memoirsMenu:
 			memoirsMenu(callbackQuery);
-			Log.add("memoirsMenu bot");
 			return;
 
 		}

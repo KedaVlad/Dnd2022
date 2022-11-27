@@ -14,6 +14,7 @@ import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.factory.InerComand;
 import com.dnd.dndTable.factory.Json;
+import com.dnd.dndTable.factory.Script;
 import com.dnd.dndTable.rolls.Dice.Roll;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -22,7 +23,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 
-public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Source{
+public abstract class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 
 	private static final long serialVersionUID = 3219669745475635442L;
 
@@ -85,41 +86,42 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 
 		ClassDnd assasin = new Rogue();
 
+		assasin.diceHp = Roll.D8;
 		List<List<InerComand>> pool = new ArrayList<>();
 
 		List<InerComand> lvl0= new ArrayList<>();
 
-		InerComand c1 = new InerComand(false, possessionKey);
+		InerComand c1 = new InerComand(false, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Light Armor");
 		lvl0.add(c1);
 
-		c1 = new InerComand(false, possessionKey);
+		c1 = new InerComand(false, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Simple Weapon");
 
 		lvl0.add(c1);
-		c1 = new InerComand(false, possessionKey);
+		c1 = new InerComand(false, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Hand Crossbows");
 
 		lvl0.add(c1);
-		c1 = new InerComand(false, possessionKey);
+		c1 = new InerComand(false, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Long Swords");
 
 		lvl0.add(c1);
-		c1 = new InerComand(false, possessionKey);
+		c1 = new InerComand(false, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Rapiers");
 
 		lvl0.add(c1);
-		c1 = new InerComand(false, possessionKey);
+		c1 = new InerComand(false, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Short Swords");
 
 		lvl0.add(c1);
-		c1 = new InerComand(false, possessionKey);
+		c1 = new InerComand(false, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Thieves' Tools");
 
@@ -154,7 +156,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 
 		lvl0.add(c1);	
 
-		c1 = new InerComand(true, itemKey);
+		c1 = new InerComand(true, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(1);
@@ -165,7 +167,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 
 		lvl0.add(c1);
 
-		c1 = new InerComand(true, itemKey);
+		c1 = new InerComand(true, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(1);
@@ -176,7 +178,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 
 		lvl0.add(c1);
 
-		c1 = new InerComand(true, itemKey);
+		c1 = new InerComand(true, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(1);
@@ -188,15 +190,15 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 
 		lvl0.add(c1);
 
-		c1 = new InerComand(false, itemKey);
+		c1 = new InerComand(false, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Leather Armor");
 		lvl0.add(c1);
-		c1 = new InerComand(false, itemKey);
+		c1 = new InerComand(false, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Dagger");
 		lvl0.add(c1);
-		c1 = new InerComand(false, itemKey);
+		c1 = new InerComand(false, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Thieves' Tools");
 		lvl0.add(c1);
@@ -204,6 +206,8 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, KeyWallet, Sou
 		List<InerComand> lvl1 = new ArrayList<>();
 
 		c1 = new InerComand(false, featureKey);
+		Feature competense = new Feature("Competence");
+		InerComand comandss = new InerComand(true, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Competence");
 		lvl1.add(c1);

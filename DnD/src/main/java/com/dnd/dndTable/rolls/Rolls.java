@@ -21,7 +21,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	private List<Article> skills;
 	private List<Article> saveRolls;
 	private AttackMachine attackMachine;
-	private Action targetAct;
+	private Action targetAction;
 
 	public Rolls() 
 	{
@@ -36,13 +36,14 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		buildSkills();
 		buildSaveRoll();
 	}
+
 	public int getHp(ClassDnd clazz, boolean random)
 	{
 		if(random == true)
 		{
 			Dice dice = hp;
 			dice.setCombo(clazz.getDiceHp());
-			dice.setBuff(getValue(Stat.CONSTITUTION).getBuff());
+			dice.setBuff(stats.get(2).dice.getBuff());
 			return dice.roll();	
 		}
 		else
@@ -50,34 +51,107 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			switch(clazz.getDiceHp())
 			{
 			case D6:
-				return 4 + getValue(Stat.CONSTITUTION).getBuff() + hp.roll();
+				return 4 + stats.get(2).dice.getBuff() + hp.roll();
 			case D8:
-				return 5 + getValue(Stat.CONSTITUTION).getBuff() + hp.roll();
+				return 5 + stats.get(2).dice.getBuff() + hp.roll();
 			case D10:
-				return 6 + getValue(Stat.CONSTITUTION).getBuff() + hp.roll();
+				return 6 + stats.get(2).dice.getBuff() + hp.roll();
 			case D12:
-				return 7 + getValue(Stat.CONSTITUTION).getBuff() + hp.roll();
+				return 7 + stats.get(2).dice.getBuff() + hp.roll();
 			default:
 				return 0;
 			}
 		}
 	}
 
-	public Formula attack(Action act)
+	public Formula stepOne()
 	{
-		this.targetAct = act;
-		return buildFormula(targetAct.attack);
+		if(targetAction.isTrueStricke() && targetAction.isOneStep())
+		{
+			return buildHitFormula(targetAction.getStepOne());
+		}
+		else if(targetAction.isOneStep())
+		{
+			return buildAttackFormula(targetAction.getStepOne());
+		}
+		else if(targetAction.isTrueStricke())
+		{
+			return buildTrueStrikeFormula(targetAction.getStepOne());
+		}
+		else
+		{
+			return buildAttackFormula(targetAction.getStepOne());
+		}
+
 	}
 
-	public Formula hit()
+	private Formula buildAttackFormula(Article article)
 	{
-		Formula answer = new Formula(targetAct.hit.name);
-		answer.getFormula().add(buildValue(targetAct.hit));
-		answer.getFormula().addAll(targetAct.hit.permanentBuff);
+		Formula answer = new Formula(article.getName());
+		answer.getFormula().add(new Dice("Base", 0, Roll.D20));
+		answer.getFormula().add(getValue(article.getDepends()));
+
+		if(getProf(article) != null)
+		{
+			answer.getFormula().add(getProf(article));
+		}
+
+		answer.getFormula().addAll(article.permanentBuff);
 		return answer;
 	}
 
-	public Dice getDice(Stat name)
+	private Formula buildHitFormula(Article article)
+	{
+		Formula answer = new Formula(article.getName());
+		answer.getFormula().add(getValue(article.getDepends()));
+
+		if(getProf(article) != null)
+		{
+			answer.getFormula().add(getProf(article));
+		}
+
+		answer.getFormula().addAll(article.permanentBuff);
+		return answer;
+	}
+
+	private Formula buildTrueStrikeFormula(Article article)
+	{
+		Formula answer = new Formula(article.getName());
+		answer.getFormula().add(new Dice("Base", 8, Roll.NO_ROLL));
+		answer.getFormula().add(getValue(article.getDepends()));
+
+		if(getProf(article) != null)
+		{
+			answer.getFormula().add(getProf(article));
+		}
+
+		answer.getFormula().addAll(article.permanentBuff);
+		return answer;
+	}
+
+	private Dice getProf(Article article)
+	{
+		Dice answer = null;
+		if(article.isCompetense())
+		{
+			answer = proficiency;
+			answer.setBuff(proficiency.getBuff()*2);
+
+		}
+		else if(article.isProficiency())
+		{
+			answer = proficiency;
+		}
+		else if(targetAction.getStepOne().isHalfProf() == true)
+		{
+			answer = proficiency;
+			answer.setBuff(proficiency.getBuff()/2);
+		}
+
+		return answer;
+	}
+
+	private Dice getValue(Stat name)
 	{
 		switch(name)
 		{
@@ -98,151 +172,42 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		}
 	}
 
-	public Formula getFormula(String name)
+	public void getStatAction(String name)
 	{
-		Article targetArticle = null;
 		boolean breaker = false;
-		if(initiative.name.equals(name))
+
+		if(breaker == false)
 		{
-			targetArticle = initiative;
-		}
-		else if(breaker == false)
-		{
-			for(Article article: saveRolls)
+			for(MainStat stat: stats)
 			{
-				if(article.name.equals(name))
+				if(stat.name.toString() == name)
 				{
-					targetArticle = article;
+					this.targetAction = new Action(name, new Article(name, stat.name));
 					breaker = true;
 					break;
 				}
 			}
 		}
-		else if(breaker == false)
+		if(breaker == false)
 		{
 			for(Article article: skills)
 			{
-				if(article.name.equals(name))
+				if(article.getName() == name)
 				{
-					targetArticle = article;
-					breaker = true;
-					break;
+					this.targetAction = new Action(name, article);
 				}
 			}
 		}
-
-		return buildFormula(targetArticle);
-	}
-
-	private Formula buildFormula(Article targetArticle)
-	{
-		Formula answer = new Formula(targetArticle.name);
-		answer.getFormula().add(getDice(targetArticle.depends));
-
-		if(targetArticle.competense == true)
-		{
-			Dice changeProf = proficiency;
-			changeProf.setBuff(changeProf.getBuff()*2);
-			answer.getFormula().add(changeProf);
-		}
-		else if(targetArticle.proficiency == true)
-		{
-			answer.getFormula().add(proficiency);
-		}
-		else if(targetArticle.halfProf == true)
-		{
-			Dice changeProf = proficiency;
-			changeProf.setBuff(changeProf.getBuff()*2);
-			answer.getFormula().add(changeProf);
-		}
-		answer.getFormula().addAll(targetArticle.permanentBuff);
-		return answer;
-	}
-
-	public Dice getValue(Stat stat)
-	{
-
-		Dice answer = new Dice(stat.name(),0, Roll.NO_ROLL);
-		switch(stat)
-		{
-		case STRENGTH:
-			answer.setBuff(stats.get(0).dice.getBuff());
-			break;
-		case DEXTERITY:
-			answer.setBuff(stats.get(1).dice.getBuff());
-			break;
-		case CONSTITUTION:
-			answer.setBuff(stats.get(2).dice.getBuff());
-			break;
-		case INTELLIGENSE:
-			answer.setBuff(stats.get(3).dice.getBuff());
-			break;
-		case WISDOM:
-			answer.setBuff(stats.get(4).dice.getBuff());
-			break;
-		case CHARISMA:
-			answer.setBuff(stats.get(5).dice.getBuff());
-			break;
-		default:
-			break;
-		}
-		return answer;
-	}
-
-	public Dice getValue(String name)
-	{
-		Dice answer = null;
-		boolean breaker = false;
-		if(initiative.name.equals(name))
-		{
-			answer = buildValue(initiative);
-		}
-		else if(breaker == false)
-		{
-			for(Article article: saveRolls)
-			{
-				if(article.name.equals(name))
-				{
-					answer = buildValue(article);
-					breaker = true;
-					break;
-				}
-			}
-		}
-		else if(breaker == false)
+		if(breaker == false)
 		{
 			for(Article article: skills)
 			{
-				if(article.name.equals(name))
+				if(article.getName() == name)
 				{
-					answer = buildValue(article);
-					breaker = true;
-					break;
+					this.targetAction = new Action(name, article);
 				}
 			}
 		}
-		return answer;
-	}
-
-	private Dice buildValue(Article targetArticle)
-	{
-		Dice answer = new Dice(targetArticle.name,0, Roll.NO_ROLL);
-
-		answer.setBuff(getDice(targetArticle.depends).getBuff());
-
-		if(targetArticle.competense == true)
-		{
-			answer.setBuff(proficiency.getBuff()*2);
-		}
-		else if(targetArticle.proficiency == true)
-		{
-			answer.setBuff(proficiency.getBuff());
-		}
-		else if(targetArticle.halfProf == true)
-		{
-			answer.setBuff(proficiency.getBuff()/2);
-		}
-		return answer;
 	}
 
 	public void setStats(int str, int dex, int con, int intl, int wis, int cha)
@@ -307,14 +272,13 @@ public class Rolls implements Serializable, Names, KeyWallet {
 				stat.up(value);
 			}
 		}
-
 	}
 
 	public void up(String name, Dice dice)
 	{
 		boolean breaker = false;
 
-		if(initiative.name.equals(name))
+		if(initiative.getName().equals(name))
 		{
 			initiative.permanentBuff.add(dice);
 		}
@@ -322,7 +286,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		{
 			for(Article article: saveRolls)
 			{
-				if(article.name.equals(name))
+				if(article.getName().equals(name))
 				{
 					article.permanentBuff.add(dice);
 					breaker = true;
@@ -334,7 +298,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		{
 			for(Article article: skills)
 			{
-				if(article.name.equals(name))
+				if(article.getName().equals(name))
 				{
 					article.permanentBuff.add(dice);
 					breaker = true;
@@ -349,7 +313,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		for(String name: names)
 		{
 			boolean breaker = false;
-			if(initiative.name.equals(name))
+			if(initiative.getName().equals(name))
 			{
 				initiative.setCompetense(true);
 			}
@@ -357,7 +321,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				for(Article article: saveRolls)
 				{
-					if(article.name.equals(name))
+					if(article.getName().equals(name))
 					{
 						article.setCompetense(true);
 						breaker = true;
@@ -369,7 +333,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				for(Article article: skills)
 				{
-					if(article.name.equals(name))
+					if(article.getName().equals(name))
 					{
 						article.setCompetense(true);
 						breaker = true;
@@ -385,7 +349,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		for(String name: names)
 		{
 			boolean breaker = false;
-			if(initiative.name.equals(name))
+			if(initiative.getName().equals(name))
 			{
 				initiative.setProficiency(true);
 			}
@@ -393,7 +357,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				for(Article article: saveRolls)
 				{
-					if(article.name.equals(name))
+					if(article.getName().equals(name))
 					{
 						article.setProficiency(true);
 						breaker = true;
@@ -405,7 +369,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				for(Article article: skills)
 				{
-					if(article.name.equals(name))
+					if(article.getName().equals(name))
 					{
 						article.setProficiency(true);
 						breaker = true;
@@ -421,7 +385,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		for(String name: names)
 		{
 			boolean breaker = false;
-			if(initiative.name.equals(name))
+			if(initiative.getName().equals(name))
 			{
 				initiative.setHalfProf(true);
 			}
@@ -429,7 +393,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				for(Article article: saveRolls)
 				{
-					if(article.name.equals(name))
+					if(article.getName().equals(name))
 					{
 						article.setHalfProf(true);
 						breaker = true;
@@ -441,7 +405,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				for(Article article: skills)
 				{
-					if(article.name.equals(name))
+					if(article.getName().equals(name))
 					{
 						article.setHalfProf(true);
 						breaker = true;
@@ -456,7 +420,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	{
 
 		boolean breaker = false;
-		if(initiative.name.equals(name))
+		if(initiative.getName().equals(name))
 		{
 			initiative.spesial.add(buff);
 		}
@@ -464,7 +428,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		{
 			for(Article article: saveRolls)
 			{
-				if(article.name.equals(name))
+				if(article.getName().equals(name))
 				{
 					article.spesial.add(buff);
 					breaker = true;
@@ -476,7 +440,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		{
 			for(Article article: skills)
 			{
-				if(article.name.equals(name))
+				if(article.getName().equals(name))
 				{
 					article.spesial.add(buff);
 					breaker = true;
@@ -496,15 +460,24 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		return saveRolls;
 	}
 
-	public Dice getProficiency() {
+	public Dice getProficiency() 
+{
 		return proficiency;
 	}
 
-	public AttackMachine getAttackMachine() {
+	public AttackMachine getAttackMachine() 
+{
 		return attackMachine;
 	}
-	public void setAttackMachine(AttackMachine attackMachine) {
+	
+	public void setAttackMachine(AttackMachine attackMachine) 
+	{
 		this.attackMachine = attackMachine;
+	}
+
+	public void setTargetAct(Action targetAct) 
+	{
+		this.targetAction = targetAct;
 	}
 
 	class MainStat implements Serializable
@@ -518,13 +491,13 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		{
 			this.name = name;
 			this.value = 0;
-			this.dice = new Dice(name.toString(), 0, Roll.D20);
+			this.dice = new Dice(name.toString(), 0, Roll.NO_ROLL);
 		}
 
 		void up(int value)
 		{
 			this.value += value;
-			dice.setBuff((value - 10)/2);
+			dice.setBuff((this.value - 10)/2);
 		}
 
 		public String toString()
