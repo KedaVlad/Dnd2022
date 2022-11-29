@@ -1,5 +1,35 @@
 [
+//SKILLS POSSESSION
    {
+   "name":"SR Dexterity",
+   "inerComand":{
+      "cloud":false,
+      "effect":true,
+      "back":false,
+      "key":"=wedklsdfwobf=",
+      "comand":[
+         [
+            "SR Dexterity"
+         ]
+      ]
+   }
+},
+{
+   "name":"SR Intelligense",
+   "inerComand":{
+      "cloud":false,
+      "effect":true,
+      "back":false,
+      "key":"=wedklsdfwobf=",
+      "comand":[
+         [
+            "SR Intelligense"
+         ]
+      ]
+   }
+},
+//WEAPON POSSESSION
+{
       "name":"Simple Weapon",
       "inerComand":{
          "back":false,

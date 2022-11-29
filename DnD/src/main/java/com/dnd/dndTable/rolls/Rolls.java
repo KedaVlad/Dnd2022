@@ -20,7 +20,6 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	private List<MainStat> stats;
 	private List<Article> skills;
 	private List<Article> saveRolls;
-	private AttackMachine attackMachine;
 	private Action targetAction;
 
 	public Rolls() 
@@ -31,7 +30,6 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		skills = new ArrayList<>();
 		saveRolls = new ArrayList<>();
 		initiative = new Article("Initiative", Stat.DEXTERITY);
-		setAttackMachine(new AttackMachine());
 		buildStats();
 		buildSkills();
 		buildSaveRoll();
@@ -465,15 +463,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		return proficiency;
 	}
 
-	public AttackMachine getAttackMachine() 
-{
-		return attackMachine;
-	}
-	
-	public void setAttackMachine(AttackMachine attackMachine) 
-	{
-		this.attackMachine = attackMachine;
-	}
+
 
 	public void setTargetAct(Action targetAct) 
 	{

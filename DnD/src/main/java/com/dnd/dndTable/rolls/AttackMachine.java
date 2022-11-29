@@ -52,7 +52,7 @@ public class AttackMachine implements Serializable
 		Article hit = new Article(targetWeapon.getName(), attack.getDepends());
 		hit.permanentBuff.add(targetWeapon.getFirstType().getDamage());
 		hit.permanentBuff.addAll(buffs);
-		attacks.add(new Action(targetWeapon.getName(), attack, hit));
+		attacks.add(new Action(targetWeapon.getName(), false, attack, hit));
 
 		for(AttackModification elseAttack: getElseAttack())
 		{
@@ -60,7 +60,7 @@ public class AttackMachine implements Serializable
 			attack.permanentBuff.add(elseAttack.getAttack());
 			hit.setName(elseAttack.getName());
 			hit.permanentBuff.add(elseAttack.getDamage());
-			attacks.add(new Action(elseAttack.getName(), attack, hit));
+			attacks.add(new Action(elseAttack.getName(), false, attack, hit));
 		}
 		
 		if(targetWeapon.getSecondType() != null)
@@ -74,7 +74,7 @@ public class AttackMachine implements Serializable
 			hit.permanentBuff.clear();
 			hit.permanentBuff.add(targetWeapon.getSecondType().getDamage());
 			hit.permanentBuff.addAll(buffs);
-			attacks.add(new Action(targetWeapon.getSecondType().getName(), attack, hit));
+			attacks.add(new Action(targetWeapon.getSecondType().getName(),false, attack, hit));
 		}
 
 		this.attacks = attacks;

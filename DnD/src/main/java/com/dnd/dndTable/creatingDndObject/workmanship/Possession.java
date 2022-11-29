@@ -56,9 +56,9 @@ public class Possession implements Serializable, Script {
 
 	public static void main(String[] args) throws JsonProcessingException 
 	{
-		Possession target = new Possession("SR Dexterity");
-		InerComand comand = new InerComand(false, true, );
-		comand.getComand().get(0).add(WeaponType.SHORTSWORD);
+		Possession target = new Possession("SR Intelligense");
+		InerComand comand = new InerComand(false, true, skillKey);
+		comand.getComand().get(0).add("SR Intelligense");
 		target.setInerComand(comand);
 		
 		

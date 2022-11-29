@@ -11,6 +11,8 @@ import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
+import com.dnd.dndTable.rolls.Action;
+import com.dnd.dndTable.rolls.AttackMachine;
 import com.dnd.dndTable.rolls.Rolls;
 
 
@@ -28,13 +30,23 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	private ClassDnd myClass;
 	private ClassDnd multiClass;
 	private Rolls rolls;
+	private AttackMachine attackMachine;
 	private Workmanship myWorkmanship;
     private СhoiceCloud cloud;
-
+    private Body body;
     private List<String> permanentBuffs;
     private List<String> timesBuffs;
 	private List<String> myMemoirs;
-
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public CharacterDnd(String name) 
 	{
@@ -237,6 +249,14 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	public List<String> getTimesBuffs() {
 		return timesBuffs;
+	}
+
+	public AttackMachine getAttackMachine() {
+		return attackMachine;
+	}
+
+	public void setAttackMachine(AttackMachine attackMachine) {
+		this.attackMachine = attackMachine;
 	}
 
 

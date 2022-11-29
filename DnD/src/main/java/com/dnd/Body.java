@@ -1,6 +1,8 @@
 package com.dnd;
 
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
@@ -9,38 +11,41 @@ import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 
 public class Body {
 
-	private Map<String, Weapon> prepearedWepons;
+	private int armor;
 	
-	private Map<String, Bag> myBags;
+	private List<String> status;
+	
+	private List<Bag> myBags;
+	//private List<Clothes> weared;
+	private List<Weapon> prepearedWepons;
+	
+	
 
 
 	
 	public Body()
 	{
 		
-		prepearedWepons = new LinkedHashMap<>();
-		myBags = new LinkedHashMap<>();
-		myBags.put("Bag", new Bag("Bag"));
+		prepearedWepons = new ArrayList<>();
+		myBags = new ArrayList<>();
+		myBags.add(new Bag("Bag"));
 	}
 	
-	public Map<String, Weapon> getPrepearedWepons() {
+	public List<Weapon> getPrepearedWepons() {
 		return prepearedWepons;
 	}
 
 	public void setPrepearedWepons(Weapon weapon) {
 		
-		for(WeaponProperties properties: weapon.getProperties())
-		{
-			//if(properties.equals(weapon))
-		}
+	
 		
 	}
 
-	public Map<String, Bag> getMyBags() {
+	public List<Bag> getMyBags() {
 		return myBags;
 	}
 
-	public void setMyBags(Map<String, Bag> myBags) {
+	public void setMyBags(List<Bag> myBags) {
 		this.myBags = myBags;
 	}
 

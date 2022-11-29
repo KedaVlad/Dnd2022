@@ -10,6 +10,8 @@ import com.dnd.Log;
 import com.dnd.Source;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
 import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.factory.InerComand;
@@ -126,17 +128,17 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, Script, Source
 		c1.getComand().get(0).add("Thieves' Tools");
 
 		lvl0.add(c1);
-		c1 = new InerComand(false, possessionKey);
+		c1 = new InerComand(false, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("SR Dexterity");
 
 		lvl0.add(c1);
-		c1 = new InerComand(false, possessionKey);
+		c1 = new InerComand(false, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("SR Intelligense");
 
 		lvl0.add(c1);
-		c1 = new InerComand(true, possessionKey);
+		c1 = new InerComand(true, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(4);
@@ -156,7 +158,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, Script, Source
 
 		lvl0.add(c1);	
 
-		c1 = new InerComand(true, weaponKey);
+		c1 = new InerComand(true, false, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(1);
@@ -167,7 +169,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, Script, Source
 
 		lvl0.add(c1);
 
-		c1 = new InerComand(true, weaponKey);
+		c1 = new InerComand(true, false,  weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(1);
@@ -178,7 +180,7 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, Script, Source
 
 		lvl0.add(c1);
 
-		c1 = new InerComand(true, weaponKey);
+		c1 = new InerComand(true, false, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(1);
@@ -190,24 +192,24 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, Script, Source
 
 		lvl0.add(c1);
 
-		c1 = new InerComand(false, weaponKey);
+		c1 = new InerComand(false, false, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Leather Armor");
 		lvl0.add(c1);
-		c1 = new InerComand(false, weaponKey);
+		c1 = new InerComand(false, false, weaponKey);
 		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Dagger");
+		c1.getComand().get(0).add(WeaponType.DAGGER);
 		lvl0.add(c1);
-		c1 = new InerComand(false, weaponKey);
+		c1 = new InerComand(false, false, weaponKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Thieves' Tools");
 		lvl0.add(c1);
 
 		List<InerComand> lvl1 = new ArrayList<>();
 
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		Feature competense = new Feature("Competence");
-		InerComand comandss = new InerComand(true, possessionKey);
+		InerComand comandss = new InerComand(true, false, possessionKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Competence");
 		lvl1.add(c1);

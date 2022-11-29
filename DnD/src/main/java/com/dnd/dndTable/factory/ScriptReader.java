@@ -121,6 +121,7 @@ abstract class ScriptReader implements Script, Names
 			character.getRolls().toProficiency(comand.getComand().get(0).get(0).toString());
 		}
 		
+		
 	}
 	
 }
