@@ -18,32 +18,33 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Test implements Source {
 
-	private String name;
+	private Some name;
 	private int age;
 	private boolean b;
 	public Test() {
-	
-	}
-	
-	
-	public String toString()
-	{
-		return getName();
+name = new Some();
 	}
 
-	public static String getName(Object object)
+	class Some
 	{
-		return object.toString();
+		String nsame;
 	}
-	
+
+
+
+
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
+		Test t1 = new Test();
+		t1.name.nsame ="sdsdsdssd";
+		Some s = t1.name;
+		s.nsame = "YFYFYFYFYFYFYF";
 
-		
-	
+		System.out.println(s.nsame);
+		System.out.println(t1.name.nsame);
 	}
-	
-	
+
+
 
 
 	public String getName() {

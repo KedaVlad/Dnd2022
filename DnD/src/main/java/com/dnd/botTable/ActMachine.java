@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Log;
+import com.dnd.dndTable.rolls.actions.HeroAction;
 
 
-class ActMachine implements Serializable {
+class ActMachine implements Serializable 
+{
 
 	private static final long serialVersionUID = 5473026731995501761L;
 	private List<Act> mainMap = new ArrayList<>();
@@ -25,13 +27,39 @@ class ActMachine implements Serializable {
 
 	void finish(String act)
 	{
-		for(Act undep: undependet)
+		for(Act undependetAct: undependet)
 		{
-			if(undep.getName().equals(act)) {
+			if(undependetAct.getName().equals(act)) {
 
-				getTrash().addAll(undep.end());
-				undependet.remove(undep);
+				getTrash().addAll(undependetAct.end());
+				undependet.remove(undependetAct);
 			}
+		}
+	}
+
+	void goTo(HeroAction action, boolean depend)
+	{
+		if(depend == true)
+		{
+
+			for(int i = 0; i < mainMap.size(); i++)
+			{
+				if(mainMap.get(i).getName().equals(action.getName()))
+				{
+					down(action);
+					depend = false;
+					break;
+				}
+			}
+			if(depend == true)
+			{
+				up(action);
+			}
+
+		} 
+		else
+		{
+			start(action);
 		}
 	}
 
@@ -45,21 +73,21 @@ class ActMachine implements Serializable {
 	{
 		if(depend == true)
 		{
-			
-				for(int i = 0; i < mainMap.size(); i++)
+
+			for(int i = 0; i < mainMap.size(); i++)
+			{
+				if(mainMap.get(i).getName().equals(act))
 				{
-					if(mainMap.get(i).getName().equals(act))
-					{
-						down(act);
-						depend = false;
-						break;
-					}
+					down(act);
+					depend = false;
+					break;
 				}
-				if(depend == true)
-				{
-					up(act);
-				}
-			
+			}
+			if(depend == true)
+			{
+				up(act);
+			}
+
 		} 
 		else
 		{
@@ -70,6 +98,11 @@ class ActMachine implements Serializable {
 	private void start(String act)
 	{
 		undependet.add(Act.create(act));
+	}
+
+	private void start(HeroAction act)
+	{
+		undependet.add(ActionAct.create(act));
 	}
 
 	private void down(String act)
@@ -87,6 +120,29 @@ class ActMachine implements Serializable {
 				break;
 			}
 		}
+	}
+
+	private void down(HeroAction act)
+	{
+		for(int i = mainMap.size() - 1; i >= 0; i--)
+		{
+			if(!mainMap.get(i).getName().equals(act.getName()))
+			{
+				Log.add("Down " + act + trash);
+				getTrash().addAll(mainMap.get(i).end());
+				mainMap.remove(i);
+			}
+			else
+			{
+				break;
+			}
+		}
+	}
+
+	private void up(HeroAction act)
+	{
+		Log.add("Up " + act + trash);
+		this.mainMap.add(ActionAct.create(act));
 	}
 
 	private void up(String act)
@@ -112,17 +168,34 @@ class ActMachine implements Serializable {
 		return answer;
 	}
 
+	public void toUndependet(Integer act)
+	{
+		undependet.get(undependet.size()-1).setActCircle(act);
+	}
+
 	public void toAct(Integer act)
 	{
 		mainMap.get(mainMap.size()-1).setActCircle(act);
 	}
 
-	public void prepare(Integer prepared) {
+	public void prepare(Integer prepared) 
+	{
 		this.prepared.add(prepared);
 	}
 
-	public List<Integer> getTrash() {
+	public List<Integer> getTrash() 
+	{
 		return trash;
+	}
+
+	public HeroAction getAction()
+	{
+		if(mainMap.get(mainMap.size() - 1) instanceof ActionAct)
+		{
+			ActionAct target = (ActionAct)mainMap.get(mainMap.size() - 1);
+			return target.getAction();
+		}
+		return null;
 	}
 
 	public String toString()
@@ -165,18 +238,18 @@ class Act implements Serializable{
 
 	}
 
-	public String getName() {
+	public String getName() 
+	{
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) 
+	{
 		this.name = name;
 	}	
 
 	public String toString()
 	{
-
-
 		String answer = name + "|";
 
 		for(Integer inter: actCircle)
@@ -184,6 +257,31 @@ class Act implements Serializable{
 			answer += inter + "|";
 		}
 		return answer;
+	}
+
+}
+
+class ActionAct extends Act 
+{
+	private static final long serialVersionUID = 1L;
+
+	private HeroAction action;
+
+	public HeroAction getAction() {
+		return action;
+	}
+
+	static ActionAct create(HeroAction action)
+	{
+		ActionAct act = new ActionAct();
+		act.setName(action.getName());
+		act.action = action;
+		return act;
+
+	}
+
+	public void setAction(HeroAction action) {
+		this.action = action;
 	}
 
 }

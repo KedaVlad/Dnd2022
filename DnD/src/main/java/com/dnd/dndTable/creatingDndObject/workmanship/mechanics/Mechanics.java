@@ -11,8 +11,8 @@ public class Mechanics extends Feature
 	private boolean cellsCheck;
 	private boolean diceCheck;
 	private boolean poolCheck;
-	
-	private Cells cells;
+	private SimplePool<Feature> pool;
+	private Matrix matrix;
 	private Dice dice;
 	
 	public Mechanics(boolean cells, boolean dice, boolean pool)
@@ -28,7 +28,7 @@ public class Mechanics extends Feature
 	{
 		if(isCellsCheck() == true)
 		{
-			cells.use();
+		
 		}
 		
 		

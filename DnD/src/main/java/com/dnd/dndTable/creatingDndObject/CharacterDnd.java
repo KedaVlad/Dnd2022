@@ -5,15 +5,19 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Activator;
 import com.dnd.Body;
 import com.dnd.Log;
+import com.dnd.botTable.Template;
+import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
-import com.dnd.dndTable.rolls.Action;
 import com.dnd.dndTable.rolls.AttackMachine;
 import com.dnd.dndTable.rolls.Rolls;
+import com.dnd.dndTable.rolls.actions.HeroAction;
 
 
 public class CharacterDnd implements Serializable, ObjectDnd
@@ -38,9 +42,22 @@ public class CharacterDnd implements Serializable, ObjectDnd
     private List<String> timesBuffs;
 	private List<String> myMemoirs;
 	
+	private Activator activator;
 	
+	public Template registAction(ActionObject object)
+	{
+		if(object instanceof Weapon)
+		{
+			
+		}
+		
+		return null;
+	}
 	
-	
+	public Template act(HeroAction action)
+	{
+	return null;
+	}
 	
 	
 	
@@ -261,6 +278,26 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 
 
-	
+
+
+
+
+	public Activator getActivator() {
+		return activator;
+	}
+
+
+
+
+
+
+
+	public void setActivator(Activator activator) {
+		this.activator = activator;
+	}
+
+	public HeroAction getTargetAction() {
+		return targetAction;
+	}	
 
 }

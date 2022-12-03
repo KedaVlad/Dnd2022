@@ -1,6 +1,8 @@
 package com.dnd;
 
-public interface KeyWallet {
+import com.dnd.botTable.ObjectKey;
+
+public interface KeyWallet extends ObjectKey {
 
 	///FOR CALLBACK///////////////////////////////////////////////////////////////////////////////////
 	//MAIN KEYS
@@ -8,6 +10,7 @@ public interface KeyWallet {
 	final static String keyCheck = "(>.+>)";
 	final static String keyAnswer = "(.*)";
 	final static String characterCaseKey = ">shktymhgccnie>";
+	final static String eliminationKey = ">shktysdehiyoljne>";
 	//CREATE CASE
 	final static String characterCreateKey = ">asdzcrwvgylkjtr>";
 	final static String startClassKey = ">regwrgvcewjklo98754zvwevdcvwev>";
@@ -29,6 +32,8 @@ public interface KeyWallet {
 	final static String characterListMenu = ">regvcz23chawwwracterListMenufewdsgkgerregeg7ujyh>";
 	
 	///FOR MEDIATORS///////////////////////////////////////////////////////////////////////////////////
+	final static String startAction = ">dsgjkhuuikuyjhtddhgvd>";
+	final static String action = ">dsgjkhuuishfghwefdvhgvd>";
 	//CREATE CASE
 	final static String classMediatorKey = ">regwrgvczvwevdcvwevwewe>";
 	final static String characterMediatorKey = ">shktymhgccniewewe>";

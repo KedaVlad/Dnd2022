@@ -3,50 +3,55 @@ package com.dnd.dndTable.creatingDndObject.workmanship.mechanics;
 import java.util.List;
 
 import com.dnd.Names.Stat;
+import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
+import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Damage;
+import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Effect;
 
 public class MagicSoul {
 
 	private Matrix cells;
 	private int sizeNoCellsSpells;
-	private int sizeSpells;
 	private Stat depends;
 	private boolean[] serializer = new boolean[3];
+	private SimplePool<Spell> pool;
 
-	private List<List<Spell>> spellActivePool;
 
-	public String add(Spell spell)
+	public Effect cast(int target, int cell)
 	{
-		if(spellActivePool.get(0).size() <= sizeSpells)
+		cells.use(cell);
+		Spell spell = pool.getActive().get(target);
+		if(spell.getCast() instanceof Damage)
 		{
-			spellActivePool.get(0).add(spell);
-			return "added";
+		Damage damage = (Damage) spell.getCast();	
+		damage.getAction().getStepOne().setDepends(depends);
+		return damage;
 		}
-		else if(spellActivePool.get(1) != null)
-		{
-			spellActivePool.get(1).add(spell);
-			return "added to your book but uour hend hes no free space";
-		}
-		else
-		{
-			return "no free space";
-		}
-	}
-	
-	public void remove(int target)
-	{
-		if(spellActivePool.get(1) != null)
-		{
-			spellActivePool.get(0).add(spellActivePool.get(0).get(target));
-		}
-		spellActivePool.get(0).remove(target);
-	}
-
-	public Spell cast(int target, int cell)
-	{
 		
+		return spell.getCast();
 	}
 	
-	public Spell cast()
+	public Effect cast(int target)
+	{
+		Spell spell = pool.getActive().get(target);
+		cells.use(spell.getLvlSpell());
+		if(spell.getCast() instanceof Damage)
+		{
+		Damage damage = (Damage) spell.getCast();	
+		damage.getAction().getStepOne().setDepends(depends);
+		return damage;
+		}
+		
+		return spell.getCast();
+	}
+
+	public SimplePool<Spell> getPool() {
+		return pool;
+	}
+
+	public void setPool(SimplePool<Spell> pool) {
+		this.pool = pool;
+	}
+	
 
 }

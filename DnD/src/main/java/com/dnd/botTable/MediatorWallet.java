@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 import com.dnd.KeyWallet;
 
-public class MediatorWallet implements KeyWallet, Serializable{
+class MediatorWallet implements KeyWallet, Serializable{
 
 	private static final long serialVersionUID = -5414437962917485661L;
 	private boolean characterCreateMediator = false;

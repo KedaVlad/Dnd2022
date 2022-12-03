@@ -1,14 +1,17 @@
 package com.dnd.dndTable.rolls;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Action {
+public class Actіion {
 	
 	private String name;
 	private boolean trueStricke;
 	private boolean oneStep;
 	private Article stepOne;
 	private Article stepTwo;
+	
+	private List<Action> nextStep = new ArrayList<>();
 	private List<String> spesials;
 	
 	Action(String name, Article attack, Article hit, boolean trueStrike, List<String> spesials)
@@ -111,6 +114,14 @@ public class Action {
 
 	public void setOneStep(boolean oneStep) {
 		this.oneStep = oneStep;
+	}
+
+	public List<Action> getNextStep() {
+		return nextStep;
+	}
+
+	public void setNextStep(List<Action> nextStep) {
+		this.nextStep = nextStep;
 	}
 	
 }

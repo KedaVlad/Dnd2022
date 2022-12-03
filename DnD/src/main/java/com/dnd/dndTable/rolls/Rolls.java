@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Activator;
 import com.dnd.KeyWallet;
 import com.dnd.Names;
 import com.dnd.Names.Stat;
@@ -21,6 +22,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	private List<Article> skills;
 	private List<Article> saveRolls;
 	private Action targetAction;
+	
 
 	public Rolls() 
 	{
@@ -34,7 +36,8 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		buildSkills();
 		buildSaveRoll();
 	}
-
+	
+	
 	public int getHp(ClassDnd clazz, boolean random)
 	{
 		if(random == true)

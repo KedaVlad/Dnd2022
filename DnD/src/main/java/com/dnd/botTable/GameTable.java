@@ -37,9 +37,7 @@ public class GameTable implements KeyWallet, Serializable
 	
 	private MediatorWallet mediatorWallet = new MediatorWallet();
 	
-	//private TrashCan trashCan = new TrashCan();
-	
-	ActMachine script = new ActMachine();
+	private ActMachine script = new ActMachine();
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 
@@ -65,12 +63,7 @@ public class GameTable implements KeyWallet, Serializable
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public List<String> chooseAttack(Weapon weapon)
-	{
-		
-		
-		return null;
-	}
+	
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -125,17 +118,8 @@ public class GameTable implements KeyWallet, Serializable
 		this.chatId = chatId;
 	}
 
-	/*public TrashCan getTrashCan() 
-	{
-		return trashCan;
-	}
-
-	public void setTrashCan(TrashCan trashCan) 
-	{
-		this.trashCan = trashCan;
-	}*/
-
-	public boolean isCheckChar() {
+	public boolean isCheckChar() 
+{
 
 		if(actualGameCharacter == null)
 		{
@@ -147,15 +131,18 @@ public class GameTable implements KeyWallet, Serializable
 		}
 	}
 
-	public void setCheсkChar(boolean chekChar) {
+	public void setCheсkChar(boolean chekChar)
+	{
 		this.chekChar = chekChar;
 	}
 
-	public ControlPanel getControlPanel() {
+	public ControlPanel getControlPanel() 
+	{
 		return controlPanel;
 	}
 
-	public static GameTable create(long chatId) {
+	public static GameTable create(long chatId) 
+	{
 
 		GameTable gameTable = new GameTable();
 
@@ -193,6 +180,10 @@ public class GameTable implements KeyWallet, Serializable
 	public void delete(String name) 
 	{
 		savedCharacter.remove(name);
+	}
+
+	public ActMachine getScript() {
+		return script;
 	}
 
 }

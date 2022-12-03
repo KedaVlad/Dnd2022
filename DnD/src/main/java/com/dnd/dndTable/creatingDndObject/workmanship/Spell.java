@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Effect;
+
 
 public class Spell implements Serializable {
 	
@@ -13,7 +15,7 @@ public class Spell implements Serializable {
 	private static final long serialVersionUID = -7876613939972469105L;
 	
 	private int lvlSpell;
-	private String cast;
+	private Effect cast;
 	private String name;
 	private String description;
 	private String applicationTime;
@@ -45,18 +47,7 @@ public class Spell implements Serializable {
 
 }
 	
-	public String castSpell(Spell spell, int spellSlot) {
-		String result = getCast(); 
-		if(spell.getLvlSpell() < spellSlot) { return result;
-		} else {
-		for(int i = 0; i < spellSlot; i++) {
-		} 
-		return result;
-		}
-	}
-    public String castSpell(Spell spell) {
-	return getCast();
-	}
+
 
 	public String getDescription() {
 		return description;
@@ -86,12 +77,12 @@ public class Spell implements Serializable {
 		return lvlSpell;
 	}
 
-	public String getCast() {
+	public Effect getCast() {
 		return cast;
 	}
 
 
-	public void setCast(String cast) {
+	public void setCast(Effect cast) {
 		this.cast = cast;
 	}
 

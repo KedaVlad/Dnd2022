@@ -11,13 +11,14 @@ import com.dnd.Log;
 import com.dnd.Names.SaveRoll;
 import com.dnd.Names.Skill;
 import com.dnd.Names.Stat;
+import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Effect;
 import com.dnd.dndTable.factory.InerComand;
 import com.dnd.dndTable.factory.Json;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class Feature implements Serializable, KeyWallet
+public class Feature implements Serializable, ActionObject
 {
 	
 	private static final long serialVersionUID = 5053270361827778941L;
@@ -154,6 +155,12 @@ public class Feature implements Serializable, KeyWallet
 
 	public void setEffect(Effect effect) {
 		this.effect = effect;
+	}
+
+	@Override
+	public String objectKey() {
+		
+		return feature;
 	}
 	
 
