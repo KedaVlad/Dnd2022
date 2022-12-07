@@ -11,13 +11,22 @@ public class AttackModification implements Serializable
 
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private List<WeaponProperties> properties;
+	private List<WeaponProperties> requirement;
 	private WeaponType type;
 	private Dice attack;
 	private Dice damage;
-	private String effects; // if he dead you can attack again
+	private String effects;
 
 
+	public AttackModification separate(AttackModification second)
+	{
+		AttackModification answer = new AttackModification();
+		answer.name = second.name;
+		
+		
+		
+		return null;
+	}
 
 	public String getName() {
 		return name;
@@ -35,13 +44,6 @@ public class AttackModification implements Serializable
 		this.attack = attack;
 	}
 
-	public Dice getDamage() {
-		return damage;
-	}
-
-	public void setDamage(Dice damage) {
-		this.damage = damage;
-	}
 
 	public String getEffects() {
 		return effects;
@@ -59,12 +61,21 @@ public class AttackModification implements Serializable
 		this.type = type;
 	}
 
-	public List<WeaponProperties> getProperties() {
-		return properties;
+	
+	public List<WeaponProperties> getRequirement() {
+		return requirement;
 	}
 
-	public void setProperties(List<WeaponProperties> properties) {
-		this.properties = properties;
+	public void setRequirement(List<WeaponProperties> properties) {
+		this.requirement = properties;
+	}
+
+	public Dice getDamage() {
+		return damage;
+	}
+
+	public void setDamage(Dice damage) {
+		this.damage = damage;
 	}
 
 	

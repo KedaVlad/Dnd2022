@@ -15,6 +15,8 @@ import java.util.Scanner;
 import com.dnd.Source;
 import com.dnd.botTable.CharacterDndBot;
 import com.dnd.botTable.GameTable;
+import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
+import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
 import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.exc.StreamWriteException;
@@ -26,7 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.SerializationFeature;
 
-public class Json implements Source {
+public class Json {
 
 	private static final ObjectMapper mapper = getObjectMapper();
 
@@ -39,14 +41,14 @@ public class Json implements Source {
 	{
 		return mapper.treeToValue(node, clazz);
 	}
-	
+
 	public static <T> T fromFileJson(String file, Class<T> clazz) throws IOException
 	{
 		Path filePath = Path.of(file);
 		String json = Files.readString(filePath) ;
 		return fromJson(parse(json), clazz);
 	}
-	
+
 	public static <T>T convertor(Object object, Class<T> subject)
 	{
 		JsonNode prepear = Json.toJson(object);
@@ -69,23 +71,6 @@ public class Json implements Source {
 
 		return objectWriter.writeValueAsString(node);
 	}
-	
-	public static Map<String, Feature> getFeatures() 
-	{
-		Feature[] features;
-		Map<String, Feature> featuresMap = new HashMap<>();
-		try {
-			features = fromFileJson(featuresSource, Feature[].class);
-			for(Feature feature: features)
-			{
-				featuresMap.put(feature.getName(), feature);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		
-		return featuresMap;
-	}
 
 	@SuppressWarnings("unchecked")
 	public static Map<Long, GameTable> restor()
@@ -93,7 +78,7 @@ public class Json implements Source {
 		Map<Long, GameTable> gameTable = null;
 		try 
 		{
-			FileInputStream fileInputStream = new FileInputStream(source + "reserve");
+			FileInputStream fileInputStream = new FileInputStream("C:\\Users\\ALTRON\\git\\Dnd2022\\DnD\\LocalData\\reserve");
 			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
 			gameTable = (Map<Long, GameTable>) objectInputStream.readObject();
 			objectInputStream.close();
@@ -108,7 +93,7 @@ public class Json implements Source {
 
 	public static void backup(Map<Long, GameTable> gameTable) 
 	{
-		File file = new File(source + "reserve");
+		File file = new File("C:\\Users\\ALTRON\\git\\Dnd2022\\DnD\\LocalData\\reserve");
 		Map<Long, GameTable> reserve = gameTable;
 
 		try {
@@ -130,7 +115,7 @@ public class Json implements Source {
 		defaultObjectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
 		return defaultObjectMapper;
 	}
-	
+
 	private static void cleanReserve()
 	{
 		Scanner scanner = new Scanner(System.in);
@@ -147,13 +132,19 @@ public class Json implements Source {
 			System.out.println("uncleaned");
 		}
 	}
-	
-	
-	
+
+	public static Source fromJson(JsonNode node, Source source) throws IllegalArgumentException, IOException
+	{
+		String file = source.source();
+		Path filePath = Path.of(file);
+		String json = Files.readString(filePath) ;
+		return fromJson(parse(json), Source.class);
+	}
+
 	public static void main(String[] args) throws IOException {
-		
+
 		cleanReserve();
-	
+
 	}
 
 }

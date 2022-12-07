@@ -5,13 +5,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public abstract class HeroAction implements Serializable
+public class HeroAction extends Action
 {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private String text;
 
 	private List<HeroAction> nextStep = new ArrayList<>();
+
+	
+	public HeroAction(String name, String text, List<HeroAction> nextStep)
+	{
+		this.name = name;
+		this.text = text;
+		this.nextStep = nextStep;
+	}
+	public HeroAction() {}
 
 	public String getText() 
 	{
@@ -39,6 +48,11 @@ public abstract class HeroAction implements Serializable
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	public boolean isLastStep()
+	{
+		return nextStep == null || nextStep.isEmpty();
 	}
 	
 }

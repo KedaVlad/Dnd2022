@@ -2,9 +2,10 @@ package com.dnd.dndTable.creatingDndObject.bagDnd;
 
 import java.io.Serializable;
 
+import com.dnd.Source;
 import com.dnd.dndTable.ObjectDnd;
 
-public class Items implements Serializable, ObjectDnd{
+public class Items implements Serializable, ObjectDnd, Source{
 	
 	private static final long serialVersionUID = -1353539867889183740L;
 	
@@ -24,5 +25,11 @@ public class Items implements Serializable, ObjectDnd{
 	}
 	public String toString() {
 		return getName();
+	}
+
+	@Override
+	public String source() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

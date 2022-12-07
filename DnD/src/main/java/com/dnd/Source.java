@@ -1,7 +1,11 @@
 package com.dnd;
 
-public interface Source {
+public interface Source 
+{
 
+	final static String I = "\\";
+	final static String json = ".json";
+	
 	final static String source = "C:\\Users\\ALTRON\\git\\Dnd2022\\DnD\\LocalData\\";
 
 	final static String userSource = source + "users\\";
@@ -32,5 +36,7 @@ public interface Source {
 	final static String possessionsSource = source + "workmanship\\possession.json";
 	final static String traitsSource = source + "workmanship\\trait.json";
 
+	
+	public abstract String source();
 }
 

@@ -38,7 +38,7 @@ import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.actions.HeroAction;
 import com.dnd.dndTable.factory.Json;
 
-public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet,Source 
+public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 {
 
 	private Map<Long, GameTable> gameTable = new HashMap<>();
@@ -124,14 +124,11 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 	}
 
-
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 	private void handleMessage(Message message, GameTable game) throws TelegramApiException, InterruptedException
 	{
-
-
 		if(message.hasText() && message.hasEntities()) 
 		{	
 			Optional<MessageEntity> commandEntity =
@@ -535,48 +532,18 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	}
 
-	private void action(CallbackQuery callbackQuery, GameTable game) throws TelegramApiException
-	{
-		String target = callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2");
-		game.getScript().goTo(target, true);
-		Template template = game.getActualGameCharacter().act(game.getScript().getAction());
-		templateExecuter(callbackQuery.getMessage(), game, template);
-	}
-
-
-	private void startAction(CallbackQuery callbackQuery, GameTable game) throws TelegramApiException
-	{
-		Template template = null;
-		String key = callbackQuery.getData();
-		Pattern pat = Pattern.compile(keyNumber);
-		Matcher matcher = pat.matcher(key);
-		int target = ((Integer) Integer.parseInt(matcher.group()));
-		if(key.contains(weapon))
-		{
-
-		}
-		else if(key.contains(feature))
-		{
-			List<Feature> features = game.getActualGameCharacter().getWorkmanship().getMyFeatures();
-			template = game.getActualGameCharacter().registAction(features.get(target));
-		}
-
-		templateExecuter(callbackQuery.getMessage(), game, template);
-
-	}
-
 	private void templateExecuter(Message message, GameTable game, Template target) throws TelegramApiException
 	{
-		game.getScript().goTo(target.getName(), target.isMainAct());
+		game.getScript().goTo(target.getAction(), target.isMainAct());
 		if(target.isMainAct() && target.hasButtons())
 		{
 			List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 
-			for(String key: target.getButtons().keySet())
+			for(String key: target.getButtons())
 			{
 				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
 						.text(key)
-						.callbackData(target.getButtons().get(key))
+						.callbackData(action + key)
 						.build()));
 			}
 
@@ -604,7 +571,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
 					.text("Elimination")
-					.callbackData(target.getButtons().get(eliminationKey + target.getName()))
+					.callbackData(eliminationKey + target.getName())
 					.build()));
 
 			Message act = execute(SendMessage.builder()
@@ -615,6 +582,35 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 			game.getScript().toUndependet(act.getMessageId());
 		}
+	}
+
+	private void action(CallbackQuery callbackQuery, GameTable game) throws TelegramApiException
+	{
+		String target = callbackQuery.getData().replaceAll(keyCheck + keyAnswer, "$2");
+		game.getScript().goTo(target, true);
+		Template template = game.getActualGameCharacter().act(game.getScript().getAction());
+		templateExecuter(callbackQuery.getMessage(), game, template);
+	}
+
+	private void startAction(CallbackQuery callbackQuery, GameTable game) throws TelegramApiException
+	{
+		Template template = null;
+		String key = callbackQuery.getData();
+		Pattern pat = Pattern.compile(keyNumber);
+		Matcher matcher = pat.matcher(key);
+		int target = ((Integer) Integer.parseInt(matcher.group()));
+		if(key.contains(weapon))
+		{
+
+		}
+		else if(key.contains(feature))
+		{
+			List<Feature> features = game.getActualGameCharacter().getWorkmanship().getMyFeatures();
+			template = game.getActualGameCharacter().registAction(features.get(target));
+		}
+
+		templateExecuter(callbackQuery.getMessage(), game, template);
+
 	}
 
 	private void downloadHero(CallbackQuery callbackQuery, GameTable game) throws InterruptedException, TelegramApiException 

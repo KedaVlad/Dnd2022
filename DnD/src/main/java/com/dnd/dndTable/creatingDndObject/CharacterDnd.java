@@ -48,7 +48,8 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	{
 		if(object instanceof Weapon)
 		{
-			
+			Weapon weapon = (Weapon) object;
+			return Templeate(attackMachine.getActionTree(weapon));
 		}
 		
 		return null;

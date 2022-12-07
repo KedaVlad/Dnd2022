@@ -7,6 +7,13 @@ import com.dnd.dndTable.rolls.Dice;
 
 public class RollAction extends SimpleRollAction
 {
+	public RollAction(String name, String text, List<HeroAction> nextStep, Stat depends, boolean proficiency) 
+	{
+		super(name, text, nextStep);
+		this.depends = depends;
+		this.proficiency = proficiency;
+	}
+
 	private static final long serialVersionUID = 1L;
 	private Stat depends;
 	private boolean proficiency;

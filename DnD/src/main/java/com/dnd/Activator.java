@@ -3,7 +3,7 @@ package com.dnd;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.dndTable.rolls.Action;
+
 import com.dnd.dndTable.rolls.actions.HeroAction;
 
 public class Activator {

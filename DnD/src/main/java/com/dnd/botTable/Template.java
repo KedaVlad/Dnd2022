@@ -1,5 +1,6 @@
 package com.dnd.botTable;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -12,64 +13,47 @@ public class Template {
 	private boolean mainAct;
 	private List<String> buttons;
 	private HeroAction action;
-	
-	public Template( HeroAction action, boolean mainAct)
+
+	public Template(HeroAction action, boolean mainAct)
 	{
+		this.action = action;
+		this.mainAct = mainAct;
 		this.name = action.getName();
 		this.text = action.getText();
-		this.buttons =
-		this.mainAct = mainAct;
+		this.buttons = new ArrayList<>();
+		if(!action.isLastStep())
+		{
+			for(int i = 0; i < action.getNextStep().size(); i++)
+			{
+				getButtons().add(action.getNextStep().get(i).getName());
+			}
+		}
+
 	}
-	
-	public Template(String name, String message, boolean mainAct)
-	{
-		this.name = name;
-		this.text = message;
-		this.mainAct = mainAct;
-	}
-	
-	public Template(String name, String message, boolean mainAct, Map<String, String> buttons)
-	{
-		this.name = name;
-		this.text = message;
-		this.mainAct = mainAct;
-		this.buttons = buttons;
-	}
-	
+
 	public String getText() 
 	{
 		return text;
 	}
-	
+
 	public void setText(String message) 
 	{
 		this.text = message;
 	}
-	
+
 	public boolean isMainAct() 
 	{
 		return mainAct;
 	}
-	
+
 	public void setMainAct(boolean mainAct) 
 	{
 		this.mainAct = mainAct;
 	}
-	
+
 	public boolean hasButtons() 
 	{
-		return buttons!=null && !buttons.isEmpty();
-	}
-	
-	
-	public Map<String, String> getButtons() 
-	{
-		return buttons;
-	}
-	
-	public void setButtons(Map<String, String> buttons) 
-	{
-		this.buttons = buttons;
+		return buttons !=null && !buttons.isEmpty();
 	}
 
 	public String getName() {
@@ -87,5 +71,9 @@ public class Template {
 	public void setAction(HeroAction action) {
 		this.action = action;
 	}
-	
+
+	public List<String> getButtons() {
+		return buttons;
+	}
+
 }

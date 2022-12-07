@@ -25,33 +25,36 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 
-public abstract class ClassDnd implements Serializable,ObjectDnd, Script, Source{
+public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 
 	private static final long serialVersionUID = 3219669745475635442L;
 
+	private String className;
 	private String myArchetypeClass;
 	@JsonIgnore
 	private int lvl;
 	private Roll diceHp;
+	private int firstHp;
 
 
 	private List<List<InerComand>> growMap;
 
-
-	//Standard creating 
-	public ClassDnd(int lvl) {		
-		this.lvl = lvl;
+	@Override
+	public String source()
+	{
+		return classSource + I + className + I + myArchetypeClass + json;
+		
 	}
 
-	public ClassDnd() 
-	{		
 
+
+	
+	public int getFirstHp()
+	{
+		return firstHp;
 	}
-
-	@JsonIgnore
-	public abstract int getFirstHp(); 
-	@JsonIgnore
-	public abstract List<String> getPermanentBuffs();
+	
+	
 
 	public String getMyArchetypeClass() 
 	{
@@ -373,6 +376,21 @@ public abstract class ClassDnd implements Serializable,ObjectDnd, Script, Source
 
 	public void setDiceHp(Roll diceHp) {
 		this.diceHp = diceHp;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+
+
+
+	public void setFirstHp(int firstHp) {
+		this.firstHp = firstHp;
 	}
 }
 

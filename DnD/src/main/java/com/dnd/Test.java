@@ -2,9 +2,13 @@ package com.dnd;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.ws.rs.core.Response;
+
+import org.telegram.telegrambots.meta.api.objects.Message;
 
 import com.dnd.botTable.CharacterDndBot;
 import com.dnd.botTable.GameTable;
@@ -34,14 +38,32 @@ name = new Some();
 
 
 	public static void main(String[] args) throws IOException {
-		// TODO Auto-generated method stub
-		Test t1 = new Test();
-		t1.name.nsame ="sdsdsdssd";
-		Some s = t1.name;
-		s.nsame = "YFYFYFYFYFYFYF";
-
-		System.out.println(s.nsame);
-		System.out.println(t1.name.nsame);
+		
+		
+		
+		List<Integer> some = new ArrayList<>();
+		
+		
+		some.add(4);
+		some.add(12);
+		some.add(1, 123);
+		
+		System.out.println(some);
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 	}
 
 
