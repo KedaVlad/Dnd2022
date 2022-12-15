@@ -1,7 +1,6 @@
 package com.dnd.dndTable.creatingDndObject.workmanship.mechanics;
 
 import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
-import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Effect;
 import com.dnd.dndTable.rolls.Dice;
 
 public class Mechanics extends Feature
@@ -22,21 +21,6 @@ public class Mechanics extends Feature
 		this.setPoolCheck(pool);
 	}
 	
-	
-	
-	public Effect cast()
-	{
-		if(isCellsCheck() == true)
-		{
-		
-		}
-		
-		
-		return this.getEffect();
-	}
-
-
-
 	public boolean isCellsCheck() {
 		return cellsCheck;
 	}
@@ -81,6 +65,30 @@ public class Mechanics extends Feature
 
 	public void setDice(Dice dice) {
 		this.dice = dice;
+	}
+
+
+
+	public SimplePool<Feature> getPool() {
+		return pool;
+	}
+
+
+
+	public void setPool(SimplePool<Feature> pool) {
+		this.pool = pool;
+	}
+
+
+
+	public Matrix getMatrix() {
+		return matrix;
+	}
+
+
+
+	public void setMatrix(Matrix matrix) {
+		this.matrix = matrix;
 	}
 	
 	

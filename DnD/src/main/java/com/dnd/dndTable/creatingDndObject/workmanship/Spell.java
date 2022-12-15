@@ -2,11 +2,9 @@ package com.dnd.dndTable.creatingDndObject.workmanship;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Effect;
+import com.dnd.botTable.actions.HeroAction;
 
 
 public class Spell implements Serializable {
@@ -15,7 +13,7 @@ public class Spell implements Serializable {
 	private static final long serialVersionUID = -7876613939972469105L;
 	
 	private int lvlSpell;
-	private Effect cast;
+	private HeroAction cast;
 	private String name;
 	private String description;
 	private String applicationTime;
@@ -77,16 +75,6 @@ public class Spell implements Serializable {
 		return lvlSpell;
 	}
 
-	public Effect getCast() {
-		return cast;
-	}
-
-
-	public void setCast(Effect cast) {
-		this.cast = cast;
-	}
-
-
 	public List<String> getClassFor() {
 		return classFor;
 	}
@@ -97,6 +85,14 @@ public class Spell implements Serializable {
 			this.classFor.add(string);
 		}
 		
+	}
+
+	public HeroAction getCast() {
+		return cast;
+	}
+
+	public void setCast(HeroAction cast) {
+		this.cast = cast;
 	}
 
 	

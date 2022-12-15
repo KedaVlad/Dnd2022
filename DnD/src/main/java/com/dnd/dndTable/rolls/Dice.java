@@ -19,6 +19,7 @@ public class Dice implements Serializable
 	private String name;
 	private int buff;
 	private List<Roll> combo;
+	private int[] results;
 
 	public Dice(String name, int buff, Roll... combo)
 	{
@@ -26,53 +27,66 @@ public class Dice implements Serializable
 		this.setBuff(buff);
 		this.combo = new ArrayList<>();
 		setCombo(combo);
+		results = new int[combo.length + 1];
 	}
 
 	public String execute()
 	{
 		String answer = this.name + ": ";
-		boolean start = true;
-		for(Roll roll: this.combo)
+
+		for(int i = 0; i < this.combo.size(); i++)
 		{
-			if(start == true)
+			this.getResults()[i] = roll(this.combo.get(i));				
+		}
+		this.getResults()[this.getResults().length-1] = this.buff;
+		answer += summ() + "(";
+
+		boolean start = true;
+		for(int i = 0; i < results.length; i++)
+		{
+			int target = results[i];
+			if(start && (target != 0))
 			{
-				answer = "" + roll(roll);
+				answer += "" + target;
 				start = false;
 			}
-			else 
+			else if(target < 0)
 			{
-				answer += " + " + roll(roll);
-			}	
+				answer += " - " + target*-1;
+			}
+			else if(target > 0)
+			{
+				answer += " + " + target;
+			}
+			else
+			{
+				continue;
+			}
+			
 		}
-
-		if(this.buff < 0)
-		{
-			answer += " - " + this.buff;
-		}
-		else if(this.buff > 0);
-		{
-			answer += " + " + this.buff;
-		}
-
-
-		return answer + " = " + roll();
+		
+		return answer + ")";
 	}
 
 	public int roll()
 	{
-		if(this.combo.contains(Roll.NO_ROLL))
+		for(int i = 0; i < this.combo.size(); i++)
 		{
-			return this.buff;
+			this.getResults()[i] = roll(this.combo.get(i));				
 		}
-		else
+		this.getResults()[this.getResults().length-1] = this.buff;
+		return summ();
+	}
+	
+
+	int summ()
+	{
+		int answer = 0;
+		for(int target: getResults())
 		{
-			int answer = 0;
-			for(Roll roll: this.combo)
-			{
-				answer += roll(roll);
-			}
-			return answer + this.buff;
+			answer += target;
 		}
+		return answer;
 	}
 
 	public void setCombo(Roll... combo)
@@ -229,10 +243,14 @@ public class Dice implements Serializable
 	{
 		this.buff = buff;
 	}
-	
+
 	public void addBuff(int buff)
 	{
 		this.buff += buff;
+	}
+
+	public int[] getResults() {
+		return results;
 	}
 
 }

@@ -13,19 +13,22 @@ public class AttackModification implements Serializable
 	private String name;
 	private List<WeaponProperties> requirement;
 	private WeaponType type;
-	private Dice attack;
-	private Dice damage;
-	private String effects;
+	private List<Dice> attack;
+	private List<Dice> damage;
 
 
-	public AttackModification separate(AttackModification second)
+	public AttackModification marger(AttackModification second)
 	{
 		AttackModification answer = new AttackModification();
 		answer.name = second.name;
-		
-		
-		
-		return null;
+		answer.requirement = this.requirement;
+		answer.type = this.type;
+		answer.attack = this.attack;
+		answer.attack.addAll(second.attack);
+		answer.damage = this.damage;
+		answer.damage.addAll(second.damage);
+	
+		return answer;
 	}
 
 	public String getName() {
@@ -36,21 +39,12 @@ public class AttackModification implements Serializable
 		this.name = name;
 	}
 
-	public Dice getAttack() {
+	public List<Dice> getAttack() {
 		return attack;
 	}
 
-	public void setAttack(Dice attack) {
+	public void setAttack(List<Dice> attack) {
 		this.attack = attack;
-	}
-
-
-	public String getEffects() {
-		return effects;
-	}
-
-	public void setEffects(String effects) {
-		this.effects = effects;
 	}
 
 	public WeaponType getType() {
@@ -70,11 +64,11 @@ public class AttackModification implements Serializable
 		this.requirement = properties;
 	}
 
-	public Dice getDamage() {
+	public List<Dice> getDamage() {
 		return damage;
 	}
 
-	public void setDamage(Dice damage) {
+	public void setDamage(List<Dice> damage) {
 		this.damage = damage;
 	}
 

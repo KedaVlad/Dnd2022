@@ -114,7 +114,7 @@ abstract class ScriptReader implements Script, Names
 		
 		if(comand.getKey().contains(weaponKey))
 		{
-			character.getRolls().getAttackMachine().setPossession(Json.convertor(comand.getComand().get(0).get(0), WeaponProperties.class));
+			character.getAttackMachine().setPossession(Json.convertor(comand.getComand().get(0).get(0), WeaponProperties.class));
 		}
 		else if(comand.getKey().contains(skillKey))
 		{

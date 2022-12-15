@@ -1,4 +1,4 @@
-package com.dnd.dndTable.rolls.actions;
+package com.dnd.botTable.actions;
 
 public class SkillAction extends AttackAction 
 {

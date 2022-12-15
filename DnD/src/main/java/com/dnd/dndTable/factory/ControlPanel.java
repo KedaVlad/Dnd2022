@@ -1,177 +1,111 @@
 package com.dnd.dndTable.factory;
 
-import java.io.File;
 import java.io.Serializable;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.dnd.KeyWallet;
-import com.dnd.Log;
-import com.dnd.Source;
-import com.dnd.dndTable.ObjectDnd;
+import com.dnd.botTable.Action;
+import com.dnd.botTable.actions.BotAction;
+import com.dnd.botTable.actions.FactoryAction;
+import com.dnd.botTable.actions.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.rolls.Dice;
 
-public class ControlPanel implements KeyWallet, Source, Serializable {
+public class ControlPanel implements Serializable {
 
 	private static final long serialVersionUID = -231330030795056098L;
-	private File mainFile;
-	private String classBeck;
-	private String archetypeBeck;
-	private int classLvl;
-	private String race;
-	private String subRace;	
-	private File subRaceDir;
-
-
-	public enum ObjectType
+	private static final long key = 231330038;
+	
+ 	public Action createHero()
 	{
-		CLASS, ARCHETYPE, RACE, SUBRACE, ITEM, STATS;
+ 		return CharacterFactory.startCreate();
 	}
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-	public void createClass(CharacterDnd character)
+	
+	public Action act(FactoryAction action)
 	{
-		ClassFactory.create(character, classBeck, classLvl, archetypeBeck);
-
-	}
-
-	public void createRace(CharacterDnd character)
-	{
-		RaceFactory.create(character, race, subRace);
-	}
-
-	public String[] getArray(ObjectType type)
-	{
-		switch(type)
+		if(action.getKey() == CharacterFactory.key)
 		{
-		case CLASS:
-			return ClassFactory.getClassArray();
-		case ARCHETYPE:
-			return ClassFactory.getArchetypeArray(classBeck);
-		case RACE:
-			return RaceFactory.getRaceArray();
-		case SUBRACE:
-			return RaceFactory.getSubRaceArray(race);
-		default:
-			Log.add("getArray(ERROR not valid ObjectType");
-			break;
+			return CharacterFactory.execute(action);
+		}
+		else if(action.getKey() == ClassFactory.key)
+		{
+			return ClassFactory.execute(action);
+		}
+		else if(action.getKey() == RaceFactory.key)
+		{
+			return RaceFactory.execute(action);
+		}
+		else
+		{
+		return null;
+		}
+	}
+	
+	public Action readiness(CharacterDnd character)
+	{
+		if(character.getClassDnd() == null)
+		{
+			return ClassFactory.startCreate(character.getName());
+		}
+		else if(character.getMyRace() == null)
+		{
+			return RaceFactory.startCreate();
+		}
+		else if(character.getHp() == 0)
+		{
+			return finish();
+		}
+		else
+		{
+			return null;
+		}
+	}
+
+	public Action finish(FinalAction action, CharacterDnd character)
+	{
+		long key = action.getKey();
+		if(key == CharacterFactory.key)
+		{
+			character = CharacterFactory.finish(action);
+			return ClassFactory.startCreate(action.getLocalData().get(0));
+		}
+		else if(key == ClassFactory.key)
+		{
+			ClassFactory.finish(action, character);
+			return RaceFactory.startCreate();
+		}
+		else if(key == RaceFactory.key)
+		{
+			RaceFactory.finish(action, character);
+			return finish();
 		}
 		return null;
 	}
-
-	public String getObjectInfo(ObjectType type) 
+	
+	private Action finish()
 	{
-		switch(type)
-		{
-		case CLASS:
-			return ClassFactory.getObgectInfo(classBeck, archetypeBeck);
+		String name = "ChooseStat";
+		String godGift = Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20();
 
-		case RACE:
-			return RaceFactory.getObgectInfo(race, subRace);
-			
-		case STATS:
-
-			String godGift = Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20() + ", " + Dice.d20();
-
-			String answer =  "Now let's see what you have in terms of characteristics.\r\n"
-					+ "\r\n"
-					+ "Write the value of the characteristics in order: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma.\r\n"
-					+ "1.Each stat cannot be higher than 20.\r\n"
-					+ "2. Write down stats without taking into account buffs from race / class.\r\n"
-					+ "\r\n"
-					+ "Use the random god gift in the order you want your stats to be.\r\n"
-					+ "\r\n" + "\r\n" + godGift + "\r\n"
-					+ "\r\n"
-					+ "Or write down those values that are agreed with your game master.";
-			return answer;
-			
-		default:
-			Log.add("getObjectInfo(ERROR not valid ObjectType");
-			break;
-		}
-		return null;
+		String text =  "Now let's see what you have in terms of characteristics.\r\n"
+				+ "\r\n"
+				+ "Write the value of the characteristics in order: Strength, Dexterity, Constitution, Intelligence, Wisdom, Charisma.\r\n"
+				+ "1.Each stat cannot be higher than 20.\r\n"
+				+ "2. Write down stats without taking into account buffs from race / class.\r\n"
+				+ "\r\n"
+				+ "Use the random god gift in the order you want your stats to be.\r\n"
+				+ "\r\n" + godGift + "\r\n"
+				+ "\r\n"
+				+ "Or write down those values that are agreed with your game master.\r\n"
+				+ "Examples:\r\n"
+				+ " str 11 dex 12 con 13 int 14 wis 15 cha 16\r\n"
+				+ " 11 12 13 14 15 16 \r\n"
+				+ " 11/12/13/14/15/16";
+		
+		return BotAction.create(name, getKey(), true, true, text, null);
 	}
-
-	////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	public void cleanLocalData()
+	
+	public static long getKey() 
 	{
-		classBeck = null;
-		archetypeBeck = null;
-		classLvl = 0;
-		race = null;
-		subRace = null;	
-		subRaceDir = null;
+		return key;
 	}
-
-	public String getClassBeck() 
-	{
-		return classBeck;
-	}
-
-	public void setClassBeck(String classBeck) 
-	{
-		this.classBeck = classBeck;
-	}
-
-	public String getArchetypeBeck() 
-	{
-		return archetypeBeck;
-	}
-
-	public void setArchetypeBeck(String archerypeBeck) 
-	{
-		this.archetypeBeck = archerypeBeck;
-	}
-
-	public String getSubRace()
-	{
-		return subRace;
-	}
-
-	public void setSubRace(String subRace)
-	{
-		this.subRace = subRace;
-	}
-
-	public String getRace() 
-	{
-		return race;
-	}
-
-	public void setRace(String race)
-	{
-		this.race = race;
-	}
-
-	public int getClassLvl()
-	{
-		return classLvl;
-	}
-
-	public void setClassLvl(int classLvl)
-	{
-		this.classLvl = classLvl;
-	}
-
-	public File getSubRaceDir() 
-	{
-		return subRaceDir;
-	}
-
-	public void setSubRaceDir(File subRaceDir) 
-	{
-		this.subRaceDir = subRaceDir;
-	}
-
-	public File getMainFile() {
-		return mainFile;
-	}
-
-	public void setMainFile(File mainFile) {
-		this.mainFile = mainFile;
-	}
-
+	
 }

@@ -4,13 +4,24 @@ import com.dnd.botTable.ObjectKey;
 
 public interface KeyWallet extends ObjectKey {
 
+	final static long start = 0000000000;
+	final static long hp = 000000001;
+	final static long menu = 000000002;
+	final static long toMenu = 000000003;
+	final static long characterCase = 000000004;
+	final static long eliminationKey = 666666666;
+	
+	final static String startText ="/myCharacters - This command leads to your character library,"
+			+ " where you can create and choose which character you play.\n";
+	
+	
+	
 	///FOR CALLBACK///////////////////////////////////////////////////////////////////////////////////
 	//MAIN KEYS
 	final static String keyNumber = "[-]?[0-9]+(.[0-9]+)?";
 	final static String keyCheck = "(>.+>)";
 	final static String keyAnswer = "(.*)";
 	final static String characterCaseKey = ">shktymhgccnie>";
-	final static String eliminationKey = ">shktysdehiyoljne>";
 	//CREATE CASE
 	final static String characterCreateKey = ">asdzcrwvgylkjtr>";
 	final static String startClassKey = ">regwrgvcewjklo98754zvwevdcvwev>";
@@ -41,7 +52,7 @@ public interface KeyWallet extends ObjectKey {
 	final static String statMediatorKey = ">shktyasdvyil;kjhfewe>";
 	final static String hpMediatorKey = ">shktyawefwefasasdcvjwme>";
 
-	final static String start = ">regwrweffwvwevwfewefewe>";
+	
 	final static String dock = ">rffasdsadenmfdgtrjeooiue>";
 	
 	public static String allAfterKey(String key)

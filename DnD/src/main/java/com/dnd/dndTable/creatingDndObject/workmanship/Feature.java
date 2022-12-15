@@ -1,22 +1,13 @@
 package com.dnd.dndTable.creatingDndObject.workmanship;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import com.dnd.KeyWallet;
-import com.dnd.Log;
-import com.dnd.Names.SaveRoll;
-import com.dnd.Names.Skill;
-import com.dnd.Names.Stat;
+import com.dnd.botTable.actions.HeroAction;
 import com.dnd.dndTable.ActionObject;
-import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Effect;
 import com.dnd.dndTable.factory.InerComand;
 import com.dnd.dndTable.factory.Json;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 
 public class Feature implements Serializable, ActionObject
 {
@@ -25,9 +16,7 @@ public class Feature implements Serializable, ActionObject
 	
 	private String name;
 	private String description;
-	private Effect cast;
-    private boolean active;
-	private Effect effect;
+	private HeroAction action;
 	private List<InerComand> inerComands;
 
 	enum For 
@@ -37,10 +26,7 @@ public class Feature implements Serializable, ActionObject
 	
 	private For depend;
 	
-	public Effect cast()
-	{
-		return effect;
-	}
+	
 
 	public Feature(String name)
 	{
@@ -125,12 +111,10 @@ public class Feature implements Serializable, ActionObject
 		
 	}
 
-	public boolean isActive() {
-		return active;
-	}
-
-	public void setActive(boolean active) {
-		this.active = active;
+	@Override
+	public String objectKey() {
+		
+		return feature;
 	}
 
 	public For getDepend() {
@@ -141,26 +125,12 @@ public class Feature implements Serializable, ActionObject
 		this.depend = depend;
 	}
 
-	public Effect getCast() {
-		return cast;
+	public HeroAction getAction() {
+		return action;
 	}
 
-	public void setCast(Effect cast) {
-		this.cast = cast;
-	}
-
-	public Effect getEffect() {
-		return effect;
-	}
-
-	public void setEffect(Effect effect) {
-		this.effect = effect;
-	}
-
-	@Override
-	public String objectKey() {
-		
-		return feature;
+	public void setAction(HeroAction action) {
+		this.action = action;
 	}
 	
 

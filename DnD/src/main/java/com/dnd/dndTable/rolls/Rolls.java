@@ -4,10 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Activator;
 import com.dnd.KeyWallet;
 import com.dnd.Names;
 import com.dnd.Names.Stat;
+import com.dnd.botTable.actions.RollAction;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
@@ -21,7 +21,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	private List<MainStat> stats;
 	private List<Article> skills;
 	private List<Article> saveRolls;
-	private Action targetAction;
+	
 	
 
 	public Rolls() 
@@ -45,6 +45,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			Dice dice = hp;
 			dice.setCombo(clazz.getDiceHp());
 			dice.setBuff(stats.get(2).dice.getBuff());
+			dice.execute();
 			return dice.roll();	
 		}
 		else
@@ -64,69 +65,16 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			}
 		}
 	}
-
-	public Formula stepOne()
+	
+	public Formula execute(RollAction action)
 	{
-		if(targetAction.isTrueStricke() && targetAction.isOneStep())
+		Formula answer = new Formula(action.getName());
+		answer.getFormula().addAll(action.getBase());
+		answer.getFormula().add(getValue(action.getDepends()));
+		if(action.isProficiency())
 		{
-			return buildHitFormula(targetAction.getStepOne());
+			answer.getFormula().add(proficiency);
 		}
-		else if(targetAction.isOneStep())
-		{
-			return buildAttackFormula(targetAction.getStepOne());
-		}
-		else if(targetAction.isTrueStricke())
-		{
-			return buildTrueStrikeFormula(targetAction.getStepOne());
-		}
-		else
-		{
-			return buildAttackFormula(targetAction.getStepOne());
-		}
-
-	}
-
-	private Formula buildAttackFormula(Article article)
-	{
-		Formula answer = new Formula(article.getName());
-		answer.getFormula().add(new Dice("Base", 0, Roll.D20));
-		answer.getFormula().add(getValue(article.getDepends()));
-
-		if(getProf(article) != null)
-		{
-			answer.getFormula().add(getProf(article));
-		}
-
-		answer.getFormula().addAll(article.permanentBuff);
-		return answer;
-	}
-
-	private Formula buildHitFormula(Article article)
-	{
-		Formula answer = new Formula(article.getName());
-		answer.getFormula().add(getValue(article.getDepends()));
-
-		if(getProf(article) != null)
-		{
-			answer.getFormula().add(getProf(article));
-		}
-
-		answer.getFormula().addAll(article.permanentBuff);
-		return answer;
-	}
-
-	private Formula buildTrueStrikeFormula(Article article)
-	{
-		Formula answer = new Formula(article.getName());
-		answer.getFormula().add(new Dice("Base", 8, Roll.NO_ROLL));
-		answer.getFormula().add(getValue(article.getDepends()));
-
-		if(getProf(article) != null)
-		{
-			answer.getFormula().add(getProf(article));
-		}
-
-		answer.getFormula().addAll(article.permanentBuff);
 		return answer;
 	}
 
@@ -143,7 +91,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		{
 			answer = proficiency;
 		}
-		else if(targetAction.getStepOne().isHalfProf() == true)
+		else if(article.isHalfProf() == true)
 		{
 			answer = proficiency;
 			answer.setBuff(proficiency.getBuff()/2);
@@ -183,7 +131,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				if(stat.name.toString() == name)
 				{
-					this.targetAction = new Action(name, new Article(name, stat.name));
+					//this.targetAction = new Action(name, new Article(name, stat.name));
 					breaker = true;
 					break;
 				}
@@ -195,7 +143,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				if(article.getName() == name)
 				{
-					this.targetAction = new Action(name, article);
+					//this.targetAction = new Action(name, article);
 				}
 			}
 		}
@@ -205,7 +153,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				if(article.getName() == name)
 				{
-					this.targetAction = new Action(name, article);
+					//this.targetAction = new Action(name, article);
 				}
 			}
 		}
@@ -464,13 +412,6 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	public Dice getProficiency() 
 {
 		return proficiency;
-	}
-
-
-
-	public void setTargetAct(Action targetAct) 
-	{
-		this.targetAction = targetAct;
 	}
 
 	class MainStat implements Serializable

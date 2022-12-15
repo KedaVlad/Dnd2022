@@ -19,7 +19,7 @@ import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.factory.InerComand;
 import com.dnd.dndTable.factory.Json;
 import com.fasterxml.jackson.core.JsonProcessingException;
-public class RaceDnd implements Serializable, ObjectDnd, Source, KeyWallet{
+public class RaceDnd implements Serializable, ObjectDnd,  KeyWallet{
 
 	private static final long serialVersionUID = -7603608846317166137L;
 	

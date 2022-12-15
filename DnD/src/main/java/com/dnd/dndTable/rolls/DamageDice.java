@@ -8,9 +8,9 @@ public class DamageDice extends Dice
 	private static final long serialVersionUID = 1L;
 	private TypeDamage typeDamage;
 	
-	public DamageDice(String name, int buff, Roll[] combo, TypeDamage typeDamage) {
+	public DamageDice(String name, int buff, TypeDamage typeDamage, Roll... combo) {
 		super(name, buff, combo);
-		
+		this.typeDamage = typeDamage;
 	}
 
 	public TypeDamage getTypeDamage() {
@@ -23,32 +23,41 @@ public class DamageDice extends Dice
 	
 	public String execute()
 	{
-		String answer = this.getName() + "(" + typeDamage.toString() + "): ";
-		boolean start = true;
-		for(Roll roll: this.getCombo())
+		String answer = this.getName() + "(" + typeDamage.toString() + "): ";	
+		for(int i = 0; i < this.getCombo().size(); i++)
 		{
-			if(start == true)
+				this.getResults()[i] = roll(this.getCombo().get(i));				
+		}
+
+		this.getResults()[this.getResults().length-1] = this.getBuff();
+		 answer += summ() + "(";
+		 
+		 boolean start = true;
+		 for(int i = 0; i < getResults().length; i++)
 			{
-				answer = "" + roll(roll);
-				start = false;
+				int target = getResults()[i];
+				if(start && (target != 0))
+				{
+					answer += "" + target;
+					start = false;
+				}
+				else if(target < 0)
+				{
+					answer += " - " + target*-1;
+				}
+				else if(target > 0)
+				{
+					answer += " + " + target;
+				}
+				else
+				{
+					continue;
+				}
+				
 			}
-			else 
-			{
-				answer += " + " + roll(roll);
-			}	
-		}
-
-		if(this.getBuff() < 0)
-		{
-			answer += " - " + this.getBuff();
-		}
-		else if(this.getBuff() > 0);
-		{
-			answer += " + " + this.getBuff();
-		}
-
-
-		return answer + " = " + roll();
+		 
+		 return answer + ")";
+		 
 	}
 
 	

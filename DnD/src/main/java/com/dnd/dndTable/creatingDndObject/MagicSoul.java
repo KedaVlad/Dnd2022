@@ -1,4 +1,4 @@
-package com.dnd.dndTable.creatingDndObject.workmanship.mechanics;
+package com.dnd.dndTable.creatingDndObject;
 
 import java.util.List;
 
@@ -7,6 +7,8 @@ import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Damage;
 import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Effect;
+import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.Matrix;
+import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.SimplePool;
 
 public class MagicSoul {
 

@@ -1,5 +1,6 @@
-package com.dnd.dndTable.rolls.actions;
+package com.dnd.botTable.actions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Names.Stat;
@@ -10,6 +11,6 @@ public class CheckResistAction extends RollAction
 {
 	private static final long serialVersionUID = 1L;
 	{
-		this.setBase(new Dice("Base", 8, Roll.NO_ROLL));
+		this.getBase().add(new Dice("Base", 8, Roll.NO_ROLL));
 	}
 }

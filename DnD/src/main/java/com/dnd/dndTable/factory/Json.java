@@ -13,14 +13,8 @@ import java.util.Map;
 import java.util.Scanner;
 
 import com.dnd.Source;
-import com.dnd.botTable.CharacterDndBot;
 import com.dnd.botTable.GameTable;
-import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
-import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
-import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -121,8 +115,7 @@ public class Json {
 		Scanner scanner = new Scanner(System.in);
 		if(scanner.nextInt() == 12345)
 		{
-			CharacterDndBot bot = new CharacterDndBot();
-			Json.backup(bot.getGameTable());
+			Json.backup(new HashMap<Long, GameTable>());
 			System.out.println("cleaned");
 			scanner.close();
 		}

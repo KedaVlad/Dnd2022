@@ -46,9 +46,6 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 		
 	}
 
-
-
-	
 	public int getFirstHp()
 	{
 		return firstHp;
@@ -89,9 +86,13 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 	public static void main(String[] args) throws JsonProcessingException 
 	{
 
-		ClassDnd assasin = new Rogue();
+		ClassDnd assasin = new ClassDnd();
 
 		assasin.diceHp = Roll.D8;
+		
+		assasin.className = "Rogue";
+		assasin.myArchetypeClass = "Assasin";
+		
 		List<List<InerComand>> pool = new ArrayList<>();
 
 		List<InerComand> lvl0= new ArrayList<>();
@@ -217,12 +218,12 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 		c1.getComand().get(0).add("Competence");
 		lvl1.add(c1);
 
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Sneak Attack");
 		lvl1.add(c1);
 
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Thieves Jargon");
 		lvl1.add(c1);
@@ -230,7 +231,7 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 
 		List<InerComand> lvl2 = new ArrayList<>();
 
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Tricky Action");
 		lvl2.add(c1);
@@ -238,29 +239,29 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 
 		List<InerComand> lvl3 = new ArrayList<>();
 
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Additional Holdings");
 		lvl3.add(c1);
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Liquidation");
 		lvl3.add(c1);
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Precise Aiming");
 		lvl3.add(c1);
 
 		List<InerComand> lvl4 = new ArrayList<>();
 		List<InerComand> lvl5 = new ArrayList<>();
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Incredible Evasion");
 		
 		lvl5.add(c1);
 		List<InerComand> lvl6 = new ArrayList<>();
 		List<InerComand> lvl7 = new ArrayList<>();
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add(("Evasiveness"));
 		lvl7.add(c1);
@@ -268,7 +269,7 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 
 		List<InerComand> lvl9 = new ArrayList<>();
 
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Penetration Master");
 		lvl9.add(c1);
@@ -276,42 +277,42 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 		List<InerComand> lvl10 = new ArrayList<>();
 		List<InerComand> lvl11 = new ArrayList<>();
 
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Reliable Talent");
 		lvl11.add(c1);
 
 		List<InerComand> lvl12 = new ArrayList<>();
 		List<InerComand> lvl13 = new ArrayList<>();
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Impostor");
 		lvl13.add(c1);
 		List<InerComand> lvl14 = new ArrayList<>();
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Blind Sight");
 		lvl14.add(c1);
 		List<InerComand> lvl15 = new ArrayList<>();
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Slippery Mind");
 		lvl15.add(c1);
 		List<InerComand> lvl16 = new ArrayList<>();
 
 		List<InerComand> lvl17 = new ArrayList<>();
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Death Blow");
 		lvl17.add(c1);
 		List<InerComand> lvl18 = new ArrayList<>();
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Intangibility");
 		lvl18.add(c1);
 		List<InerComand> lvl19 = new ArrayList<>();
 		List<InerComand> lvl20 = new ArrayList<>();
-		c1 = new InerComand(false, featureKey);
+		c1 = new InerComand(false, false, featureKey);
 		c1.getComand().add(new ArrayList<>());
 		c1.getComand().get(0).add("Luck");
 		lvl20.add(c1);
@@ -348,7 +349,7 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 		System.out.println(json);
 		System.out.println(Json.parse(json));
 
-		Rogue r = Json.fromJson(Json.parse(json), Rogue.class);
+		/*Rogue r = Json.fromJson(Json.parse(json), Rogue.class);
 
 		System.out.println(r);
 		System.out.println(r.getGrowMap());
@@ -367,7 +368,7 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 		String jj = r.getGrowMap().get(0).get(0).toString();
 		System.out.println(jj);
 		Possession pp = Json.fromJson(Json.parse(jj), Possession.class);
-		System.out.println(pp);
+		System.out.println(pp);*/
 	}
 
 	public Roll getDiceHp() {

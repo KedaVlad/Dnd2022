@@ -24,21 +24,19 @@ import com.dnd.dndTable.creatingDndObject.workmanship.Trait;
 
 abstract class WorkmanshipFactory implements Source, KeyWallet {
 
-	private final static Map<String, Feature> features = Json.getFeatures();
 
 	
-
 	static void createFeature(CharacterDnd character, String skill) 
 	{	
 		if(!character.getWorkmanship().getMyFeatures().contains(new Feature(skill)))
 		{
-			character.getWorkmanship().getMyFeatures().add(features.get(skill));
+			character.getWorkmanship().getMyFeatures().add(new Feature(skill));
 			
-			if(features.get(skill).getInerComands() != null)
-			{
-				for(InerComand comand: features.get(skill).getInerComands())
-				ScriptReader.execute(character, comand);
-			}
+		//if(features.get(skill).getInerComands() != null)
+		//	{
+		//		for(InerComand comand: features.get(skill).getInerComands())
+		//		ScriptReader.execute(character, comand);
+		//	}
 		}
 	}
 

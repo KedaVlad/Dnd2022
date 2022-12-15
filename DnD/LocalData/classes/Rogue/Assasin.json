@@ -1,91 +1,141 @@
 {
+   "className":"Rogue",
    "myArchetypeClass":"Assasin",
+   "diceHp":"D8",
+   "firstHp":0,
    "growMap":[
       [
          {
             "cloud":false,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   "Light Armor"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   "Simple Weapon"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   "Hand Crossbows"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   "Long Swords"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   "Rapiers"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   "Short Swords"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   "Thieves' Tools"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   "SR Dexterity"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   "SR Intelligense"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":true,
-            "key":"<",
+            "effect":false,
+            "back":false,
+            "key":"=wqeqwqwerghyukio=",
             "comand":[
                [
                   4,
@@ -103,12 +153,17 @@
                   "Insight",
                   "Stelth",
                   "Persuasion"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":true,
-            "key":"*",
+            "effect":false,
+            "back":false,
+            "key":"=wefsdfaavgbf=",
             "comand":[
                [
                   1,
@@ -117,12 +172,17 @@
                [
                   "Rapier",
                   "Shortsword"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":true,
-            "key":"*",
+            "effect":false,
+            "back":false,
+            "key":"=wefsdfaavgbf=",
             "comand":[
                [
                   1,
@@ -131,12 +191,17 @@
                [
                   "Shortbow and 20 Arrows",
                   "Shortsword"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":true,
-            "key":"*",
+            "effect":false,
+            "back":false,
+            "key":"=wefsdfaavgbf=",
             "comand":[
                [
                   1,
@@ -146,33 +211,51 @@
                   "Dungeoneer's Pack",
                   "Burglar's Pack",
                   "Explorer's Pack"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"*",
+            "effect":false,
+            "back":false,
+            "key":"=wefsdfaavgbf=",
             "comand":[
                [
                   "Leather Armor"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"*",
+            "effect":false,
+            "back":false,
+            "key":"=wefsdfaavgbf=",
             "comand":[
                [
-                  "Dagger"
+                  "DAGGER"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"*",
+            "effect":false,
+            "back":false,
+            "key":"=wefsdfaavgbf=",
             "comand":[
                [
                   "Thieves' Tools"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -180,28 +263,43 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Competence"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Sneak Attack"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Thieves Jargon"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -209,10 +307,15 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Tricky Action"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -220,28 +323,43 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Additional Holdings"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Liquidation"
+               ],
+               [
+                  
                ]
             ]
          },
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Precise Aiming"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -252,53 +370,34 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Incredible Evasion"
+               ],
+               [
+                  
                ]
             ]
          }
       ],
       [
-         {
-            "cloud":true,
-            "key":"sdkfwfwmsd",
-            "comand":[
-               [
-                  2,
-                  "Competency 2. Warning!!! If you choose the same positions as on the first level, you will not get anything. Choose your two skill proficiencies or one skill proficiency and thieves' tools proficiency.Your proficiency bonus is doubled for all ability checks you make using any of the chosen proficiencies."
-               ],
-               [
-                  "Acrobatics",
-                  "Animal Handing",
-                  "Arcana",
-                  "Athletix",
-                  "Deception",
-                  "History",
-                  "Insight",
-                  "Intimidation",
-                  "Investigation",
-                  "Medicine",
-                  "Nature",
-                  "Perception",
-                  "Performance",
-                  "Persuasion",
-                  "Religion",
-                  "Sleigth of Hand",
-                  "Stelth",
-                  "Survival"
-               ]
-            ]
-         } 
+         
       ],
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Evasiveness"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -309,10 +408,15 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Penetration Master"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -323,10 +427,15 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Reliable Talent"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -337,10 +446,15 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Impostor"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -348,10 +462,15 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Blind Sight"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -359,10 +478,15 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Slippery Mind"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -373,10 +497,15 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Death Blow"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -384,10 +513,15 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Intangibility"
+               ],
+               [
+                  
                ]
             ]
          }
@@ -398,10 +532,15 @@
       [
          {
             "cloud":false,
-            "key":"=",
+            "effect":false,
+            "back":false,
+            "key":"=dsfsdfnkkk",
             "comand":[
                [
                   "Luck"
+               ],
+               [
+                  
                ]
             ]
          }

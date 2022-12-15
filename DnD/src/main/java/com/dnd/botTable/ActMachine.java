@@ -5,57 +5,60 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Log;
-import com.dnd.dndTable.rolls.actions.HeroAction;
 
 
 class ActMachine implements Serializable 
 {
-
 	private static final long serialVersionUID = 5473026731995501761L;
-	private List<Act> mainMap = new ArrayList<>();
-	private List<Act> undependet = new ArrayList<>();
-
-	private List<Integer> prepared = new ArrayList<>();
+	private List<Action> mainTree = new ArrayList<>();
+	private List<Action> datached = new ArrayList<>();
+	private List<Integer> prepeared = new ArrayList<>();
 	private List<Integer> trash = new ArrayList<>();
 
-
-	void finish()
+	void finishLast()
 	{
-		getTrash().addAll(mainMap.get(mainMap.size() - 1).end());
-		mainMap.remove(mainMap.size() - 1);
+		trash.addAll(mainTree.get(mainTree.size() - 1).end());
+		mainTree.remove(mainTree.size() - 1);
 	}
 
-	void finish(String act)
+	void dateche(String name)
 	{
-		for(Act undependetAct: undependet)
+		for(Action dateche: datached)
 		{
-			if(undependetAct.getName().equals(act)) {
+			if(dateche.name.equals(name)) {
 
-				getTrash().addAll(undependetAct.end());
-				undependet.remove(undependetAct);
+				trash.addAll(dateche.end());
+				datached.remove(dateche);
+				break;
 			}
 		}
 	}
 
-	void goTo(HeroAction action, boolean depend)
+	void goToMediator()
 	{
-		if(depend == true)
+		for(int i = mainTree.size() - 1; i >= 0; i--)
+		{		
+			if(mainTree.get(i).mediator == true)
+			{
+				break;
+			}
+			else
+			{
+				trash.addAll(mainTree.get(i).end());
+				mainTree.remove(i);
+			}
+		}
+	}
+
+	void goTo(Action action)
+	{
+		if(action.mainAct == true)
 		{
-
-			for(int i = 0; i < mainMap.size(); i++)
+			if(beackTo(action.name))
 			{
-				if(mainMap.get(i).getName().equals(action.getName()))
-				{
-					down(action);
-					depend = false;
-					break;
-				}
+				finishLast();
 			}
-			if(depend == true)
-			{
-				up(action);
-			}
-
+			up(action);
 		} 
 		else
 		{
@@ -63,225 +66,95 @@ class ActMachine implements Serializable
 		}
 	}
 
-	void goTo(String base, String act)
+	boolean beackTo(String key)
 	{
-		goTo(base, true);
-		goTo(act, true);
-	}
-
-	void goTo(String act, boolean depend)
-	{
-		if(depend == true)
+		for(int i = 0; i < mainTree.size(); i++)
 		{
-
-			for(int i = 0; i < mainMap.size(); i++)
+			if(mainTree.get(i).name == key)
 			{
-				if(mainMap.get(i).getName().equals(act))
+				for(int j = mainTree.size() - 1; j != i; j--)
 				{
-					down(act);
-					depend = false;
-					break;
+					trash.addAll(mainTree.get(j).end());
+					mainTree.remove(j);
 				}
-			}
-			if(depend == true)
-			{
-				up(act);
-			}
-
-		} 
-		else
-		{
-			start(act);
-		}
-	}
-
-	private void start(String act)
-	{
-		undependet.add(Act.create(act));
-	}
-
-	private void start(HeroAction act)
-	{
-		undependet.add(ActionAct.create(act));
-	}
-
-	private void down(String act)
-	{
-		for(int i = mainMap.size() - 1; i >= 0; i--)
-		{
-			if(!mainMap.get(i).getName().equals(act))
-			{
-				Log.add("Down " + act + trash);
-				getTrash().addAll(mainMap.get(i).end());
-				mainMap.remove(i);
-			}
-			else
-			{
-				break;
+				return true;
 			}
 		}
+		return false;
 	}
 
-	private void down(HeroAction act)
+	boolean beackTo(long key)
 	{
-		for(int i = mainMap.size() - 1; i >= 0; i--)
+
+		for(Action action: mainTree)
 		{
-			if(!mainMap.get(i).getName().equals(act.getName()))
+			if(action.key == key)
 			{
-				Log.add("Down " + act + trash);
-				getTrash().addAll(mainMap.get(i).end());
-				mainMap.remove(i);
-			}
-			else
-			{
-				break;
+				return beackTo(action.name);
 			}
 		}
+		return false;
 	}
 
-	private void up(HeroAction act)
+
+	private void up(Action action)
 	{
-		Log.add("Up " + act + trash);
-		this.mainMap.add(ActionAct.create(act));
+		this.mainTree.add(action);
 	}
 
-	private void up(String act)
+
+	private void start(Action act)
 	{
-		Log.add("Up " + act + trash);
-		this.mainMap.add(Act.create(act));
+		datached.add(act);
 	}
+
 
 	public List<Integer> throwAwayTrash() {
 
-		Log.add("Throw 1 " + trash);
 		List<Integer> answer = new ArrayList<>();
 		answer.addAll(trash);
-		Log.add("Throw 2 " + answer);
 		getTrash().clear();
-		Log.add("Throw 21 " + answer);
-		Log.add("Throw 3 " + trash);
-		getTrash().addAll(prepared);
-		Log.add("Throw 23 " + answer);
-		Log.add("Throw 4 " + trash);
-		prepared.clear();
-		Log.add("Throw 5 " + answer);
+		getTrash().addAll(prepeared);
+		prepeared.clear();
 		return answer;
 	}
 
-	public void toUndependet(Integer act)
-	{
-		undependet.get(undependet.size()-1).setActCircle(act);
-	}
 
 	public void toAct(Integer act)
 	{
-		mainMap.get(mainMap.size()-1).setActCircle(act);
+		mainTree.get(mainTree.size()-1).toCircle(act);
 	}
+
 
 	public void prepare(Integer prepared) 
 	{
-		this.prepared.add(prepared);
+		this.prepeared.add(prepared);
 	}
+
 
 	public List<Integer> getTrash() 
 	{
 		return trash;
 	}
 
-	public HeroAction getAction()
+
+	public Action getAction()
 	{
-		if(mainMap.get(mainMap.size() - 1) instanceof ActionAct)
+		return mainTree.get(mainTree.size() - 1);
+	}
+
+	
+	public void toDatached(String name, Integer messageId) {
+		for(Action action: datached)
 		{
-			ActionAct target = (ActionAct)mainMap.get(mainMap.size() - 1);
-			return target.getAction();
+			if(action.name == name)
+			{
+				action.toCircle(messageId);
+				break;
+			}
 		}
-		return null;
-	}
-
-	public String toString()
-	{
-		String answer = "----------------------------------------------\n";
-
-		for(Act act: mainMap)
-		{
-			answer += (act.toString()) + "\n";
-		}
-
-		return answer + "----------------------------------------\n";
-	}
-}
-
-class Act implements Serializable{
-
-
-	private static final long serialVersionUID = 2479864067932090569L;
-
-	private String name;
-
-	private List<Integer> actCircle = new ArrayList<>();
-
-	List<Integer> end()
-	{
-		return actCircle;
-	}
-
-	void setActCircle(Integer act) 
-	{
-		this.actCircle.add(act);
-	}
-
-	static Act create(String name)
-	{
-		Act act = new Act();
-		act.setName(name);
-		return act;
-
-	}
-
-	public String getName() 
-	{
-		return name;
-	}
-
-	public void setName(String name) 
-	{
-		this.name = name;
-	}	
-
-	public String toString()
-	{
-		String answer = name + "|";
-
-		for(Integer inter: actCircle)
-		{
-			answer += inter + "|";
-		}
-		return answer;
 	}
 
 }
 
-class ActionAct extends Act 
-{
-	private static final long serialVersionUID = 1L;
 
-	private HeroAction action;
-
-	public HeroAction getAction() {
-		return action;
-	}
-
-	static ActionAct create(HeroAction action)
-	{
-		ActionAct act = new ActionAct();
-		act.setName(action.getName());
-		act.action = action;
-		return act;
-
-	}
-
-	public void setAction(HeroAction action) {
-		this.action = action;
-	}
-
-}

@@ -13,7 +13,6 @@ public class Rogue extends ClassDnd {
 	
 
 	public Rogue( int lvl, String archetype) {
-		super(lvl);
 		this.myArchetypeClass = archetype;
 	}
 	public Rogue()

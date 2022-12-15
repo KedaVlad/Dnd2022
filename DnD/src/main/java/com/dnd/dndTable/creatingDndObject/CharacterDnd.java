@@ -5,27 +5,30 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Activator;
 import com.dnd.Body;
 import com.dnd.Log;
-import com.dnd.botTable.Template;
+import com.dnd.botTable.Action;
+import com.dnd.botTable.actions.AttackAction;
+import com.dnd.botTable.actions.HeroAction;
+import com.dnd.botTable.actions.PreAttack;
+import com.dnd.botTable.actions.RollAction;
 import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
-import com.dnd.dndTable.rolls.AttackMachine;
+import com.dnd.dndTable.rolls.Formula;
 import com.dnd.dndTable.rolls.Rolls;
-import com.dnd.dndTable.rolls.actions.HeroAction;
 
 
-public class CharacterDnd implements Serializable, ObjectDnd
+public class CharacterDnd implements Serializable, ActionObject
 {
 
 	private static final long serialVersionUID = -7781627593661723428L;
 
 	private String name;
+	private boolean fighting;
 	private int lvl;
 	private int hp;
 	private String nature;
@@ -36,35 +39,104 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	private Rolls rolls;
 	private AttackMachine attackMachine;
 	private Workmanship myWorkmanship;
-    private СhoiceCloud cloud;
-    private Body body;
-    private List<String> permanentBuffs;
-    private List<String> timesBuffs;
+	private СhoiceCloud cloud;
+	private Body body;
+	private List<String> permanentBuffs;
+	private List<String> timesBuffs;
 	private List<String> myMemoirs;
-	
-	private Activator activator;
-	
-	public Template registAction(ActionObject object)
+
+	public Action registAction(ActionObject object)
 	{
-		if(object instanceof Weapon)
+		if(isFighting())
 		{
-			Weapon weapon = (Weapon) object;
-			return Templeate(attackMachine.getActionTree(weapon));
+			if(object instanceof Weapon)
+			{
+				Weapon weapon = (Weapon) object;
+				return attackMachine.startAction(weapon);
+				
+			}
 		}
-		
+
 		return null;
 	}
-	
-	public Template act(HeroAction action)
+
+	private PreAttack preAttack(PreAttack attack)
 	{
-	return null;
+		Formula formula = rolls.execute(attack.getAction());
+		int status = attack.getStatus();
+		String text;
+		if(status == 1)
+		{
+			text = formula.execute(true);
+		}
+		else if(status == 3)
+		{
+			text = formula.execute(false);
+		}
+		else 
+		{
+			text = formula.execute();
+		}
+		
+		attack.setCriticalMiss(formula.isNatural1());
+		attack.setCriticalHit(formula.isNatural20());
+		attack.setText(text);
+		return attack;
 	}
 	
+	private HeroAction roll(RollAction action)
+	{
+		Formula formula = rolls.execute(action);
+		return HeroAction.create("finish", 0, formula.execute(), null);
+	}
 	
-	
-	
-	
-	
+	public Action act(HeroAction action)
+	{
+		long key = action.getKey();
+		Action answer = null;
+		
+		if(key == AttackMachine.key)
+		{
+			if(action instanceof PreAttack)
+			{
+				answer = attackMachine.postAttack(preAttack((PreAttack) action));
+			}
+			else if(action instanceof AttackAction)
+			{
+				return PreAttack.create((AttackAction) action);
+			}
+			else if(action instanceof RollAction)
+			{
+			    return roll((RollAction) action);
+			}
+			else
+			{
+				return action;
+			}
+		}
+		
+		if(action instanceof AttackAction)
+		{
+			
+		
+		}
+		else if(action instanceof RollAction)
+		{
+			
+		}
+		else
+		{
+			
+		}
+		
+		return answer;
+	}
+
+
+
+
+
+
 
 	public CharacterDnd(String name) 
 	{
@@ -82,7 +154,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	public void lvlUp(CharacterDnd character) 
 	{
 		myClass.setLvl(myClass.getLvl()+1);
-		
+
 	}
 
 	public ClassDnd getClassDnd() 
@@ -185,7 +257,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 
 	private void setProfisiency() 
 	{
-		
+
 		int result = 0;
 
 		if(lvl>16) 
@@ -204,15 +276,15 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		{
 			result = 2;
 		}
-       if(result != rolls.getProficiency().getBuff())
-       {
-    	  rolls.getProficiency().setBuff(result);
-       }
-       
+		if(result != rolls.getProficiency().getBuff())
+		{
+			rolls.getProficiency().setBuff(result);
+		}
+
 	}
-	
- 	public int getSpeed()
- 	{
+
+	public int getSpeed()
+	{
 		return speed;
 	}
 
@@ -232,7 +304,7 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	{
 		return rolls;
 	}
-	
+
 	public Workmanship getWorkmanship() 
 	{
 		return myWorkmanship;
@@ -247,23 +319,6 @@ public class CharacterDnd implements Serializable, ObjectDnd
 	{
 		return new CharacterDnd(name);
 	}
-	
-	public List<String> getPermanentBuffs() {
-	
-		List<String> answer = permanentBuffs;
-		if(multiClass != null)
-		{
-		answer.addAll(myClass.getPermanentBuffs());
-		answer.addAll(multiClass.getPermanentBuffs());
-		}
-		else
-		{
-			answer.addAll(myClass.getPermanentBuffs());
-		}
-		
-		
-		return answer;
-	}
 
 	public List<String> getTimesBuffs() {
 		return timesBuffs;
@@ -277,28 +332,19 @@ public class CharacterDnd implements Serializable, ObjectDnd
 		this.attackMachine = attackMachine;
 	}
 
-
-
-
-
-
-
-	public Activator getActivator() {
-		return activator;
+	public boolean isFighting() {
+		return fighting;
 	}
 
-
-
-
-
-
-
-	public void setActivator(Activator activator) {
-		this.activator = activator;
+	public void setFighting(boolean fighting) {
+		this.fighting = fighting;
 	}
 
-	public HeroAction getTargetAction() {
-		return targetAction;
+	@Override
+	public String objectKey() 
+	{
+		// TODO Auto-generated method stub
+		return null;
 	}	
 
 }
