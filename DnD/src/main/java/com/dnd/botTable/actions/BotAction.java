@@ -54,16 +54,14 @@ public class BotAction extends Action{
 
 	
 	@Override
-	protected boolean hasButtons() {
+	public boolean hasButtons() {
 		
 		return (nextStep != null) && (nextStep.length != 0);
 	}
 	
 	public String toString()
 	{
-		String answer = name + " BOT ACTION |";
-
-		return answer;
+		return "  | BOT ACTION :" + name + "|  ";
 	}
 	
 }

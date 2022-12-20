@@ -1,6 +1,6 @@
 package com.dnd.dndTable.creatingDndObject.workmanship.mechanics;
 
-import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.rolls.Dice;
 
 public class Mechanics extends Feature

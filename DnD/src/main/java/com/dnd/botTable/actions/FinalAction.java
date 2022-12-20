@@ -7,6 +7,7 @@ public class FinalAction extends FactoryAction
 	public static FinalAction create(FactoryAction action)
 	{
 		FinalAction target = new FinalAction();
+		target.name = "FINAL";
 		target.key = action.getKey();
 		target.text = action.getText();
 		target.mainAct = true;
@@ -17,10 +18,12 @@ public class FinalAction extends FactoryAction
 	}
 	public String toString()
 	{
-		String answer = name + "| FINAL ACTION";
-
-	
-		return answer;
+		String localData = "local data - ";
+		for(String string: this.getLocalData())
+		{
+			localData += string + " ";
+		}
+		return "  | FACTORY ACTION :" + name + localData + "|  ";
 	}
 	
 	@Override

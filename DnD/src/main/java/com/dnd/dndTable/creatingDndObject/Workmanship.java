@@ -4,23 +4,59 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
+import com.dnd.botTable.Action;
+import com.dnd.botTable.actions.HeroAction;
+import com.dnd.botTable.actions.RegistrateAction;
+import com.dnd.dndTable.ActionObject;
+import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
+import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.Mechanics;
 import com.google.common.math.Stats;
 
 
-public class Workmanship implements Serializable 
+public class Workmanship implements Serializable, ObjectDnd 
 {
 	
 	private static final long serialVersionUID = -6541873819810645125L;
-	
-	
+	public final static long key = 348954892;
 	private List<Feature> myFeatures; 
 	private List<Spell> mySpells;
 	private List<Possession> myPossessions;
 	
+	HeroAction startAction(ObjectDnd object)
+	{
+		if(object instanceof Feature)
+		{
+			if(object instanceof Mechanics)
+			{
+				
+			}
+			else
+			{
+				return fetureAction((Feature) object);
+			}
+		}
+		else if(object instanceof Spell)
+		{
+			
+		}
+		
+		return null;
+	}
 	
+	private HeroAction fetureAction(Feature object) {
+		
+	return null;
+		
+	}
+
+	HeroAction execute(HeroAction action)
+	{
+		return null;
+	}
+		
 	public Workmanship()
 	{
 		myFeatures = new ArrayList<>();
@@ -92,6 +128,29 @@ public class Workmanship implements Serializable
 				break;
 			}
 		}
+	}
+
+	
+	@Override
+	public long key() {
+		return key;
+	}
+
+	public Action getFeatureMenu() {
+		
+		String name = "FeatureMenu";
+		String text = "This is your feature. Choose some for more infotmation";
+		List<Action> buttons = new ArrayList<>();
+		for(Feature feature: myFeatures)
+		{
+			buttons.add(RegistrateAction.create(feature.getName(),feature));
+		}
+		return HeroAction.create(name, key, text, buttons);
+	}
+
+	public Action featureCase(Feature object) {
+	
+		return null;
 	}
 	
 }

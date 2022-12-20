@@ -9,7 +9,12 @@
   </properties>
  <dependencies>
   
-  
+  <dependency>
+    <groupId>junit</groupId>
+    <artifactId>junit</artifactId>
+    <version>4.4</version>
+    <scope>test</scope>
+  </dependency>
   <dependency>
         <groupId>org.telegram</groupId>
         <artifactId>telegrambots</artifactId>
@@ -25,21 +30,21 @@
        <artifactId>slf4j-simple</artifactId>
        <version>2.0.0</version>
    </dependency>
-   <dependency>
+<dependency>
     <groupId>com.fasterxml.jackson.core</groupId>
     <artifactId>jackson-databind</artifactId>
     <version>2.14.0-rc2</version>
 </dependency>
-   <dependency>
-    <groupId>com.google.code.gson</groupId>
-    <artifactId>gson</artifactId>
-    <version>2.9.1</version>
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-annotations</artifactId>
+    <version>2.14.0</version>
 </dependency>
-  
-  
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-core</artifactId>
+    <version>2.14.0</version>
+</dependency>
   </dependencies>
-  
-  
-  
   
 </project>

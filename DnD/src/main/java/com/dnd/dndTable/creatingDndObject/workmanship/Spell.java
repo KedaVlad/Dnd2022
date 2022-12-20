@@ -5,9 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.botTable.actions.HeroAction;
+import com.dnd.dndTable.ActionObject;
 
 
-public class Spell implements Serializable {
+public class Spell implements Serializable, ActionObject 
+{
 	
 	
 	private static final long serialVersionUID = -7876613939972469105L;
@@ -93,6 +95,12 @@ public class Spell implements Serializable {
 
 	public void setCast(HeroAction cast) {
 		this.cast = cast;
+	}
+
+	@Override
+	public long key() {
+		// TODO Auto-generated method stub
+		return spell;
 	}
 
 	

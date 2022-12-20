@@ -2,14 +2,12 @@ package com.dnd.dndTable.creatingDndObject.workmanship;
 
 import java.io.Serializable;
 
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
+
 public class Trait extends Feature implements Serializable {
 
 	private static final long serialVersionUID = -8115502742156146242L;
-
-	public Trait(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
-	}
+	
 	private int id;
 	private String name;
 	public boolean equals(Object obj) {

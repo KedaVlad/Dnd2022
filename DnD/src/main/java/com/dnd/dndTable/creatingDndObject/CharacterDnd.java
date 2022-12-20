@@ -11,18 +11,23 @@ import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.AttackAction;
 import com.dnd.botTable.actions.HeroAction;
 import com.dnd.botTable.actions.PreAttack;
+import com.dnd.botTable.actions.RegistrateAction;
 import com.dnd.botTable.actions.RollAction;
+import com.dnd.botTable.actions.StartTreeAction;
 import com.dnd.dndTable.ActionObject;
+import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.ObjectDnd;
+import com.dnd.dndTable.Refreshable;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.rolls.Formula;
 import com.dnd.dndTable.rolls.Rolls;
 
 
-public class CharacterDnd implements Serializable, ActionObject
+public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 {
 
 	private static final long serialVersionUID = -7781627593661723428L;
@@ -30,7 +35,7 @@ public class CharacterDnd implements Serializable, ActionObject
 	private String name;
 	private boolean fighting;
 	private int lvl;
-	private int hp;
+	private HP hp;
 	private String nature;
 	private int speed;
 	private RaceDnd myRace;
@@ -40,23 +45,54 @@ public class CharacterDnd implements Serializable, ActionObject
 	private AttackMachine attackMachine;
 	private Workmanship myWorkmanship;
 	private СhoiceCloud cloud;
+	private MagicSoul magicSoul;
 	private Body body;
 	private List<String> permanentBuffs;
 	private List<String> timesBuffs;
 	private List<String> myMemoirs;
 
-	public Action registAction(ActionObject object)
+	private Action registAction(RegistrateAction action)
 	{
+		ObjectDnd object = action.getTarget();
 		if(isFighting())
 		{
 			if(object instanceof Weapon)
 			{
 				Weapon weapon = (Weapon) object;
 				return attackMachine.startAction(weapon);
-				
+
+			}
+		}
+		else
+		{
+			if(object instanceof Feature)
+			{
+				return myWorkmanship.featureCase((Feature)object);
+			}
+			else if(object instanceof Time)
+			{
+				return rest((Time)object);
 			}
 		}
 
+		return null;
+	}
+
+	private Action rest(Time time) 
+	{
+		refresh(time);
+		String name = "EndRest";
+		if(time == Time.SHORT)
+		{
+			String text = "Everything that depended on a short rest is reset.\n"
+					+ "You have "+lvl+" Hit Dice available to restore your health.";
+			HeroAction.create(name, character, text, null);
+		}
+		else if(time == Time.LONG)
+		{
+			String text = "You are fully rested and recovered!";
+			HeroAction.create(name, character, text, null);
+		}
 		return null;
 	}
 
@@ -77,24 +113,34 @@ public class CharacterDnd implements Serializable, ActionObject
 		{
 			text = formula.execute();
 		}
-		
+
 		attack.setCriticalMiss(formula.isNatural1());
 		attack.setCriticalHit(formula.isNatural20());
 		attack.setText(text);
 		return attack;
 	}
-	
+
 	private HeroAction roll(RollAction action)
 	{
 		Formula formula = rolls.execute(action);
 		return HeroAction.create("finish", 0, formula.execute(), null);
 	}
-	
-	public Action act(HeroAction action)
+
+	public Action act(Action action)
 	{
 		long key = action.getKey();
 		Action answer = null;
-		
+
+		if(action instanceof StartTreeAction)
+		{
+			return startTreeAction((StartTreeAction) action);
+		}
+		if(action instanceof RegistrateAction)
+		{
+			return registAction((RegistrateAction) action);
+		}
+
+
 		if(key == AttackMachine.key)
 		{
 			if(action instanceof PreAttack)
@@ -107,36 +153,69 @@ public class CharacterDnd implements Serializable, ActionObject
 			}
 			else if(action instanceof RollAction)
 			{
-			    return roll((RollAction) action);
+				return roll((RollAction) action);
 			}
 			else
 			{
 				return action;
 			}
 		}
-		
+
 		if(action instanceof AttackAction)
 		{
-			
-		
+
+
 		}
 		else if(action instanceof RollAction)
 		{
-			
+
 		}
 		else
 		{
-			
+
 		}
-		
 		return answer;
 	}
 
+	private Action startTreeAction(StartTreeAction action) {
+
+		long key = action.getKey();
+		if(key == feature)
+		{
+			return myWorkmanship.getFeatureMenu();
+		}
+		else if(key == possession)
+		{
+			return myWorkmanship.getPossessionMenu();
+		}
+		else if(key == spell)
+		{
+
+		}
+		else if(key == body)
+		{
+
+		}
+		else if(key == rest)
+		{
+			return rest();
+		}
 
 
+		return null;	
+	}
 
-
-
+	private Action rest() 
+	{
+		String name = "Rest";
+		String text = "You are resting... How many hours did you have time to rest?\n"
+				+ "Long rest - if 8 or more.\n"
+				+ "Short rest - if more than 1.5 and less than 8.";
+		List<Action> buttons = new  ArrayList<>();
+		buttons.add(RegistrateAction.create("Long rest", Time.LONG));
+		buttons.add(RegistrateAction.create("Short rest", Time.SHORT));
+		return HeroAction.create(name, character, text, buttons);
+	}
 
 	public CharacterDnd(String name) 
 	{
@@ -145,6 +224,7 @@ public class CharacterDnd implements Serializable, ActionObject
 		myMemoirs = new ArrayList<>();	
 		cloud = new СhoiceCloud();
 		rolls = new Rolls();
+		hp = new HP();
 		permanentBuffs = new ArrayList<>();
 		timesBuffs = new ArrayList<>();
 
@@ -216,12 +296,6 @@ public class CharacterDnd implements Serializable, ActionObject
 		myMemoirs.add(memoirs);
 	}
 
-	public String getMenu() 
-	{
-
-		return name;
-	}
-
 	public void setLvl() 
 	{
 
@@ -237,12 +311,12 @@ public class CharacterDnd implements Serializable, ActionObject
 
 	public int getHp() 
 	{
-		return hp;
+		return hp.getNow() + hp.getTimeHp();
 	}
 
 	public void setHp(int hp)
 	{
-		this.hp = hp;
+		this.hp.grow(hp);
 	}
 
 	public String getNature() 
@@ -293,7 +367,6 @@ public class CharacterDnd implements Serializable, ActionObject
 		this.speed = speed;
 	}
 
-
 	public void setMyStat(int str, int dex, int con, int intl, int wis, int cha) 
 	{
 		rolls.setStats(str, dex, con, intl, wis, cha); 
@@ -340,11 +413,28 @@ public class CharacterDnd implements Serializable, ActionObject
 		this.fighting = fighting;
 	}
 
+	public Body getBody() {
+		return body;
+	}
+
+	public List<String> getPermanentBuffs() {
+		return permanentBuffs;
+	}
+
 	@Override
-	public String objectKey() 
-	{
-		// TODO Auto-generated method stub
-		return null;
+	public void refresh(Time time) {
+
+		magicSoul.refresh(time);
+
 	}	
 
+	public String getStatus()
+	{
+		return "Status";
+	}
+
+	public String getMenu()
+	{
+		return "Menu";
+	}
 }

@@ -38,13 +38,12 @@ public abstract class Action implements Serializable {
 
 	public String toString()
 	{
-		String answer = name + "|";
+		return "  |" + name + "|  ";
 
-		for(Integer inter: actCircle)
-		{
-			answer += inter + "|";
-		}
-		return answer;
+	}
+	public String getName() {
+		// TODO Auto-generated method stub
+		return name;
 	}
 
 }

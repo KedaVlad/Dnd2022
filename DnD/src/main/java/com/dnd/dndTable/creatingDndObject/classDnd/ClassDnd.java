@@ -9,14 +9,16 @@ import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Source;
 import com.dnd.dndTable.ObjectDnd;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
-import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
-import com.dnd.dndTable.factory.InerComand;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.factory.Json;
 import com.dnd.dndTable.factory.Script;
+import com.dnd.dndTable.factory.inerComands.AddComand;
+import com.dnd.dndTable.factory.inerComands.InerComand;
 import com.dnd.dndTable.rolls.Dice.Roll;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -25,7 +27,7 @@ import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 
-public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
+public class ClassDnd implements Serializable, Script, Source{
 
 	private static final long serialVersionUID = 3219669745475635442L;
 
@@ -51,8 +53,6 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 		return firstHp;
 	}
 	
-	
-
 	public String getMyArchetypeClass() 
 	{
 		return myArchetypeClass;
@@ -82,7 +82,30 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 	{
 		this.myArchetypeClass = myArchetypeClass;
 	}
+	
+	public Roll getDiceHp() {
+		return diceHp;
+	}
 
+	public void setDiceHp(Roll diceHp) {
+		this.diceHp = diceHp;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public void setClassName(String className) {
+		this.className = className;
+	}
+
+	public void setFirstHp(int firstHp) {
+		this.firstHp = firstHp;
+	}
+	
+	
+	
+	
 	public static void main(String[] args) throws JsonProcessingException 
 	{
 
@@ -97,9 +120,7 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 
 		List<InerComand> lvl0= new ArrayList<>();
 
-		InerComand c1 = new InerComand(false, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Light Armor");
+		InerComand c1 = AddComand.create(Armor.create("Light Armor"));
 		lvl0.add(c1);
 
 		c1 = new InerComand(false, false, possessionKey);
@@ -371,28 +392,7 @@ public class ClassDnd implements Serializable,ObjectDnd, Script, Source{
 		System.out.println(pp);*/
 	}
 
-	public Roll getDiceHp() {
-		return diceHp;
-	}
-
-	public void setDiceHp(Roll diceHp) {
-		this.diceHp = diceHp;
-	}
-
-	public String getClassName() {
-		return className;
-	}
-
-	public void setClassName(String className) {
-		this.className = className;
-	}
-
-
-
-
-	public void setFirstHp(int firstHp) {
-		this.firstHp = firstHp;
-	}
+	
 }
 
 

@@ -3,6 +3,7 @@ package com.dnd.dndTable.factory;
 import java.io.Serializable;
 
 import com.dnd.botTable.Action;
+import com.dnd.botTable.GameTable;
 import com.dnd.botTable.actions.BotAction;
 import com.dnd.botTable.actions.FactoryAction;
 import com.dnd.botTable.actions.FinalAction;
@@ -59,22 +60,25 @@ public class ControlPanel implements Serializable {
 		}
 	}
 
-	public Action finish(FinalAction action, CharacterDnd character)
+	public Action finish(FinalAction action, GameTable gameTable)
 	{
 		long key = action.getKey();
 		if(key == CharacterFactory.key)
 		{
-			character = CharacterFactory.finish(action);
+			gameTable.setActualGameCharacter(CharacterFactory.finish(action));
+			gameTable.save();
 			return ClassFactory.startCreate(action.getLocalData().get(0));
 		}
 		else if(key == ClassFactory.key)
 		{
-			ClassFactory.finish(action, character);
+			ClassFactory.finish(action, gameTable.getActualGameCharacter());
+			gameTable.save();
 			return RaceFactory.startCreate();
 		}
 		else if(key == RaceFactory.key)
 		{
-			RaceFactory.finish(action, character);
+			RaceFactory.finish(action, gameTable.getActualGameCharacter());
+			gameTable.save();
 			return finish();
 		}
 		return null;

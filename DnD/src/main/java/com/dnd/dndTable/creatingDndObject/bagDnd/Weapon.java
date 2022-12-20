@@ -48,4 +48,9 @@ public class Weapon extends Items
 		this.firstType = firstType;
 	}
 
+	@Override
+	public long key() {
+		// TODO Auto-generated method stub
+		return weapon;
+	}
 }

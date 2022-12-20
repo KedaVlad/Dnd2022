@@ -1,7 +1,6 @@
 package com.dnd.botTable;
 
 
-import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -13,39 +12,29 @@ import java.util.regex.Pattern;
 import org.telegram.telegrambots.meta.api.objects.Message;
 
 import com.dnd.KeyWallet;
-import com.dnd.Log;
+import com.dnd.botTable.actions.ArrayAction;
 import com.dnd.botTable.actions.BotAction;
 import com.dnd.botTable.actions.FactoryAction;
 import com.dnd.botTable.actions.FinalAction;
 import com.dnd.botTable.actions.HeroAction;
+import com.dnd.botTable.actions.StartTreeAction;
 import com.dnd.dndTable.ActionObject;
-import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
-import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.factory.ControlPanel;
 import com.dnd.dndTable.rolls.Dice;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 public class GameTable implements KeyWallet, Serializable
 {
 	private static final long serialVersionUID = -8448308501857106456L;
 	private long chatId;
-	private boolean mediator;
 	private Map<String, CharacterDnd> savedCharacter = new LinkedHashMap<>();
 	private CharacterDnd actualGameCharacter;
 	private ControlPanel controlPanel = new ControlPanel();
 	private ActMachine script = new ActMachine();
 
-	public Action startAction(ActionObject object)
-	{
-		return getActualGameCharacter().registAction(object);
-	}
-
 	public Action makeAction(Action action)
 	{ 
-		Log.add("in game table" + action);
 		if(action instanceof HeroAction)
 		{
 			HeroAction hero = (HeroAction) action;
@@ -53,19 +42,16 @@ public class GameTable implements KeyWallet, Serializable
 		}
 		else if(action instanceof FinalAction)
 		{
-			Log.add("right place");
 			script.beackTo(start);
-			return controlPanel.finish((FinalAction)action, getActualGameCharacter());
+			return controlPanel.finish((FinalAction)action, this);
 		}
 		else if(action instanceof FactoryAction)
-		{
-			
+		{	
 			FactoryAction factory = (FactoryAction) action;
 			return controlPanel.act(factory);
 		}
 		else if(action instanceof BotAction)
 		{
-			
 			return execute((BotAction) action);
 		}
 		return null;
@@ -91,7 +77,52 @@ public class GameTable implements KeyWallet, Serializable
 		{
 			return menu();
 		}
+		else if(key == menu)
+		{
+			return inMenu(action);
+		}
 
+		return null;
+	}
+
+
+	private Action inMenu(BotAction action) 
+	{
+		if(action.getAnswer().equals("SPELLS"))
+		{
+			return actualGameCharacter.act(StartTreeAction.create(spell));
+		} 
+		else if(action.getAnswer().equals("FETURE"))
+		{
+			return actualGameCharacter.act(StartTreeAction.create(feature));
+		}
+		else if(action.getAnswer().equals("POSSESSION"))
+		{
+			return actualGameCharacter.act(StartTreeAction.create(possession));
+		}
+		else if(action.getAnswer().equals("BAG"))
+		{
+			return actualGameCharacter.act(StartTreeAction.create(body));
+		}
+		else if(action.getAnswer().equals("ROLLS"))
+		{
+			return actualGameCharacter.act(StartTreeAction.create(stat));
+		}
+		else if(action.getAnswer().equals("REST"))
+		{
+			return actualGameCharacter.act(StartTreeAction.create(rest));
+		}
+		else if(action.getAnswer().equals("FIGHT"))
+		{
+			return fightMenu();
+		}
+		
+		return null;
+		
+	}
+
+	private Action fightMenu() {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -117,7 +148,7 @@ public class GameTable implements KeyWallet, Serializable
 	
 	private Action download(String string)
 	{
-		actualGameCharacter = savedCharacter.get(string);
+		setActualGameCharacter(savedCharacter.get(string));
 		if(controlPanel.readiness(getActualGameCharacter()) != null)
 		{
 			return controlPanel.readiness(getActualGameCharacter());
@@ -155,21 +186,20 @@ public class GameTable implements KeyWallet, Serializable
 
 	private Action menu()
 	{
-		String name = "Menu";
-		String text = getActualGameCharacter().getName();
-		String[][] buttoms = 
-			{{"SPELLS", "FETURE", "POSSESSION"},
-					{"BAG", "MEMOIRS"},
-					{"FIGHT"}
-			};
-		return BotAction.create(name, menu, true, false, text, buttoms);
+		return ArrayAction.create("Menu", toMenu, new BotAction[] {
+				BotAction.create("Menu", menu, true, false, actualGameCharacter.getStatus(), null), 
+				BotAction.create("Menu", menu, true, false, actualGameCharacter.getMenu(), new String[][]
+					{{"SPELLS", "FETURE", "POSSESSION"},
+							{"BAG", "ROLLS"},
+							{"MEMOIRS"},
+							{"REST","FIGHT"}
+					})});
 	}
 
 	private Action apruveHp(BotAction action)
 	{
 		String name;
 		String text;
-		setMediator(false);
 		if(action.getAnswer().contains("Stable"))
 		{
 			getActualGameCharacter().setHp(Dice.stableStartHp(getActualGameCharacter()));
@@ -265,7 +295,7 @@ public class GameTable implements KeyWallet, Serializable
 	{
 		GameTable gameTable = new GameTable();
 		gameTable.setChatId(message.getChatId());
-		gameTable.getScript().goTo(BotAction.create("BASE", message.getChatId() , true, false, null, null));	
+		gameTable.getScript().up(BotAction.create(message.getChatId()+"", message.getChatId() , true, false, null, null));	
 		return gameTable;
 
 	}
@@ -293,15 +323,6 @@ public class GameTable implements KeyWallet, Serializable
 		return script;
 	}
 
-	public boolean isMediator() {
-		return mediator;
-	}
-
-	public void setMediator(boolean mediator) 
-	{
-		this.mediator = mediator;
-	}
-	
 	public long getChatId() 
 	{
 		return chatId;
@@ -315,6 +336,11 @@ public class GameTable implements KeyWallet, Serializable
 	public CharacterDnd getActualGameCharacter() 
 {
 		return actualGameCharacter;
+	}
+
+	public void setActualGameCharacter(CharacterDnd actualGameCharacter) 
+	{
+		this.actualGameCharacter = actualGameCharacter;
 	}
 
 }

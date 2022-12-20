@@ -10,14 +10,14 @@ public class HeroAction extends Action
 {
 	private static final long serialVersionUID = 1L;
 
-	private List<HeroAction> nextStep = new ArrayList<>();
+	private List<Action> nextStep = new ArrayList<>();
 
-	public List<HeroAction> getNextStep() 
+	public List<Action> getNextStep() 
 	{
 		return nextStep;
 	}
 
-	public void setNextStep(List<HeroAction> nextStep) 
+	public void setNextStep(List<Action> nextStep) 
 	{
 		this.nextStep = nextStep;
 	}
@@ -27,7 +27,7 @@ public class HeroAction extends Action
 		return nextStep == null || nextStep.isEmpty();
 	}
 	
-	public static HeroAction create(String name, long key, String text, List<HeroAction> nextStep)
+	public static HeroAction create(String name, long key, String text, List<Action> nextStep)
 	{
 		HeroAction answer = new HeroAction();
 		answer.name = name;
@@ -61,9 +61,9 @@ public class HeroAction extends Action
 	@Override
 	public Action continueAction(String name) {
 		
-		for(HeroAction action: this.nextStep)
+		for(Action action: this.nextStep)
 		{
-			if(action.name.equals(name))
+			if(action.getName().equals(name))
 			{
 				return action;
 			}
@@ -81,7 +81,7 @@ public class HeroAction extends Action
 		
 		for(int i = 0; i < this.getNextStep().size(); i++)
 		{
-			buttoms[i][0] = this.getNextStep().get(i).name;
+			buttoms[i][0] = this.getNextStep().get(i).getName();
 		}
 		}
 		
@@ -92,6 +92,11 @@ public class HeroAction extends Action
 	protected boolean hasButtons() {
 		// TODO Auto-generated method stub
 		return nextStep != null && !nextStep.isEmpty();
+	}
+	
+	public String toString()
+	{
+		return "  | HERO ACTION :" + name + "|  ";
 	}
 	
 }

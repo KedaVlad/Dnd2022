@@ -12,7 +12,6 @@ abstract class CharacterFactory
 	
 	public static Action startCreate()
 	{
-		Log.add("characterHactory start create");
 		String name = "CreateCharacter";
 		String text = "Traveler, how should I call you?!\n(Write Hero name)";
 		return FactoryAction.create(name, key, true, text, null);
@@ -20,9 +19,6 @@ abstract class CharacterFactory
 
 	public static Action execute(FactoryAction action)
 	{
-		Log.add("CharacterFactory.execute");
-	
-		
 		switch(action.getLocalData().size())
 		{
 		case 1:
@@ -33,17 +29,11 @@ abstract class CharacterFactory
 	
 	private static Action apruveAction(FactoryAction action)
 	{
-		Log.add("CharacterFactory.apruveAction");
-		
 		action.setName("ApruveCharactersName");
 		action.setMediator(false);
 		action.setText("So can I call you - " + action.getLocalData().get(0) + "? If not, repeat your name.");
 		action.setNextStep(new String[][] {{"Yeah, right"}});
-		Log.add(action);
-		Action answer = FinalAction.create(action);
-		Log.add("bech 1" + FinalAction.create(action));
-		Log.add("bich 2" + answer);
-		return answer;
+		return  FinalAction.create(action);
 	}
 	
 	public static CharacterDnd finish(FinalAction action)

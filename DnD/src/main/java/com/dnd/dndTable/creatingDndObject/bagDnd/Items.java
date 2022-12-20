@@ -12,11 +12,6 @@ public class Items implements Serializable, ObjectDnd, Source{
 	private String name;
 	private String description;
 	
-	public Items(String name)
-	{
-		this.name = name;
-	}
-
 	public Items() {}
 
 	
@@ -31,5 +26,23 @@ public class Items implements Serializable, ObjectDnd, Source{
 	public String source() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public long key() {
+		// TODO Auto-generated method stub
+		return item;
+	}
+
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public void setName(String name) {
+		this.name = name;
 	}
 }

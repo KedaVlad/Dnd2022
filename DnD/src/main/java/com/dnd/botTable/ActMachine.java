@@ -34,82 +34,67 @@ class ActMachine implements Serializable
 		}
 	}
 
-	void goToMediator()
+	boolean isMediator()
 	{
-		for(int i = mainTree.size() - 1; i >= 0; i--)
-		{		
-			if(mainTree.get(i).mediator == true)
-			{
-				break;
-			}
-			else
-			{
-				trash.addAll(mainTree.get(i).end());
-				mainTree.remove(i);
-			}
-		}
-	}
-
-	void goTo(Action action)
-	{
-		if(action.mainAct == true)
+		if(mainTree.get(mainTree.size() - 1).mediator)
 		{
-			if(beackTo(action.name))
-			{
-				finishLast();
-			}
-			up(action);
-		} 
+			Log.add("MEDIATOR WORK LAST");
+			return true;
+		}
+		else if(mainTree.size() > 1 && mainTree.get(mainTree.size() - 2).mediator)
+		{
+			Log.add("MEDIATOR WORK pre LAST");
+			finishLast();
+			return true;
+		}
 		else
 		{
-			start(action);
+			Log.add("MEDIATOR doesnt WORK");
+			return false;
 		}
 	}
 
-	boolean beackTo(String key)
+	void beackTo(String name)
 	{
+		Log.add("START BEACKING to "+name);
 		for(int i = 0; i < mainTree.size(); i++)
 		{
-			if(mainTree.get(i).name == key)
+			Log.add("CHECK ACTION #" + i + " - " + mainTree.get(i).name);
+			if(mainTree.get(i).name.equals(name))
 			{
-				for(int j = mainTree.size() - 1; j != i; j--)
+				Log.add("FIND " + name + " = " + mainTree.get(i).name);
+				for(int j = mainTree.size() - 1; j > i; j--)
 				{
+					Log.add("FINISH #" + j + mainTree.get(j).name);
 					trash.addAll(mainTree.get(j).end());
 					mainTree.remove(j);
 				}
-				return true;
 			}
 		}
-		return false;
 	}
 
-	boolean beackTo(long key)
+	void beackTo(long key)
 	{
-
 		for(Action action: mainTree)
 		{
 			if(action.key == key)
 			{
-				return beackTo(action.name);
+				beackTo(action.name);
 			}
 		}
-		return false;
 	}
 
-
-	private void up(Action action)
+	void up(Action action)
 	{
 		this.mainTree.add(action);
 	}
 
-
-	private void start(Action act)
+	void start(Action act)
 	{
 		datached.add(act);
 	}
 
-
-	public List<Integer> throwAwayTrash() {
+	List<Integer> throwAwayTrash() {
 
 		List<Integer> answer = new ArrayList<>();
 		answer.addAll(trash);
@@ -119,32 +104,27 @@ class ActMachine implements Serializable
 		return answer;
 	}
 
-
-	public void toAct(Integer act)
+	void toAct(Integer act)
 	{
 		mainTree.get(mainTree.size()-1).toCircle(act);
 	}
 
-
-	public void prepare(Integer prepared) 
+	void prepare(Integer prepared) 
 	{
 		this.prepeared.add(prepared);
 	}
 
-
-	public List<Integer> getTrash() 
+	List<Integer> getTrash() 
 	{
 		return trash;
 	}
 
-
-	public Action getAction()
+	Action getAction()
 	{
 		return mainTree.get(mainTree.size() - 1);
 	}
 
-	
-	public void toDatached(String name, Integer messageId) {
+	void toDatached(String name, Integer messageId) {
 		for(Action action: datached)
 		{
 			if(action.name == name)
@@ -155,6 +135,18 @@ class ActMachine implements Serializable
 		}
 	}
 
+	
+	public String toString()
+	{
+		String answer = "MAIN TREE  ";
+		
+		for(Action action: mainTree)
+		{
+			answer += action + "[>]";
+		}
+		
+		return answer;
+	}
 }
 
 

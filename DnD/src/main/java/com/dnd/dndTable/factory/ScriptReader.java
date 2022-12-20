@@ -6,16 +6,24 @@ import java.util.List;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Names;
+import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
+import com.dnd.dndTable.factory.inerComands.AddComand;
+import com.dnd.dndTable.factory.inerComands.InerComand;
 
-abstract class ScriptReader implements Script, Names
+abstract class ScriptReader implements DndKeyWallet, Names
 {
 
 	static void execute(CharacterDnd character, InerComand comand)
 	{
 
+		if(comand instanceof AddComand)
+		{
+			add(character, (AddComand) comand);
+		}
+		
 		if(comand.isCloud() && comand.isEffect())
 		{
 			act(character, comand);
@@ -34,6 +42,39 @@ abstract class ScriptReader implements Script, Names
 		}
 
 	}
+
+
+
+	private static void add(CharacterDnd character, AddComand comand) {
+		
+		long key = comand.getKey();
+		if(key == item)
+		{
+			
+		}
+		else if(key == weapon)
+		{
+			
+		}
+		else if(key == feature)
+		{
+			addFeature(character, (Feature) comand.getTarget());
+		}
+		else if(key == spell)
+		{
+			
+		}
+		
+	}
+
+
+
+	private static void addFeature(CharacterDnd character, Feature target) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 	private static void act(CharacterDnd character, InerComand comand) 
 	{

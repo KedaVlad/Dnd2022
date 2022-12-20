@@ -11,6 +11,7 @@ import com.dnd.botTable.actions.FactoryAction;
 import com.dnd.botTable.actions.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.*;
+import com.dnd.dndTable.factory.inerComands.InerComand;
 
 abstract class ClassFactory implements Source 
 {

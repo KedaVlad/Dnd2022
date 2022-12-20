@@ -16,10 +16,10 @@ import com.dnd.Source;
 import com.dnd.dndTable.creatingDndObject.*;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
-import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.dnd.dndTable.creatingDndObject.workmanship.Trait;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 
 
 abstract class WorkmanshipFactory implements Source, KeyWallet {

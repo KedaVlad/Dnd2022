@@ -14,12 +14,12 @@ import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.Rogue;
-import com.dnd.dndTable.creatingDndObject.workmanship.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
-import com.dnd.dndTable.factory.InerComand;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.factory.Json;
+import com.dnd.dndTable.factory.inerComands.InerComand;
 import com.fasterxml.jackson.core.JsonProcessingException;
-public class RaceDnd implements Serializable, ObjectDnd,  KeyWallet{
+public class RaceDnd implements Serializable,  KeyWallet{
 
 	private static final long serialVersionUID = -7603608846317166137L;
 	

@@ -16,7 +16,6 @@ import com.dnd.Source;
 import com.dnd.botTable.GameTable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
@@ -25,8 +24,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 public class Json {
 
 	private static final ObjectMapper mapper = getObjectMapper();
-
-	public static JsonNode parse(String src) throws JsonMappingException, JsonProcessingException
+	
+	public static JsonNode parse(String src) throws IOException
 	{
 		return mapper.readTree(src);
 	}
@@ -59,7 +58,7 @@ public class Json {
 		return mapper.valueToTree(object);
 	}
 
-	public static String stingify(JsonNode node) throws JsonProcessingException
+	public static String stingify(JsonNode node) throws IOException
 	{
 		ObjectWriter objectWriter = mapper.writer();
 
@@ -113,17 +112,17 @@ public class Json {
 	private static void cleanReserve()
 	{
 		Scanner scanner = new Scanner(System.in);
-		if(scanner.nextInt() == 12345)
-		{
+		//if(scanner.nextInt() == 12345)
+		//{
 			Json.backup(new HashMap<Long, GameTable>());
 			System.out.println("cleaned");
 			scanner.close();
-		}
-		else
-		{
-			scanner.close();
-			System.out.println("uncleaned");
-		}
+		//}
+		//else
+		//{
+		//	scanner.close();
+		//	System.out.println("uncleaned");
+		//}
 	}
 
 	public static Source fromJson(JsonNode node, Source source) throws IllegalArgumentException, IOException

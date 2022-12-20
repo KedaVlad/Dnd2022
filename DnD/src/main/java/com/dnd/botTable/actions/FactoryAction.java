@@ -70,6 +70,7 @@ public class FactoryAction extends Action
 		FactoryAction action = new FactoryAction();
 		action.key = this.key;
 		action.mainAct = true;
+		action.localData.addAll(this.getLocalData());
 		action.localData.add(name);
 		return action;
 	}
@@ -93,9 +94,11 @@ public class FactoryAction extends Action
 
 	public String toString()
 	{
-		String answer = name + " FACTORYACTION |";
-
-
-		return answer;
+		String localData = "local data - ";
+		for(String string: this.localData)
+		{
+			localData += string + " ";
+		}
+		return "  | FACTORY ACTION :" + name + localData + "|  ";
 	}
 }

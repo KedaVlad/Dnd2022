@@ -2,15 +2,16 @@ package com.dnd.dndTable.creatingDndObject.workmanship;
 
 import java.io.Serializable;
 
+import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
-import com.dnd.dndTable.factory.InerComand;
 import com.dnd.dndTable.factory.Json;
 import com.dnd.dndTable.factory.Script;
+import com.dnd.dndTable.factory.inerComands.InerComand;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
-public class Possession implements Serializable, Script {
+public class Possession implements Serializable, ObjectDnd {
 
 	private static final long serialVersionUID = 863271851968078819L;
 
@@ -67,5 +68,11 @@ public class Possession implements Serializable, Script {
 		System.out.println( Json.stingify(aa));
 		
 	
+	}
+
+	@Override
+	public long key() {
+		// TODO Auto-generated method stub
+		return possession;
 	}
 }
