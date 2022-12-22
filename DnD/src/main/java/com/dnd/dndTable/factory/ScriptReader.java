@@ -7,162 +7,88 @@ import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Names;
 import com.dnd.dndTable.DndKeyWallet;
+import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
+import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
 import com.dnd.dndTable.factory.inerComands.AddComand;
 import com.dnd.dndTable.factory.inerComands.InerComand;
+import com.dnd.dndTable.factory.inerComands.ProfComand;
+import com.dnd.dndTable.factory.inerComands.UpComand;
 
 abstract class ScriptReader implements DndKeyWallet, Names
 {
 
 	static void execute(CharacterDnd character, InerComand comand)
 	{
-
 		if(comand instanceof AddComand)
 		{
 			add(character, (AddComand) comand);
 		}
-		
-		if(comand.isCloud() && comand.isEffect())
+		else if(comand instanceof ProfComand)
 		{
-			act(character, comand);
+			prof(character, (ProfComand) comand);
 		}
-		else if(comand.isCloud())
+		else if(comand instanceof UpComand)
 		{
-			cloud(character, comand);
+			up(character,(UpComand) comand);
 		}
-		else if(comand.isEffect())
-		{
-			change(character, comand);
-		}
-		else
-		{
-			build(character, comand);
-		}
-
 	}
 
 
-
-	private static void add(CharacterDnd character, AddComand comand) {
-		
+	private static void up(CharacterDnd character, UpComand comand) 
+	{
 		long key = comand.getKey();
-		if(key == item)
+		if(key == stat)
 		{
-			
-		}
-		else if(key == weapon)
-		{
-			
-		}
-		else if(key == feature)
-		{
-			addFeature(character, (Feature) comand.getTarget());
-		}
-		else if(key == spell)
-		{
-			
+			character.getRolls().up(comand.getName(), comand.getValue());
 		}
 		
 	}
 
 
-
-	private static void addFeature(CharacterDnd character, Feature target) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-
-	private static void act(CharacterDnd character, InerComand comand) 
+	private static void add(CharacterDnd character, AddComand comand) 
 	{
-			
-	}
-		
-	private static void change(CharacterDnd character, InerComand comand) 
-	{
-		addPossession(character, comand);
-	}
-
-
-	private static void cloud(CharacterDnd character, InerComand comand)
-	{
-		if(comand.getKey().contains(lvlUpScript))
+		ObjectDnd[] objects = comand.getTarget();
+		for(ObjectDnd object: objects)
 		{
-			cloudStat(character, comand.getKey(), comand.getComand());
-		}
-		else
-		{
-			cloudWorkmanship(character, comand.getKey(), comand.getComand());
-		}
-
-	}
-	
-	private static void build(CharacterDnd character, InerComand comand)
-	{
-		try {
-			if(comand.getKey().contains(statKey))
+			if(object instanceof Items)
 			{
-				character.getRolls().up(Json.convertor(comand.getComand().get(0).get(1), Stat.class),
-						(Integer)Integer.parseInt(comand.getComand().get(0).get(0).toString()));
+
 			}
-			else if(comand.getKey().contains(competenseKey))
+			else if(object instanceof Feature)
 			{
-				character.getRolls().toCompetense(comand.getComand().get(0).get(1).toString());
+				character.getWorkmanship().addFeature((Feature) object);
+				if(object instanceof InerFeature)
+				{
+					InerFeature target = (InerFeature) object;
+					for(InerComand inerComand: target.getComand())
+					{
+					execute(character, inerComand);
+					}
+				}
 			}
-			else if(comand.getKey().contains(featureKey))
+			else if(object instanceof Possession)
 			{
-				Possession target = Json.convertor(comand.getComand().get(0).get(0), Possession.class);
+				Possession target = (Possession) object;
 				character.getWorkmanship().addPossession(target);
-				WorkmanshipFactory.createFeature(character, comand.getComand().get(0).get(0).toString());
-			}	
-			else if(comand.getKey().contains(spellKey))
-			{
-				WorkmanshipFactory.createSpell(character, comand.getComand().get(0).get(0).toString());
+				execute(character, target.getInerComand());
 			}
-			else if(comand.getKey().contains(possessionKey))
-			{
-				WorkmanshipFactory.createPossession(character, comand.getComand().get(0).get(0).toString());
-			}
-		} catch (IllegalArgumentException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 
-
-	protected static void cloudWorkmanship(CharacterDnd character, String key, List<List<Object>> comand)
+	private static void prof(CharacterDnd character, ProfComand comand)
 	{
-		int lifeTime = ((Integer) Integer.parseInt(comand.get(0).get(0).toString()));
-		String term = comand.get(0).get(1).toString();
-		List<Object> performans = comand.get(1);
-		character.getCloud().setPerforman(key, lifeTime, term, performans);
-	}
-
-	protected static void cloudStat(CharacterDnd character, String key, List<List<Object>> comand)
-	{
-
-		int lifeTime = ((Integer) Integer.parseInt(comand.get(0).get(0).toString()));
-		String term = comand.get(0).get(1).toString();
-		List<Object> performans = comand.get(1);
-		character.getCloud().setPerforman(key, lifeTime, term, performans);
-
-	}
-
-	private static void addPossession(CharacterDnd character, InerComand comand) {
-		
-		if(comand.getKey().contains(weaponKey))
+		long key = comand.getKey();
+		String target = comand.getTarget();
+		if(key == stat)
 		{
-			character.getAttackMachine().setPossession(Json.convertor(comand.getComand().get(0).get(0), WeaponProperties.class));
+			
 		}
-		else if(comand.getKey().contains(skillKey))
-		{
-			character.getRolls().toProficiency(comand.getComand().get(0).get(0).toString());
-		}
-		
-		
 	}
-	
+
 }

@@ -102,9 +102,10 @@ abstract class ClassFactory implements Source
 			character.setLvl();
 			for(int i = 0; i < lvl; i++)
 			{
-				for(InerComand comand: character.getClassDnd().getGrowMap().get(i))
+				for(InerComand comand: character.getClassDnd().getGrowMap()[i])
 				{	
 					ScriptReader.execute(character, comand);
+					comand = null;
 				}
 			}
 		}
@@ -112,73 +113,6 @@ abstract class ClassFactory implements Source
 		{
 			e.printStackTrace();
 		}
-	}
-
-	static void create(CharacterDnd character, String className, int lvl, String archetype) 
-	{
-
-		try
-		{
-			switch(className)
-			{
-			case "Artificer":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Artificer.class));
-
-			case "Barbarian":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Barbarian.class));
-				break;
-
-			case "Bard":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Bard.class));
-				break;
-
-			case "Blood Hunter":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, BloodHunter.class));
-				break;
-
-			case "Cleric":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Cleric.class));
-				break;
-
-			case "Druid":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Druid.class));
-				break;
-
-			case "Fighter":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Fighter.class));
-				break;
-
-			case "Monk":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Monk.class));
-				break;
-
-			case "Rogue":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Rogue.class));
-				break;
-
-			case "Warlock":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Warlock.class));
-				break;
-
-			case "Wizard":
-				character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, Wizard.class));
-				break;
-			}
-		} 
-		catch (IOException e) 
-		{
-			e.printStackTrace();
-		}
-		character.getClassDnd().setLvl(lvl);
-		character.setLvl();
-		for(int i = 0; i < lvl; i++)
-		{
-			for(InerComand comand: character.getClassDnd().getGrowMap().get(i))
-			{	
-				ScriptReader.execute(character, comand);
-			}
-		}
-
 	}
 
 	static String[][] getClassArray() 

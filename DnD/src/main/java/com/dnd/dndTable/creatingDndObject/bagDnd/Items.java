@@ -4,8 +4,14 @@ import java.io.Serializable;
 
 import com.dnd.Source;
 import com.dnd.dndTable.ObjectDnd;
-
-public class Items implements Serializable, ObjectDnd, Source{
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME,  property = "ITEM")
+@JsonSubTypes({
+	@JsonSubTypes.Type(value = Armor.class, name = "ARMOR"),
+	@JsonSubTypes.Type(value = Pack.class, name = "PACK"),
+	@JsonSubTypes.Type(value = Weapon.class, name = "WEAPON")})
+public class Items implements Serializable,ObjectDnd, Source{
 	
 	private static final long serialVersionUID = -1353539867889183740L;
 	

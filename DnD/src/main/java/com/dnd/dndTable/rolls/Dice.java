@@ -11,6 +11,7 @@ public class Dice implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
+	
 	public enum Roll
 	{
 		D4, D6, D8, D10, D12, D20, D100, NO_ROLL
@@ -18,15 +19,16 @@ public class Dice implements Serializable
 
 	private String name;
 	private int buff;
-	private List<Roll> combo;
+	private Roll[] combo;
 	private int[] results;
 
+	public Dice() {};
+	
 	public Dice(String name, int buff, Roll... combo)
 	{
 		this.setName(name);
 		this.setBuff(buff);
-		this.combo = new ArrayList<>();
-		setCombo(combo);
+		this.setCombo(combo);
 		results = new int[combo.length + 1];
 	}
 
@@ -34,9 +36,9 @@ public class Dice implements Serializable
 	{
 		String answer = this.name + ": ";
 
-		for(int i = 0; i < this.combo.size(); i++)
+		for(int i = 0; i < this.getCombo().length; i++)
 		{
-			this.getResults()[i] = roll(this.combo.get(i));				
+			this.getResults()[i] = roll(this.getCombo()[i]);				
 		}
 		this.getResults()[this.getResults().length-1] = this.buff;
 		answer += summ() + "(";
@@ -70,14 +72,13 @@ public class Dice implements Serializable
 
 	public int roll()
 	{
-		for(int i = 0; i < this.combo.size(); i++)
+		for(int i = 0; i < this.getCombo().length; i++)
 		{
-			this.getResults()[i] = roll(this.combo.get(i));				
+			this.getResults()[i] = roll(this.getCombo()[i]);				
 		}
 		this.getResults()[this.getResults().length-1] = this.buff;
 		return summ();
 	}
-	
 
 	int summ()
 	{
@@ -89,19 +90,7 @@ public class Dice implements Serializable
 		return answer;
 	}
 
-	public void setCombo(Roll... combo)
-	{ 
-		if(this.combo.contains(Roll.NO_ROLL))
-		{
-			this.combo.clear();
-		}
-		for(Roll roll: combo)
-		{
-			this.combo.add(roll);
-		}
-	}
-
-	public List<Roll> getCombo()
+	public Roll[] getCombo()
 	{
 		return combo;
 	}
@@ -251,6 +240,11 @@ public class Dice implements Serializable
 
 	public int[] getResults() {
 		return results;
+	}
+
+	
+	public void setCombo(Roll... combo) {
+		this.combo = combo;
 	}
 
 }

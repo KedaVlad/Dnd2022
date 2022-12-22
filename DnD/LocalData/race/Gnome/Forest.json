@@ -4,69 +4,52 @@
    "subRace":"Forest",
    "specials":[
       {
-         "cloud":false,
-         "key":"+",
-         "comand":[
-            [
-               2,
-               "Intelligence"
-            ]
-         ]
+         "UP_COMAND":{
+            "name":"Intelligence",
+            "key":180000000,
+            "value":2
+         }
       },
       {
-         "cloud":false,
-         "key":"+",
-         "comand":[
-            [
-               1,
-               "Dexterity"
-            ]
-         ]
+         "UP_COMAND":{
+            "name":"Dexterity",
+            "key":180000000,
+            "value":1
+         }
       },
       {
-         "cloud":false,
-         "key":"=",
-         "comand":[
-            [
-               "Natural Illusion"
+         "ADD_COMAND":{
+            "target":[
+               {
+                  "FEATURE":{
+                     "name":"Natural Illusion",
+                     "description":"Natural Illusisssssson",
+                     "depend":null
+                  }
+               },
+               {
+                  "FEATURE":{
+                     "name":"Communication with small animals",
+                     "description":"Communication with small animals",
+                     "depend":null
+                  }
+               },
+               {
+                  "FEATURE":{
+                     "name":"Dark vision",
+                     "description":"Dark vision",
+                     "depend":null
+                  }
+               },
+               {
+                  "FEATURE":{
+                     "name":"Dwarven cunning",
+                     "description":"Dwarven cunning",
+                     "depend":null
+                  }
+               }
             ]
-         ]
-      },
-      {
-         "cloud":false,
-         "key":"=",
-         "comand":[
-            [
-               "Natural Illusion"
-            ]
-         ]
-      },
-      {
-         "cloud":false,
-         "key":"=",
-         "comand":[
-            [
-               "Communication with small animals"
-            ]
-         ]
-      },
-      {
-         "cloud":false,
-         "key":"=",
-         "comand":[
-            [
-               "Dark vision"
-            ]
-         ]
-      },
-      {
-         "cloud":false,
-         "key":"=",
-         "comand":[
-            [
-               "Dwarven cunning"
-            ]
-         ]
+         }
       }
    ]
 }

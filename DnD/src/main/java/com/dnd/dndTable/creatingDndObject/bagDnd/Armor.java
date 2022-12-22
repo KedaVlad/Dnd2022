@@ -1,5 +1,8 @@
 package com.dnd.dndTable.creatingDndObject.bagDnd;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("ARMOR")
 public class Armor extends Items
 {
 	private static final long serialVersionUID = 1L;

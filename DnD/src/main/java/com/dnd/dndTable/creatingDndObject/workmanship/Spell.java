@@ -10,8 +10,6 @@ import com.dnd.dndTable.ActionObject;
 
 public class Spell implements Serializable, ActionObject 
 {
-	
-	
 	private static final long serialVersionUID = -7876613939972469105L;
 	
 	private int lvlSpell;

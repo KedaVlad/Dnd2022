@@ -24,9 +24,9 @@ public class DamageDice extends Dice
 	public String execute()
 	{
 		String answer = this.getName() + "(" + typeDamage.toString() + "): ";	
-		for(int i = 0; i < this.getCombo().size(); i++)
+		for(int i = 0; i < this.getCombo().length; i++)
 		{
-				this.getResults()[i] = roll(this.getCombo().get(i));				
+				this.getResults()[i] = roll(this.getCombo()[i]);				
 		}
 
 		this.getResults()[this.getResults().length-1] = this.getBuff();

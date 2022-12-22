@@ -1,16 +1,22 @@
 package com.dnd.dndTable.factory.inerComands;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.dnd.dndTable.ObjectDnd;
-import com.dnd.dndTable.factory.inerComands.AddComand;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
-public class InerComand implements Serializable {
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME,  property = "COMAND")
+@JsonSubTypes({
+	@JsonSubTypes.Type(value = AddComand.class, name = "ADD_COMAND"),
+	@JsonSubTypes.Type(value = UpComand.class, name = "UP_COMAND"),
+	@JsonSubTypes.Type(value = ProfComand.class, name = "PROF_COMAND"),
+	@JsonSubTypes.Type(value = CloudComand.class, name = "CLOUD_COMAND")})
+
+public abstract class InerComand implements Serializable {
 
 	
 	private static final long serialVersionUID = -5446546498879076199L;
+/*
 	private boolean cloud;
 	private boolean effect;
 	private boolean back;

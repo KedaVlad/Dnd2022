@@ -2,6 +2,7 @@ package com.dnd.botTable.actions;
 
 import java.util.List;
 
+import com.dnd.botTable.Action;
 import com.dnd.dndTable.rolls.Dice;
 
 public class SimpleRollAction extends HeroAction
@@ -9,7 +10,7 @@ public class SimpleRollAction extends HeroAction
 		
 	private static final long serialVersionUID = 1L;
 	
-	public static SimpleRollAction create(String name, long key, String text, List<HeroAction> nextStep, List<Dice> base)
+	public static SimpleRollAction create(String name, long key, String text, List<Action> nextStep, List<Dice> base)
 	{
 		SimpleRollAction answer = new SimpleRollAction();
 		answer.name = name;

@@ -22,6 +22,11 @@ import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.Rogue;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
+import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.FeatureBuilder;
+import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.MechanicBuilder;
+import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.Mechanics;
 import com.dnd.dndTable.factory.Json;
 import com.dnd.dndTable.factory.inerComands.AddComand;
 import com.dnd.dndTable.factory.inerComands.InerComadDeserializer;
@@ -55,23 +60,7 @@ public class TestSome {
 	
 	public static void main(String[] args) throws IOException {
 
-		TestSome test = new A();
-		
-		JsonNode node = Json.toJson(test);
-	
-		String string = Json.stingify(node);
-		
-		TestSome test1 = Json.fromJson(node, TestSome.class);
-		
-		if(test1 instanceof A)
-		{
-			A a = (A) test1;
-			System.out.println(a.name + a.age);
-		}
-		else
-		{
-			System.out.println(false);
-		}
+		InerFeature a = InerFeature.build(Feature.build().name("Dura"));
 		
 		
 		

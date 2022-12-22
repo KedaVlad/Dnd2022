@@ -1,5 +1,8 @@
 package com.dnd.dndTable.creatingDndObject.workmanship.features;
 
+import com.fasterxml.jackson.annotation.JsonTypeName;
+
+@JsonTypeName("PASSIVE_FEATURE")
 public class PassiveFeature extends Feature {
 
 	private static final long serialVersionUID = 1L;

@@ -46,7 +46,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	private Workmanship myWorkmanship;
 	private СhoiceCloud cloud;
 	private MagicSoul magicSoul;
-	private Body body;
+	private Body myBody;
 	private List<String> permanentBuffs;
 	private List<String> timesBuffs;
 	private List<String> myMemoirs;
@@ -98,25 +98,31 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 
 	private PreAttack preAttack(PreAttack attack)
 	{
-		Formula formula = rolls.execute(attack.getAction());
-		int status = attack.getStatus();
 		String text;
-		if(status == 1)
+		if(attack.getAction().getAttack().isPermanentCrit())
 		{
-			text = formula.execute(true);
+			text = "PERMANENT CRIT";
 		}
-		else if(status == 3)
+		else
 		{
-			text = formula.execute(false);
-		}
-		else 
-		{
-			text = formula.execute();
-		}
-
+			Formula formula = rolls.execute(attack.getAction());
+			int status = attack.getStatus();
+			if(status == 1)
+			{
+				text = formula.execute(true);
+			}
+			else if(status == 3)
+			{
+				text = formula.execute(false);
+			}
+			else 
+			{
+				text = formula.execute();
+			}
 		attack.setCriticalMiss(formula.isNatural1());
 		attack.setCriticalHit(formula.isNatural20());
 		attack.setText(text);
+		}
 		return attack;
 	}
 
@@ -186,7 +192,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		}
 		else if(key == possession)
 		{
-			return myWorkmanship.getPossessionMenu();
+			
 		}
 		else if(key == spell)
 		{
@@ -414,7 +420,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	}
 
 	public Body getBody() {
-		return body;
+		return myBody;
 	}
 
 	public List<String> getPermanentBuffs() {

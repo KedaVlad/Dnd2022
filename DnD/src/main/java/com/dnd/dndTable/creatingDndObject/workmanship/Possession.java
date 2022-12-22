@@ -3,28 +3,34 @@ package com.dnd.dndTable.creatingDndObject.workmanship;
 import java.io.Serializable;
 
 import com.dnd.dndTable.ObjectDnd;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
-import com.dnd.dndTable.factory.Json;
-import com.dnd.dndTable.factory.Script;
 import com.dnd.dndTable.factory.inerComands.InerComand;
+import com.dnd.dndTable.factory.inerComands.ProfComand;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-
-public class Possession implements Serializable, ObjectDnd {
+@JsonTypeName("POSSESSION")
+public class Possession implements Serializable, ObjectDnd
+{
 
 	private static final long serialVersionUID = 863271851968078819L;
-
-	private int id;
-	private String name;
-	private InerComand inerComand;
 	
-	public Possession(String name) 
+	private String name;
+	private ProfComand inerComand;
+	
+	public Possession() {}
+	
+	public Possession(String name, long key) 
 	{
 	this.name = name;
+	this.inerComand = ProfComand.create(key, name);
 	}
 	
-	public boolean equals(Object obj) 
+	public Possession competence()
+	{
+		this.inerComand.competence();
+		return this;
+	}
+	
+/*	public boolean equals(Object obj) 
 {
 		if(obj == this) return true;
 		if(obj == null || obj.getClass() != this.getClass()) return false;
@@ -41,7 +47,8 @@ public class Possession implements Serializable, ObjectDnd {
 		return result;
 
 }
-
+*/
+	
 	public String getName() {
 		return name;
 	}
@@ -50,24 +57,13 @@ public class Possession implements Serializable, ObjectDnd {
 		return inerComand;
 	}
 
-	public void setInerComand(InerComand inerComand) {
+	public void setInerComand(ProfComand inerComand) {
 		this.inerComand = inerComand;
 	}
 	
-
 	public static void main(String[] args) throws JsonProcessingException 
 	{
-		Possession target = new Possession("SR Intelligense");
-		InerComand comand = new InerComand(false, true, skillKey);
-		comand.getComand().get(0).add("SR Intelligense");
-		target.setInerComand(comand);
 		
-		
-		JsonNode aa = Json.toJson(target);
-		
-		System.out.println( Json.stingify(aa));
-		
-	
 	}
 
 	@Override

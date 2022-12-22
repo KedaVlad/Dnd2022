@@ -4,12 +4,18 @@ import java.util.List;
 
 import com.dnd.dndTable.rolls.AttackModification;
 import com.dnd.dndTable.rolls.Dice;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
+@JsonTypeName("WEAPON")
 public class Weapon extends Items
 {
 
 	private static final long serialVersionUID = 3883278765106047552L;
+	
+	private int attack;
+	private int damage;
 
+	
 	public enum WeaponProperties
 	{
 		UNIVERSAL, LUNG, THROWING, FENCING, TWO_HANDED, AMMUNITION, RELOAD, AVAILABILITY, MILITARY, LONG_RANGE, MELEE, SIMPLE, HEAVY
@@ -26,12 +32,24 @@ public class Weapon extends Items
 
 	private AttackModification firstType;
 	private AttackModification secondType;
-
-	public Weapon(String name) 
+	
+	public static Weapon build(WeaponType type)
 	{
-		super(name);
+		return new Weapon();
+	}
+	
+	public Weapon attack(int attack)
+	{
+		this.attack = attack;
+		return this;
 	}
 
+	public Weapon damage(int damage)
+	{
+		this.damage = damage;
+		return this;
+	}
+	
 	public AttackModification getSecondType() {
 		return secondType;
 	}
@@ -52,5 +70,21 @@ public class Weapon extends Items
 	public long key() {
 		// TODO Auto-generated method stub
 		return weapon;
+	}
+
+	public int getAttack() {
+		return attack;
+	}
+
+	public void setAttack(int attack) {
+		this.attack = attack;
+	}
+
+	public int getDamage() {
+		return damage;
+	}
+
+	public void setDamage(int damage) {
+		this.damage = damage;
 	}
 }

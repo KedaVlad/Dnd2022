@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Names.Stat;
+import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.AttackAction;
 import com.dnd.botTable.actions.HeroAction;
 import com.dnd.botTable.actions.PreAttack;
 import com.dnd.botTable.actions.RollAction;
+import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
@@ -16,10 +18,10 @@ import com.dnd.dndTable.rolls.AttackModification;
 import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
-public class AttackMachine implements Serializable
+public class AttackMachine implements Serializable, DndKeyWallet 
 {
 	private static final long serialVersionUID = 1L;
-    static final long key = 111222333;
+    static final long key = attackMachine;
 	
 	private Dice noWeapon = new Dice("No weapon attack", 1, Roll.NO_ROLL);
 	private int critX = 1;
@@ -36,7 +38,7 @@ public class AttackMachine implements Serializable
 	public HeroAction startAction(Weapon weapon)
 	{
 		List<AttackModification> target = buildAttacks(weapon);
-		List<HeroAction> attacks = new ArrayList<>();
+		List<Action> attacks = new ArrayList<>();
 		for(AttackModification attack: target)
 		{
 			attacks.add(AttackAction.create(key, checkStat(attack), checkProf(attack), attack));
@@ -66,7 +68,7 @@ public class AttackMachine implements Serializable
 	
 	private HeroAction makeHit(PreAttack attack) {
 	
-		List<HeroAction> nextSteps = new ArrayList<>();
+		List<Action> nextSteps = new ArrayList<>();
 		List<AttackModification> attacks = getAttacks(attack.getAction().getAttack(), afterAttak);
 		for(AttackModification target: attacks)
 		{
@@ -78,7 +80,7 @@ public class AttackMachine implements Serializable
 
 	private HeroAction makeCrit(PreAttack attack) {
 		
-		List<HeroAction> nextSteps = new ArrayList<>();
+		List<Action> nextSteps = new ArrayList<>();
 		List<AttackModification> attacks = getAttacks(crit(attack.getAction().getAttack()), afterAttak);
 		for(AttackModification target: attacks)
 		{
@@ -90,7 +92,7 @@ public class AttackMachine implements Serializable
 	private AttackModification crit(AttackModification attack) 
 	{
 		Dice damage = attack.getDamage().get(0);
-		Roll roll = damage.getCombo().get(0);
+		Roll roll = damage.getCombo()[0];
 		List<Roll> critsRolls = new ArrayList<>();
 		for(int i = 0; i < critX; i++)
 		{
@@ -105,7 +107,7 @@ public class AttackMachine implements Serializable
 		Stat answer = Stat.STRENGTH;
 		for(WeaponProperties target: dexteritys)
 		{
-			if(weapon.getRequirement().contains(target))
+			if(require(weapon.getRequirement(), target))
 			{
 				answer = Stat.DEXTERITY;
 				break;
@@ -117,9 +119,18 @@ public class AttackMachine implements Serializable
 	private boolean checkProf(AttackModification weapon)
 	{
 		return getPossession().contains(WeaponProperties.MILITARY) 
-				|| (weapon.getRequirement().contains(WeaponProperties.SIMPLE) && getPossession().contains(WeaponProperties.SIMPLE))
+				|| (require(weapon.getRequirement(),WeaponProperties.SIMPLE) && getPossession().contains(WeaponProperties.SIMPLE))
 				|| typePossession.contains(weapon.getType());
 
+	}
+	
+	private boolean require(WeaponProperties[] pool, WeaponProperties target)
+	{
+		for(WeaponProperties properties: pool)
+		{
+			if(properties.equals(target)) return true;
+		}
+		return false;
 	}
 
 	private List<AttackModification> buildAttacks(Weapon weapon)
@@ -142,7 +153,7 @@ public class AttackMachine implements Serializable
 	{
 		for(AttackModification type: permanent)
 		{
-			int condition = type.getRequirement().size();
+			int condition = type.getRequirement().length;
 			for(WeaponProperties properties: type.getRequirement())
 			{
 				if(condition == 0)
@@ -173,7 +184,7 @@ public class AttackMachine implements Serializable
 		answer.add(attack);
 		for(AttackModification type: attacks)
 		{
-			int condition = type.getRequirement().size();
+			int condition = type.getRequirement().length;
 			for(WeaponProperties properties: type.getRequirement())
 			{
 				if(condition == 0)

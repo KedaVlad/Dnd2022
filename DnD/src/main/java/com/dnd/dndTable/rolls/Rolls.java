@@ -8,6 +8,7 @@ import com.dnd.KeyWallet;
 import com.dnd.Names;
 import com.dnd.Names.Stat;
 import com.dnd.botTable.actions.RollAction;
+import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
@@ -36,7 +37,6 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		buildSkills();
 		buildSaveRoll();
 	}
-	
 	
 	public int getHp(ClassDnd clazz, boolean random)
 	{
@@ -212,11 +212,11 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		saveRolls.add(new Article(SaveRoll.SR_CHARISMA.toString(), Stat.CHARISMA));
 	}
 
-	public void up(Stat name, int value)
+	public void up(String name, int value)
 	{
 		for(MainStat stat: stats)
 		{
-			if(stat.name.equals(name))
+			if(stat.name.toString().equals(name))
 			{
 				stat.up(value);
 			}
@@ -414,7 +414,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		return proficiency;
 	}
 
-	class MainStat implements Serializable
+	class MainStat implements Serializable, ObjectDnd
 	{
 		private static final long serialVersionUID = 1L;
 		Stat name;
@@ -437,6 +437,12 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		public String toString()
 		{
 			return name.toString() + " : " + dice.getBuff();
+		}
+
+		@Override
+		public long key() {
+			// TODO Auto-generated method stub
+			return stat;
 		}
 
 	}

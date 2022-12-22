@@ -1,7 +1,7 @@
 package com.dnd.dndTable;
 
 
-public interface ActionObject extends ObjectDnd, DndKeyWallet
+public interface ActionObject extends DndKeyWallet, ObjectDnd
 {
 	
 }

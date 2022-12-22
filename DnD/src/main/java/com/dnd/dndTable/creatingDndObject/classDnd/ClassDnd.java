@@ -1,6 +1,7 @@
 package com.dnd.dndTable.creatingDndObject.classDnd;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -8,26 +9,36 @@ import java.util.List;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Source;
+import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Pack;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
+import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.Mechanics;
 import com.dnd.dndTable.factory.Json;
-import com.dnd.dndTable.factory.Script;
 import com.dnd.dndTable.factory.inerComands.AddComand;
+import com.dnd.dndTable.factory.inerComands.CloudComand;
 import com.dnd.dndTable.factory.inerComands.InerComand;
+import com.dnd.dndTable.rolls.AttackModification;
+import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 
-
-public class ClassDnd implements Serializable, Script, Source{
+@JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME,  property = "CLASS_DND")
+public class ClassDnd implements Serializable, DndKeyWallet, Source{
 
 	private static final long serialVersionUID = 3219669745475635442L;
 
@@ -39,20 +50,20 @@ public class ClassDnd implements Serializable, Script, Source{
 	private int firstHp;
 
 
-	private List<List<InerComand>> growMap;
+	private InerComand[][] growMap;
 
 	@Override
 	public String source()
 	{
 		return classSource + I + className + I + myArchetypeClass + json;
-		
+
 	}
 
 	public int getFirstHp()
 	{
 		return firstHp;
 	}
-	
+
 	public String getMyArchetypeClass() 
 	{
 		return myArchetypeClass;
@@ -68,12 +79,12 @@ public class ClassDnd implements Serializable, Script, Source{
 		this.lvl = lvl;
 	}
 
-	public List<List<InerComand>> getGrowMap() 
+	public InerComand[][] getGrowMap() 
 	{
 		return growMap;
 	}
 
-	public void setGrowMap(List<List<InerComand>> growMap) 
+	public void setGrowMap(InerComand[][] growMap) 
 	{
 		this.growMap = growMap;
 	}
@@ -82,7 +93,7 @@ public class ClassDnd implements Serializable, Script, Source{
 	{
 		this.myArchetypeClass = myArchetypeClass;
 	}
-	
+
 	public Roll getDiceHp() {
 		return diceHp;
 	}
@@ -102,273 +113,159 @@ public class ClassDnd implements Serializable, Script, Source{
 	public void setFirstHp(int firstHp) {
 		this.firstHp = firstHp;
 	}
-	
-	
-	
-	
-	public static void main(String[] args) throws JsonProcessingException 
+
+
+
+
+	public static void main(String[] args) throws IOException 
 	{
 
 		ClassDnd assasin = new ClassDnd();
 
 		assasin.diceHp = Roll.D8;
-		
+
 		assasin.className = "Rogue";
 		assasin.myArchetypeClass = "Assasin";
+		assasin.growMap = new InerComand[21][];
+
+		assasin.growMap[0] = new InerComand[] { 
+				AddComand.create(
+				new Possession("Light Armor", armor),
+				new Possession("Simple Weapon", weapon),
+				new Possession("Hand Crossbows", weapon),
+				new Possession("Long Swords", weapon),
+				new Possession("Rapiers", weapon),
+				new Possession("Short Swords", weapon),
+				new Possession("Short Swords", weapon),
+				new Possession("Thieves' Tools", item),
+				new Possession("SR Dexterity", stat),
+				new Possession("SR Intelligense", stat),
+				new Possession("SR Intelligense", stat),
+				Armor.create("Leather Armor"),
+				Weapon.build(WeaponType.DAGGER),
+				Pack.create("Thieves' Tools")),
+
+				CloudComand.create(4, "Choose skill", false,
+				AddComand.create(new Possession("Acrobatics", stat)),
+				AddComand.create(new Possession("Investigation", stat)),
+				AddComand.create(new Possession("Athletics", stat)),
+				AddComand.create(new Possession("Mindfulness", stat)),
+				AddComand.create(new Possession("Performance", stat)),
+				AddComand.create(new Possession("Intimidation", stat)),
+				AddComand.create(new Possession("Sleight of hand", stat)),
+				AddComand.create(new Possession("Deception", stat)),
+				AddComand.create(new Possession("Insight", stat)),
+				AddComand.create(new Possession("Stelth", stat)),
+				AddComand.create(new Possession("Persuasion", stat))),
+				
+				CloudComand.create(1, "Choose item", false,
+				AddComand.create(Weapon.build(WeaponType.RAPIER)),
+				AddComand.create(Weapon.build(WeaponType.SHORTSWORD))),
 		
-		List<List<InerComand>> pool = new ArrayList<>();
-
-		List<InerComand> lvl0= new ArrayList<>();
-
-		InerComand c1 = AddComand.create(Armor.create("Light Armor"));
-		lvl0.add(c1);
-
-		c1 = new InerComand(false, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Simple Weapon");
-
-		lvl0.add(c1);
-		c1 = new InerComand(false, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Hand Crossbows");
-
-		lvl0.add(c1);
-		c1 = new InerComand(false, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Long Swords");
-
-		lvl0.add(c1);
-		c1 = new InerComand(false, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Rapiers");
-
-		lvl0.add(c1);
-		c1 = new InerComand(false, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Short Swords");
-
-		lvl0.add(c1);
-		c1 = new InerComand(false, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Thieves' Tools");
-
-		lvl0.add(c1);
-		c1 = new InerComand(false, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("SR Dexterity");
-
-		lvl0.add(c1);
-		c1 = new InerComand(false, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("SR Intelligense");
-
-		lvl0.add(c1);
-		c1 = new InerComand(true, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add(4);
-		c1.getComand().get(0).add("Choose skill");
-
-		c1.getComand().get(1).add("Acrobatics");
-		c1.getComand().get(1).add("Investigation");
-		c1.getComand().get(1).add("Athletics");
-		c1.getComand().get(1).add("Mindfulness");
-		c1.getComand().get(1).add("Performance");
-		c1.getComand().get(1).add("Intimidation");
-		c1.getComand().get(1).add("Sleight of hand");
-		c1.getComand().get(1).add("Deception");
-		c1.getComand().get(1).add("Insight");
-		c1.getComand().get(1).add("Stelth");
-		c1.getComand().get(1).add("Persuasion");
-
-		lvl0.add(c1);	
-
-		c1 = new InerComand(true, false, weaponKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add(1);
-		c1.getComand().get(0).add("Choose item");
-
-		c1.getComand().get(1).add("Rapier");
-		c1.getComand().get(1).add("Shortsword");
-
-		lvl0.add(c1);
-
-		c1 = new InerComand(true, false,  weaponKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add(1);
-		c1.getComand().get(0).add("Choose item");
-
-		c1.getComand().get(1).add("Shortbow and 20 Arrows");
-		c1.getComand().get(1).add("Shortsword");
-
-		lvl0.add(c1);
-
-		c1 = new InerComand(true, false, weaponKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add(1);
-		c1.getComand().get(0).add("Choose item");
-
-		c1.getComand().get(1).add("Dungeoneer's Pack");
-		c1.getComand().get(1).add("Burglar's Pack");
-		c1.getComand().get(1).add("Explorer's Pack");
-
-		lvl0.add(c1);
-
-		c1 = new InerComand(false, false, weaponKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Leather Armor");
-		lvl0.add(c1);
-		c1 = new InerComand(false, false, weaponKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add(WeaponType.DAGGER);
-		lvl0.add(c1);
-		c1 = new InerComand(false, false, weaponKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Thieves' Tools");
-		lvl0.add(c1);
-
-		List<InerComand> lvl1 = new ArrayList<>();
-
-		c1 = new InerComand(false, false, featureKey);
-		Feature competense = new Feature("Competence");
-		InerComand comandss = new InerComand(true, false, possessionKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Competence");
-		lvl1.add(c1);
-
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Sneak Attack");
-		lvl1.add(c1);
-
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Thieves Jargon");
-		lvl1.add(c1);
-
-
-		List<InerComand> lvl2 = new ArrayList<>();
-
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Tricky Action");
-		lvl2.add(c1);
-
-
-		List<InerComand> lvl3 = new ArrayList<>();
-
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Additional Holdings");
-		lvl3.add(c1);
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Liquidation");
-		lvl3.add(c1);
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Precise Aiming");
-		lvl3.add(c1);
-
-		List<InerComand> lvl4 = new ArrayList<>();
-		List<InerComand> lvl5 = new ArrayList<>();
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Incredible Evasion");
+				CloudComand.create(1, "Choose item", false,
+				AddComand.create(Weapon.build(WeaponType.SHORTBOW)), //+20 arrow
+				AddComand.create(Weapon.build(WeaponType.SHORTSWORD))),
+				
+				CloudComand.create(1, "Choose Pack", false,
+				AddComand.create(Pack.create("Dungeoneer's Pack")),
+				AddComand.create(Pack.create("Burglar's Pack")),
+				AddComand.create(Pack.create("Explorer's Pack")))};
 		
-		lvl5.add(c1);
-		List<InerComand> lvl6 = new ArrayList<>();
-		List<InerComand> lvl7 = new ArrayList<>();
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add(("Evasiveness"));
-		lvl7.add(c1);
-		List<InerComand> lvl8 = new ArrayList<>();
+		
+		assasin.growMap[1] = new InerComand[] { AddComand.create(
+				InerFeature.create("Competence", "Blavlavla", CloudComand.create(2, "Choose", false,
+						AddComand.create(new Possession("Thieves' Tools", item).competence()),
+						AddComand.create(new Possession("", skill).competence()))),
+				InerFeature.build(Feature.build().name("Sneak Attack").description("Y HIT WERY WELL")).comand(
+						AddComand.create(AttackModification.build()
+								.name("Sneak Attack")
+								.postAttack(true)
+								.damage(new Dice("Sneak Attack", 0, Roll.D6))
+								.requirement(WeaponProperties.FENCING),
+								AttackModification.build()
+								.name("Sneak Attack")
+								.postAttack(true)
+								.damage(new Dice("Sneak Attack", 0, Roll.D6))
+								.requirement(WeaponProperties.THROWING))),
+				InerFeature.create("Thieves Jargon", "Blaasfeefvla", 
+						AddComand.create(new Possession("Thieves Jargon", language))))};
 
-		List<InerComand> lvl9 = new ArrayList<>();
+		assasin.growMap[2] = new InerComand[] { AddComand.create(Feature.build().name("Tricky Action").description("Bimbombom"))};
 
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Penetration Master");
-		lvl9.add(c1);
+		assasin.growMap[3] = new InerComand[] { AddComand.create(Feature.build().name("Additional Holdings").description("Bimweweom"),
+				new Possession("Poisn Tools", item),
+				new Possession("Grimm Tools", item),
+				InerFeature.build(Feature.build().name("Liquidation").description("Liquidation dsksdlflkdsf")).comand(
+						AddComand.create(AttackModification.build()
+								.name("Liquidation")
+								.crit()
+								.requirement(WeaponProperties.FENCING),
+								AttackModification.build()
+								.name("Liquidation")
+								.crit()
+								.requirement(WeaponProperties.THROWING))),
+				Feature.build().name("Precise Aiming").description("Some des"))};
+		
+		assasin.growMap[4] = new InerComand[] {  CloudComand.lvlUp(null) };
+		
+		assasin.growMap[5] = new InerComand[] { AddComand.create(Feature.build().name("Incredible Evasion").description("Y HasdIT WERY WasdELL"))};
 
-		List<InerComand> lvl10 = new ArrayList<>();
-		List<InerComand> lvl11 = new ArrayList<>();
+		assasin.growMap[6] = new InerComand[] { CloudComand.create(2, "Choose", false,
+				AddComand.create(new Possession("Thieves' Tools", item).competence()),
+				AddComand.create(new Possession("", skill).competence()))};
+		
+		assasin.growMap[7] = new InerComand[] { AddComand.create(Feature.build().name("Evasiveness").description("Y HIT WEasdRY WELL"))};
+		
+		assasin.growMap[8] = new InerComand[] { CloudComand.lvlUp(null)};
 
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Reliable Talent");
-		lvl11.add(c1);
+		assasin.growMap[9] = new InerComand[] { AddComand.create(Feature.build().name("Penetration Master").description("Y HIT WEasweweewdRY WELL"))};
 
-		List<InerComand> lvl12 = new ArrayList<>();
-		List<InerComand> lvl13 = new ArrayList<>();
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Impostor");
-		lvl13.add(c1);
-		List<InerComand> lvl14 = new ArrayList<>();
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Blind Sight");
-		lvl14.add(c1);
-		List<InerComand> lvl15 = new ArrayList<>();
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Slippery Mind");
-		lvl15.add(c1);
-		List<InerComand> lvl16 = new ArrayList<>();
+		assasin.growMap[10] = new InerComand[] { CloudComand.lvlUp(null)};
+		
+		assasin.growMap[11] = new InerComand[] { AddComand.create(Feature.build().name("Reliable Talent").description("Y HfefefeIT WEasdRY WELL"))};//!!!!!!!!!!!!!!!!!!!!11
 
-		List<InerComand> lvl17 = new ArrayList<>();
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Death Blow");
-		lvl17.add(c1);
-		List<InerComand> lvl18 = new ArrayList<>();
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Intangibility");
-		lvl18.add(c1);
-		List<InerComand> lvl19 = new ArrayList<>();
-		List<InerComand> lvl20 = new ArrayList<>();
-		c1 = new InerComand(false, false, featureKey);
-		c1.getComand().add(new ArrayList<>());
-		c1.getComand().get(0).add("Luck");
-		lvl20.add(c1);
-
-		pool.add(lvl0);
-		pool.add(lvl1);
-		pool.add(lvl2);
-		pool.add(lvl3);
-		pool.add(lvl4);
-		pool.add(lvl5);
-		pool.add(lvl6);
-		pool.add(lvl7);
-		pool.add(lvl8);
-		pool.add(lvl9);
-		pool.add(lvl10);
-		pool.add(lvl11);
-		pool.add(lvl12);
-		pool.add(lvl13);
-		pool.add(lvl14);
-		pool.add(lvl15);
-		pool.add(lvl16);
-		pool.add(lvl17);
-		pool.add(lvl18);
-		pool.add(lvl19);
-		pool.add(lvl20);
+		assasin.growMap[12] = new InerComand[] { CloudComand.lvlUp(null)};
+		
+		assasin.growMap[13] = new InerComand[] {  AddComand.create(Feature.build().name("Impostor").description("Y HfefefeIT WEasdRY WELL"))};
+		
+		assasin.growMap[14] = new InerComand[] { AddComand.create(Feature.build().name("Blind Sight").description("Y HfefefeIT WEasdRY WELL"))};
+		
+		assasin.growMap[15] = new InerComand[] { AddComand.create(
+				InerFeature.create("Slippery Mind", "Blavlavla", 
+						AddComand.create(new Possession("SR Wisdom", stat))))};
+		
+		assasin.growMap[16] = new InerComand[] { CloudComand.lvlUp(null)};
+		
+		assasin.growMap[17] = new InerComand[] { AddComand.create(Feature.build().name("Death Blow").description("Y HfefefeIT WEasdRY WELL"))};
+		
+		assasin.growMap[18] = new InerComand[] { AddComand.create(Feature.build().name("Intangibility").description("Y HfefefeIT WEasdRY WELL"))};
+		
+		assasin.growMap[19] = new InerComand[] {  CloudComand.lvlUp(null)};
+		
+		assasin.growMap[20] = new InerComand[] {  AddComand.create(Feature.build().name("Luck").description("Y HfefefeIT WEasdRY WELL"))};
+		
 
 
-		assasin.setGrowMap(pool);
 
-		assasin.setMyArchetypeClass("Assasin");
-
-
-		String json = Json.stingify(Json.toJson(assasin));
+		JsonNode node = Json.toJson(assasin);
+		String json = Json.stingify(node);
 		System.out.println(json);
-		System.out.println(Json.parse(json));
+		
+		ClassDnd clazz = Json.fromJson(node, ClassDnd.class);
+		
+		System.out.println("*************************");
+		int i = 0;
+		for(InerComand[] pool: clazz.growMap)
+		{
+			System.out.println("lvl "+i);
+			i++;
+			for(InerComand comand: pool)
+			{
+				System.out.println("__________________________");
+				System.out.println(comand);
+			}
+			
+		}
 
 		/*Rogue r = Json.fromJson(Json.parse(json), Rogue.class);
 
@@ -392,7 +289,7 @@ public class ClassDnd implements Serializable, Script, Source{
 		System.out.println(pp);*/
 	}
 
-	
+
 }
 
 

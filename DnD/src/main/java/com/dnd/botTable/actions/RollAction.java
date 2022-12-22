@@ -3,12 +3,13 @@ package com.dnd.botTable.actions;
 import java.util.List;
 
 import com.dnd.Names.Stat;
+import com.dnd.botTable.Action;
 import com.dnd.dndTable.rolls.AttackModification;
 
 public class RollAction extends SimpleRollAction
 {
 	
-	public static RollAction create(long key, AttackModification attack, List<HeroAction> nextStep, Stat depends, boolean proficiency)
+	public static RollAction create(long key, AttackModification attack, List<Action> nextStep, Stat depends, boolean proficiency)
 	{
 		
 		RollAction answer = new RollAction();
