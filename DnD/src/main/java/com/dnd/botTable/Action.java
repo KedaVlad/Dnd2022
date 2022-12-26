@@ -18,7 +18,7 @@ public abstract class Action implements Serializable {
 	private List<Integer> actCircle = new ArrayList<>();
 
 	protected abstract String[][] buildButtons();
-	protected abstract Action continueAction(String key);
+	public abstract Action continueAction(String key);
 	protected abstract boolean hasButtons();
 
 	public long getKey()

@@ -10,12 +10,13 @@ import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.FactoryAction;
 import com.dnd.botTable.actions.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
+import com.dnd.dndTable.creatingDndObject.RaceDnd;
 import com.dnd.dndTable.factory.inerComands.InerComand;
 
 abstract class RaceFactory implements Source
 {
 	private final static File dirRace = new File(raceSource);
+	private static File dirSubRace;
 	static final long key = 987976965;
 	
 	public static Action startCreate()
@@ -112,10 +113,12 @@ abstract class RaceFactory implements Source
 		
 		return allRaces;
 	}
-
+	
 	public static String[][] getSubRaceArray(String race)
 	{
-        String[] all = dirRace.list();
+		dirSubRace = new File(raceSource + race);
+		
+        String[] all = dirSubRace.list();
 		
 		String[][] allRaces = new String[all.length][1];
 		for(int i = 0; i < all.length; i++)

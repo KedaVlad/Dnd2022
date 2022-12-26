@@ -1,9 +1,9 @@
 package com.dnd.dndTable;
 
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
+import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
-import com.dnd.dndTable.rolls.AttackModification;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 

@@ -10,24 +10,19 @@ public class HeroAction extends Action
 {
 	private static final long serialVersionUID = 1L;
 
-	private List<Action> nextStep = new ArrayList<>();
+	private Action[][] nextStep;
 
-	public List<Action> getNextStep() 
+	public Action[][] getNextStep() 
 	{
 		return nextStep;
 	}
 
-	public void setNextStep(List<Action> nextStep) 
-	{
-		this.nextStep = nextStep;
-	}
-
 	public boolean isLastStep()
 	{
-		return nextStep == null || nextStep.isEmpty();
+		return nextStep == null || nextStep.length == 0;
 	}
 	
-	public static HeroAction create(String name, long key, String text, List<Action> nextStep)
+	public static HeroAction create(String name, long key, String text, Action[][] nextStep)
 	{
 		HeroAction answer = new HeroAction();
 		answer.name = name;
@@ -35,7 +30,7 @@ public class HeroAction extends Action
 		answer.mainAct = true;
 		answer.mediator = false;
 		answer.text = text;
-		answer.nextStep = nextStep;
+		answer.setNextStep(nextStep);
 		return answer;
 	}
 	
@@ -61,7 +56,8 @@ public class HeroAction extends Action
 	@Override
 	public Action continueAction(String name) {
 		
-		for(Action action: this.nextStep)
+		for(Action[] actions: this.nextStep)
+		for(Action action: actions)
 		{
 			if(action.getName().equals(name))
 			{
@@ -74,29 +70,32 @@ public class HeroAction extends Action
 	@Override
 	public String[][] buildButtons()
 	{
-		String[][] buttoms = null;
-		if(this.getNextStep() != null && this.getNextStep().size() != 0)
+		String[][] buttons = new String[nextStep.length][];
+		for(int i = 0; i < nextStep.length; i++)
 		{
-		buttoms = new String[this.getNextStep().size()][1];
-		
-		for(int i = 0; i < this.getNextStep().size(); i++)
-		{
-			buttoms[i][0] = this.getNextStep().get(i).getName();
+			buttons[i] = new String[nextStep[i].length];
+			for(int j = 0; j < buttons[i].length; j++)
+			{
+				buttons[i][j] = nextStep[i][j].getName();
+			}
 		}
-		}
 		
-		return buttoms;
+		return buttons;
 	}
 
 	@Override
 	protected boolean hasButtons() {
 		// TODO Auto-generated method stub
-		return nextStep != null && !nextStep.isEmpty();
+		return nextStep != null && nextStep.length > 0;
 	}
 	
 	public String toString()
 	{
 		return "  | HERO ACTION :" + name + "|  ";
+	}
+
+	public void setNextStep(Action[][] nextStep) {
+		this.nextStep = nextStep;
 	}
 	
 }

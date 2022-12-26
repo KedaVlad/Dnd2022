@@ -2,14 +2,25 @@ package com.dnd.dndTable;
 
 public interface Refreshable {
 
-	enum Time implements ObjectDnd
+	public enum Time implements ObjectDnd
 	{
-		LONG, SHORT;
+		LONG("LONG"), SHORT("SHORT");
 
+		String name;
+		
+		Time(String name)
+		{
+			this.name = name;
+		}
+		
+		public String toString()
+		{
+			return name;
+		}
 		@Override
 		public long key() 
 		{
-			return rest;
+			return REST;
 		}
 	}
 	

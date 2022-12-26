@@ -1,17 +1,20 @@
 package com.dnd.dndTable.creatingDndObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Names.Stat;
+import com.dnd.botTable.Action;
+import com.dnd.botTable.actions.HeroAction;
+import com.dnd.botTable.actions.RegistrateAction;
+import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.Refreshable;
+import com.dnd.dndTable.creatingDndObject.modification.Matrix;
+import com.dnd.dndTable.creatingDndObject.modification.pool.SimplePool;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
-import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Damage;
-import com.dnd.dndTable.creatingDndObject.workmanship.magicEffects.Effect;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.Matrix;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.SimplePool;
 
-public class MagicSoul implements Refreshable{
+public class MagicSoul implements Refreshable, ObjectDnd{
 
 	private Matrix cells;
 	private int sizeNoCellsSpells;
@@ -21,49 +24,60 @@ public class MagicSoul implements Refreshable{
 
 	private Time time;
 
-	public Effect cast(int target, int cell)
+	public Action cast(int target, int cell)
 	{
-		cells.use(cell);
-		Spell spell = pool.getActive().get(target);
-		if(spell.getCast() instanceof Damage)
-		{
-		Damage damage = (Damage) spell.getCast();	
-		damage.getAction().getStepOne().setDepends(depends);
-		return damage;
-		}
-		
-		return spell.getCast();
+		return null;
 	}
 	
-	public Effect cast(int target)
+	public Action cast(int target)
 	{
-		Spell spell = pool.getActive().get(target);
-		cells.use(spell.getLvlSpell());
-		if(spell.getCast() instanceof Damage)
-		{
-		Damage damage = (Damage) spell.getCast();	
-		damage.getAction().getStepOne().setDepends(depends);
-		return damage;
-		}
-		
-		return spell.getCast();
+		return null;
 	}
 
-	public SimplePool<Spell> getPool() {
+	public SimplePool<Spell> getPool() 
+	{
 		return pool;
 	}
 
-	public void setPool(SimplePool<Spell> pool) {
+	public void setPool(SimplePool<Spell> pool) 
+	{
 		this.pool = pool;
 	}
 
 	@Override
-	public void refresh(Time time) {
+	public void refresh(Time time) 
+	{
 		if(this.time == time)
 		{
 			cells.refresh();
 		}
 		
+	}
+
+	public Action getSpellMenu() 
+	{
+		String name = "SpellMenu";
+		String text = "This is your spells. Choose some for more infotmation";
+		Action[][] buttons = new Action[pool.getActive().size()][0];
+		for(int i = 0; i < pool.getActive().size(); i++)
+		{
+			Spell spell = pool.getActive().get(i);
+			buttons[i][0] = RegistrateAction.create(spell.getName(),spell);
+		}
+		return HeroAction.create(name, key(), text, buttons);
+	}
+	
+	public Action spellCase(Feature object) 
+	{
+		String name = object.getName();
+		String text = name + "\n" + object.getDescription();
+		return HeroAction.create(name, key(), text, null);
+	}
+
+	@Override
+	public long key() 
+	{
+		return MAGIC_SOUL;
 	}
 
 	

@@ -8,20 +8,21 @@ import com.dnd.Names.Stat;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.AttackAction;
 import com.dnd.botTable.actions.HeroAction;
-import com.dnd.botTable.actions.PreAttack;
+import com.dnd.botTable.actions.PreRoll;
 import com.dnd.botTable.actions.RollAction;
 import com.dnd.dndTable.DndKeyWallet;
+import com.dnd.dndTable.creatingDndObject.Rolls.Proficiency;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
-import com.dnd.dndTable.rolls.AttackModification;
+import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class AttackMachine implements Serializable, DndKeyWallet 
 {
 	private static final long serialVersionUID = 1L;
-    static final long key = attackMachine;
+    static final long key = ATTACK_MACHINE;
 	
 	private Dice noWeapon = new Dice("No weapon attack", 1, Roll.NO_ROLL);
 	private int critX = 1;
@@ -29,7 +30,6 @@ public class AttackMachine implements Serializable, DndKeyWallet
 	private List<AttackModification> preAttacks;
 	private List<AttackModification> afterAttak;
 	private List<AttackModification> permanent;
-
 	private List<WeaponProperties> possession;
 	private List<WeaponType> typePossession;
 	private List<WeaponProperties> dexteritys;
@@ -37,17 +37,17 @@ public class AttackMachine implements Serializable, DndKeyWallet
 	
 	public HeroAction startAction(Weapon weapon)
 	{
-		List<AttackModification> target = buildAttacks(weapon);
-		List<Action> attacks = new ArrayList<>();
-		for(AttackModification attack: target)
+		List<AttackModification> attacks = buildAttacks(weapon);
+		Action[][] actions = new Action[attacks.size()][0];
+		for(int i = 0; i < attacks.size(); i++)
 		{
-			attacks.add(AttackAction.create(key, checkStat(attack), checkProf(attack), attack));
+			AttackModification target = attacks.get(i);
+			actions[i][0] = AttackAction.create(key, checkStat(target), checkProf(target), target);
 		}
-		
-		return HeroAction.create(weapon.getName(), key, weapon.getName(), attacks);
+		return HeroAction.create(weapon.getName(), key, weapon.getName(), actions);
 	}
 	
-	HeroAction postAttack(PreAttack attack)
+	HeroAction postAttack(PreRoll attack)
 	{
 		if(attack.isCriticalMiss())
 		{
@@ -62,29 +62,31 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		{
 			return makeHit(attack);
 		}
-
-		
 	}
 	
-	private HeroAction makeHit(PreAttack attack) {
-	
-		List<Action> nextSteps = new ArrayList<>();
-		List<AttackModification> attacks = getAttacks(attack.getAction().getAttack(), afterAttak);
-		for(AttackModification target: attacks)
+	private HeroAction makeHit(PreRoll attack) 
+	{
+		AttackAction action = (AttackAction) attack.getAction();
+		List<AttackModification> attacks = getAttacks(action.getAttack(), afterAttak);
+		Action[][] nextSteps = new Action[attacks.size()][1];
+		for(int i = 0; i < attacks.size(); i++)
 		{
-		nextSteps.add(RollAction.create(key, target, null, checkStat(target), checkProf(target)));
+			AttackModification target = attacks.get(i);
+			nextSteps[i][0] = RollAction.create(target.getName(), target.getDamage(), key, null, checkStat(target), checkProf(target));
 		}
-		nextSteps.add(HeroAction.create("MISS", key, "GOODLUCK NEXT TIME", null));
+		nextSteps[nextSteps.length - 1][0] = HeroAction.create("MISS", key, "GOODLUCK NEXT TIME", null);
 		return HeroAction.create(attack.getName(), key, attack.getText(), nextSteps);
 	}
 
-	private HeroAction makeCrit(PreAttack attack) {
-		
-		List<Action> nextSteps = new ArrayList<>();
-		List<AttackModification> attacks = getAttacks(crit(attack.getAction().getAttack()), afterAttak);
-		for(AttackModification target: attacks)
+	private HeroAction makeCrit(PreRoll attack) 
+	{
+		AttackAction action = (AttackAction) attack.getAction();
+		List<AttackModification> attacks = getAttacks(crit(action.getAttack()), afterAttak);
+		Action[][] nextSteps = new Action[attacks.size()][1];
+		for(int i = 0; i < attacks.size(); i++)
 		{
-		nextSteps.add(RollAction.create(key, target, null, checkStat(target), checkProf(target)));
+			AttackModification target = attacks.get(i);
+			nextSteps[i][0] = RollAction.create(target.getName(), target.getDamage(),key, null, checkStat(target), checkProf(target));
 		}
 		return HeroAction.create(attack.getName(), key, attack.getText(), nextSteps);
 	}
@@ -116,12 +118,15 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		return answer;
 	}
 
-	private boolean checkProf(AttackModification weapon)
+	private Proficiency checkProf(AttackModification weapon)
 	{
-		return getPossession().contains(WeaponProperties.MILITARY) 
+		if(getPossession().contains(WeaponProperties.MILITARY) 
 				|| (require(weapon.getRequirement(),WeaponProperties.SIMPLE) && getPossession().contains(WeaponProperties.SIMPLE))
-				|| typePossession.contains(weapon.getType());
-
+				|| typePossession.contains(weapon.getType()))
+		{
+			return Proficiency.BASE;
+		}
+		return null;
 	}
 	
 	private boolean require(WeaponProperties[] pool, WeaponProperties target)

@@ -1,4 +1,4 @@
-package com.dnd.dndTable.rolls;
+package com.dnd.dndTable.creatingDndObject.modification;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -7,6 +7,7 @@ import java.util.List;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
+import com.dnd.dndTable.rolls.Dice;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("ATTACK_MODIFICATION")
 public class AttackModification implements Serializable, ObjectDnd
@@ -144,7 +145,7 @@ public class AttackModification implements Serializable, ObjectDnd
 	@Override
 	public long key() {
 		// TODO Auto-generated method stub
-		return attackModification;
+		return ATTACK_MODIFICATION;
 	}
 	
 	

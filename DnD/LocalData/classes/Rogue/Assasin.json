@@ -3,7 +3,7 @@
       "className":"Rogue",
       "myArchetypeClass":"Assasin",
       "diceHp":"D8",
-      "firstHp":0,
+      "firstHp":8,
       "growMap":[
          [
             {

@@ -28,7 +28,7 @@ public class CharacterDndBotTest {
 
 	@Test
 	public void test() {
-		fail("Not yet implemented");
+		
 	}
 
 }

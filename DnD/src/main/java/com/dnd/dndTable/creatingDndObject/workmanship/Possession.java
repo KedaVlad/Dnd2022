@@ -69,6 +69,6 @@ public class Possession implements Serializable, ObjectDnd
 	@Override
 	public long key() {
 		// TODO Auto-generated method stub
-		return possession;
+		return POSSESSION;
 	}
 }

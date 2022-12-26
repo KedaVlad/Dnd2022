@@ -5,12 +5,11 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Body;
 import com.dnd.Log;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.AttackAction;
 import com.dnd.botTable.actions.HeroAction;
-import com.dnd.botTable.actions.PreAttack;
+import com.dnd.botTable.actions.PreRoll;
 import com.dnd.botTable.actions.RegistrateAction;
 import com.dnd.botTable.actions.RollAction;
 import com.dnd.botTable.actions.StartTreeAction;
@@ -18,13 +17,13 @@ import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.Refreshable;
+import com.dnd.dndTable.creatingDndObject.Rolls.MainStat;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
-import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
-import com.dnd.dndTable.creatingDndObject.raceDnd.RaceDnd;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
+import com.dnd.dndTable.rolls.Article;
 import com.dnd.dndTable.rolls.Formula;
-import com.dnd.dndTable.rolls.Rolls;
 
 
 public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
@@ -51,6 +50,86 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	private List<String> timesBuffs;
 	private List<String> myMemoirs;
 
+	public Action act(Action action)
+	{
+		Log.add(action);
+		Log.add("START ACT IN CHARACTER");
+		long key = action.getKey();
+		Action answer = null;
+
+		if(action instanceof StartTreeAction)
+		{
+			return startTreeAction((StartTreeAction) action);
+		}
+		if(action instanceof RegistrateAction)
+		{
+			return registAction((RegistrateAction) action);
+		}
+
+
+		if(key == AttackMachine.key)
+		{
+			if(action instanceof PreRoll)
+			{
+				PreRoll roll = (PreRoll) action;
+				if(roll.getAction() instanceof AttackAction)
+				{
+				answer = attackMachine.postAttack(preRoll(roll));
+				}
+				else
+				{
+					answer = preRoll(roll).rebuild();
+				}
+			}
+			else if(action instanceof AttackAction)
+			{
+				return PreRoll.create((AttackAction) action);
+			}
+			else if(action instanceof RollAction)
+			{
+				return roll((RollAction) action);
+			}
+			else
+			{
+				return action;
+			}
+		}
+		Log.add(action);
+		return answer;
+	}
+
+	private Action startTreeAction(StartTreeAction action) {
+
+		Log.add(action + "START TREE ACTION");
+		long key = action.getKey();
+		if(key == FEATURE)
+		{
+			return myWorkmanship.getFeatureMenu();
+		}
+		else if(key == POSSESSION)
+		{
+			return myWorkmanship.getPossessionMenu();
+		}
+		else if(key == SPELL)
+		{
+			return magicSoul.getSpellMenu();	
+		}
+		else if(key == BODY)
+		{
+			return myBody.getBodyMeny();
+		}
+		else if(key == ROLLS)
+		{
+			return rolls.getRollsMenu();
+		}
+		else if(key == REST)
+		{
+			return rest();
+		}
+
+		return null;	
+	}
+	
 	private Action registAction(RegistrateAction action)
 	{
 		ObjectDnd object = action.getTarget();
@@ -73,9 +152,34 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 			{
 				return rest((Time)object);
 			}
+			else if(object instanceof Bag)
+			{
+				return myBody.getBagMeny((Bag) object);
+			}
+			else if(object instanceof Items)
+			{
+				return myBody.getItemMenu((Items) object);
+			}
+			else if(object instanceof MainStat)
+			{
+				return rolls.getStatCase((MainStat) object);
+			}
+			else if(object instanceof Article)
+			{
+				return rolls.getArticleCase((Article) object);
+			}
 		}
-
 		return null;
+	}
+
+	private Action rest() 
+	{
+		String name = "Rest";
+		String text = "You are resting... How many hours did you have time to rest?\n"
+				+ "Long rest - if 8 or more.\n"
+				+ "Short rest - if more than 1.5 and less than 8.";
+		Action[][] buttons = {{RegistrateAction.create("Long rest", Time.LONG),RegistrateAction.create("Short rest", Time.SHORT)}};
+		return HeroAction.create(name, CHARACTER, text, buttons);
 	}
 
 	private Action rest(Time time) 
@@ -86,22 +190,26 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		{
 			String text = "Everything that depended on a short rest is reset.\n"
 					+ "You have "+lvl+" Hit Dice available to restore your health.";
-			HeroAction.create(name, character, text, null);
+			HeroAction.create(name, CHARACTER, text, null);
 		}
 		else if(time == Time.LONG)
 		{
 			String text = "You are fully rested and recovered!";
-			HeroAction.create(name, character, text, null);
+			HeroAction.create(name, CHARACTER, text, null);
 		}
 		return null;
 	}
-
-	private PreAttack preAttack(PreAttack attack)
+	
+	private PreRoll preRoll(PreRoll attack)
 	{
 		String text;
-		if(attack.getAction().getAttack().isPermanentCrit())
+		if(attack.getAction() instanceof AttackAction)
 		{
-			text = "PERMANENT CRIT";
+			AttackAction action = (AttackAction) attack.getAction();
+			if(action.getAttack().isPermanentCrit())
+			{
+				text = "PERMANENT CRIT";
+			}
 		}
 		else
 		{
@@ -125,109 +233,19 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		}
 		return attack;
 	}
-
+	
 	private HeroAction roll(RollAction action)
 	{
 		Formula formula = rolls.execute(action);
 		return HeroAction.create("finish", 0, formula.execute(), null);
 	}
 
-	public Action act(Action action)
-	{
-		long key = action.getKey();
-		Action answer = null;
-
-		if(action instanceof StartTreeAction)
-		{
-			return startTreeAction((StartTreeAction) action);
-		}
-		if(action instanceof RegistrateAction)
-		{
-			return registAction((RegistrateAction) action);
-		}
-
-
-		if(key == AttackMachine.key)
-		{
-			if(action instanceof PreAttack)
-			{
-				answer = attackMachine.postAttack(preAttack((PreAttack) action));
-			}
-			else if(action instanceof AttackAction)
-			{
-				return PreAttack.create((AttackAction) action);
-			}
-			else if(action instanceof RollAction)
-			{
-				return roll((RollAction) action);
-			}
-			else
-			{
-				return action;
-			}
-		}
-
-		if(action instanceof AttackAction)
-		{
-
-
-		}
-		else if(action instanceof RollAction)
-		{
-
-		}
-		else
-		{
-
-		}
-		return answer;
-	}
-
-	private Action startTreeAction(StartTreeAction action) {
-
-		long key = action.getKey();
-		if(key == feature)
-		{
-			return myWorkmanship.getFeatureMenu();
-		}
-		else if(key == possession)
-		{
-			
-		}
-		else if(key == spell)
-		{
-
-		}
-		else if(key == body)
-		{
-
-		}
-		else if(key == rest)
-		{
-			return rest();
-		}
-
-
-		return null;	
-	}
-
-	private Action rest() 
-	{
-		String name = "Rest";
-		String text = "You are resting... How many hours did you have time to rest?\n"
-				+ "Long rest - if 8 or more.\n"
-				+ "Short rest - if more than 1.5 and less than 8.";
-		List<Action> buttons = new  ArrayList<>();
-		buttons.add(RegistrateAction.create("Long rest", Time.LONG));
-		buttons.add(RegistrateAction.create("Short rest", Time.SHORT));
-		return HeroAction.create(name, character, text, buttons);
-	}
-
-	public CharacterDnd(String name) 
+	private CharacterDnd(String name) 
 	{
 		this.name = name;
 		myWorkmanship = new Workmanship();
-		myMemoirs = new ArrayList<>();	
+		myMemoirs = new ArrayList<>();
+		myBody = new Body();
 		cloud = new СhoiceCloud();
 		rolls = new Rolls();
 		hp = new HP();
@@ -284,27 +302,18 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		setLvl();
 	}
 
-	public String getMyMemoirs() 
+	public List<String> getMyMemoirs() 
 	{
-
-		String answer = "";
-		for(String string: myMemoirs)
-		{
-			answer += string + "\n";
-		}
-
-		return answer;
+		return myMemoirs;
 	}
 
-	public void setMyMemoirs(String memoirs) 
+	public void addMyMemoirs(String memoirs) 
 	{
-
 		myMemoirs.add(memoirs);
 	}
-
+	
 	public void setLvl() 
 	{
-
 		if(multiClass != null)
 		{
 			lvl = myClass.getLvl() + multiClass.getLvl();
@@ -313,16 +322,6 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		{
 			lvl = myClass.getLvl();
 		}
-	}
-
-	public int getHp() 
-	{
-		return hp.getNow() + hp.getTimeHp();
-	}
-
-	public void setHp(int hp)
-	{
-		this.hp.grow(hp);
 	}
 
 	public String getNature() 
@@ -399,39 +398,41 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		return new CharacterDnd(name);
 	}
 
-	public List<String> getTimesBuffs() {
+	public List<String> getTimesBuffs() 
+	{
 		return timesBuffs;
 	}
 
-	public AttackMachine getAttackMachine() {
+	public AttackMachine getAttackMachine() 
+	{
 		return attackMachine;
 	}
 
-	public void setAttackMachine(AttackMachine attackMachine) {
-		this.attackMachine = attackMachine;
-	}
-
-	public boolean isFighting() {
+	public boolean isFighting() 
+	{
 		return fighting;
 	}
 
-	public void setFighting(boolean fighting) {
+	public void setFighting(boolean fighting) 
+	{
 		this.fighting = fighting;
 	}
 
-	public Body getBody() {
+	public Body getBody() 
+	{
 		return myBody;
 	}
 
-	public List<String> getPermanentBuffs() {
+	public List<String> getPermanentBuffs() 
+	{
 		return permanentBuffs;
 	}
 
 	@Override
-	public void refresh(Time time) {
-
+	public void refresh(Time time) 
+	{
 		magicSoul.refresh(time);
-
+		hp.refresh(time);
 	}	
 
 	public String getStatus()
@@ -442,5 +443,33 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	public String getMenu()
 	{
 		return "Menu";
+	}
+
+	public HP getHp() 
+	{
+		return hp;
+	}
+
+	public MagicSoul getMagicSoul() 
+	{
+		return magicSoul;
+	}
+
+	public void setMagicSoul(MagicSoul magicSoul) 
+	{
+		this.magicSoul = magicSoul;
+	}
+
+	public Action getMemoirsAct() 
+	{
+		String name = "MEMOIRS";
+		String text = "MEMOIRS\n";
+		int i = 1;
+		for(String string: myMemoirs)
+		{
+			text = i + ". " + string + "\n";
+		}
+		
+		return HeroAction.create(name, NO_ANSWER, text, null);
 	}
 }

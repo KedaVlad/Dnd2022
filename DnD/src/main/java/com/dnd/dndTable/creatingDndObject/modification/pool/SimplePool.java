@@ -1,10 +1,14 @@
-package com.dnd.dndTable.creatingDndObject.workmanship.mechanics;
+package com.dnd.dndTable.creatingDndObject.modification.pool;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SimplePool<T> extends Pool<T> {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int activeMaxSize;
 	
 	public void add(T object)

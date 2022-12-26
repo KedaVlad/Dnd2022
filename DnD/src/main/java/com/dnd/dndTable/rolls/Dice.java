@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Names.Stat;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
@@ -190,11 +191,11 @@ public class Dice implements Serializable
 
 	public static int stableStartHp(CharacterDnd character)
 	{ 
-		int start = character.getClassDnd().getFirstHp();
-
+		int start = character.getClassDnd().getFirstHp() + character.getRolls().getValue(Stat.CONSTITUTION.toString());
+		
 		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
 		{
-			start += character.getRolls().getHp(character.getClassDnd(), false);
+			start += character.getRolls().rollHp(character.getClassDnd(), false);
 		}
 
 		return start;
@@ -203,11 +204,11 @@ public class Dice implements Serializable
 	public static int randomStartHp(CharacterDnd character)
 	{
 
-		int start = character.getClassDnd().getFirstHp();
+		int start = character.getClassDnd().getFirstHp() + character.getRolls().getValue(Stat.CONSTITUTION.toString());
 
 		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
 		{
-			start += character.getRolls().getHp(character.getClassDnd(), true);
+			start += character.getRolls().rollHp(character.getClassDnd(), true);
 		}
 
 		return start;

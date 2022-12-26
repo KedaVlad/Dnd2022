@@ -10,7 +10,7 @@ public class SimpleRollAction extends HeroAction
 		
 	private static final long serialVersionUID = 1L;
 	
-	public static SimpleRollAction create(String name, long key, String text, List<Action> nextStep, List<Dice> base)
+	public static SimpleRollAction create(String name, long key, String text, Action[][] nextStep, List<Dice> base)
 	{
 		SimpleRollAction answer = new SimpleRollAction();
 		answer.name = name;
@@ -22,14 +22,13 @@ public class SimpleRollAction extends HeroAction
 		answer.base = base;
 		return answer;
 	}
-	
 	private List<Dice> base;
 
 	public List<Dice> getBase() 
 	{
 		return base;
 	}
-
+	
 	public void setBase(List<Dice> base) 
 	{
 		this.base = base;

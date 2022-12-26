@@ -19,17 +19,13 @@ import com.dnd.botTable.GameTable;
 import com.dnd.botTable.actions.FactoryAction;
 import com.dnd.botTable.actions.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.dndTable.creatingDndObject.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
-import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
-import com.dnd.dndTable.creatingDndObject.classDnd.Rogue;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.FeatureBuilder;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.MechanicBuilder;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.Mechanics;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Mechanics;
 import com.dnd.dndTable.factory.Json;
 import com.dnd.dndTable.factory.inerComands.AddComand;
-import com.dnd.dndTable.factory.inerComands.InerComadDeserializer;
 import com.dnd.dndTable.factory.inerComands.InerComand;
 import com.dnd.dndTable.rolls.DamageDice;
 import com.dnd.dndTable.rolls.Dice;
@@ -53,6 +49,18 @@ public class TestSome {
 	protected int age = 4;
 	
 	
+	static void chekStatRandomiser()
+	{
+		int i = 0;
+		while(true)
+		{
+			i++;
+			int j = Dice.randomStat();
+			System.out.println(j);
+			if(j < 3) break;
+			if(i >= 1000) break;
+		}
+	}
 	
 	
 	
@@ -60,14 +68,17 @@ public class TestSome {
 	
 	public static void main(String[] args) throws IOException {
 
-		InerFeature a = InerFeature.build(Feature.build().name("Dura"));
+		List<String> s = new ArrayList<>();
+		s.add("AAAAAAAA");
+		s.add("BBBBBBBBBBBBBB");
+		s.add(0, "CCCCCCCCCCCCCC");
 		
+		for(String string:s)
+		{
+			System.out.println(string);
+		}
 		
-		
-		
-	//	node.path("name")
 
-		
 	}
 }
 

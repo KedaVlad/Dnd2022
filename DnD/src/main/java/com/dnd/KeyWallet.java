@@ -4,11 +4,11 @@ import com.dnd.dndTable.DndKeyWallet;
 
 public interface KeyWallet extends DndKeyWallet {
 
-	final static long start = 0000000000;
-	final static long hp = 000000001;
-	final static long menu = 000000002;
-	final static long toMenu = 000000003;
-	final static long characterCase = 000000004;
+	final static long hp = 100000001;
+	final static long menu = 100000002;
+	final static long toMenu = 100000003;
+	final static long characterCase = 100000004;
+	final static long start = 1000000005;
 	final static long eliminationKey = 666666666;
 	
 	final static long buttonsKey = 254123765;

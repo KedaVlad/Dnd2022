@@ -41,8 +41,14 @@ public class BotAction extends Action{
 	@Override
 	public Action continueAction(String key) 
 	{
-		this.answer = key;
-		return this;
+		BotAction answer = new BotAction();
+		answer.name = this.name;
+		answer.key = this.key;
+		answer.mainAct = this.mainAct;
+		answer.mediator = this.mediator;
+		answer.text = this.text;
+		answer.answer = key;
+		return answer;
 	}
 
 	

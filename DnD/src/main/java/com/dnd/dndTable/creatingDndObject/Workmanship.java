@@ -12,7 +12,7 @@ import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.Mechanics;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Mechanics;
 import com.google.common.math.Stats;
 
 
@@ -140,17 +140,31 @@ public class Workmanship implements Serializable, ObjectDnd
 		
 		String name = "FeatureMenu";
 		String text = "This is your feature. Choose some for more infotmation";
-		List<Action> buttons = new ArrayList<>();
-		for(Feature feature: myFeatures)
+		Action[][] buttons = new Action[myFeatures.size()][1];
+		for(int i = 0; i < myFeatures.size(); i++)
 		{
-			buttons.add(RegistrateAction.create(feature.getName(),feature));
+			Feature feature = myFeatures.get(i);
+			buttons[i][0] = RegistrateAction.create(feature.getName(),feature);
 		}
 		return HeroAction.create(name, key, text, buttons);
 	}
 
 	public Action featureCase(Feature object) {
 	
-		return null;
+		String name = object.getName();
+		String text = name + "\n" + object.getDescription();
+		return HeroAction.create(name, key, text, null);
+	}
+
+	public Action getPossessionMenu() {
+		String name = "FeatureMenu";
+		String text = "This is your possessions. \n";
+		
+		for(Possession possession: myPossessions)
+		{
+			text += possession.getName() + "\n";
+		}
+		return HeroAction.create(name, key, text, null);
 	}
 	
 }

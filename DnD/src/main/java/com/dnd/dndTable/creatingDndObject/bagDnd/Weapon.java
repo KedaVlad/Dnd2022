@@ -2,7 +2,7 @@ package com.dnd.dndTable.creatingDndObject.bagDnd;
 
 import java.util.List;
 
-import com.dnd.dndTable.rolls.AttackModification;
+import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.rolls.Dice;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -69,7 +69,7 @@ public class Weapon extends Items
 	@Override
 	public long key() {
 		// TODO Auto-generated method stub
-		return weapon;
+		return WEAPON;
 	}
 
 	public int getAttack() {

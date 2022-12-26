@@ -1,9 +1,13 @@
 package com.dnd.dndTable.creatingDndObject;
 
+import java.io.Serializable;
+
+import com.dnd.Log;
 import com.dnd.dndTable.Refreshable;
 
-public class HP implements Refreshable
+public class HP implements Refreshable, Serializable
 {
+	private static final long serialVersionUID = 1L;
 	private int max = 0;
 	private int now = 0;
 	private int timeHp = 0;
@@ -13,6 +17,7 @@ public class HP implements Refreshable
 	public void grow(int value)
 	{
 		this.max += value;
+		this.now = this.max;
 	}
 	
 	public void damaged(int value)

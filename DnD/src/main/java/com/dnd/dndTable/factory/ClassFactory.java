@@ -5,12 +5,13 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.dnd.Log;
 import com.dnd.Source;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.FactoryAction;
 import com.dnd.botTable.actions.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.creatingDndObject.classDnd.*;
+import com.dnd.dndTable.creatingDndObject.ClassDnd;
 import com.dnd.dndTable.factory.inerComands.InerComand;
 
 abstract class ClassFactory implements Source 
@@ -79,7 +80,7 @@ abstract class ClassFactory implements Source
 			action.setName("checkCondition");
 			action.setText(lvl + "??? I see you're new here. Let's start with lvl 1.\nAre you satisfied with this option?/n"
 					+  getObgectInfo(action.getLocalData().get(0), action.getLocalData().get(1)) + "\nIf not, select another option above." );
-			action.getLocalData().remove(0);
+			action.getLocalData().remove(2);
 			action.getLocalData().add(1+"");
 			action.setNextStep(new String[][] {{"Okey"}});
 			return FinalAction.create(action);
@@ -99,7 +100,8 @@ abstract class ClassFactory implements Source
 			int lvl = ((Integer) Integer.parseInt(action.getLocalData().get(2)));
 			character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, ClassDnd.class));
 			character.getClassDnd().setLvl(lvl);
-			character.setLvl();
+			Log.add(character.getClassDnd().getLvl() + " Class lvl");
+			Log.add(character.getLvl() + " Character lvl");
 			for(int i = 0; i < lvl; i++)
 			{
 				for(InerComand comand: character.getClassDnd().getGrowMap()[i])

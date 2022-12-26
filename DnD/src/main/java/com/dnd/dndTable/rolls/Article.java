@@ -5,26 +5,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Names.Stat;
+import com.dnd.dndTable.ObjectDnd;
+import com.dnd.dndTable.creatingDndObject.Rolls.Proficiency;
 
-public class Article implements Serializable
+public class Article implements Serializable, ObjectDnd
 {
 	private static final long serialVersionUID = 1L;
 	private String name;
 	private Stat depends;
-	private boolean proficiency;
-	private boolean halfProf;
-	private boolean competense;
-	List <String> spesial;
-	List <Dice> permanentBuff;
+	private Proficiency proficiency;
+	private List <String> spesial;
 
-	Article(String name, Stat depends)
+	public Article(String name, Stat depends)
 	{
 		this.setName(name);
 		this.setDepends(depends);
 		spesial = new ArrayList<>();
-		permanentBuff = new ArrayList<>();
 	}
-
+	
 	public String getSpesial()
 	{
 		String answer = "";
@@ -35,46 +33,51 @@ public class Article implements Serializable
 		return answer;
 	}
 	
-	
-
-	public String getName() {
+	public String getName() 
+	{
 		return name;
 	}
 
-	public void setName(String name) {
+	public void setName(String name) 
+	{
 		this.name = name;
 	}
 
-	public Stat getDepends() {
+	public Stat getDepends() 
+	{
 		return depends;
 	}
 
-	public void setDepends(Stat depends) {
+	public void setDepends(Stat depends) 
+	{
 		this.depends = depends;
 	}
 
-	public boolean isProficiency() {
+	public boolean isProficiency() 
+	{
+		return proficiency != null;
+	}
+
+	public void addSpesial(String spesial) 
+	{
+		this.spesial.add(spesial);
+	}
+
+	
+	@Override
+	public long key() {
+		// TODO Auto-generated method stub
+		return ARTICLE;
+	}
+
+	public Proficiency getProficiency() 
+	{
 		return proficiency;
 	}
 
-	public void setProficiency(boolean proficiency) {
+	public void setProficiency(Proficiency proficiency) 
+	{
 		this.proficiency = proficiency;
-	}
-
-	public boolean isHalfProf() {
-		return halfProf;
-	}
-
-	public void setHalfProf(boolean halfProf) {
-		this.halfProf = halfProf;
-	}
-
-	public boolean isCompetense() {
-		return competense;
-	}
-
-	public void setCompetense(boolean competense) {
-		this.competense = competense;
 	}
 	
 }

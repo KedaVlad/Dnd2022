@@ -38,7 +38,7 @@ abstract class CharacterFactory
 	
 	public static CharacterDnd finish(FinalAction action)
 	{
-		return new CharacterDnd((String)action.getLocalData().get(0));
+		return CharacterDnd.create((String)action.getLocalData().get(0));
 	}
 	
 }

@@ -43,7 +43,7 @@ abstract class ScriptReader implements DndKeyWallet, Names
 	private static void up(CharacterDnd character, UpComand comand) 
 	{
 		long key = comand.getKey();
-		if(key == stat)
+		if(key == STAT)
 		{
 			character.getRolls().up(comand.getName(), comand.getValue());
 		}
@@ -85,7 +85,7 @@ abstract class ScriptReader implements DndKeyWallet, Names
 	{
 		long key = comand.getKey();
 		String target = comand.getTarget();
-		if(key == stat)
+		if(key == STAT)
 		{
 			
 		}

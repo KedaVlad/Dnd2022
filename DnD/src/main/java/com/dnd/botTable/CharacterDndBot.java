@@ -38,7 +38,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private GameTable initialize(Update update) throws TelegramApiException
 	{
 		Message message = null;
-
+		
 		if(update.hasCallbackQuery())
 		{
 			message = update.getCallbackQuery().getMessage();
@@ -61,7 +61,9 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	{ 
 		try 
 		{
-			GameTable game = initialize(update);
+			GameTable game = initialize(update);	
+			Log.add(game.getActualGameCharacter().getWorkmanship().getMyFeatures().size() + " WORKMANSHIP SIZE");
+			if(game.getActualGameCharacter() != null) Log.add(game.getActualGameCharacter().getHp() + " HPHPHPHPHPHPHPHPHP");
 			if(update.hasCallbackQuery())
 			{
 				handleCallback(update.getCallbackQuery(), game);
@@ -112,7 +114,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			String regex = "([a-zA-Z]+)" + buttonsKey + "(.+)";
 			String target = string.replaceAll(regex, "$1");
 			String callback = string.replaceAll(regex, "$2");
-			
 			game.getScript().beackTo(target);
             templateExecuter(callbackQuery.getMessage(), game, game.makeAction(game.getScript().getAction().continueAction(callback)));
 		}
@@ -121,7 +122,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			String regex = "([a-zA-Z]+)(.*)";
 			String target = string.replaceAll(regex, "$1");
 			String callback = string.replaceAll(regex, "$2");
-			
 			game.getScript().beackTo(target);
             templateExecuter(callbackQuery.getMessage(), game, game.makeAction(game.getScript().getAction().continueAction(callback)));
 		}
@@ -129,12 +129,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void handleMessage(Message message, GameTable game) throws TelegramApiException, InterruptedException
 	{
-		if(game.getScript().isMediator())
-		{
-			game.getScript().toAct(message.getMessageId());
-			templateExecuter(message, game, game.makeAction(game.getScript().getAction().continueAction(message.getText())));
-		}
-		else if(message.hasText() && message.hasEntities()) 
+		if(message.hasText() && message.hasEntities()) 
 		{	
 			Optional<MessageEntity> commandEntity =
 					message.getEntities()
@@ -159,13 +154,18 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				}
 			}
 		}
+		else if(game.getScript().isMediator())
+		{
+			game.getScript().toAct(message.getMessageId());
+			templateExecuter(message, game, game.makeAction(game.getScript().getAction().continueAction(message.getText())));
+		}
 		else
 		{
 
 
 			if(game.getActualGameCharacter() != null)
 			{
-				game.getActualGameCharacter().setMyMemoirs(message.getText());
+				game.getActualGameCharacter().addMyMemoirs(message.getText());
 				Message toTrash = execute(SendMessage.builder()
 						.text("I will put it in your memoirs")
 						.chatId(message.getChatId().toString())
@@ -192,7 +192,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		if(target instanceof ArrayAction)
 		{
 			ArrayAction array = (ArrayAction) target;
-			for(BotAction action: array.getPool())
+			for(Action action: array.getPool())
 			{
 				if(action.hasButtons())
 				{
@@ -336,11 +336,11 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		telegramBotsApi.registerBot(bot);
 		bot.gameTables = Json.restor();
 
-		while(true)
+	/*	while(true)
 		{
 			Json.backup(bot.gameTables);
 			Thread.sleep(5000); 
 			System.out.println("*********************************************************************************************************************");
-		}
+		}*/
 	}
 }

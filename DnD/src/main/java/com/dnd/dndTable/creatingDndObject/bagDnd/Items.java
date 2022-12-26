@@ -37,7 +37,7 @@ public class Items implements Serializable,ObjectDnd, Source{
 	@Override
 	public long key() {
 		// TODO Auto-generated method stub
-		return item;
+		return ITEM;
 	}
 
 	public String getDescription() {

@@ -1,5 +1,6 @@
-package com.dnd.dndTable.creatingDndObject.workmanship.mechanics;
+package com.dnd.dndTable.creatingDndObject.modification.pool;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,8 +14,9 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 	@JsonSubTypes.Type(value = SoftPool.class, name = "SOFT_POOL"),
 	@JsonSubTypes.Type(value = TimePool.class, name = "TIME_POOL"),
 	@JsonSubTypes.Type(value = SimplePool.class, name = "SIMPLE_POOL")})
-public abstract class Pool<T> 
+public abstract class Pool<T> implements Serializable
 {
+	private static final long serialVersionUID = 1L;
 	protected List<T> active = new ArrayList<>();
 	
 	public List<T> getActive() 

@@ -1,4 +1,4 @@
-package com.dnd.dndTable.creatingDndObject.classDnd;
+package com.dnd.dndTable.creatingDndObject;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,15 +17,15 @@ import com.dnd.dndTable.creatingDndObject.bagDnd.Pack;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
+import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.Mechanics;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.Mechanics;
 import com.dnd.dndTable.factory.Json;
 import com.dnd.dndTable.factory.inerComands.AddComand;
 import com.dnd.dndTable.factory.inerComands.CloudComand;
 import com.dnd.dndTable.factory.inerComands.InerComand;
-import com.dnd.dndTable.rolls.AttackModification;
 import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -123,6 +123,7 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 		ClassDnd assasin = new ClassDnd();
 
 		assasin.diceHp = Roll.D8;
+		assasin.firstHp = 8;
 
 		assasin.className = "Rogue";
 		assasin.myArchetypeClass = "Assasin";
@@ -130,33 +131,33 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 
 		assasin.growMap[0] = new InerComand[] { 
 				AddComand.create(
-				new Possession("Light Armor", armor),
-				new Possession("Simple Weapon", weapon),
-				new Possession("Hand Crossbows", weapon),
-				new Possession("Long Swords", weapon),
-				new Possession("Rapiers", weapon),
-				new Possession("Short Swords", weapon),
-				new Possession("Short Swords", weapon),
-				new Possession("Thieves' Tools", item),
-				new Possession("SR Dexterity", stat),
-				new Possession("SR Intelligense", stat),
-				new Possession("SR Intelligense", stat),
+				new Possession("Light Armor", ARMOR),
+				new Possession("Simple Weapon", WEAPON),
+				new Possession("Hand Crossbows", WEAPON),
+				new Possession("Long Swords", WEAPON),
+				new Possession("Rapiers", WEAPON),
+				new Possession("Short Swords", WEAPON),
+				new Possession("Short Swords", WEAPON),
+				new Possession("Thieves' Tools", ITEM),
+				new Possession("SR Dexterity", STAT),
+				new Possession("SR Intelligense", STAT),
+				new Possession("SR Intelligense", STAT),
 				Armor.create("Leather Armor"),
 				Weapon.build(WeaponType.DAGGER),
 				Pack.create("Thieves' Tools")),
 
 				CloudComand.create(4, "Choose skill", false,
-				AddComand.create(new Possession("Acrobatics", stat)),
-				AddComand.create(new Possession("Investigation", stat)),
-				AddComand.create(new Possession("Athletics", stat)),
-				AddComand.create(new Possession("Mindfulness", stat)),
-				AddComand.create(new Possession("Performance", stat)),
-				AddComand.create(new Possession("Intimidation", stat)),
-				AddComand.create(new Possession("Sleight of hand", stat)),
-				AddComand.create(new Possession("Deception", stat)),
-				AddComand.create(new Possession("Insight", stat)),
-				AddComand.create(new Possession("Stelth", stat)),
-				AddComand.create(new Possession("Persuasion", stat))),
+				AddComand.create(new Possession("Acrobatics", STAT)),
+				AddComand.create(new Possession("Investigation", STAT)),
+				AddComand.create(new Possession("Athletics", STAT)),
+				AddComand.create(new Possession("Mindfulness", STAT)),
+				AddComand.create(new Possession("Performance", STAT)),
+				AddComand.create(new Possession("Intimidation", STAT)),
+				AddComand.create(new Possession("Sleight of hand", STAT)),
+				AddComand.create(new Possession("Deception", STAT)),
+				AddComand.create(new Possession("Insight", STAT)),
+				AddComand.create(new Possession("Stelth", STAT)),
+				AddComand.create(new Possession("Persuasion", STAT))),
 				
 				CloudComand.create(1, "Choose item", false,
 				AddComand.create(Weapon.build(WeaponType.RAPIER)),
@@ -174,8 +175,8 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 		
 		assasin.growMap[1] = new InerComand[] { AddComand.create(
 				InerFeature.create("Competence", "Blavlavla", CloudComand.create(2, "Choose", false,
-						AddComand.create(new Possession("Thieves' Tools", item).competence()),
-						AddComand.create(new Possession("", skill).competence()))),
+						AddComand.create(new Possession("Thieves' Tools", ITEM).competence()),
+						AddComand.create(new Possession("", SKILL).competence()))),
 				InerFeature.build(Feature.build().name("Sneak Attack").description("Y HIT WERY WELL")).comand(
 						AddComand.create(AttackModification.build()
 								.name("Sneak Attack")
@@ -188,13 +189,13 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 								.damage(new Dice("Sneak Attack", 0, Roll.D6))
 								.requirement(WeaponProperties.THROWING))),
 				InerFeature.create("Thieves Jargon", "Blaasfeefvla", 
-						AddComand.create(new Possession("Thieves Jargon", language))))};
+						AddComand.create(new Possession("Thieves Jargon", LANGUAGE))))};
 
 		assasin.growMap[2] = new InerComand[] { AddComand.create(Feature.build().name("Tricky Action").description("Bimbombom"))};
 
 		assasin.growMap[3] = new InerComand[] { AddComand.create(Feature.build().name("Additional Holdings").description("Bimweweom"),
-				new Possession("Poisn Tools", item),
-				new Possession("Grimm Tools", item),
+				new Possession("Poisn Tools", ITEM),
+				new Possession("Grimm Tools", ITEM),
 				InerFeature.build(Feature.build().name("Liquidation").description("Liquidation dsksdlflkdsf")).comand(
 						AddComand.create(AttackModification.build()
 								.name("Liquidation")
@@ -211,8 +212,8 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 		assasin.growMap[5] = new InerComand[] { AddComand.create(Feature.build().name("Incredible Evasion").description("Y HasdIT WERY WasdELL"))};
 
 		assasin.growMap[6] = new InerComand[] { CloudComand.create(2, "Choose", false,
-				AddComand.create(new Possession("Thieves' Tools", item).competence()),
-				AddComand.create(new Possession("", skill).competence()))};
+				AddComand.create(new Possession("Thieves' Tools", ITEM).competence()),
+				AddComand.create(new Possession("", SKILL).competence()))};
 		
 		assasin.growMap[7] = new InerComand[] { AddComand.create(Feature.build().name("Evasiveness").description("Y HIT WEasdRY WELL"))};
 		
@@ -232,7 +233,7 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 		
 		assasin.growMap[15] = new InerComand[] { AddComand.create(
 				InerFeature.create("Slippery Mind", "Blavlavla", 
-						AddComand.create(new Possession("SR Wisdom", stat))))};
+						AddComand.create(new Possession("SR Wisdom", STAT))))};
 		
 		assasin.growMap[16] = new InerComand[] { CloudComand.lvlUp(null)};
 		

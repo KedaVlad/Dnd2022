@@ -1,10 +1,11 @@
-package com.dnd.dndTable.creatingDndObject.workmanship.mechanics;
+package com.dnd.dndTable.creatingDndObject.modification.pool;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class SecondTypePool<T> extends SimplePool<T> {
 
+	private static final long serialVersionUID = 1L;
 	private List<T> weating = new ArrayList<>();
 	
 	public void pull(int target)

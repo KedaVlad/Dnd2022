@@ -72,7 +72,7 @@ public class Feature implements Serializable, ActionObject, ObjectDnd
 	@Override
 	public long key() {
 		// TODO Auto-generated method stub
-		return feature;
+		return FEATURE;
 	}
 	
 	

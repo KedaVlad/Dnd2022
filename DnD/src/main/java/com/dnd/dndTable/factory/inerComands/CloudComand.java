@@ -3,9 +3,9 @@ package com.dnd.dndTable.factory.inerComands;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.Pool;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.SoftPool;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.TimePool;
+import com.dnd.dndTable.creatingDndObject.modification.pool.Pool;
+import com.dnd.dndTable.creatingDndObject.modification.pool.SoftPool;
+import com.dnd.dndTable.creatingDndObject.modification.pool.TimePool;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
@@ -66,8 +66,8 @@ public class CloudComand extends InerComand{
 			return CloudComand.create(1,
 					"U shood to choose STATS or TRAIT or your spesials oportunities",
 					false,
-					IntegrateCloud.create(2, "STAT", true, com.dnd.dndTable.DndKeyWallet.stat),
-					IntegrateCloud.create(1, "TRAIT", false, com.dnd.dndTable.DndKeyWallet.trait), 
+					IntegrateCloud.create(2, "STAT", true, com.dnd.dndTable.DndKeyWallet.STAT),
+					IntegrateCloud.create(1, "TRAIT", false, com.dnd.dndTable.DndKeyWallet.TRAIT), 
 					comands);
 			
 		}
@@ -76,8 +76,8 @@ public class CloudComand extends InerComand{
 			return CloudComand.create(1,
 					"U shood to choose STATS or TRAIT",
 					false,
-					IntegrateCloud.create(2, "STAT", true, com.dnd.dndTable.DndKeyWallet.stat),
-					IntegrateCloud.create(1, "TRAIT", false, com.dnd.dndTable.DndKeyWallet.trait));
+					IntegrateCloud.create(2, "STAT", true, com.dnd.dndTable.DndKeyWallet.STAT),
+					IntegrateCloud.create(1, "TRAIT", false, com.dnd.dndTable.DndKeyWallet.TRAIT));
 		}
 	}
 }

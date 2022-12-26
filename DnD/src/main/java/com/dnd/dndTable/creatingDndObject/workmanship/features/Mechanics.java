@@ -1,7 +1,8 @@
-package com.dnd.dndTable.creatingDndObject.workmanship.mechanics;
+package com.dnd.dndTable.creatingDndObject.workmanship.features;
 
-import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
-import com.dnd.dndTable.rolls.AttackModification;
+import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
+import com.dnd.dndTable.creatingDndObject.modification.Matrix;
+import com.dnd.dndTable.creatingDndObject.modification.pool.SimplePool;
 import com.dnd.dndTable.rolls.Dice;
 
 public class Mechanics extends Feature

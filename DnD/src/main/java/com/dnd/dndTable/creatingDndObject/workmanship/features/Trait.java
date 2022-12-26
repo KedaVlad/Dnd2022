@@ -1,8 +1,6 @@
-package com.dnd.dndTable.creatingDndObject.workmanship;
+package com.dnd.dndTable.creatingDndObject.workmanship.features;
 
 import java.io.Serializable;
-
-import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 
 public class Trait extends Feature implements Serializable {
 

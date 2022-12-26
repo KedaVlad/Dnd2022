@@ -1,4 +1,4 @@
-package com.dnd.dndTable.creatingDndObject.raceDnd;
+package com.dnd.dndTable.creatingDndObject;
 
 
 import java.io.File;
@@ -14,7 +14,6 @@ import com.dnd.Source;
 import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
-import com.dnd.dndTable.creatingDndObject.classDnd.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.factory.Json;
@@ -81,8 +80,8 @@ public class RaceDnd implements Serializable,  DndKeyWallet{
 
 		gnome.specials = new InerComand[]
 				{
-						UpComand.create("Intelligence", stat, 2),
-						UpComand.create("Dexterity", stat, 1),
+						UpComand.create("Intelligence", STAT, 2),
+						UpComand.create("Dexterity", STAT, 1),
 						AddComand.create(
 								Feature.build().name("Natural Illusion").description("Natural Illusisssssson"),
 								Feature.build().name("Communication with small animals").description("Communication with small animals"),

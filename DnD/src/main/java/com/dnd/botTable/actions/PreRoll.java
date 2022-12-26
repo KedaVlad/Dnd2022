@@ -1,32 +1,36 @@
 package com.dnd.botTable.actions;
 
 import com.dnd.botTable.Action;
+import com.dnd.dndTable.rolls.Dice;
+import com.dnd.dndTable.rolls.Dice.Roll;
 
-public class PreAttack extends HeroAction
+public class PreRoll extends HeroAction
 {
 	private static final long serialVersionUID = 1L;
 
-	private int status;
-	private String[][] nextStep;
-	private AttackAction action;
+	protected int status;
+	protected String[][] nextStep = new String[][] {{"ADVENTURE", "BASIC", "DISADVENTURE"}};
+	private RollAction action;
 	private boolean criticalMiss;
 	private boolean criticalHit;
 
-	
-	public static PreAttack create(AttackAction action)
+	public static PreRoll create(RollAction action)
 	{
-		PreAttack answer = new PreAttack();
+		PreRoll answer = new PreRoll();
 		answer.action = action;
+		answer.getAction().getBase().add(0, new Dice("D20", 0, Roll.D20));
 		answer.name = action.getName();
 		answer.key = action.getKey();
 		answer.mainAct = true;
 		answer.mediator = false;
 		answer.text = action.getText();
-		answer.nextStep = new String[][] {{"ADVENTURE", "BASIC", "DISADVENTURE"}};
 		return answer;
 	}
 	
-	
+	public int getStatus() 
+	{
+		return status;
+	}
 	@Override
 	public Action continueAction(String name) {
 		
@@ -42,24 +46,14 @@ public class PreAttack extends HeroAction
 		{
 			this.status = 3;
 		}
-		else
-		{
-			this.status = 2;
-		}
-		
+
 		return this;
 	}
 
 	@Override
 	public String[][] buildButtons()
 	{
-	
 		return nextStep;
-	}
-
-	public AttackAction getAction() 
-	{
-		return action;
 	}
 
 	@Override
@@ -68,30 +62,34 @@ public class PreAttack extends HeroAction
 		return (nextStep != null) && (nextStep.length != 0);
 	}
 
-	
-	public int getStatus() 
+	public boolean isCriticalMiss() 
 	{
-		return status;
-	}
-
-
-	public boolean isCriticalMiss() {
 		return criticalMiss;
 	}
 
-
-	public void setCriticalMiss(boolean criticalMiss) {
+	public void setCriticalMiss(boolean criticalMiss) 
+	{
 		this.criticalMiss = criticalMiss;
 	}
 
-
-	public boolean isCriticalHit() {
+	public boolean isCriticalHit() 
+	{
 		return criticalHit;
 	}
 
-
-	public void setCriticalHit(boolean criticalHit) {
+	public void setCriticalHit(boolean criticalHit) 
+	{
 		this.criticalHit = criticalHit;
 	}
 
+	
+	public RollAction getAction() 
+	{
+		return action;
+	}
+	
+	public HeroAction rebuild()
+	{
+		return HeroAction.create(this.name, this.key, this.text, null);
+	}
 }

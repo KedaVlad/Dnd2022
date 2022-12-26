@@ -98,7 +98,7 @@ public class Spell implements Serializable, ActionObject
 	@Override
 	public long key() {
 		// TODO Auto-generated method stub
-		return spell;
+		return SPELL;
 	}
 
 	

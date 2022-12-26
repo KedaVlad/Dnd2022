@@ -27,7 +27,7 @@ public class RegistrateAction extends Action
 	}
 
 	@Override
-	protected Action continueAction(String key) {
+	public Action continueAction(String key) {
 		// TODO Auto-generated method stub
 		return null;
 	}

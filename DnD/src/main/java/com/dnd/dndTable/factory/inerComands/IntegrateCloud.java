@@ -3,8 +3,8 @@ package com.dnd.dndTable.factory.inerComands;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.SoftPool;
-import com.dnd.dndTable.creatingDndObject.workmanship.mechanics.TimePool;
+import com.dnd.dndTable.creatingDndObject.modification.pool.SoftPool;
+import com.dnd.dndTable.creatingDndObject.modification.pool.TimePool;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 

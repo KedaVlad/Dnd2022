@@ -7,22 +7,17 @@ import java.util.List;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import com.dnd.Names.Stat;
-import com.dnd.dndTable.rolls.AttackModification;
+import com.dnd.dndTable.creatingDndObject.Rolls.Proficiency;
+import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class AttackAction extends RollAction
 {
-	
-	{
-		this.getBase().add(new Dice("D20", 0, Roll.D20));
-	}
-
-
 	private static final long serialVersionUID = 1L;
 	private AttackModification attack;
 
-	public static AttackAction create(long key, Stat depends, boolean proficiency, AttackModification attack)
+	public static AttackAction create(long key, Stat depends, Proficiency proficiency, AttackModification attack)
 	{
 		AttackAction answer = new AttackAction();
 		answer.key = key;

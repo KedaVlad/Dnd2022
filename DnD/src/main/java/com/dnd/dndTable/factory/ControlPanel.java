@@ -2,6 +2,7 @@ package com.dnd.dndTable.factory;
 
 import java.io.Serializable;
 
+import com.dnd.Log;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.GameTable;
 import com.dnd.botTable.actions.BotAction;
@@ -42,6 +43,7 @@ public class ControlPanel implements Serializable {
 	
 	public Action readiness(CharacterDnd character)
 	{
+		Log.add("Start redines Check");
 		if(character.getClassDnd() == null)
 		{
 			return ClassFactory.startCreate(character.getName());
@@ -50,7 +52,7 @@ public class ControlPanel implements Serializable {
 		{
 			return RaceFactory.startCreate();
 		}
-		else if(character.getHp() == 0)
+		else if(character.getHp().getNow() == 0)
 		{
 			return finish();
 		}
@@ -101,8 +103,7 @@ public class ControlPanel implements Serializable {
 				+ "Or write down those values that are agreed with your game master.\r\n"
 				+ "Examples:\r\n"
 				+ " str 11 dex 12 con 13 int 14 wis 15 cha 16\r\n"
-				+ " 11 12 13 14 15 16 \r\n"
-				+ " 11/12/13/14/15/16";
+				+ " 11, 12, 13, 14, 15, 16";
 		
 		return BotAction.create(name, getKey(), true, true, text, null);
 	}
