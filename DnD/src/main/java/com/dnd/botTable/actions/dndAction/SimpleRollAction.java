@@ -1,4 +1,4 @@
-package com.dnd.botTable.actions;
+package com.dnd.botTable.actions.dndAction;
 
 import java.util.List;
 
@@ -13,7 +13,7 @@ public class SimpleRollAction extends HeroAction
 	public static SimpleRollAction create(String name, long key, String text, Action[][] nextStep, List<Dice> base)
 	{
 		SimpleRollAction answer = new SimpleRollAction();
-		answer.name = name;
+		answer.setName(name);
 		answer.key = key;
 		answer.mainAct = true;
 		answer.mediator = false;

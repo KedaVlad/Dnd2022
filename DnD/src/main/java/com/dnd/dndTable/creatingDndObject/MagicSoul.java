@@ -5,8 +5,8 @@ import java.util.List;
 
 import com.dnd.Names.Stat;
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.HeroAction;
-import com.dnd.botTable.actions.RegistrateAction;
+import com.dnd.botTable.actions.dndAction.HeroAction;
+import com.dnd.botTable.actions.dndAction.RegistrateAction;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.Refreshable;
 import com.dnd.dndTable.creatingDndObject.modification.Matrix;

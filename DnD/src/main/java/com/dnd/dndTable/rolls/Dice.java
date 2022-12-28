@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Log;
 import com.dnd.Names.Stat;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.rolls.Dice.Roll;
@@ -42,8 +43,14 @@ public class Dice implements Serializable
 			this.getResults()[i] = roll(this.getCombo()[i]);				
 		}
 		this.getResults()[this.getResults().length-1] = this.buff;
-		answer += summ() + "(";
-
+		answer += summ();
+		
+		if(results.length > 2 ||
+				results.length > 1 &&
+				results[0] != 0 &&
+				results[1] != 0)
+		{
+		answer += "(";
 		boolean start = true;
 		for(int i = 0; i < results.length; i++)
 		{
@@ -69,6 +76,8 @@ public class Dice implements Serializable
 		}
 		
 		return answer + ")";
+		}
+		return answer;
 	}
 
 	public int roll()

@@ -9,9 +9,11 @@ import com.dnd.Log;
 import com.dnd.Names;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.ArrayAction;
-import com.dnd.botTable.actions.HeroAction;
-import com.dnd.botTable.actions.RegistrateAction;
-import com.dnd.botTable.actions.RollAction;
+import com.dnd.botTable.actions.dndAction.ChangeAction;
+import com.dnd.botTable.actions.dndAction.HeroAction;
+import com.dnd.botTable.actions.dndAction.PreRoll;
+import com.dnd.botTable.actions.dndAction.RegistrateAction;
+import com.dnd.botTable.actions.dndAction.RollAction;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.rolls.Article;
 import com.dnd.dndTable.rolls.Dice;
@@ -77,7 +79,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 
 	public Formula execute(RollAction action)
 	{
-		Formula answer = new Formula(action.getName());
+		Formula answer = new Formula("ROLL");
 		answer.getFormula().addAll(action.getBase());
 		answer.getFormula().add(getDice(action.getDepends().toString()));
 		if(action.isProficiency())
@@ -394,6 +396,79 @@ public class Rolls implements Serializable, Names, KeyWallet {
 				return HeroAction.create(name, key, text, actions);
 	}
 
+	public Action getStatCase(RegistrateAction action) 
+	{
+		MainStat stat = (MainStat) action.getTarget();
+		String changeStatText = stat.toString() + ". If u have reason to change value...";
+		
+		ChangeAction changeAction = ChangeAction.create(action, changeStatText, buildStatChangeButtons(stat));
+		PreRoll rollAction = PreRoll.create("... or roll.", RollAction.create("RollStat", ROLL, null, stat.name, null));
+		Action[] buttons = new Action[]{changeAction, rollAction};
+		return ArrayAction.create("StatCase", NO_ANSWER , buttons);
+	}
+	
+	private String[][] buildStatChangeButtons(MainStat stat)
+	{
+		
+		String[][] base = new String[][] {{"-3","-2","-1","+1","+2","+3"}};
+		int max = 20 - stat.value;
+		int min = stat.value - 3;
+		if(max > 3) max = 3;
+		if(min > 3) min = 3;
+		String[][] answer = new String[1][min+max];
+		if(answer[0].length == 6)
+		{
+			return base;
+		}
+		else if(min < max)
+		{
+			int j = 0;
+			for(int i = 6 - answer[0].length; i < 6; i++)
+			{
+				answer[0][j] = base[0][i];
+				j++;
+			}
+		}
+		else
+		{
+			for(int i = 0; i < answer[0].length; i ++)
+			{
+				answer[0][i] = base[0][i];
+			}
+		}
+		return answer;
+	}
+
+	public Action changeStat(ChangeAction action) 
+	{
+		MainStat stat = (MainStat) action.getTarget();
+		String name = stat.name.toString();
+
+		Log.add(action.getAnswer());
+		switch(action.getAnswer())
+		{
+		case "+1":
+			up(name, +1);
+			break;
+		case "+2":
+			up(name, +2);
+			break;
+		case "+3":
+			up(name, +3);
+			break;
+		case "-1":
+			up(name, -1);
+			break;
+		case "-2":
+			up(name, -2);
+			break;
+		case "-3":
+			up(name, -3);
+			break;
+		}
+		return action.beckKey("Menu").beckCall(menu +"ROLLS");
+	}
+
 	private Action SaveRollMenu()
 	{
 		String name = "SaveRollMenu";
@@ -428,7 +503,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				value += getProf(skills.get(i).getProficiency()).getBuff();
 			}
-			
+
 			actions[i][0] = RegistrateAction.create( value + 
 					" " + skills.get(i).getName(), skills.get(i));
 		}
@@ -440,7 +515,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			{
 				value += getProf(skills.get(i).getProficiency()).getBuff();
 			}
-			
+
 			actions[j][1] = RegistrateAction.create( value + 
 					" " + skills.get(i).getName(), skills.get(i));
 			j++;
@@ -448,14 +523,80 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		return HeroAction.create(name, key, text, actions);
 	}
 
-	public Action getStatCase(MainStat object) 
+	public Action getArticleCase(RegistrateAction action)
 	{
-		return null;
+		Article article = (Article) action.getTarget();
+
+		String changeStatText = articleInfo(article) + ". If u have reasons up your possession of this...";
+		String[][] buttonsChange = buildArticleChangeButtons(article);
+		if(buttonsChange == null) {
+			return PreRoll.create(articleInfo(article), RollAction.create("RollArticle", STAT, null, article.getDepends(), null));
+		}
+		else
+		{
+		ChangeAction changeAction = ChangeAction.create(action, changeStatText, buttonsChange);
+		PreRoll rollAction = PreRoll.create("... or roll.", RollAction.create("RollArticle", STAT, null, article.getDepends(), null));
+		Action[] buttons = new Action[]{changeAction, rollAction};
+		return ArrayAction.create("ArticleCase", NO_ANSWER , buttons);
+		}
 	}
 
-	public Action getArticleCase(Article object)
+	private String[][] buildArticleChangeButtons(Article article)
 	{
-		return null;
+		if(article.getProficiency() != null)
+		{
+			if(article.getProficiency().equals(Proficiency.BASE))
+			{
+				return new String[][] {{"Up to COMPETENSE"}};
+			}
+			else
+			{
+				return new String[][] {{"Up to PROFICIENCY"}};
+			}
+		}
+		else
+		{
+			return new String[][] {{"Up to PROFICIENCY"}};
+		}
+	}
+	
+	private String articleInfo(Article article)
+	{
+		String answer = article.getName() + "depends on " + article.getDepends().toString();
+		if(article.getProficiency() != null)
+		{
+			if(article.getProficiency().equals(Proficiency.COMPETENSE))
+			{
+				return answer += " + competense";
+			}
+			else if(article.getProficiency().equals(Proficiency.BASE))
+			{
+				return answer += " + proficiency";
+			}
+			else
+			{
+				return answer += " + half proficiency";
+			}
+		}
+		else
+		{
+			return answer;
+		}
+	}
+
+	public Action changeArticle(ChangeAction action) 
+	{
+		Article stat = (Article) action.getTarget();
+		switch(action.getAnswer())
+		{
+		case "Up to COMPETENSE":
+			stat.setProficiency(Proficiency.COMPETENSE);
+			break;
+		case "Up to PROFICIENCY":
+			stat.setProficiency(Proficiency.BASE);
+			break;
+		}
+		return action.beckKey("Menu").beckCall("ROLLS");
 	}
 
 	class MainStat implements Serializable, ObjectDnd
@@ -463,6 +604,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		private static final long serialVersionUID = 1L;
 		Stat name;
 		int value;
+		int maxValue = 20;
 		Dice dice;
 
 		MainStat(Stat name)
@@ -480,12 +622,12 @@ public class Rolls implements Serializable, Names, KeyWallet {
 
 		private String SR()
 		{
-			return dice.getBuff() + " " + name.toString() ;
+			return dice.getBuff() + " " + name.toString();
 		}
 
 		public String toString()
 		{
-			return value +"(" +dice.getBuff() + ") " + name.toString();
+			return value +"(" +dice.getBuff() + ")" + " " +name.toString();
 		}
 
 		@Override
@@ -495,6 +637,10 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		}
 
 	}
+
+
+
+
 
 
 }

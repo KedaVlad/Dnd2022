@@ -15,11 +15,12 @@ import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.botTable.actions.ArrayAction;
 import com.dnd.botTable.actions.BotAction;
-import com.dnd.botTable.actions.FactoryAction;
-import com.dnd.botTable.actions.FinalAction;
-import com.dnd.botTable.actions.HeroAction;
-import com.dnd.botTable.actions.RegistrateAction;
-import com.dnd.botTable.actions.StartTreeAction;
+import com.dnd.botTable.actions.dndAction.DndAction;
+import com.dnd.botTable.actions.dndAction.HeroAction;
+import com.dnd.botTable.actions.dndAction.RegistrateAction;
+import com.dnd.botTable.actions.dndAction.StartTreeAction;
+import com.dnd.botTable.actions.factoryAction.FactoryAction;
+import com.dnd.botTable.actions.factoryAction.FinalAction;
 import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.factory.ControlPanel;
@@ -38,13 +39,10 @@ public class GameTable implements KeyWallet, Serializable
 	public Action makeAction(Action action)
 	{ 
 		Log.add(action);
-		Log.add("START BIMBOM");
-		if(action instanceof HeroAction
-				|| action instanceof RegistrateAction
-				|| action instanceof StartTreeAction)
+		Log.add("START MAKE ACTION IN GAME TABLE");
+		if(action instanceof DndAction)
 		{
-			HeroAction hero = (HeroAction) action;
-			return getActualGameCharacter().act(hero);
+			return getActualGameCharacter().act(action);
 		}
 		else if(action instanceof FinalAction)
 		{
@@ -60,7 +58,7 @@ public class GameTable implements KeyWallet, Serializable
 		{
 			return execute((BotAction) action);
 		}
-		Log.add("END BIMBOM");
+		Log.add("ERROR MAKE ACTION IN GAME TABLE");
 		return null;
 	}
 
@@ -292,8 +290,7 @@ public class GameTable implements KeyWallet, Serializable
 
 			text = "Instructions not followed, please try again. Make sure there are 6 values.\r\n"
 					+ "Examples:\r\n"
-					+ " 11 12 13 14 15 16 \r\n"
-					+ " 11/12/13/14/15/16 \r\n"
+					+ " 11, 12, 13, 14, 15, 16 \r\n"
 					+ " str 11 dex 12 con 13 int 14 wis 15 cha 16 ";
 
 			return BotAction.create(name, 0 , true, true, text, null);
@@ -302,6 +299,8 @@ public class GameTable implements KeyWallet, Serializable
 		else
 		{
 			getActualGameCharacter().setMyStat(stats.get(0), stats.get(1), stats.get(2), stats.get(3), stats.get(4), stats.get(5));
+			getActualGameCharacter().addMemoirs("My start rolled stats: " + stats.get(0) + " " + stats.get(1) + " " + 
+			stats.get(2) + " " + stats.get(3) + " " + stats.get(4) + " " + stats.get(5));
 			int stableHp = Dice.stableStartHp(getActualGameCharacter());
 			String[][] nextStep = {{"Stable " + stableHp, "Random ***"}};
 			text = "How much HP does your character have?\r\n"

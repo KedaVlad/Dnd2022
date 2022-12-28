@@ -15,8 +15,35 @@ public abstract class Action implements Serializable {
 	protected String text;
 	protected boolean mainAct;
 	protected boolean mediator;
+	private String[] backTo = new String[2];
 	private List<Integer> actCircle = new ArrayList<>();
+	
+	public Action beckKey(String string)
+	{
+		this.backTo[0] = string;
+		return this;
+	}
+	
+	public Action beckCall(String string)
+	{
+		if(this.backTo[0] != null)
+		{
+			this.backTo[1] = string;
+		}
+		return this;
+	}
+	
+	boolean hasBack()
+	{
+		return backTo[0] != null;
+	}
+	
+	String[] backTo()
+	{
+		return backTo;
+	}
 
+	
 	protected abstract String[][] buildButtons();
 	public abstract Action continueAction(String key);
 	protected abstract boolean hasButtons();
@@ -41,9 +68,14 @@ public abstract class Action implements Serializable {
 		return "  |" + name + "|  ";
 
 	}
-	public String getName() {
-		// TODO Auto-generated method stub
+	public String getName() 
+	{
 		return name;
+	}
+
+	public void setName(String name) 
+	{
+		this.name = name;
 	}
 
 }

@@ -1,5 +1,6 @@
-package com.dnd.botTable.actions;
+package com.dnd.botTable.actions.dndAction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Names.Stat;
@@ -16,13 +17,31 @@ public class RollAction extends SimpleRollAction
 		
 		RollAction answer = new RollAction();
 		answer.key = key;
-		answer.name = name;
+		answer.setName(name);
 		answer.mainAct = true;
 		answer.mediator = false;
 		answer.setNextStep(nextStep);
 		answer.setDepends(depends);
 		answer.setProficiency(proficiency);
 		answer.setBase(base); 
+		return  answer;
+	}
+	
+	public static RollAction create(String name, long key, Action[][] nextStep, Stat depends, Proficiency proficiency, Dice... base)
+	{
+		RollAction answer = new RollAction();
+		answer.key = key;
+		answer.setName(name);
+		answer.mainAct = true;
+		answer.mediator = false;
+		answer.setNextStep(nextStep);
+		answer.setDepends(depends);
+		answer.setProficiency(proficiency);
+		answer.setBase(new ArrayList<>()); 
+		for(Dice dice: base)
+		{
+		answer.getBase().add(dice);
+		}
 		return  answer;
 	}
 

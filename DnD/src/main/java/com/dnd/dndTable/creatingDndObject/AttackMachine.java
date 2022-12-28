@@ -6,10 +6,10 @@ import java.util.List;
 
 import com.dnd.Names.Stat;
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.AttackAction;
-import com.dnd.botTable.actions.HeroAction;
-import com.dnd.botTable.actions.PreRoll;
-import com.dnd.botTable.actions.RollAction;
+import com.dnd.botTable.actions.dndAction.AttackAction;
+import com.dnd.botTable.actions.dndAction.HeroAction;
+import com.dnd.botTable.actions.dndAction.PreRoll;
+import com.dnd.botTable.actions.dndAction.RollAction;
 import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.creatingDndObject.Rolls.Proficiency;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;

@@ -32,13 +32,12 @@ import com.dnd.dndTable.factory.Json;
 
 public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 {
-
 	private Map<Long, GameTable> gameTables = new HashMap<>();
 
 	private GameTable initialize(Update update) throws TelegramApiException
 	{
 		Message message = null;
-		
+
 		if(update.hasCallbackQuery())
 		{
 			message = update.getCallbackQuery().getMessage();
@@ -62,7 +61,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		try 
 		{
 			GameTable game = initialize(update);	
-			Log.add(game.getActualGameCharacter().getWorkmanship().getMyFeatures().size() + " WORKMANSHIP SIZE");
 			if(game.getActualGameCharacter() != null) Log.add(game.getActualGameCharacter().getHp() + " HPHPHPHPHPHPHPHPHP");
 			if(update.hasCallbackQuery())
 			{
@@ -115,15 +113,17 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			String target = string.replaceAll(regex, "$1");
 			String callback = string.replaceAll(regex, "$2");
 			game.getScript().beackTo(target);
-            templateExecuter(callbackQuery.getMessage(), game, game.makeAction(game.getScript().getAction().continueAction(callback)));
+			templateExecuter(callbackQuery.getMessage(), game, game.makeAction(game.getScript().getAction().continueAction(callback)));
 		}
 		else
 		{
 			String regex = "([a-zA-Z]+)(.*)";
 			String target = string.replaceAll(regex, "$1");
 			String callback = string.replaceAll(regex, "$2");
+			Log.add("SHOOD BACK TO " + target);
+			Log.add("CALLBACK " + callback);
 			game.getScript().beackTo(target);
-            templateExecuter(callbackQuery.getMessage(), game, game.makeAction(game.getScript().getAction().continueAction(callback)));
+			templateExecuter(callbackQuery.getMessage(), game, game.makeAction(game.getScript().getAction().continueAction(callback)));
 		}
 	}
 
@@ -165,13 +165,14 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 			if(game.getActualGameCharacter() != null)
 			{
-				game.getActualGameCharacter().addMyMemoirs(message.getText());
+				game.getActualGameCharacter().addMemoirs(message.getText());
 				Message toTrash = execute(SendMessage.builder()
 						.text("I will put it in your memoirs")
 						.chatId(message.getChatId().toString())
 						.build()
 						);
 				game.getScript().prepare(toTrash.getMessageId());
+				game.getScript().prepare(message.getMessageId());
 			}
 			else
 			{
@@ -181,6 +182,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 						.build()
 						);
 				game.getScript().prepare(toTrash.getMessageId());
+				game.getScript().prepare(message.getMessageId());
 
 			}
 		}
@@ -188,12 +190,23 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void templateExecuter(Message message, GameTable game, Action target) throws TelegramApiException
 	{
+		if(target.hasBack())
+		{
+			game.getScript().beackTo(target.backTo()[0]);
+			if(target.backTo()[1] != null)
+			{
+				target = game.makeAction(game.getScript().getAction().continueAction(target.backTo()[1]));
+			}
+		}
+
 		game.getScript().up(target);	
+
 		if(target instanceof ArrayAction)
 		{
 			ArrayAction array = (ArrayAction) target;
 			for(Action action: array.getPool())
 			{
+				Log.add(action + " --- " + action.hasButtons());
 				if(action.hasButtons())
 				{
 					List<List<InlineKeyboardButton>> buttons = buttons(action, action.key);
@@ -217,40 +230,40 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 		else
 		{
-		if(target.mainAct && target.hasButtons())
-		{
-			List<List<InlineKeyboardButton>> buttons = buttons(target, buttonsKey);
-			Message act = execute(SendMessage.builder()
-					.text(target.text)
-					.chatId(message.getChatId().toString())
-					.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
-					.build());
-			game.getScript().toAct(act.getMessageId());
+			if(target.mainAct && target.hasButtons())
+			{
+				List<List<InlineKeyboardButton>> buttons = buttons(target, buttonsKey);
+				Message act = execute(SendMessage.builder()
+						.text(target.text)
+						.chatId(message.getChatId().toString())
+						.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
+						.build());
+				game.getScript().toAct(act.getMessageId());
 
+			}
+			else if(target.mainAct)
+			{
+				Message act = execute(SendMessage.builder()
+						.text(target.text)
+						.chatId(message.getChatId().toString())
+						.build());
+				game.getScript().toAct(act.getMessageId());
+			}
+			else
+			{
+				List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
+				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
+						.text("ELIMINATION")
+						.callbackData(target.name + eliminationKey)
+						.build()));
+				Message act = execute(SendMessage.builder()
+						.text(target.text)
+						.chatId(message.getChatId().toString())
+						.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
+						.build());
+				game.getScript().toDatached(target.name, act.getMessageId());
+			}
 		}
-		else if(target.mainAct)
-		{
-			Message act = execute(SendMessage.builder()
-					.text(target.text)
-					.chatId(message.getChatId().toString())
-					.build());
-			game.getScript().toAct(act.getMessageId());
-		}
-		else
-		{
-			List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-			buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-					.text("ELIMINATION")
-					.callbackData(target.name + eliminationKey)
-					.build()));
-			Message act = execute(SendMessage.builder()
-					.text(target.text)
-					.chatId(message.getChatId().toString())
-					.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
-					.build());
-			game.getScript().toDatached(target.name, act.getMessageId());
-		}
-	}
 	}
 
 	private List<List<InlineKeyboardButton>> buttons(Action action, long key)
@@ -290,6 +303,75 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 						InlineKeyboardButton.builder()
 						.text(line[2])
 						.callbackData(action.getName() + key + line[2])
+						.build()));
+			}
+			else if(line.length == 4)
+			{
+				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
+						.text(line[0])
+						.callbackData(action.getName() + key + line[0])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[1])
+						.callbackData(action.getName() + key + line[1])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[2])
+						.callbackData(action.getName() + key + line[2])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[3])
+						.callbackData(action.getName() + key + line[3])
+						.build()));
+			}
+			else if(line.length == 5)
+			{
+				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
+						.text(line[0])
+						.callbackData(action.getName() + key + line[0])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[1])
+						.callbackData(action.getName() + key + line[1])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[2])
+						.callbackData(action.getName() + key + line[2])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[3])
+						.callbackData(action.getName() + key + line[3])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[4])
+						.callbackData(action.getName() + key + line[4])
+						.build()));
+			}
+			else if(line.length == 6)
+			{
+				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
+						.text(line[0])
+						.callbackData(action.getName() + key + line[0])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[1])
+						.callbackData(action.getName() + key + line[1])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[2])
+						.callbackData(action.getName() + key + line[2])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[3])
+						.callbackData(action.getName() + key + line[3])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[4])
+						.callbackData(action.getName() + key + line[4])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[5])
+						.callbackData(action.getName() + key + line[5])
 						.build()));
 			}
 		}
@@ -335,12 +417,13 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
 		telegramBotsApi.registerBot(bot);
 		bot.gameTables = Json.restor();
-
-	/*	while(true)
+		/*
+		while(true)
 		{
 			Json.backup(bot.gameTables);
 			Thread.sleep(5000); 
 			System.out.println("*********************************************************************************************************************");
-		}*/
+		}
+		 */	
 	}
 }

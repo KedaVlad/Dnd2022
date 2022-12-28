@@ -16,8 +16,8 @@ import com.dnd.Names.TypeDamage;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.CharacterDndBot;
 import com.dnd.botTable.GameTable;
-import com.dnd.botTable.actions.FactoryAction;
-import com.dnd.botTable.actions.FinalAction;
+import com.dnd.botTable.actions.factoryAction.FactoryAction;
+import com.dnd.botTable.actions.factoryAction.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
@@ -66,19 +66,12 @@ public class TestSome {
 	
 	
 	
-	public static void main(String[] args) throws IOException {
+	public static void main(String[] args) throws IOException
+	{
 
-		List<String> s = new ArrayList<>();
-		s.add("AAAAAAAA");
-		s.add("BBBBBBBBBBBBBB");
-		s.add(0, "CCCCCCCCCCCCCC");
-		
-		for(String string:s)
-		{
-			System.out.println(string);
-		}
-		
-
+		System.out.println("+" + 2 +3);
+		System.out.println("+" + (2 +3));
+		System.out.println(-1 + "");
 	}
 }
 

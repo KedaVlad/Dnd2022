@@ -1,4 +1,4 @@
-package com.dnd.botTable.actions;
+package com.dnd.botTable.actions.dndAction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,7 +21,7 @@ public class AttackAction extends RollAction
 	{
 		AttackAction answer = new AttackAction();
 		answer.key = key;
-		answer.name = (attack.getName());
+		answer.setName((attack.getName()));
 		answer.mainAct = true;
 		answer.mediator = false;
 		answer.setDepends(depends);

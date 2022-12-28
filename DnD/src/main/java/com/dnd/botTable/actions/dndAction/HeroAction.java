@@ -1,4 +1,4 @@
-package com.dnd.botTable.actions;
+package com.dnd.botTable.actions.dndAction;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.dnd.botTable.Action;
 
-public class HeroAction extends Action
+public class HeroAction extends DndAction
 {
 	private static final long serialVersionUID = 1L;
 
@@ -25,7 +25,7 @@ public class HeroAction extends Action
 	public static HeroAction create(String name, long key, String text, Action[][] nextStep)
 	{
 		HeroAction answer = new HeroAction();
-		answer.name = name;
+		answer.setName(name);
 		answer.key = key;
 		answer.mainAct = true;
 		answer.mediator = false;
@@ -97,5 +97,10 @@ public class HeroAction extends Action
 	public void setNextStep(Action[][] nextStep) {
 		this.nextStep = nextStep;
 	}
+	
+	public HeroAction rebuild()
+		{
+			return HeroAction.create(this.name, this.key, this.text, null);
+		}
 	
 }

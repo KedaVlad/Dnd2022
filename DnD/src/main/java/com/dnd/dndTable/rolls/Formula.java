@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.Log;
+import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class Formula implements Serializable
 {
@@ -15,6 +16,22 @@ public class Formula implements Serializable
 	private boolean natural20;
 	private boolean natural1;
 
+	private enum CritCheck { NONE, CRIT20, CRIT1 }
+	
+	public String toString()
+	{
+		String answer = "";
+		for(Dice dice: formula)
+		{
+			for(Roll roll:dice.getCombo())
+			{
+			answer += roll.toString();	
+			}
+			answer += dice.getBuff() + " " + dice.getName() + " |||";
+		}
+		return answer;
+	}
+	
 	public Formula(Dice first, Dice... formula)
 	{
 		this.formula = new ArrayList<>();
@@ -49,48 +66,81 @@ public class Formula implements Serializable
 		this.getFormula().addAll(formula);
 	}
 
+	private CritCheck critCheck(Dice dice)
+	{
+		if(dice.getCombo()[0].equals(Roll.D20))
+		{
+			if(dice.getResults()[0] == 20)
+			{
+				return CritCheck.CRIT20;
+			}
+			else if(dice.getResults()[0] == 1)
+			{
+				return CritCheck.CRIT1;
+			}
+			else
+			{
+				return CritCheck.NONE;
+			}
+		}
+		else
+		{
+			return CritCheck.NONE;
+		}
+	}
 	
 	public String execute(boolean advanture)
 	{
 		String answer = this.name;
 		int first;
-		boolean crit20;
-		boolean crit1;
+		 CritCheck critFirst;
+		 CritCheck critSecond;
+		 CritCheck crit;
 		
-		this.name = "First roll\n";
+		this.name = "First roll\n\n";
 		answer += this.execute() + "\n";
 		first = this.summ();
-		crit20 = this.natural20;
-		crit1 = this.natural1;
+		critFirst = critCheck(this.formula.get(0));
 		
-		this.name = "Second roll\n";
+		this.name = "\nSecond roll\n\n";
 		answer += this.execute() + "\n";
+		critSecond = critCheck(this.formula.get(0));
 		
 		if(advanture == true)
 		{
 			if(this.summ() > first)
 			{
-				answer += "Final result: " + this.summ();
+				answer += "\nFinal result: " + this.summ();
+				crit = critSecond;
 			}
 			else
 			{
-				answer += "Final result: " + first;
-				this.natural1 = crit1;
-				this.natural20 = crit20;
+				answer += "\nFinal result: " + first;
+				crit = critFirst;
 			}
 		}
 		else
 		{
 			if(this.summ() < first)
 			{
-				answer += "Final result: " + this.summ();
+				answer += "\nFinal result: " + this.summ();
+				crit = critSecond;
 			}
 			else
 			{
-				answer += "Final result: " + first;
-				this.natural1 = crit1;
-				this.natural20 = crit20;
+				answer += "\nFinal result: " + first;
+				crit = critFirst;
 			}
+		}
+		if(crit.equals(CritCheck.CRIT1))
+		{
+			this.natural1 = true;
+			answer += " !CRITICAL 1!";
+		}
+		else if(crit.equals(CritCheck.CRIT20))
+		{
+			this.natural20 = true;
+			answer += " !NATURAL 20!";
 		}
 		return answer;
 	}
@@ -105,13 +155,15 @@ public class Formula implements Serializable
 			answer += dice.execute() + "\n";	
 		}
 		answer += "Result: " + summ();
-		if(getFormula().get(0).getResults()[0] == 20)
+		if(critCheck(getFormula().get(0)).equals(CritCheck.CRIT20))
 		{
-			natural20 = true;
+			this.natural20 = true;
+			answer += " !NATURAL 20!";
 		}
-		else if(getFormula().get(0).getResults()[0] == 1)
+		else if(critCheck(getFormula().get(0)).equals(CritCheck.CRIT1))
 		{
-			natural1 = true;
+			this.natural1 = true;
+			answer += " !CRITICAL 1!";
 		}
 		return answer;
 	}

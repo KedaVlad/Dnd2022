@@ -8,8 +8,8 @@ import java.util.regex.Pattern;
 import com.dnd.Log;
 import com.dnd.Source;
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.FactoryAction;
-import com.dnd.botTable.actions.FinalAction;
+import com.dnd.botTable.actions.factoryAction.FactoryAction;
+import com.dnd.botTable.actions.factoryAction.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.ClassDnd;
 import com.dnd.dndTable.factory.inerComands.InerComand;
@@ -99,9 +99,8 @@ abstract class ClassFactory implements Source
 			String archetype = action.getLocalData().get(1);
 			int lvl = ((Integer) Integer.parseInt(action.getLocalData().get(2)));
 			character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, ClassDnd.class));
+			character.addMemoirs(getObgectInfo(className, archetype));
 			character.getClassDnd().setLvl(lvl);
-			Log.add(character.getClassDnd().getLvl() + " Class lvl");
-			Log.add(character.getLvl() + " Character lvl");
 			for(int i = 0; i < lvl; i++)
 			{
 				for(InerComand comand: character.getClassDnd().getGrowMap()[i])

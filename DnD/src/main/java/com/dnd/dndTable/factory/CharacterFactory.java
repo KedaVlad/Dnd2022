@@ -2,8 +2,8 @@ package com.dnd.dndTable.factory;
 
 import com.dnd.Log;
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.FactoryAction;
-import com.dnd.botTable.actions.FinalAction;
+import com.dnd.botTable.actions.factoryAction.FactoryAction;
+import com.dnd.botTable.actions.factoryAction.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 
 abstract class CharacterFactory 

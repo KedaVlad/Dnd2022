@@ -1,4 +1,4 @@
-package com.dnd.botTable.actions;
+package com.dnd.botTable.actions.factoryAction;
 
 public class FinalAction extends FactoryAction
 {
@@ -7,7 +7,7 @@ public class FinalAction extends FactoryAction
 	public static FinalAction create(FactoryAction action)
 	{
 		FinalAction target = new FinalAction();
-		target.name = "FINAL";
+		target.setName("FINAL");
 		target.key = action.getKey();
 		target.text = action.getText();
 		target.mainAct = true;

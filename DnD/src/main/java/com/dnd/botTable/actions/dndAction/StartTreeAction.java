@@ -1,8 +1,8 @@
-package com.dnd.botTable.actions;
+package com.dnd.botTable.actions.dndAction;
 
 import com.dnd.botTable.Action;
 
-public class StartTreeAction extends Action {
+public class StartTreeAction extends DndAction {
 
 
 	public static StartTreeAction create(long key)

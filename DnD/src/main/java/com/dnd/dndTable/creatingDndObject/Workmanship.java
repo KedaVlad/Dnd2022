@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.HeroAction;
-import com.dnd.botTable.actions.RegistrateAction;
+import com.dnd.botTable.actions.dndAction.HeroAction;
+import com.dnd.botTable.actions.dndAction.RegistrateAction;
 import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;

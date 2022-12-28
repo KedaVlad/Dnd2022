@@ -1,4 +1,4 @@
-package com.dnd.botTable.actions;
+package com.dnd.botTable.actions.factoryAction;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ public class FactoryAction extends Action
 	public static FactoryAction create(String name, long key, boolean mediator, String text, String[][] nextStep)
 	{
 		FactoryAction answer = new FactoryAction();
-		answer.name = name;
+		answer.setName(name);
 		answer.key = key;
 		answer.mainAct = true;
 		answer.mediator = mediator;

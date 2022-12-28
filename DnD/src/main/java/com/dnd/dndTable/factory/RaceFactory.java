@@ -7,8 +7,8 @@ import java.util.List;
 
 import com.dnd.Source;
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.FactoryAction;
-import com.dnd.botTable.actions.FinalAction;
+import com.dnd.botTable.actions.factoryAction.FactoryAction;
+import com.dnd.botTable.actions.factoryAction.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.RaceDnd;
 import com.dnd.dndTable.factory.inerComands.InerComand;
@@ -60,6 +60,7 @@ abstract class RaceFactory implements Source
 		try
 		{
 			character.setRaceDnd(Json.fromFileJson(raceSource + raceName + "\\" + subRace, RaceDnd.class));
+			character.addMemoirs(getObgectInfo(raceName, subRace));
 		} 
 		catch (IOException e) 
 		{

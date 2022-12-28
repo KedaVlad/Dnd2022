@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.HeroAction;
+import com.dnd.botTable.actions.dndAction.HeroAction;
 import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;

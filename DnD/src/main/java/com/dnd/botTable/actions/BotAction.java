@@ -13,7 +13,7 @@ public class BotAction extends Action{
 	public static BotAction create(String name, long key, boolean mainAct, boolean mediator, String text, String[][] nextStep) {
 		
 		BotAction target = new BotAction();
-		target.name = name;
+		target.setName(name);
 		target.key = key;
 		target.mainAct = mainAct;
 		target.mediator = mediator;
@@ -42,7 +42,7 @@ public class BotAction extends Action{
 	public Action continueAction(String key) 
 	{
 		BotAction answer = new BotAction();
-		answer.name = this.name;
+		answer.setName(this.name);
 		answer.key = this.key;
 		answer.mainAct = this.mainAct;
 		answer.mediator = this.mediator;

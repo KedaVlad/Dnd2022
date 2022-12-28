@@ -1,4 +1,4 @@
-package com.dnd.botTable.actions;
+package com.dnd.botTable.actions.dndAction;
 
 import com.dnd.botTable.Action;
 import com.dnd.dndTable.rolls.Dice;
@@ -8,45 +8,33 @@ public class PreRoll extends HeroAction
 {
 	private static final long serialVersionUID = 1L;
 
-	protected int status;
+	protected String status;
 	protected String[][] nextStep = new String[][] {{"ADVENTURE", "BASIC", "DISADVENTURE"}};
 	private RollAction action;
 	private boolean criticalMiss;
 	private boolean criticalHit;
 
-	public static PreRoll create(RollAction action)
+	public static PreRoll create(String text,RollAction action)
 	{
 		PreRoll answer = new PreRoll();
 		answer.action = action;
 		answer.getAction().getBase().add(0, new Dice("D20", 0, Roll.D20));
-		answer.name = action.getName();
+		answer.setName(action.getName());
 		answer.key = action.getKey();
 		answer.mainAct = true;
 		answer.mediator = false;
-		answer.text = action.getText();
+		answer.text = text;
 		return answer;
 	}
 	
-	public int getStatus() 
+	public String getStatus() 
 	{
 		return status;
 	}
 	@Override
-	public Action continueAction(String name) {
-		
-		if(name == "ADVENTURE")
-		{
-			this.status = 1;
-		}
-		else if(name == "BASIC")
-		{
-			this.status = 2;
-		}
-		else if(name == "DISADVENTURE")
-		{
-			this.status = 3;
-		}
-
+	public Action continueAction(String answer) 
+	{
+		this.status = answer;
 		return this;
 	}
 
@@ -88,8 +76,4 @@ public class PreRoll extends HeroAction
 		return action;
 	}
 	
-	public HeroAction rebuild()
-	{
-		return HeroAction.create(this.name, this.key, this.text, null);
-	}
 }

@@ -25,4 +25,5 @@ public interface DndKeyWallet
 	public final static long MAGIC_SOUL = 290000000;
 	public final static long SAVE_ROLL = 300000000;
 	public final static long ARTICLE = 310000000;
+	public final static long ROLL = 320000000;
 }
