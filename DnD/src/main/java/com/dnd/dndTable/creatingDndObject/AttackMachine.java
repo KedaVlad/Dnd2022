@@ -42,7 +42,7 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		for(int i = 0; i < attacks.size(); i++)
 		{
 			AttackModification target = attacks.get(i);
-			actions[i][0] = AttackAction.create(key, checkStat(target), checkProf(target), target);
+			actions[i][0] = AttackAction.create(key, checkStat(target), checkProf(weapon), target);
 		}
 		return HeroAction.create(weapon.getName(), key, weapon.getName(), actions);
 	}
@@ -72,7 +72,7 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		for(int i = 0; i < attacks.size(); i++)
 		{
 			AttackModification target = attacks.get(i);
-			nextSteps[i][0] = RollAction.create(target.getName(), target.getDamage(), key, null, checkStat(target), checkProf(target));
+			nextSteps[i][0] = RollAction.create(target.getName(), target.getDamage(), key, null, checkStat(target), null);
 		}
 		nextSteps[nextSteps.length - 1][0] = HeroAction.create("MISS", key, "GOODLUCK NEXT TIME", null);
 		return HeroAction.create(attack.getName(), key, attack.getText(), nextSteps);
@@ -86,7 +86,7 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		for(int i = 0; i < attacks.size(); i++)
 		{
 			AttackModification target = attacks.get(i);
-			nextSteps[i][0] = RollAction.create(target.getName(), target.getDamage(),key, null, checkStat(target), checkProf(target));
+			nextSteps[i][0] = RollAction.create(target.getName(), target.getDamage(),key, null, checkStat(target), null);
 		}
 		return HeroAction.create(attack.getName(), key, attack.getText(), nextSteps);
 	}
@@ -118,10 +118,11 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		return answer;
 	}
 
-	private Proficiency checkProf(AttackModification weapon)
+	private Proficiency checkProf(Weapon weapon)
 	{
+		
 		if(getPossession().contains(WeaponProperties.MILITARY) 
-				|| (require(weapon.getRequirement(),WeaponProperties.SIMPLE) && getPossession().contains(WeaponProperties.SIMPLE))
+				|| (require(weapon.getFirstType().getRequirement(),WeaponProperties.SIMPLE) && getPossession().contains(WeaponProperties.SIMPLE))
 				|| typePossession.contains(weapon.getType()))
 		{
 			return Proficiency.BASE;
@@ -141,12 +142,18 @@ public class AttackMachine implements Serializable, DndKeyWallet
 	private List<AttackModification> buildAttacks(Weapon weapon)
 	{
 		List<AttackModification> answer = new ArrayList<>();
-		AttackModification base = permanentBuff(weapon.getFirstType());
+		AttackModification base = weapon.getFirstType();
+		base.getAttack().get(0).setBuff(weapon.getAttack());
+		base.getDamage().get(0).setBuff(weapon.getDamage());
+		base = permanentBuff(base);
 		answer.addAll(getAttacks(base, preAttacks));
 
 		if(weapon.getSecondType() != null)
 		{
-			AttackModification second = permanentBuff(weapon.getSecondType());
+			AttackModification second = weapon.getSecondType();
+			second.getAttack().get(0).setBuff(weapon.getAttack());
+			second.getDamage().get(0).setBuff(weapon.getDamage());
+			second = permanentBuff(second);
 			answer.addAll(getAttacks(second, preAttacks));
 		}
 

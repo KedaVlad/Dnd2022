@@ -91,22 +91,21 @@ public class Rolls implements Serializable, Names, KeyWallet {
 
 	private Dice getProf(Proficiency article)
 	{
-		Dice answer = null;
+		Log.add(proficiency.getBuff() + "PROFFFFFFFFFFFFFF");
+		Dice answer = new Dice("Proficiency", 0, Roll.NO_ROLL);
 		switch(article)
 		{
 		case COMPETENSE:
-			answer = proficiency;
 			answer.setBuff(proficiency.getBuff()*2);
 			break;
 		case BASE:
 			answer = proficiency;
 			break;
 		case HALF:
-			answer = proficiency;
 			answer.setBuff(proficiency.getBuff()/2);
 			break;
 		}
-
+		Log.add(answer.getBuff() + "PROFFFFFFFFFFFFFF end");
 		return answer;
 	}
 
@@ -466,7 +465,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			up(name, -3);
 			break;
 		}
-		return action.beckKey("Menu").beckCall(menu +"ROLLS");
+		return action.beckKey("Menu").beckCall(menu +"STATS");
 	}
 
 	private Action SaveRollMenu()
@@ -530,12 +529,12 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		String changeStatText = articleInfo(article) + ". If u have reasons up your possession of this...";
 		String[][] buttonsChange = buildArticleChangeButtons(article);
 		if(buttonsChange == null) {
-			return PreRoll.create(articleInfo(article), RollAction.create("RollArticle", STAT, null, article.getDepends(), null));
+			return PreRoll.create(articleInfo(article), RollAction.create("RollArticle", ROLL, null, article.getDepends(), article.getProficiency()));
 		}
 		else
 		{
 		ChangeAction changeAction = ChangeAction.create(action, changeStatText, buttonsChange);
-		PreRoll rollAction = PreRoll.create("... or roll.", RollAction.create("RollArticle", STAT, null, article.getDepends(), null));
+		PreRoll rollAction = PreRoll.create("... or roll.", RollAction.create("RollArticle", ROLL, null, article.getDepends(), article.getProficiency()));
 		Action[] buttons = new Action[]{changeAction, rollAction};
 		return ArrayAction.create("ArticleCase", NO_ANSWER , buttons);
 		}
@@ -548,6 +547,10 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			if(article.getProficiency().equals(Proficiency.BASE))
 			{
 				return new String[][] {{"Up to COMPETENSE"}};
+			}
+			else if(article.getProficiency().equals(Proficiency.COMPETENSE))
+			{
+				return null;
 			}
 			else
 			{
@@ -596,7 +599,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			stat.setProficiency(Proficiency.BASE);
 			break;
 		}
-		return action.beckKey("Menu").beckCall("ROLLS");
+		return action.beckKey("Menu").beckCall(menu +"STATS");
 	}
 
 	class MainStat implements Serializable, ObjectDnd

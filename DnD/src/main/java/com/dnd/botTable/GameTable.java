@@ -15,6 +15,7 @@ import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.botTable.actions.ArrayAction;
 import com.dnd.botTable.actions.BotAction;
+import com.dnd.botTable.actions.RollsAction;
 import com.dnd.botTable.actions.dndAction.DndAction;
 import com.dnd.botTable.actions.dndAction.HeroAction;
 import com.dnd.botTable.actions.dndAction.RegistrateAction;
@@ -53,6 +54,10 @@ public class GameTable implements KeyWallet, Serializable
 		{	
 			FactoryAction factory = (FactoryAction) action;
 			return controlPanel.act(factory);
+		}
+		else if(action instanceof RollsAction)
+		{
+			return rollsMenu((RollsAction)action);
 		}
 		else if(action instanceof BotAction)
 		{
@@ -163,8 +168,8 @@ public class GameTable implements KeyWallet, Serializable
 					BotAction.create("Menu", NO_ANSWER, true, false, actualGameCharacter.getStatus(), null), 
 					BotAction.create("Menu", menu, true, false, actualGameCharacter.getMenu(), new String[][]
 							{{"FETURE", "POSSESSION"},
-						{"BAG", "ROLLS"},
-						{"MEMOIRS"},
+						{"STATS", "ROLLS"},
+						{"BAG", "MEMOIRS"},
 						{"REST","FIGHT"}
 							})});
 		}
@@ -175,8 +180,8 @@ public class GameTable implements KeyWallet, Serializable
 					BotAction.create("Menu", NO_ANSWER, true, false, actualGameCharacter.getStatus(), null), 
 					BotAction.create("Menu", menu, true, false, actualGameCharacter.getMenu(), new String[][]
 							{{"SPELLS", "FETURE", "POSSESSION"},
-						{"BAG", "ROLLS"},
-						{"MEMOIRS"},
+						{"STATS", "ROLLS"},
+						{"BAG", "MEMOIRS"},
 						{"REST","FIGHT"}
 							})});
 		}
@@ -197,13 +202,17 @@ public class GameTable implements KeyWallet, Serializable
 		{
 			return actualGameCharacter.act(StartTreeAction.create(POSSESSION));
 		}
-		else if(action.getAnswer().equals("BAG"))
+		else if(action.getAnswer().equals("STATS"))
 		{
-			return actualGameCharacter.act(StartTreeAction.create(BODY));
+			return actualGameCharacter.act(StartTreeAction.create(ROLLS));
 		}
 		else if(action.getAnswer().equals("ROLLS"))
 		{
-			return actualGameCharacter.act(StartTreeAction.create(ROLLS));
+			return new RollsAction();
+		}
+		else if(action.getAnswer().equals("BAG"))
+		{
+			return actualGameCharacter.act(StartTreeAction.create(BODY));
 		}
 		else if(action.getAnswer().equals("MEMOIRS"))
 		{
@@ -222,6 +231,36 @@ public class GameTable implements KeyWallet, Serializable
 
 	}
 
+	private Action rollsMenu(RollsAction action)
+	{
+		String text = "";
+		switch(action.getAnswer())
+		{
+		case "D4":
+			text = Dice.d4() + "";
+			break;
+		case "D6":
+			text = Dice.d6() + "";
+			break;
+		case "D8":
+			text = Dice.d8() + "";
+			break;
+		case "D10":
+			text = Dice.d10() + "";
+			break;
+		case "D12":
+			text = Dice.d12() + "";
+			break;
+		case "D20":
+			text = Dice.d20() + "";
+			break;
+		case "D100":
+			text = Dice.d20() + "";
+			break;
+		}
+		return BotAction.create("EndTree", NO_ANSWER, true, false, text, null);
+	}
+	
 	private Action apruveHp(BotAction action)
 	{
 		String name;

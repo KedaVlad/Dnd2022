@@ -374,6 +374,37 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 						.callbackData(action.getName() + key + line[5])
 						.build()));
 			}
+			else if(line.length == 7)
+			{
+				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
+						.text(line[0])
+						.callbackData(action.getName() + key + line[0])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[1])
+						.callbackData(action.getName() + key + line[1])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[2])
+						.callbackData(action.getName() + key + line[2])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[3])
+						.callbackData(action.getName() + key + line[3])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[4])
+						.callbackData(action.getName() + key + line[4])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[5])
+						.callbackData(action.getName() + key + line[5])
+						.build(),
+						InlineKeyboardButton.builder()
+						.text(line[6])
+						.callbackData(action.getName() + key + line[6])
+						.build()));
+			}
 		}
 		return buttons;
 	}

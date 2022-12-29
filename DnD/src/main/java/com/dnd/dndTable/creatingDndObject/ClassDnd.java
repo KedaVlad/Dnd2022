@@ -143,7 +143,7 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 				new Possession("SR Intelligense", STAT),
 				new Possession("SR Intelligense", STAT),
 				Armor.create("Leather Armor"),
-				Weapon.build(WeaponType.DAGGER),
+				new Weapon(WeaponType.DAGGER),
 				Pack.create("Thieves' Tools")),
 
 				CloudComand.create(4, "Choose skill", false,
@@ -160,12 +160,12 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 				AddComand.create(new Possession("Persuasion", STAT))),
 				
 				CloudComand.create(1, "Choose item", false,
-				AddComand.create(Weapon.build(WeaponType.RAPIER)),
-				AddComand.create(Weapon.build(WeaponType.SHORTSWORD))),
+				AddComand.create(new Weapon(WeaponType.RAPIER)),
+				AddComand.create(new Weapon(WeaponType.SHORTSWORD))),
 		
 				CloudComand.create(1, "Choose item", false,
-				AddComand.create(Weapon.build(WeaponType.SHORTBOW)), //+20 arrow
-				AddComand.create(Weapon.build(WeaponType.SHORTSWORD))),
+				AddComand.create(new Weapon(WeaponType.SHORTBOW)), //+20 arrow
+				AddComand.create(new Weapon(WeaponType.SHORTSWORD))),
 				
 				CloudComand.create(1, "Choose Pack", false,
 				AddComand.create(Pack.create("Dungeoneer's Pack")),

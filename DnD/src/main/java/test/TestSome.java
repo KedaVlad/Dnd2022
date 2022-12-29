@@ -21,6 +21,7 @@ import com.dnd.botTable.actions.factoryAction.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Armor.ClassArmor;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Mechanics;
@@ -45,8 +46,10 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class TestSome {
 
+	public A a;
 	
-	protected int age = 4;
+	
+	
 	
 	
 	static void chekStatRandomiser()
@@ -68,10 +71,48 @@ public class TestSome {
 	
 	public static void main(String[] args) throws IOException
 	{
-
-		System.out.println("+" + 2 +3);
-		System.out.println("+" + (2 +3));
-		System.out.println(-1 + "");
+		A a = new A();
+		a.name = "AAAAAAAAAAAAAAA";
+		System.out.println(a.name);
+		TestSome test = new TestSome();
+		test.a = a;
+		test.a.name = "BBBBBBBBBBBBBBBB";
+		System.out.println(a.name);
+		System.out.println(test.a.name);
+		B b = new B();
+		b.a = test.a;
+		b.a.name = "CCCCCCCCCCCCCCCCCC";
+		System.out.println(a.name);
+		System.out.println(b.a.name);
+		C c = new C();
+		c.t = test;
+		c.t.a.name = "DDDDDDDDDDDDDDDDDDDD";
+		System.out.println(a.name);
+		System.out.println(test.a.name);
+		System.out.println(c.t.a.name);
+		a.name = "EEEEEEEEEEEEEEE";
+		System.out.println(a.name);
+		System.out.println(test.a.name);
+		System.out.println(b.a.name);
+		System.out.println(c.t.a.name);
+		System.out.println(ClassArmor.HEAVY);
+		System.out.println(ClassArmor.HEAVY.toString());
 	}
 }
 
+class A
+{
+	String name;
+}
+
+class B
+{
+	A a;
+	String second;
+	
+}
+
+class C
+{
+	TestSome t;
+}

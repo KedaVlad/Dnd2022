@@ -90,6 +90,6 @@ public interface Names
 	
 	public enum TypeDamage
 	{
-		FIZ, MAG
+		CHOPPING, CRUSHING, STICKING
 	}
 }

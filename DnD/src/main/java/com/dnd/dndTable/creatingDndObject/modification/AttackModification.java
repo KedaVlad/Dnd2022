@@ -7,6 +7,7 @@ import java.util.List;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
+import com.dnd.dndTable.rolls.DamageDice;
 import com.dnd.dndTable.rolls.Dice;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("ATTACK_MODIFICATION")
@@ -15,17 +16,33 @@ public class AttackModification implements Serializable, ObjectDnd
 	
 	private static final long serialVersionUID = 1L;
 	private String name;
-	private WeaponType type;
+	//private WeaponType type;
 	private WeaponProperties[] requirement;
 	private boolean postAttack;
 	private boolean permanentCrit;
 	private List<Dice> attack;
 	private List<Dice> damage;
+	private String ammunition;
+	
+	public AttackModification ammunition(String target)
+	{
+		this.ammunition = target;
+		return this;
+	}
 
 	public AttackModification()
 	{
 		attack = new ArrayList<>();
 		damage = new ArrayList<>();
+	}
+	
+	public static AttackModification create(String name, DamageDice dice, WeaponProperties... requirment)
+	{
+		AttackModification answer = new AttackModification();
+		answer.name = name;
+		answer.damage.add(dice);
+		answer.requirement = requirment;
+		return answer;
 	}
 	
 	public boolean equals(Object obj) 
@@ -42,7 +59,6 @@ public class AttackModification implements Serializable, ObjectDnd
 		AttackModification answer = new AttackModification();
 		answer.name = second.name;
 		answer.requirement = this.requirement;
-		answer.type = this.getType();
 		answer.attack = this.attack;
 		answer.attack.addAll(second.attack);
 		answer.damage = this.damage;
@@ -83,9 +99,7 @@ public class AttackModification implements Serializable, ObjectDnd
 		this.damage = damage;
 	}
 
-	public WeaponType getType() {
-		return type;
-	}
+	
 
 	public static AttackModification build()
 	{
@@ -146,6 +160,10 @@ public class AttackModification implements Serializable, ObjectDnd
 	public long key() {
 		// TODO Auto-generated method stub
 		return ATTACK_MODIFICATION;
+	}
+
+	public String getAmmunition() {
+		return ammunition;
 	}
 	
 	

@@ -2,8 +2,11 @@ package com.dnd.dndTable.creatingDndObject.bagDnd;
 
 import java.util.List;
 
+import com.dnd.Names.TypeDamage;
 import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
+import com.dnd.dndTable.rolls.DamageDice;
 import com.dnd.dndTable.rolls.Dice;
+import com.dnd.dndTable.rolls.Dice.Roll;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("WEAPON")
@@ -20,23 +23,16 @@ public class Weapon extends Items
 	{
 		UNIVERSAL, LUNG, THROWING, FENCING, TWO_HANDED, AMMUNITION, RELOAD, AVAILABILITY, MILITARY, LONG_RANGE, MELEE, SIMPLE, HEAVY
 	}
-	public enum WeaponType
-	{
-		HALBERD, WARHAMER, QUARTERSTAFF, BATTLEAXE, MACE, GYTHKA,
-		GLAIVE, DOUBLE_BLADET_SCIMITAR, GREATWSWORD, MAUL, GREATEAXE,
-		LONGBOW, LONGSWORD, DART, GREATECLUB, CLUB, BLOWGUN, YKLWA, LANCE,
-		DAGGER, WAR_PICK, WHIP, SPEAR, SHORTBOW, SHORTSWORD, CROSSBOW_LIGHT,
-		LIGHT_HUMMER, MORNINGSTAR, PIKE, JAVELIN, SLING, RAPIER, CROSSBOW_HAND,
-		SICKLE, NET, SCIMITAR, HANDAXE, TRIDEN, CROSSBOW_HEAVY, FLAIL 
-	}
-
-	private AttackModification firstType;
-	private AttackModification secondType;
 	
-	public static Weapon build(WeaponType type)
+	private WeaponType type;
+	
+	public Weapon(WeaponType type)
 	{
-		return new Weapon();
+		this.setName(type.name);
+		this.type = type;
 	}
+	
+	
 	
 	public Weapon attack(int attack)
 	{
@@ -51,20 +47,13 @@ public class Weapon extends Items
 	}
 	
 	public AttackModification getSecondType() {
-		return secondType;
-	}
-
-	public void setSecondType(AttackModification secondType) {
-		this.secondType = secondType;
+		return type.secondType;
 	}
 
 	public AttackModification getFirstType() {
-		return firstType;
+		return type.firstType;
 	}
 
-	public void setFirstType(AttackModification firstType) {
-		this.firstType = firstType;
-	}
 
 	@Override
 	public long key() {
@@ -76,15 +65,172 @@ public class Weapon extends Items
 		return attack;
 	}
 
-	public void setAttack(int attack) {
-		this.attack = attack;
+	public void addAttack(int attack) 
+	{
+		this.attack += attack;
 	}
 
 	public int getDamage() {
 		return damage;
 	}
 
-	public void setDamage(int damage) {
-		this.damage = damage;
+	public void addDamage(int damage) 
+	{
+		this.damage += damage;
 	}
+	
+	public WeaponType getType() {
+		return type;
+	}
+
+	public enum WeaponType
+	{
+		HALBERD("Halberd", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D10), 
+				WeaponProperties.HEAVY, WeaponProperties.AVAILABILITY, WeaponProperties.MILITARY, WeaponProperties.TWO_HANDED, WeaponProperties.MELEE), null),
+		
+		WARHAMER("Warhamer", AttackModification.create("One heand attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D8), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE), 
+				AttackModification.create("Two heand attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D10), 
+						WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED)),
+		
+		QUARTERSTAFF("Quarterstaff", AttackModification.create("One heand attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D6), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE), 
+				AttackModification.create("Two heand attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D8), 
+						WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED)),
+		
+		BATTLEAXE("Battleaxe", AttackModification.create("One heand attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D8), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE), 
+				AttackModification.create("Two heand attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D10), 
+						WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED)),
+		
+		MACE("Mace", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D6), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE), null),
+		
+		GYTHKA("Gythka", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D8), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED), null),
+		
+		GLAIVE("Glaive", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D10), 
+				WeaponProperties.MILITARY, WeaponProperties.AVAILABILITY, WeaponProperties.HEAVY, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED), null),
+		
+		DOUBLE_BLADET_SCIMITAR("Double-blade scimitar", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D4, Roll.D4), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED), null),
+		
+		GREATWSWORD("Greatesword", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D6, Roll.D6), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.HEAVY, WeaponProperties.TWO_HANDED), null),
+		
+		MAUL("Maul", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D6, Roll.D6), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.HEAVY, WeaponProperties.TWO_HANDED), null),
+		
+		GREATEAXE("Greateaxe", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D12), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.HEAVY, WeaponProperties.TWO_HANDED), null),
+		
+		LONGBOW("Longbow", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D12), 
+				WeaponProperties.MILITARY, WeaponProperties.AMMUNITION, WeaponProperties.LONG_RANGE, WeaponProperties.HEAVY, WeaponProperties.TWO_HANDED).ammunition("Arrows"), null),
+		
+		LONGSWORD("Longsword", AttackModification.create("One heand attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D8), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE), 
+				AttackModification.create("Two heand attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D10), 
+						WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED)),
+		
+		DART("Dart", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D4), 
+				WeaponProperties.SIMPLE, WeaponProperties.THROWING, WeaponProperties.AMMUNITION), null),
+		
+		GREATECLUB("Greateclub", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D8), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED), null),
+		
+		CLUB("Club", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D4), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.LUNG), null),
+		
+		BLOWGUN("Blowgun", AttackModification.create("Attack", new DamageDice("Weapon base", 1, TypeDamage.STICKING, Roll.NO_ROLL), 
+				WeaponProperties.LONG_RANGE, WeaponProperties.AMMUNITION, WeaponProperties.MILITARY).ammunition("Blowwgun needles"), null),
+		
+		YKLWA("Yklwa", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D8), 
+				WeaponProperties.SIMPLE, WeaponProperties.THROWING, WeaponProperties.MELEE), null),
+		
+		LANCE("Lance", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D12), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.AVAILABILITY), null),
+		
+		DAGGER("Dagger", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D4), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.THROWING, WeaponProperties.FENCING, WeaponProperties.LUNG), null),
+		
+		WAR_PICK("War pick", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D8), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE), null),
+		
+		WHIP("Whip", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D4), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.AVAILABILITY, WeaponProperties.FENCING), null),
+		
+		SPEAR("Spear", AttackModification.create("One heand attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D6), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.THROWING), 
+				AttackModification.create("Two heand attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D8), 
+						WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED)),
+		
+		SHORTBOW("Shortbow", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D6), 
+				WeaponProperties.SIMPLE, WeaponProperties.AMMUNITION, WeaponProperties.LONG_RANGE).ammunition("Arrows"), null),
+		
+		SHORTSWORD("Shortsword", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D6), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.FENCING, WeaponProperties.LUNG), null),
+		
+		CROSSBOW_LIGHT("Crossbow, light", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D8), 
+				WeaponProperties.SIMPLE, WeaponProperties.AMMUNITION, WeaponProperties.LONG_RANGE).ammunition("Crossbow bolts"), null),
+		
+		LIGHT_HUMMER("Light hummer", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D4), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.THROWING, WeaponProperties.FENCING, WeaponProperties.LUNG), null),
+		
+		MORNINGSTAR("Morningstar", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D8), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE), null),
+		
+		PIKE("Pike", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D10), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.AVAILABILITY, WeaponProperties.TWO_HANDED), null),
+		
+		JAVELIN("Javelin", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D6), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.THROWING), null),
+		
+		SLING("Sling", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D4), 
+				WeaponProperties.SIMPLE, WeaponProperties.AMMUNITION, WeaponProperties.LONG_RANGE).ammunition("Sling bullets"), null),
+		
+		RAPIER("Rapier", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D6), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.FENCING), null),
+		
+		CROSSBOW_HAND("Crossbow, hand", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D6), 
+				WeaponProperties.MILITARY, WeaponProperties.AMMUNITION, WeaponProperties.LONG_RANGE, WeaponProperties.LUNG).ammunition("Crossbow bolts"), null),
+		
+		SICKLE("Sickle", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D4), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.LUNG), null),
+		
+		SCIMITAR("Scimitar", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D6), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.FENCING, WeaponProperties.LUNG), null),
+		
+		HANDAXE("Handaxe", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D6), 
+				WeaponProperties.SIMPLE, WeaponProperties.MELEE, WeaponProperties.THROWING, WeaponProperties.LUNG), null),
+		
+		TRIDEN("Triden", AttackModification.create("One heand attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D6), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.THROWING), 
+				AttackModification.create("Two heand attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D8), 
+						WeaponProperties.MILITARY, WeaponProperties.MELEE, WeaponProperties.TWO_HANDED)),
+			
+		CROSSBOW_HEAVY("Crossbow, heavy", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.STICKING, Roll.D10), 
+				WeaponProperties.MILITARY, WeaponProperties.AMMUNITION, WeaponProperties.LONG_RANGE, WeaponProperties.HEAVY, WeaponProperties.TWO_HANDED).ammunition("Crossbow bolts"), null),
+		
+		FLAIL("Flail", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CRUSHING, Roll.D8), 
+				WeaponProperties.MILITARY, WeaponProperties.MELEE), null);
+		
+		
+		WeaponType(String name, AttackModification firstType, AttackModification secondType)
+		{
+			this.name = name;
+			this.firstType = firstType;
+			this.secondType = secondType;
+		}
+		
+		private String name;
+		private AttackModification firstType;
+		private AttackModification secondType;
+		
+		public String toString()
+		{
+			return name;
+		}
+		
+	}
+	
 }

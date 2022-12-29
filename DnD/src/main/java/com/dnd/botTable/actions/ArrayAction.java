@@ -38,12 +38,12 @@ public class ArrayAction extends Action
 	public Action continueAction(String key) 
 	{
 
-		Log.add(this);
+		Log.add(key + "====all");
 		String regex = "(\\d{9})(.+)";
 		String target = key.replaceAll(regex, "$1");
-		Log.add(target);
+		Log.add(target + " ===== key");
 		String callback = key.replaceAll(regex, "$2");
-		Log.add(callback);
+		Log.add(callback + " ======answer");
 
 		for(Action act: this.pool)
 		{
