@@ -98,9 +98,10 @@ abstract class ClassFactory implements Source
 			String className = action.getLocalData().get(0);
 			String archetype = action.getLocalData().get(1);
 			int lvl = ((Integer) Integer.parseInt(action.getLocalData().get(2)));
-			character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype, ClassDnd.class));
+			character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype + ".json", ClassDnd.class));
 			character.addMemoirs(getObgectInfo(className, archetype));
 			character.getClassDnd().setLvl(lvl);
+			Log.add(character.getClassDnd() + "CLAZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZz");
 			for(int i = 0; i < lvl; i++)
 			{
 				for(InerComand comand: character.getClassDnd().getGrowMap()[i])
@@ -134,7 +135,7 @@ abstract class ClassFactory implements Source
 		String[][] allArchetypes = new String[all.length][1];
 		for(int i = 0; i < all.length; i++)
 		{
-			allArchetypes[i][0] = all[i];
+			allArchetypes[i][0] = all[i].replaceAll("([a-zA-Z]*)(.json)","$1");
 		}
 		return allArchetypes;
 	}

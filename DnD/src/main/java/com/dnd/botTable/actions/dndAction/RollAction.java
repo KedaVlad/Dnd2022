@@ -19,7 +19,6 @@ public class RollAction extends SimpleRollAction
 		answer.key = key;
 		answer.setName(name);
 		answer.mainAct = true;
-		answer.mediator = false;
 		answer.setNextStep(nextStep);
 		answer.setDepends(depends);
 		answer.setProficiency(proficiency);
@@ -33,7 +32,6 @@ public class RollAction extends SimpleRollAction
 		answer.key = key;
 		answer.setName(name);
 		answer.mainAct = true;
-		answer.mediator = false;
 		answer.setNextStep(nextStep);
 		answer.setDepends(depends);
 		answer.setProficiency(proficiency);

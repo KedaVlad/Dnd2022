@@ -23,7 +23,6 @@ public class AttackAction extends RollAction
 		answer.key = key;
 		answer.setName((attack.getName()));
 		answer.mainAct = true;
-		answer.mediator = false;
 		answer.setDepends(depends);
 		answer.setProficiency(proficiency);
 		answer.setAttack(attack);

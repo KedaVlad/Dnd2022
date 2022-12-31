@@ -28,7 +28,6 @@ public class HeroAction extends DndAction
 		answer.setName(name);
 		answer.key = key;
 		answer.mainAct = true;
-		answer.mediator = false;
 		answer.text = text;
 		answer.setNextStep(nextStep);
 		return answer;

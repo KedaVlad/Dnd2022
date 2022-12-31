@@ -22,7 +22,6 @@ public class PreRoll extends HeroAction
 		answer.setName(action.getName());
 		answer.key = action.getKey();
 		answer.mainAct = true;
-		answer.mediator = false;
 		answer.text = text;
 		return answer;
 	}

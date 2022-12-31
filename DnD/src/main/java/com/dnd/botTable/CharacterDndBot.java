@@ -156,6 +156,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 		else if(game.getScript().isMediator())
 		{
+			Log.add("Mediator worked");
+			Log.add(game.getScript().getAction());
 			game.getScript().toAct(message.getMessageId());
 			templateExecuter(message, game, game.makeAction(game.getScript().getAction().continueAction(message.getText())));
 		}

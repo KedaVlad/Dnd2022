@@ -59,7 +59,7 @@ abstract class RaceFactory implements Source
 		String subRace = action.getLocalData().get(1);
 		try
 		{
-			character.setRaceDnd(Json.fromFileJson(raceSource + raceName + "\\" + subRace, RaceDnd.class));
+			character.setRaceDnd(Json.fromFileJson(raceSource + raceName + "\\" + subRace + ".json", RaceDnd.class));
 			character.addMemoirs(getObgectInfo(raceName, subRace));
 		} 
 		catch (IOException e) 
@@ -124,7 +124,7 @@ abstract class RaceFactory implements Source
 		String[][] allRaces = new String[all.length][1];
 		for(int i = 0; i < all.length; i++)
 		{
-			allRaces[i][0] = all[i];
+			allRaces[i][0] = all[i].replaceAll("([a-zA-Z]*)(.json)","$1");
 		}
 		
 		return allRaces;

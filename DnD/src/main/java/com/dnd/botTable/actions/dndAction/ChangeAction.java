@@ -6,8 +6,8 @@ import com.dnd.botTable.Action;
 public class ChangeAction extends RegistrateAction
 {
 	private static final long serialVersionUID = 1L;
-	private String[][] nextStep;
-	private String answer;
+	protected String[][] nextStep;
+	protected String answer;
 
 	
 	
@@ -16,7 +16,6 @@ public class ChangeAction extends RegistrateAction
 		ChangeAction answer = new ChangeAction();
 		answer.key = action.getKey();
 		answer.mainAct = true;
-		answer.mediator = false;
 		answer.setName(action.getName() + "Change");
 		answer.text = text;
 		answer.target = action.target;

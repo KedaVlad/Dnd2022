@@ -16,7 +16,6 @@ public class SimpleRollAction extends HeroAction
 		answer.setName(name);
 		answer.key = key;
 		answer.mainAct = true;
-		answer.mediator = false;
 		answer.text = text;
 		answer.setNextStep(nextStep);
 		answer.base = base;

@@ -1,12 +1,15 @@
 package com.dnd.botTable.actions.factoryAction;
 
-public class FinalAction extends FactoryAction
+import com.dnd.dndTable.ObjectDnd;
+
+public class FinalTargetAction extends FinalAction
 {
 	private static final long serialVersionUID = 1L;
-
-	public static FinalAction create(FactoryAction action)
+	private ObjectDnd target;
+	public static FinalTargetAction create(FactoryAction action, ObjectDnd targetObject)
 	{
-		FinalAction target = new FinalAction();
+		FinalTargetAction target = new FinalTargetAction();
+		target.target =targetObject;
 		target.setName("FINAL");
 		target.key = action.getKey();
 		target.text = action.getText();
@@ -30,6 +33,9 @@ public class FinalAction extends FactoryAction
 	public FinalAction continueAction(String name)
 	{
 		return this;
+	}
+	public ObjectDnd getTarget() {
+		return target;
 	}
 	
 }

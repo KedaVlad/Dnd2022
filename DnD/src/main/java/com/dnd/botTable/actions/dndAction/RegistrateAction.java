@@ -20,6 +20,12 @@ public class RegistrateAction extends StartTreeAction
 		
 	}
 	
+	public RegistrateAction key(long key)
+	{
+		this.key = key;
+		return this;
+	}
+	
 	public ObjectDnd getTarget() {
 		return target;
 	}

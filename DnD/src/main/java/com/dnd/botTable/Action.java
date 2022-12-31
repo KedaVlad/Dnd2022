@@ -78,4 +78,10 @@ public abstract class Action implements Serializable {
 		this.name = name;
 	}
 
+	public Action setMediator() 
+	{
+		this.mediator = true;
+		return this;
+	}
+
 }

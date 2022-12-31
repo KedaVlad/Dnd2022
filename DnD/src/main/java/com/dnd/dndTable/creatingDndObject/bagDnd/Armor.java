@@ -7,15 +7,42 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class Armor extends Items
 {
 	private static final long serialVersionUID = 1L;
-	private TypeArmor type;
+	private Armors type;
 	
-	public Armor(TypeArmor type)
+	public Armor() {}
+	
+	public Armor(Armors type)
 	{
 		this.setName(type.name);
+		this.setDescription(descripter(type));
 		this.type = type;
 	}
 	
-	public TypeArmor getType() 
+	private String descripter(Armors armor)
+	{
+		String answer = armor.name + "\n";
+		answer += "Type armor: " + armor.clazz + "\n";
+		if(armor.requitment != 0)
+		{
+			answer += "You need "+armor.requitment+" STRENGTH for using" + "\n";
+		}
+		if(armor.statDependBuff != 0 && armor.statDependBuff < 7)
+		{
+			answer += "Class Armor(CA): " + armor.baseArmor + " + DEXTERYTI(max " + armor.statDependBuff + ")";
+		}
+		else if(armor.statDependBuff != 0)
+		{
+			answer += "Class Armor(CA): " + armor.baseArmor + " + DEXTERYTI";
+		}
+		else
+		{
+			answer += "Class Armor(CA): " + armor.baseArmor;
+		}
+		
+		return answer;
+	}
+	
+	public Armors getType() 
 	{
 		return type;
 	}
@@ -25,7 +52,7 @@ public class Armor extends Items
 		LIGHT, HEAVY, MEDIUM, SHIELD
 	}
 	
-	public enum TypeArmor
+	public enum Armors
 	{
 		SHIELD("Shield",ClassArmor.SHIELD, 2, 0, 0),
 		STUDDED_LEATHER_ARMOR("Studded Leather Armor", ClassArmor.LIGHT, 12, 0, 7),
@@ -43,10 +70,10 @@ public class Armor extends Items
 		
 		
 		
-		TypeArmor(String name, ClassArmor clazz, int base, int requirment, int max)
+		Armors(String name, ClassArmor clazz, int base, int requirment, int max)
 		{
 			this.name = name;
-			this.setClazz(clazz);
+			this.clazz = clazz;
 			this.baseArmor = base;
 			this.requitment = requirment;
 			this.statDependBuff = base + max;
@@ -73,9 +100,5 @@ public class Armor extends Items
 		public ClassArmor getClazz() {
 			return clazz;
 		}
-		public void setClazz(ClassArmor clazz) {
-			this.clazz = clazz;
-		}
-		
 	}
 }

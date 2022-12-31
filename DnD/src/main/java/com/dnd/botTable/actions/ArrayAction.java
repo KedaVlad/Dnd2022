@@ -37,7 +37,11 @@ public class ArrayAction extends Action
 	@Override
 	public Action continueAction(String key) 
 	{
-
+		for(Action actiii: pool)
+		{
+			Log.add("=-+" + actiii.getKey());
+		}
+		
 		Log.add(key + "====all");
 		String regex = "(\\d{9})(.+)";
 		String target = key.replaceAll(regex, "$1");

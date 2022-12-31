@@ -26,4 +26,6 @@ public interface DndKeyWallet
 	public final static long SAVE_ROLL = 300000000;
 	public final static long ARTICLE = 310000000;
 	public final static long ROLL = 320000000;
+	public final static long PREPEARED = 330000000;
+	public final static long WALLET = 340000000;
 }

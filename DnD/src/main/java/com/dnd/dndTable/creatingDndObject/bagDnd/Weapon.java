@@ -24,15 +24,31 @@ public class Weapon extends Items
 		UNIVERSAL, LUNG, THROWING, FENCING, TWO_HANDED, AMMUNITION, RELOAD, AVAILABILITY, MILITARY, LONG_RANGE, MELEE, SIMPLE, HEAVY
 	}
 	
-	private WeaponType type;
+	private Weapons type;
 	
-	public Weapon(WeaponType type)
+	public Weapon() {}
+	
+	public Weapon(Weapons type)
 	{
 		this.setName(type.name);
+		this.setDescription(descripter(type));
 		this.type = type;
 	}
 	
-	
+	private String descripter(Weapons type)
+	{
+		String answer = type.name + "\n";
+		if(type.secondType == null)
+		{
+			answer += type.firstType.toString() + "\n";
+		}
+		else
+		{
+			answer += type.firstType.toString() + "\n";
+			answer += type.secondType.toString() + "\n";
+		}
+		return answer;
+	}
 	
 	public Weapon attack(int attack)
 	{
@@ -55,12 +71,6 @@ public class Weapon extends Items
 	}
 
 
-	@Override
-	public long key() {
-		// TODO Auto-generated method stub
-		return WEAPON;
-	}
-
 	public int getAttack() {
 		return attack;
 	}
@@ -79,11 +89,20 @@ public class Weapon extends Items
 		this.damage += damage;
 	}
 	
-	public WeaponType getType() {
+	public Weapons getType() {
 		return type;
 	}
+	
+	public String toString()
+	{
+		if(attack != 0 || damage != 0) 
+		{
+			return getName() + "(" + attack + "|" + damage + ")";
+		}
+		return getName();
+	}
 
-	public enum WeaponType
+	public enum Weapons
 	{
 		HALBERD("Halberd", AttackModification.create("Attack", new DamageDice("Weapon base", 0, TypeDamage.CHOPPING, Roll.D10), 
 				WeaponProperties.HEAVY, WeaponProperties.AVAILABILITY, WeaponProperties.MILITARY, WeaponProperties.TWO_HANDED, WeaponProperties.MELEE), null),
@@ -215,7 +234,7 @@ public class Weapon extends Items
 				WeaponProperties.MILITARY, WeaponProperties.MELEE), null);
 		
 		
-		WeaponType(String name, AttackModification firstType, AttackModification secondType)
+		Weapons(String name, AttackModification firstType, AttackModification secondType)
 		{
 			this.name = name;
 			this.firstType = firstType;

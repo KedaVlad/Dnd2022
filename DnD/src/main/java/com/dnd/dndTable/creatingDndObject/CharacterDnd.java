@@ -19,6 +19,7 @@ import com.dnd.dndTable.Refreshable;
 import com.dnd.dndTable.creatingDndObject.Rolls.MainStat;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Wallet;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.rolls.Article;
@@ -53,9 +54,9 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		this.name = name;
 		myWorkmanship = new Workmanship();
 		myMemoirs = new ArrayList<>();
-		myBody = new Body();
 		cloud = new СhoiceCloud();
 		rolls = new Rolls();
+		myBody = new Body(rolls.getStats());
 		hp = new HP();
 		permanentBuffs = new ArrayList<>();
 		timesBuffs = new ArrayList<>();
@@ -90,8 +91,11 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 			}
 			return HeroAction.create("EndRoll", NO_ANSWER, rolls.execute((RollAction) action).execute(), null);
 		}
-		Log.add("CHARACTER ACT ERROR");
-		return null;
+		else 
+		{
+				return action;
+		}
+
 	}
 
 	private Action startTreeAction(StartTreeAction action) {
@@ -134,6 +138,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 
 	private Action registAction(RegistrateAction action)
 	{
+		
 		if(action instanceof ChangeAction)
 		{
 			return changeAction((ChangeAction) action);
@@ -161,11 +166,20 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 				}
 				else if(object instanceof Bag)
 				{
-					return myBody.getBagMeny((Bag) object);
+					return myBody.getBagMeny(action);
 				}
 				else if(object instanceof Items)
 				{
-					return myBody.getItemMenu((Items) object);
+					if(action.getKey() == PREPEARED)
+					{
+						return myBody.getPrepearedMenu(action);
+					}
+					
+					return myBody.getItemMenu(action);
+				}
+				else if(object instanceof Wallet)
+				{
+					return myBody.walletMenu(action);
 				}
 				else if(object instanceof MainStat)
 				{
@@ -183,6 +197,8 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 
 	private Action changeAction(ChangeAction action)
 	{
+		Log.add("START CHANGE ACTION IN CHARACTER");
+		Log.add(action.getKey());
 		long key = action.getKey();
 		if(key == STAT)
 		{
@@ -192,6 +208,19 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		{
 			return rolls.changeArticle(action);
 		}
+		else if(key == PREPEARED)
+		{
+			return myBody.changePrepeared(action);
+		}
+		else if(key == ITEM)
+		{
+			return myBody.change(action);
+		}
+		else if(key == WALLET)
+		{
+			return myBody.changeWallet(action);
+		}
+		Log.add("ERROR CHANGE ACTION IN CHARACTER");
 		return null;
 	}
 

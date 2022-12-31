@@ -6,14 +6,14 @@ import java.util.List;
 
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.Weapons;
 import com.dnd.dndTable.rolls.DamageDice;
 import com.dnd.dndTable.rolls.Dice;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("ATTACK_MODIFICATION")
 public class AttackModification implements Serializable, ObjectDnd
 {
-	
+
 	private static final long serialVersionUID = 1L;
 	private String name;
 	//private WeaponType type;
@@ -23,7 +23,41 @@ public class AttackModification implements Serializable, ObjectDnd
 	private List<Dice> attack;
 	private List<Dice> damage;
 	private String ammunition;
-	
+
+	public String toString()
+	{
+		String answer = "";
+		List<WeaponProperties> props = new ArrayList<>();
+		for(WeaponProperties prop: requirement)
+		{
+			props.add(prop);
+		}
+		if(props.contains(WeaponProperties.LONG_RANGE) || props.contains(WeaponProperties.THROWING))
+		{
+			answer += "Long range attak" + "\n";
+		}
+		else
+		{
+			answer += "Melee range attak" + "\n";
+		}
+		
+		if(props.contains(WeaponProperties.AMMUNITION))
+		{
+			answer += "For shooting you need" + ammunition + "\n";
+		}
+		answer += "Properties: ";
+		for(WeaponProperties prop: requirement)
+		{
+			answer += prop + ", ";
+		}
+		answer += "\nDamage dice:";
+		for(Dice dice: damage)
+		{
+			answer += dice.toString();
+		}
+		return answer;
+	}
+
 	public AttackModification ammunition(String target)
 	{
 		this.ammunition = target;
@@ -35,7 +69,7 @@ public class AttackModification implements Serializable, ObjectDnd
 		attack = new ArrayList<>();
 		damage = new ArrayList<>();
 	}
-	
+
 	public static AttackModification create(String name, DamageDice dice, WeaponProperties... requirment)
 	{
 		AttackModification answer = new AttackModification();
@@ -44,15 +78,15 @@ public class AttackModification implements Serializable, ObjectDnd
 		answer.requirement = requirment;
 		return answer;
 	}
-	
+
 	public boolean equals(Object obj) 
 	{
-			if(obj == this) return true;
-			if(obj == null || obj.getClass() != this.getClass()) return false;
-			AttackModification target = (AttackModification) obj;
-			return this.name == target.name && this.requirement.equals(target.requirement);
-		}
-	
+		if(obj == this) return true;
+		if(obj == null || obj.getClass() != this.getClass()) return false;
+		AttackModification target = (AttackModification) obj;
+		return this.name == target.name && this.requirement.equals(target.requirement);
+	}
+
 
 	public AttackModification marger(AttackModification second)
 	{
@@ -63,7 +97,7 @@ public class AttackModification implements Serializable, ObjectDnd
 		answer.attack.addAll(second.attack);
 		answer.damage = this.damage;
 		answer.damage.addAll(second.damage);
-	
+
 		return answer;
 	}
 
@@ -99,37 +133,37 @@ public class AttackModification implements Serializable, ObjectDnd
 		this.damage = damage;
 	}
 
-	
+
 
 	public static AttackModification build()
 	{
 		return new AttackModification();
 	}
-	
+
 	public AttackModification crit()
 	{
 		this.permanentCrit = true;
 		return this;
 	}
-	
+
 	public AttackModification name(String name)
 	{
 		this.name = name;
 		return this;
 	}
-	
+
 	public AttackModification postAttack(boolean postAttack)
 	{
 		this.postAttack = postAttack;
 		return this;
 	}
-	
+
 	public AttackModification requirement(WeaponProperties... requirment)
 	{
 		this.requirement = requirment;
 		return this;
 	}
-	
+
 	public AttackModification attack(Dice...dices)
 	{
 		for(Dice dice: dices)
@@ -138,7 +172,7 @@ public class AttackModification implements Serializable, ObjectDnd
 		}
 		return this;
 	}
-	
+
 	public AttackModification damage(Dice...dices)
 	{
 		for(Dice dice: dices)
@@ -165,7 +199,7 @@ public class AttackModification implements Serializable, ObjectDnd
 	public String getAmmunition() {
 		return ammunition;
 	}
-	
-	
-	
+
+
+
 }

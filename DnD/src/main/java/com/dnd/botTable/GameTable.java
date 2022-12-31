@@ -47,7 +47,7 @@ public class GameTable implements KeyWallet, Serializable
 		}
 		else if(action instanceof FinalAction)
 		{
-			script.beackTo(start);
+			//script.beackTo(start);
 			return controlPanel.finish((FinalAction)action, this);
 		}
 		else if(action instanceof FactoryAction)

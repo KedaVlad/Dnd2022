@@ -16,7 +16,7 @@ import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Pack;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.Weapons;
 import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
@@ -143,7 +143,7 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 				new Possession("SR Intelligense", STAT),
 				new Possession("SR Intelligense", STAT),
 				Armor.create("Leather Armor"),
-				new Weapon(WeaponType.DAGGER),
+				new Weapon(Weapons.DAGGER),
 				Pack.create("Thieves' Tools")),
 
 				CloudComand.create(4, "Choose skill", false,
@@ -160,12 +160,12 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 				AddComand.create(new Possession("Persuasion", STAT))),
 				
 				CloudComand.create(1, "Choose item", false,
-				AddComand.create(new Weapon(WeaponType.RAPIER)),
-				AddComand.create(new Weapon(WeaponType.SHORTSWORD))),
+				AddComand.create(new Weapon(Weapons.RAPIER)),
+				AddComand.create(new Weapon(Weapons.SHORTSWORD))),
 		
 				CloudComand.create(1, "Choose item", false,
-				AddComand.create(new Weapon(WeaponType.SHORTBOW)), //+20 arrow
-				AddComand.create(new Weapon(WeaponType.SHORTSWORD))),
+				AddComand.create(new Weapon(Weapons.SHORTBOW)), //+20 arrow
+				AddComand.create(new Weapon(Weapons.SHORTSWORD))),
 				
 				CloudComand.create(1, "Choose Pack", false,
 				AddComand.create(Pack.create("Dungeoneer's Pack")),

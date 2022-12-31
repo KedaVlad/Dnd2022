@@ -36,6 +36,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	private List<Article> skills;
 	private List<Article> saveRolls;
 
+	
 	public Rolls() 
 	{
 		proficiency = new Dice("Proficiency bonus", 2, Roll.NO_ROLL);
@@ -55,22 +56,21 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		{
 			Dice dice = getHpDice(clazz);
 			dice.execute();
-			int answer = dice.roll() + stats.get(2).dice.getBuff();
+			int answer = dice.roll() + stats.get(2).getModificator();
 			return answer;	
 		}
 		else
 		{
-			Log.add(stats.get(2).dice.getBuff());
 			switch(clazz.getDiceHp())
 			{
 			case D6:
-				return 4 + stats.get(2).dice.getBuff() + hp.getBuff();
+				return 4 + stats.get(2).getModificator() + hp.getBuff();
 			case D8:
-				return 5 + stats.get(2).dice.getBuff() + hp.getBuff();
+				return 5 + stats.get(2).getModificator() + hp.getBuff();
 			case D10:
-				return 6 + stats.get(2).dice.getBuff() + hp.getBuff();
+				return 6 + stats.get(2).getModificator() + hp.getBuff();
 			case D12:
-				return 7 + stats.get(2).dice.getBuff() + hp.getBuff();
+				return 7 + stats.get(2).getModificator() + hp.getBuff();
 			default:
 				return 0;
 			}
@@ -113,7 +113,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	{
 		for(MainStat stat: stats)
 		{
-			if(stat.name.toString().equals(name)) return stat.dice.getBuff();
+			if(stat.name.toString().equals(name)) return stat.getModificator();
 		}
 		return 0;
 
@@ -123,7 +123,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	{
 		for(MainStat stat: stats)
 		{
-			if(stat.name.toString().equals(name)) return stat.dice;
+			if(stat.name.toString().equals(name)) return stat.getDice();
 		}
 		return null;
 
@@ -410,7 +410,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 	{
 		
 		String[][] base = new String[][] {{"-3","-2","-1","+1","+2","+3"}};
-		int max = 20 - stat.value;
+		int max = stat.maxValue - stat.value;
 		int min = stat.value - 3;
 		if(max > 3) max = 3;
 		if(min > 3) min = 3;
@@ -601,42 +601,75 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		}
 		return action.beckKey("Menu").beckCall(menu +"STATS");
 	}
+	
+	List<MainStat> getStats()
+	{
+		return stats;
+	}
 
 	class MainStat implements Serializable, ObjectDnd
 	{
 		private static final long serialVersionUID = 1L;
-		Stat name;
-		int value;
-		int maxValue = 20;
-		Dice dice;
+		private Stat name;
+		private int value;
+		private int maxValue = 20;
+		private int[] elseSourceValue = {0, 0};
+		
+		//Dice dice;
 
-		MainStat(Stat name)
+		int getValue()
+		{
+			int target = value + elseSourceValue[1];
+			if(elseSourceValue[0] != 0)
+			{
+				return elseSourceValue[0];
+			}
+			else
+			{
+				return target;
+			}
+		}
+		
+		int getModificator()
+		{
+			return (getValue()- 10)/2;
+		}
+		
+		Dice getDice()
+		{
+			return new Dice(name.toString(), getModificator(), Roll.NO_ROLL);
+		}
+		
+		private MainStat(Stat name)
 		{
 			this.name = name;
 			this.value = 0;
-			this.dice = new Dice(name.toString(), 0, Roll.NO_ROLL);
 		}
 
 		void up(int value)
 		{
 			this.value += value;
-			dice.setBuff((this.value - 10)/2);
 		}
 
 		private String SR()
 		{
-			return dice.getBuff() + " " + name.toString();
+			return getModificator() + " " + name.toString();
 		}
 
 		public String toString()
 		{
-			return value +"(" +dice.getBuff() + ")" + " " +name.toString();
+			return value +"(" + getModificator() + ")" + " " +name.toString();
 		}
 
 		@Override
 		public long key()
 		{
 			return STAT;
+		}
+
+		void setMaxValue(int maxValue) 
+		{
+			this.maxValue = maxValue;
 		}
 
 	}

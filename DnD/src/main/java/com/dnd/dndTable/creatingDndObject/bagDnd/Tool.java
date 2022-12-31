@@ -1,17 +1,19 @@
 package com.dnd.dndTable.creatingDndObject.bagDnd;
 
-public class Tools extends Items
+public class Tool extends Items
 {
 	private static final long serialVersionUID = 1L;
 
 
-	public Tools(Tool type)
+	public Tool() {}
+	
+	public Tool(Tools type)
 	{
 		this.setDescription(type.text);
 		this.setName(type.name);
 	}
 
-	public enum Tool
+	public enum Tools
 	{
 		SMITH("Smith’s Tools", "Inside:\r\n"
 				+ "• hammers,\r\n"
@@ -696,7 +698,7 @@ public class Tools extends Items
 
 
 
-		Tool(String name, String text)
+		Tools(String name, String text)
 		{
 			this.name = name;
 			this.text = text;

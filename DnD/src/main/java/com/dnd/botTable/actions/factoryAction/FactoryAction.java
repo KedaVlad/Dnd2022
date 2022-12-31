@@ -18,7 +18,7 @@ public class FactoryAction extends Action
 		answer.setName(name);
 		answer.key = key;
 		answer.mainAct = true;
-		answer.mediator = mediator;
+		answer.setMediator(mediator);
 		answer.text = text;
 		answer.nextStep = nextStep;
 		return answer;

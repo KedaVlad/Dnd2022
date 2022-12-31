@@ -3,19 +3,28 @@ package com.dnd.dndTable.creatingDndObject.bagDnd;
 public class Ammunition extends Items
 {
 	private static final long serialVersionUID = 1L;
-
-	public Ammunition(AmmunitionType type)
+	private int value;
+	
+	
+	public Ammunition() {}
+	
+	public Ammunition(Ammunitions type)
 	{
 		this.setName(type.name);
 	}
-	public enum AmmunitionType 
+	
+	public String getDescription()
+	{
+		return this.toString();
+	}
+	public enum Ammunitions 
 	{
 		SLING_BULLETS("Sling bullets"),
 		ARROWS("Arrows"),
 		BLOWWGUN_NEEDLES("Blowwgun needles"),
 		CROSSBOW_BOLTS("Crossbow bolts");
 		
-		AmmunitionType(String name)
+		Ammunitions(String name)
 		{
 			this.name = name;
 		}
@@ -24,5 +33,14 @@ public class Ammunition extends Items
 		{
 			return name;
 		}
+	}
+	
+	public String toString()
+	{
+		return getName() + "(" + value + ")";
+	}
+
+	public void addValue(int value) {
+		this.value += value;
 	}
 }

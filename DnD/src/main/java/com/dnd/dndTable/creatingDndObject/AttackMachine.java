@@ -14,7 +14,7 @@ import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.creatingDndObject.Rolls.Proficiency;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponType;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.Weapons;
 import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
@@ -31,7 +31,7 @@ public class AttackMachine implements Serializable, DndKeyWallet
 	private List<AttackModification> afterAttak;
 	private List<AttackModification> permanent;
 	private List<WeaponProperties> possession;
-	private List<WeaponType> typePossession;
+	private List<Weapons> typePossession;
 	private List<WeaponProperties> dexteritys;
 	//private boolean warlock;
 	
@@ -252,11 +252,11 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		this.possession.add(possession);
 	}
 
-	public List<WeaponType> getTypePossession() {
+	public List<Weapons> getTypePossession() {
 		return typePossession;
 	}
 
-	public void setTypePossession(WeaponType possession) {
+	public void setTypePossession(Weapons possession) {
 		this.typePossession.add(possession);
 	}
 

@@ -8,6 +8,7 @@ import com.dnd.botTable.GameTable;
 import com.dnd.botTable.actions.BotAction;
 import com.dnd.botTable.actions.factoryAction.FactoryAction;
 import com.dnd.botTable.actions.factoryAction.FinalAction;
+import com.dnd.botTable.actions.factoryAction.FinalTargetAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.rolls.Dice;
 
@@ -35,8 +36,17 @@ public class ControlPanel implements Serializable {
 		{
 			return RaceFactory.execute(action);
 		}
+		else if(action.getKey() == ItemFactory.key)
+		{
+			if(action.getLocalData().size() == 0)
+			{
+				return ItemFactory.startCreate();
+			}
+			return ItemFactory.execute(action);
+		}
 		else
 		{
+			Log.add("ERORR CONTROL PANEL ACT");
 			return null;
 		}
 	}
@@ -70,19 +80,25 @@ public class ControlPanel implements Serializable {
 			gameTable.setActualGameCharacter(CharacterFactory.finish(action));
 			gameTable.getActualGameCharacter().addMemoirs(gameTable.getActualGameCharacter().getName()+"\n");
 			gameTable.save();
-			return ClassFactory.startCreate(action.getLocalData().get(0));
+			return ClassFactory.startCreate(action.getLocalData().get(0)).beckKey("START");
 		}
 		else if(key == ClassFactory.key)
 		{
 			ClassFactory.finish(action, gameTable.getActualGameCharacter());
 			gameTable.save();
-			return RaceFactory.startCreate();
+			return RaceFactory.startCreate().beckKey("START");
 		}
 		else if(key == RaceFactory.key)
 		{
 			RaceFactory.finish(action, gameTable.getActualGameCharacter());
 			gameTable.save();
-			return finish();
+			return finish().beckKey("START");
+		}
+		else if(key == ItemFactory.key)
+		{
+			ItemFactory.finish((FinalTargetAction)action, gameTable.getActualGameCharacter());
+			gameTable.save();
+			return action.beckKey("Menu").beckCall(100000002+"BAG");
 		}
 		return null;
 	}

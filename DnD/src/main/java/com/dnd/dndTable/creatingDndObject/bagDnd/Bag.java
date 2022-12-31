@@ -11,62 +11,39 @@ public class Bag implements Serializable, ObjectDnd
 
 	private static final long serialVersionUID = -3894341880184285889L;
 
-	private int id;
 	private String name;
+	private Wallet wallet;
 	private List<Items> insideBag;
 
-
-	public Bag(String bagName) {
+	public void add(Items item)
+	{
+		insideBag.add(item);
+	}
+	
+	public Bag(String bagName) 
+	{
 		this.name = bagName;
+		this.wallet = new Wallet();
 		insideBag = new ArrayList<Items>();
 	}
 
-
-
-
-	public void whatInTheBag() {
-		if(getInsideBag().size() == 0) {
-			System.out.println("Your bag is empty!");
-		} else {
-			for(int i = 0; i < getInsideBag().size(); i++) {
-				System.out.println(getInsideBag().get(i));
-			}
-		}
+	public List<Items> getInsideBag() 
+	{
+		return insideBag;
 	}
 
-	//equals + hashCode()
-	public boolean equals(Object obj) {
-		if(obj == this) return true;
-		if(obj == null || obj.getClass() != this.getClass()) return false;
-		Bag characterDnd = (Bag) obj;
-		return id == characterDnd.id && (getName() == characterDnd.getName() ||(getName() != null && getName().equals(characterDnd.getName())));
-	}
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((getName() == null) ? 0 : getName().hashCode());             
-		result = prime * result + id; 
-		return result;
-	}
-
-
-	public List<Items> getInsideBag() {
-	return insideBag;
-	}
-
-
-
-
-	public String getName() {
+	public String getName()
+	{
 		return name;
 	}
-
-
-
 
 	@Override
 	public long key() {
 		// TODO Auto-generated method stub
 		return BAG;
+	}
+
+	public Wallet getWallet() {
+		return wallet;
 	}
 }

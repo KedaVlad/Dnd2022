@@ -7,6 +7,8 @@ public class Pack extends Items
 {
 private static final long serialVersionUID = 1L;
 
+public Pack() {}
+
 public Pack(Packs type)
 {
 	this.setName(type.name);

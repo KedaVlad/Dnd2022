@@ -24,6 +24,17 @@ public class Dice implements Serializable
 	private Roll[] combo;
 	private int[] results;
 
+	public String toString()
+	{
+		String answer = "";
+		for(Roll roll: combo)
+		{
+			answer += roll + " ";
+		}
+		answer += "(+" + buff + ")";
+		return answer;
+	}
+	
 	public Dice() {};
 	
 	public Dice(String name, int buff, Roll... combo)
