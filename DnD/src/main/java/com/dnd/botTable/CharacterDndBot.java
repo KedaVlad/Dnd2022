@@ -28,6 +28,7 @@ import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.botTable.actions.ArrayAction;
 import com.dnd.botTable.actions.BotAction;
+import com.dnd.botTable.actions.CloudAction;
 import com.dnd.dndTable.factory.Json;
 
 public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
@@ -62,6 +63,23 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			GameTable game = initialize(update);	
 			if(game.getActualGameCharacter() != null) Log.add(game.getActualGameCharacter().getHp() + " HPHPHPHPHPHPHPHPHP");
+			if(game.clouds.size() > 0)
+			{
+				Message target;
+				if(update.hasCallbackQuery())
+				{
+					target = update.getCallbackQuery().getMessage();
+				}
+				else
+				{
+					target = update.getMessage();
+				}
+				for(CloudAction cloud: game.clouds)
+				{
+					templateExecuter(target, game, cloud);
+				}
+				game.clouds.clear();
+			}
 			if(update.hasCallbackQuery())
 			{
 				handleCallback(update.getCallbackQuery(), game);
@@ -201,10 +219,11 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			}
 		}
 
-		game.getScript().up(target);	
+
 
 		if(target instanceof ArrayAction)
 		{
+			game.getScript().up(target);
 			ArrayAction array = (ArrayAction) target;
 			for(Action action: array.getPool())
 			{
@@ -234,6 +253,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			if(target.mainAct && target.hasButtons())
 			{
+				game.getScript().up(target);
 				List<List<InlineKeyboardButton>> buttons = buttons(target, buttonsKey);
 				Message act = execute(SendMessage.builder()
 						.text(target.text)
@@ -245,6 +265,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			}
 			else if(target.mainAct)
 			{
+				game.getScript().up(target);
 				Message act = execute(SendMessage.builder()
 						.text(target.text)
 						.chatId(message.getChatId().toString())
@@ -253,6 +274,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			}
 			else
 			{
+				game.getScript().start(target);
 				List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
 						.text("ELIMINATION")

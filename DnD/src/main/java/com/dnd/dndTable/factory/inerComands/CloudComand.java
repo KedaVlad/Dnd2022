@@ -14,10 +14,19 @@ import com.fasterxml.jackson.annotation.JsonTypeName;
 public class CloudComand extends InerComand{
 
 	private static final long serialVersionUID = 1L;
-	protected Pool<InerComand> pool;
+	//protected Pool<InerComand> pool;
 	protected String text;
+	protected String name;
 
-	public static CloudComand create(int times, String text, boolean soft, InerComand... comands)
+	public static CloudComand create(String name, String text)
+	{
+		CloudComand answer = new CloudComand();
+		answer.name = name;
+		answer.text = text;
+		return answer;
+	}
+	
+	/*public static CloudComand create(int times, String text, boolean soft, InerComand... comands)
 	{
 		CloudComand answer = new CloudComand();
 		List<InerComand> pool = new ArrayList<>();
@@ -43,9 +52,7 @@ public class CloudComand extends InerComand{
 		return pool;
 	}
 
-	public String getText() {
-		return text;
-	}
+	
 
 	public boolean isSoft() 
 	{
@@ -59,7 +66,7 @@ public class CloudComand extends InerComand{
 		}
 	}
 
-	public static CloudComand lvlUp(InerComand comands)
+	/*public static CloudComand lvlUp(InerComand comands)
 	{
 		if(comands != null)
 		{
@@ -79,5 +86,13 @@ public class CloudComand extends InerComand{
 					IntegrateCloud.create(2, "STAT", true, com.dnd.dndTable.DndKeyWallet.STAT),
 					IntegrateCloud.create(1, "TRAIT", false, com.dnd.dndTable.DndKeyWallet.TRAIT));
 		}
+	}*/
+
+	public String getText() {
+		return text;
+	}
+	
+	public String getName() {
+		return name;
 	}
 }

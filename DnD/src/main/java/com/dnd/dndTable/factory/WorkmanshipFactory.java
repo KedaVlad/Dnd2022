@@ -22,44 +22,4 @@ import com.dnd.dndTable.creatingDndObject.workmanship.features.Trait;
 
 abstract class WorkmanshipFactory implements Source, KeyWallet {
 
-
-	
-	static void createFeature(CharacterDnd character, String skill) 
-	{	
-		if(!character.getWorkmanship().getMyFeatures().contains(new Feature(skill)))
-		{
-			character.getWorkmanship().getMyFeatures().add(new Feature(skill));
-			
-		//if(features.get(skill).getInerComands() != null)
-		//	{
-		//		for(InerComand comand: features.get(skill).getInerComands())
-		//		ScriptReader.execute(character, comand);
-		//	}
-		}
-	}
-
-	static void createTrait(CharacterDnd character, String trait) 
-	{
-		if(!character.getWorkmanship().getMyFeatures().contains(new Trait(trait)))
-		{
-			character.getWorkmanship().getMyFeatures().add(new Trait(trait));
-		}
-	}
-
-	static void createPossession(CharacterDnd character, String possession) 
-	{
-		if(!character.getWorkmanship().getMyPossessions().contains(new Possession(possession)))
-		{
-			character.getWorkmanship().getMyPossessions().add(new Possession(possession));
-		}
-	}
-
-	static void createSpell(CharacterDnd character, String spell) 
-	{
-		if(!character.getWorkmanship().getMySpells().contains(new Spell(spell)))
-		{
-			character.getWorkmanship().getMySpells().add(new Spell(spell));
-		}
-	}
-
 }

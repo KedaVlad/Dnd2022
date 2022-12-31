@@ -6,6 +6,7 @@ import java.util.List;
 import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.Names;
+import com.dnd.botTable.actions.CloudAction;
 import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
@@ -16,6 +17,7 @@ import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
 import com.dnd.dndTable.factory.inerComands.AddComand;
+import com.dnd.dndTable.factory.inerComands.CloudComand;
 import com.dnd.dndTable.factory.inerComands.InerComand;
 import com.dnd.dndTable.factory.inerComands.ProfComand;
 import com.dnd.dndTable.factory.inerComands.UpComand;
@@ -37,6 +39,17 @@ abstract class ScriptReader implements DndKeyWallet, Names
 		{
 			up(character,(UpComand) comand);
 		}
+		else if(comand instanceof CloudComand)
+		{
+			cloud(character,(CloudComand) comand);
+		}
+	}
+
+
+	private static void cloud(CharacterDnd character, CloudComand comand) 
+	{
+		character.getCloud().add(CloudAction.create(comand.getName(), comand.getText()));
+		
 	}
 
 
@@ -58,7 +71,7 @@ abstract class ScriptReader implements DndKeyWallet, Names
 		{
 			if(object instanceof Items)
 			{
-
+				character.getBody().getMyBags().get(0).add((Items) object);
 			}
 			else if(object instanceof Feature)
 			{

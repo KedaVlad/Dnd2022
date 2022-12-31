@@ -19,7 +19,7 @@ public class PreRoll extends HeroAction
 		PreRoll answer = new PreRoll();
 		answer.action = action;
 		answer.getAction().getBase().add(0, new Dice("D20", 0, Roll.D20));
-		answer.setName(action.getName());
+		answer.setName("PRE" + action.getName());
 		answer.key = action.getKey();
 		answer.mainAct = true;
 		answer.text = text;

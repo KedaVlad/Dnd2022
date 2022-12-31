@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Log;
 import com.dnd.Names.Stat;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.dndAction.AttackAction;
@@ -37,8 +38,9 @@ public class AttackMachine implements Serializable, DndKeyWallet
 	
 	public HeroAction startAction(Weapon weapon)
 	{
+		Log.add("startAction in attack machine");
 		List<AttackModification> attacks = buildAttacks(weapon);
-		Action[][] actions = new Action[attacks.size()][0];
+		Action[][] actions = new Action[attacks.size()][1];
 		for(int i = 0; i < attacks.size(); i++)
 		{
 			AttackModification target = attacks.get(i);
@@ -49,6 +51,7 @@ public class AttackMachine implements Serializable, DndKeyWallet
 	
 	HeroAction postAttack(PreRoll attack)
 	{
+		Log.add("POSTATTACK IN ATTACK MACHINE");
 		if(attack.isCriticalMiss())
 		{
 			String text = attack.getText() + "\n\nNATURAL 1!!! GOODLUCK NEXT TIME";
@@ -60,29 +63,31 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		}
 		else
 		{
+			
 			return makeHit(attack);
 		}
 	}
 	
 	private HeroAction makeHit(PreRoll attack) 
 	{
+		Log.add("MAKE HIT IN ATTACK MACHINE");
 		AttackAction action = (AttackAction) attack.getAction();
 		List<AttackModification> attacks = getAttacks(action.getAttack(), afterAttak);
-		Action[][] nextSteps = new Action[attacks.size()][1];
+		Action[][] nextSteps = new Action[attacks.size()+1][1];
 		for(int i = 0; i < attacks.size(); i++)
 		{
 			AttackModification target = attacks.get(i);
 			nextSteps[i][0] = RollAction.create(target.getName(), target.getDamage(), key, null, checkStat(target), null);
 		}
 		nextSteps[nextSteps.length - 1][0] = HeroAction.create("MISS", key, "GOODLUCK NEXT TIME", null);
-		return HeroAction.create(attack.getName(), key, attack.getText(), nextSteps);
+		return HeroAction.create("PreHit", key, attack.getText() + "\nDid you hit?", nextSteps);
 	}
 
 	private HeroAction makeCrit(PreRoll attack) 
 	{
 		AttackAction action = (AttackAction) attack.getAction();
 		List<AttackModification> attacks = getAttacks(crit(action.getAttack()), afterAttak);
-		Action[][] nextSteps = new Action[attacks.size()][1];
+		Action[][] nextSteps = new Action[attacks.size()+1][1];
 		for(int i = 0; i < attacks.size(); i++)
 		{
 			AttackModification target = attacks.get(i);
@@ -143,7 +148,7 @@ public class AttackMachine implements Serializable, DndKeyWallet
 	{
 		List<AttackModification> answer = new ArrayList<>();
 		AttackModification base = weapon.getFirstType();
-		base.getAttack().get(0).setBuff(weapon.getAttack());
+		//base.getAttack().get(0).setBuff(weapon.getAttack());
 		base.getDamage().get(0).setBuff(weapon.getDamage());
 		base = permanentBuff(base);
 		answer.addAll(getAttacks(base, preAttacks));

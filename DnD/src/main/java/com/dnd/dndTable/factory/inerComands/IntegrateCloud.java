@@ -29,11 +29,11 @@ public class IntegrateCloud extends CloudComand {
 		
 		if(soft)
 		{
-			answer.pool = new SoftPool<InerComand>().pool(pool).times(times);
+		//	answer.pool = new SoftPool<InerComand>().pool(pool).times(times);
 		}
 		else
 		{
-			answer.pool = new TimePool<InerComand>().pool(pool).times(times);
+		//	answer.pool = new TimePool<InerComand>().pool(pool).times(times);
 		}
 		answer.text = text;
 		return answer;

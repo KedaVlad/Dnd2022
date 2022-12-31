@@ -105,12 +105,31 @@ public class Body implements ObjectDnd, Serializable
 		return HeroAction.create(name, PREPEARED, text, null);
 	}
 
+	public Action getPrepearedMenu(RegistrateAction action) 
+	{
+		Items item = (Items) action.getTarget();
+		if(item instanceof Weapon)
+		{
+			return ChangeAction.create(action, "Return to bag?" , new String[][] {{"RETURN", "ATTACK"}});
+		}
+		return ChangeAction.create(action, "Return to bag?" , new String[][] {{"RETURN"}});
+	}
+	
 	public Action changePrepeared(ChangeAction action) 
 	{
+		String answer = action.getAnswer();
 		Items item = (Items)action.getTarget();
+		if(answer.contains("RETURN"))
+		{
 		prepearedWeapons.remove(item);
 		myBags.get(0).add(item);
 		return action.beckKey("Menu").beckCall(100000002+"BAG");
+		}
+		else if(answer.contains("ATTACK"))
+		{
+			return RegistrateAction.create("ATTACK", (Weapon)item).key(ATTACK_MACHINE);
+		}
+		return null;
 	}
 
 	public Action getBagMeny(RegistrateAction action)
@@ -136,13 +155,7 @@ public class Body implements ObjectDnd, Serializable
 					RegistrateAction.create("WALLET", bag.getWallet())};
 			for(int i = 1; i < buttons.length; i++)
 			{
-				Log.add(insideBag.get(i-1).getName() + "+=+_-==)+-");
 				buttons[i] = new Action[] {RegistrateAction.create(insideBag.get(i-1).getName(),insideBag.get(i-1))};
-			}
-
-			for(Action[] acttt: buttons)
-			{
-				Log.add(acttt[0]);
 			}
 
 			return HeroAction.create(name, key(), text, buttons);
@@ -179,14 +192,10 @@ public class Body implements ObjectDnd, Serializable
 
 	public Action changeWallet(ChangeAction action)
 	{
-		Log.add("IN CHANGE WALLET");
 		Wallet wallet = (Wallet) action.getTarget();
 		if(action instanceof ComplexChenge)
 		{
-			Log.add("IN complex CHANGE WALLET");
 			ComplexChenge target = (ComplexChenge) action;
-			Log.add(target);
-			Log.add(target.getPoolAnswer().size());
 			if(target.getPoolAnswer().size() == 2)
 			{
 				return target.addQuestion("How much?(Write)", null).setMediator();
@@ -196,24 +205,17 @@ public class Body implements ObjectDnd, Serializable
 				int value = 0;
 				Pattern pat = Pattern.compile("[-]?[0-9]+(.[0-9]+)?");
 				Matcher matcher = pat.matcher(target.getPoolAnswer().get(2));
-				Log.add("Place 1");
 				while (matcher.find()) 
 				{
 					value = ((Integer) Integer.parseInt(matcher.group()));
 				}
-				Log.add(value);
-				Log.add(value);
-				Log.add(value);
-				Log.add(target.getPoolAnswer().get(1));
 				if(target.getPoolAnswer().get(1).contains("+"))
 				{
-					Log.add("Place +");
 					wallet.addCoin(target.getPoolAnswer().get(0), value);
 					return action.beckKey("Menu").beckCall(100000002+"BAG");
 				}
 				else if(target.getPoolAnswer().get(1).contains("-"))
 				{
-					Log.add("Place -");
 					if(wallet.lostCoin(target.getPoolAnswer().get(0), value))
 					{
 						return action.beckKey("Menu").beckCall(100000002+"BAG");
@@ -224,7 +226,6 @@ public class Body implements ObjectDnd, Serializable
 					}
 				}
 			}
-			Log.add("ERROR IN CHANGE WALLET COMPLEX");
 		}
 		else
 		{
@@ -235,8 +236,6 @@ public class Body implements ObjectDnd, Serializable
 
 	public Action change(ChangeAction action)
 	{
-		Log.add("IN CHANGE BODY UUUUUUUUUUUUUUUU");
-		Log.add(action);
 		ObjectDnd target = action.getTarget();
 		String answer = action.getAnswer();
 
@@ -250,7 +249,6 @@ public class Body implements ObjectDnd, Serializable
 			wear((Armor)target);
 			prepearedWeapons.add((Armor) target);
 			myBags.get(0).getInsideBag().remove((Items)target);
-			Log.add(action);
 			return action.beckKey("Menu").beckCall(100000002+"BAG");
 		}
 		else if(answer.equals("PREPEAR"))
@@ -261,10 +259,8 @@ public class Body implements ObjectDnd, Serializable
 		}
 		else if(answer.equals("TOP UP"))
 		{
-			Log.add("IN CHANGE BODY UAAAAA");
 			if(action instanceof ComplexChenge)
 			{
-				Log.add("IN CDDDDDA");
 				ComplexChenge targetAction = (ComplexChenge) action;
 				Ammunition ammunition = (Ammunition) target;
 				String valueInString = targetAction.getPoolAnswer().get(1);
@@ -276,7 +272,6 @@ public class Body implements ObjectDnd, Serializable
 					value = ((Integer) Integer.parseInt(matcher.group()));
 				}
 				ammunition.addValue(value);
-				Log.add(action);
 				return action.beckKey("Menu").beckCall(100000002+"BAG");
 			}
 			else
@@ -285,7 +280,6 @@ public class Body implements ObjectDnd, Serializable
 			}
 
 		}
-		Log.add("IN CHANGE BODY ERROORRORORORORORO");
 		return null;
 	}
 
@@ -318,12 +312,6 @@ public class Body implements ObjectDnd, Serializable
 		Weapon weapon = (Weapon) action.getTarget();
 		return ChangeAction.create(action, weapon.toString() , new String[][] {{"PREPEAR", "THROW OUT"}});
 	}
-
-	public Action getPrepearedMenu(RegistrateAction action) 
-	{
-		return ChangeAction.create(action, "Return to bag?" , new String[][] {{"RETURN"}});
-	}
-
 
 	public Body(List<MainStat> stats)
 	{

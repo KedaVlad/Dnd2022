@@ -10,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonSubTypes({
 	@JsonSubTypes.Type(value = Armor.class, name = "ARMOR"),
 	@JsonSubTypes.Type(value = Pack.class, name = "PACK"),
+	@JsonSubTypes.Type(value = Pack.class, name = "AMMUNITION"),
+	@JsonSubTypes.Type(value = Pack.class, name = "TOOL"),
 	@JsonSubTypes.Type(value = Weapon.class, name = "WEAPON")})
 public class Items implements Serializable,ObjectDnd, Source{
 	

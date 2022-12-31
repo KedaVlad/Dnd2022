@@ -46,14 +46,12 @@ public class ControlPanel implements Serializable {
 		}
 		else
 		{
-			Log.add("ERORR CONTROL PANEL ACT");
 			return null;
 		}
 	}
 
 	public Action readiness(CharacterDnd character)
 	{
-		Log.add("Start redines Check");
 		if(character.getClassDnd() == null)
 		{
 			return ClassFactory.startCreate(character.getName());

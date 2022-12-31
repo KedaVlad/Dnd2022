@@ -91,7 +91,6 @@ public class Rolls implements Serializable, Names, KeyWallet {
 
 	private Dice getProf(Proficiency article)
 	{
-		Log.add(proficiency.getBuff() + "PROFFFFFFFFFFFFFF");
 		Dice answer = new Dice("Proficiency", 0, Roll.NO_ROLL);
 		switch(article)
 		{
@@ -105,7 +104,6 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			answer.setBuff(proficiency.getBuff()/2);
 			break;
 		}
-		Log.add(answer.getBuff() + "PROFFFFFFFFFFFFFF end");
 		return answer;
 	}
 
@@ -443,7 +441,6 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		MainStat stat = (MainStat) action.getTarget();
 		String name = stat.name.toString();
 
-		Log.add(action.getAnswer());
 		switch(action.getAnswer())
 		{
 		case "+1":

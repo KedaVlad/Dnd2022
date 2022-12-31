@@ -83,10 +83,10 @@ public class RaceDnd implements Serializable,  DndKeyWallet{
 						UpComand.create("Intelligence", STAT, 2),
 						UpComand.create("Dexterity", STAT, 1),
 						AddComand.create(
-								Feature.build().name("Natural Illusion").description("Natural Illusisssssson"),
+								Feature.build().name("Natural Illusion").description("Natural Illusion"),
 								Feature.build().name("Communication with small animals").description("Communication with small animals"),
-								Feature.build().name("Dark vision").description("Dark vision"),
-								Feature.build().name("Dwarven cunning").description("Dwarven cunning")
+								Feature.build().name("Dark vision").description("Accustomed to life underground, you have superior vision in dark and dim conditions. You can see in dim light within 60 feet of you as if it were bright light, and in darkness as if it were dim light. You can’t discern color in darkness, only shades of gray."),
+								Feature.build().name("Gnome cunning").description("You have advantage on all Intelligence, Wisdom, and Charisma saving throws against magic.")
 								)
 				};
 

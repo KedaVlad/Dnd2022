@@ -15,6 +15,7 @@ import com.dnd.KeyWallet;
 import com.dnd.Log;
 import com.dnd.botTable.actions.ArrayAction;
 import com.dnd.botTable.actions.BotAction;
+import com.dnd.botTable.actions.CloudAction;
 import com.dnd.botTable.actions.RollsAction;
 import com.dnd.botTable.actions.dndAction.DndAction;
 import com.dnd.botTable.actions.dndAction.HeroAction;
@@ -36,14 +37,20 @@ public class GameTable implements KeyWallet, Serializable
 	private CharacterDnd actualGameCharacter;
 	private ControlPanel controlPanel = new ControlPanel();
 	private ActMachine script = new ActMachine();
+	List<CloudAction> clouds;
 
+	private void relocateClouds()
+	{
+		clouds = actualGameCharacter.getCloud();
+	}
+	
 	public Action makeAction(Action action)
 	{ 
-		Log.add(action);
 		Log.add("START MAKE ACTION IN GAME TABLE");
+		Action answer = null; 
 		if(action instanceof DndAction)
 		{
-			return getActualGameCharacter().act(action);
+			answer = getActualGameCharacter().act(action);
 		}
 		else if(action instanceof FinalAction)
 		{
@@ -61,10 +68,11 @@ public class GameTable implements KeyWallet, Serializable
 		}
 		else if(action instanceof BotAction)
 		{
-			return execute((BotAction) action);
+			return  execute((BotAction) action);
 		}
-		Log.add("ERROR MAKE ACTION IN GAME TABLE");
-		return null;
+		relocateClouds();
+		save();
+		return answer;
 	}
 
 	private Action execute(BotAction action)
@@ -97,7 +105,7 @@ public class GameTable implements KeyWallet, Serializable
 
 	private Action fightMenu() {
 		// TODO Auto-generated method stub
-		return null;
+		return BotAction.create("fightMenu", NO_ANSWER, true, false, "SORY BRO, I cant give you what u want ;(", null);
 	}
 
 	private Action createOrDownload(BotAction action)
@@ -127,6 +135,7 @@ public class GameTable implements KeyWallet, Serializable
 		{
 			return controlPanel.readiness(getActualGameCharacter());
 		}
+		relocateClouds();
 		return menu();
 	}
 
@@ -189,7 +198,6 @@ public class GameTable implements KeyWallet, Serializable
 
 	private Action inMenu(BotAction action) 
 	{
-		Log.add("IN MENU START " + action);
 		if(action.getAnswer().equals("SPELLS"))
 		{
 			return actualGameCharacter.act(StartTreeAction.create(SPELL));
@@ -226,7 +234,6 @@ public class GameTable implements KeyWallet, Serializable
 		{
 			return fightMenu();
 		}
-		Log.add("IN MENU FALSE");
 		return null;
 
 	}
@@ -270,6 +277,7 @@ public class GameTable implements KeyWallet, Serializable
 			getActualGameCharacter().getHp().grow(Dice.stableStartHp(getActualGameCharacter()));
 			name = "finishCreatingHero";
 			text = "Congratulations, you are ready for adventure.";
+			relocateClouds();
 			return BotAction.create(name, toMenu, true, false, text , new String[][]{{"Let's go"}});
 		}
 		else if(action.getAnswer().contains("Random"))
@@ -277,6 +285,7 @@ public class GameTable implements KeyWallet, Serializable
 			getActualGameCharacter().getHp().grow(Dice.randomStartHp(getActualGameCharacter()));
 			name = "finishCreatingHero";
 			text = "Congratulations, you are ready for adventure.";
+			relocateClouds();
 			return BotAction.create(name, toMenu, true, false, text, new String[][]{{"Let's go"}});
 		}
 		else
@@ -295,6 +304,7 @@ public class GameTable implements KeyWallet, Serializable
 				getActualGameCharacter().getHp().grow(Dice.stableStartHp(getActualGameCharacter()));
 				name = "finishCreatingHero";
 				text = "Nice try... I see U very smart, but you will get stable " + hp + " HP. You are ready for adventure.";
+				relocateClouds();
 				return BotAction.create(name, toMenu, true, false ,text , new String[][]{{"Let's go"}});
 
 			}
@@ -303,6 +313,7 @@ public class GameTable implements KeyWallet, Serializable
 				getActualGameCharacter().getHp().grow(hp);
 				name = "finishCreatingHero";
 				text = "Congratulations, you are ready for adventure.";
+				relocateClouds();
 				return BotAction.create(name, toMenu, true, false ,text , new String[][]{{"Let's go"}});
 
 			}
@@ -360,6 +371,7 @@ public class GameTable implements KeyWallet, Serializable
 	static GameTable create(Message message) 
 	{
 		GameTable gameTable = new GameTable();
+		gameTable.clouds = new ArrayList<>();
 		gameTable.setChatId(message.getChatId());
 		gameTable.getScript().up(BotAction.create(message.getChatId()+"", message.getChatId() , true, false, null, null));	
 		return gameTable;

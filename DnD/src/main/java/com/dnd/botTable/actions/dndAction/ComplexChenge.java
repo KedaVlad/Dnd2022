@@ -44,7 +44,6 @@ public class ComplexChenge extends ChangeAction
 		answer.key = this.key;
 		answer.answer = this.answer;
 		answer.mainAct = true;
-		Log.add(this.target + "LOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOK");
 		answer.target = this.target;
 		answer.poolAnswer = new ArrayList<>();
 		answer.poolAnswer.addAll(this.getPoolAnswer());

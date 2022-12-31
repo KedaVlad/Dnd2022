@@ -26,7 +26,7 @@ public class AttackAction extends RollAction
 		answer.setDepends(depends);
 		answer.setProficiency(proficiency);
 		answer.setAttack(attack);
-		answer.getBase().addAll(attack.getAttack());
+		//answer.getBase().addAll(attack.getAttack());
 				
 		return answer;
 	}

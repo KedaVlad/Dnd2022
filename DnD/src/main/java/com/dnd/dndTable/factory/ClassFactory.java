@@ -101,7 +101,6 @@ abstract class ClassFactory implements Source
 			character.setClassDnd(Json.fromFileJson(classSource + className + "\\" + archetype + ".json", ClassDnd.class));
 			character.addMemoirs(getObgectInfo(className, archetype));
 			character.getClassDnd().setLvl(lvl);
-			Log.add(character.getClassDnd() + "CLAZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZz");
 			for(int i = 0; i < lvl; i++)
 			{
 				for(InerComand comand: character.getClassDnd().getGrowMap()[i])

@@ -64,7 +64,6 @@ public class ItemFactory
 		{
 			return elseCreator(action);
 		}
-		Log.add("ERROR ITEM FACTORY EXECUTE");
 		return null;
 	}
 	
@@ -158,7 +157,6 @@ public class ItemFactory
 		{
 			if(type.toString().equals(name)) return type;
 		}
-		Log.add("ERROR TARGET WEAPON IN ITEM FACTORY");
 		return null;
 	}
 	
@@ -210,7 +208,6 @@ public class ItemFactory
 		{
 			if(type.toString().equals(name)) return type;
 		}
-		Log.add("ERROR TARGET WEAPON IN ITEM FACTORY");
 		return null;
 	}
 	
@@ -262,7 +259,6 @@ public class ItemFactory
 		{
 			if(type.toString().equals(name)) return type;
 		}
-		Log.add("ERROR TARGET WEAPON IN ITEM FACTORY");
 		return null;
 	}
 	
@@ -314,7 +310,6 @@ public class ItemFactory
 		{
 			if(type.toString().equals(name)) return type;
 		}
-		Log.add("ERROR TARGET WEAPON IN ITEM FACTORY");
 		return null;
 	}
 	
@@ -366,7 +361,6 @@ public class ItemFactory
 		{
 			if(type.toString().equals(name)) return type;
 		}
-		Log.add("ERROR TARGET WEAPON IN ITEM FACTORY");
 		return null;
 	}
 	

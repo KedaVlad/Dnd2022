@@ -1,5 +1,6 @@
 package com.dnd.botTable.actions.dndAction;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.botTable.Action;
@@ -21,7 +22,7 @@ public class SimpleRollAction extends HeroAction
 		answer.base = base;
 		return answer;
 	}
-	private List<Dice> base;
+	private List<Dice> base = new ArrayList<>();
 
 	public List<Dice> getBase() 
 	{

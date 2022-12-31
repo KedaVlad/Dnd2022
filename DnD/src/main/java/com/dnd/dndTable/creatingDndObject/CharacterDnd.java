@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.dnd.Log;
 import com.dnd.botTable.Action;
+import com.dnd.botTable.actions.CloudAction;
 import com.dnd.botTable.actions.dndAction.AttackAction;
 import com.dnd.botTable.actions.dndAction.ChangeAction;
 import com.dnd.botTable.actions.dndAction.HeroAction;
@@ -42,7 +43,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	private Rolls rolls;
 	private AttackMachine attackMachine;
 	private Workmanship myWorkmanship;
-	private СhoiceCloud cloud;
+	private List<CloudAction> cloud;
 	private MagicSoul magicSoul;
 	private Body myBody;
 	private List<String> permanentBuffs;
@@ -52,9 +53,10 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	private CharacterDnd(String name) 
 	{
 		this.name = name;
+		attackMachine = new AttackMachine();
 		myWorkmanship = new Workmanship();
 		myMemoirs = new ArrayList<>();
-		cloud = new СhoiceCloud();
+		cloud = new ArrayList<>();
 		rolls = new Rolls();
 		myBody = new Body(rolls.getStats());
 		hp = new HP();
@@ -64,7 +66,11 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	
 	public Action act(Action action)
 	{
-		Log.add(action);
+		Log.add("-----------------------------------");
+		Log.add(action instanceof RollAction);
+		Log.add(action instanceof AttackAction);
+		Log.add("-----------------------------------");
+		
 		if(action instanceof StartTreeAction)
 		{
 			return startTreeAction((StartTreeAction) action);
@@ -73,8 +79,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		{
 			Log.add("FIND PREROLL");
 			PreRoll roll = (PreRoll) action;
-			if(roll.getKey() == AttackMachine.key
-					&& roll.getAction() instanceof AttackAction)
+			if(roll.getAction() instanceof AttackAction)
 			{
 				return attackMachine.postAttack(postRoll(roll));
 			}
@@ -85,6 +90,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		}
 		else if(action instanceof RollAction)
 		{
+			
 			if(action instanceof AttackAction)
 			{
 				return PreRoll.create(action.getName() + "PreRoll", (AttackAction) action);
@@ -131,7 +137,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 			{
 				return rest();
 			}
-			Log.add("TREEACTION ERROR");
+			Log.add("TREE ACTION ERROR");
 			return null;	
 		}
 	}
@@ -146,7 +152,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		else
 		{
 			ObjectDnd object = action.getTarget();
-			if(isFighting())
+			if(action.getKey() == ATTACK_MACHINE)
 			{
 				if(object instanceof Weapon)
 				{
@@ -197,8 +203,6 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 
 	private Action changeAction(ChangeAction action)
 	{
-		Log.add("START CHANGE ACTION IN CHARACTER");
-		Log.add(action.getKey());
 		long key = action.getKey();
 		if(key == STAT)
 		{
@@ -210,7 +214,13 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		}
 		else if(key == PREPEARED)
 		{
-			return myBody.changePrepeared(action);
+			Action answer = myBody.changePrepeared(action);
+			if(answer.getKey() == ATTACK_MACHINE)
+			{
+				return registAction((RegistrateAction)answer);
+			}
+			return answer;
+		
 		}
 		else if(key == ITEM)
 		{
@@ -236,9 +246,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 
 	private Action rest(Time time) 
 	{
-		Log.add(time);
 		refresh(time);
-		Log.add(time);
 		String name = "EndRest";
 		if(time == Time.SHORT)
 		{
@@ -252,7 +260,6 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 			String text = "You are fully rested and recovered!";
 			return HeroAction.create(name, NO_ANSWER, text, null);
 		}
-		Log.add("ERROR REST");
 		return null;
 	}
 
@@ -272,9 +279,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		}
 
 		Formula formula = rolls.execute(roll.getAction());
-		Log.add(formula);
 		String status = roll.getStatus();
-		Log.add(status + " ----- status");
 		if(status.equals("ADVENTURE"))
 		{
 			text = formula.execute(true);
@@ -428,10 +433,6 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		return myWorkmanship;
 	}
 
-	public СhoiceCloud getCloud() 
-	{
-		return cloud;
-	}
 
 	public static CharacterDnd create(String name)
 	{
@@ -512,6 +513,10 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		}
 
 		return HeroAction.create(name, NO_ANSWER, text, null);
+	}
+
+	public List<CloudAction> getCloud() {
+		return cloud;
 	}
 
 }
