@@ -5,7 +5,7 @@ import java.util.List;
 
 import com.dnd.Names.Stat;
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.dndAction.HeroAction;
+import com.dnd.botTable.actions.WrappAction;
 import com.dnd.botTable.actions.dndAction.RegistrateAction;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.Refreshable;
@@ -56,7 +56,7 @@ public class MagicSoul implements Refreshable, ObjectDnd{
 
 	public Action getSpellMenu() 
 	{
-		String name = "SpellMenu";
+		String name = "SPELLS";
 		String text = "This is your spells. Choose some for more infotmation";
 		Action[][] buttons = new Action[pool.getActive().size()][0];
 		for(int i = 0; i < pool.getActive().size(); i++)
@@ -64,14 +64,14 @@ public class MagicSoul implements Refreshable, ObjectDnd{
 			Spell spell = pool.getActive().get(i);
 			buttons[i][0] = RegistrateAction.create(spell.getName(),spell);
 		}
-		return HeroAction.create(name, key(), text, buttons);
+		return WrappAction.create(name, key(), text, buttons);
 	}
 	
 	public Action spellCase(Feature object) 
 	{
 		String name = object.getName();
 		String text = name + "\n" + object.getDescription();
-		return HeroAction.create(name, key(), text, null);
+		return WrappAction.create(name, key(), text, null);
 	}
 
 	@Override

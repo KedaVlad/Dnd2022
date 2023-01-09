@@ -15,22 +15,48 @@ public abstract class Action implements Serializable {
 	protected String text;
 	protected boolean mainAct;
 	protected boolean mediator;
+	boolean replyBreaker;
+	boolean replyButtons;
 	private String[] backTo = new String[2];
 	private List<Integer> actCircle = new ArrayList<>();
+
+	public Action replyButtons()
+	{
+		this.replyBreaker = false;
+		this.replyButtons = true;
+		return this;
+	}
 	
-	public Action beckKey(String string)
+	public Action returnTo(String string)
 	{
 		this.backTo[0] = string;
 		return this;
 	}
-	
-	public Action beckCall(String string)
+
+	public Action returnTo(String nameAction, String callBack)
 	{
-		if(this.backTo[0] != null)
-		{
-			this.backTo[1] = string;
-		}
+		this.backTo[0] = nameAction;
+		this.backTo[1] = callBack;
 		return this;
+	}
+
+	public Action replyEnd()
+	{
+		this.replyBreaker = true;
+		this.replyButtons = false;
+		return this;
+	}
+
+	public boolean replyContain(String string)
+	{
+		for(String[] line: buildButtons())
+		{
+			for(String target: line)
+			{
+				if(target.equals(string)) return true;
+			}
+		}
+		return false;
 	}
 	
 	boolean hasBack()
@@ -43,7 +69,6 @@ public abstract class Action implements Serializable {
 		return backTo;
 	}
 
-	
 	protected abstract String[][] buildButtons();
 	public abstract Action continueAction(String key);
 	protected abstract boolean hasButtons();
@@ -52,10 +77,13 @@ public abstract class Action implements Serializable {
 	{
 		return key;
 	}
-	
+
 	List<Integer> end()
 	{
-		return actCircle;
+		List<Integer> end = new ArrayList<>();
+		end.addAll(actCircle);
+		actCircle.clear();
+		return end;
 	}
 
 	void toCircle(Integer act) 
@@ -65,12 +93,27 @@ public abstract class Action implements Serializable {
 
 	public String toString()
 	{
-		return "  |" + name + "|  ";
-
+		String trash = "";
+		for(Integer i:  actCircle)
+		{
+			trash += i + ", ";
+		}
+		return "  |" + name + "["+ trash + "] " + "|  ";
 	}
+	
 	public String getName() 
 	{
 		return name;
+	}
+	
+	public void setMainAct(boolean mainAct)
+	{
+		this.mainAct = mainAct;
+	}
+	
+	public void setText(String text)
+	{
+		this.text = text;
 	}
 
 	public void setName(String name) 
@@ -84,4 +127,15 @@ public abstract class Action implements Serializable {
 		return this;
 	}
 
+	public boolean isReplyBreaker() 
+{
+		return replyBreaker;
+	}
+
+	public boolean isReplyButtons() 
+{
+		return replyButtons;
+	}
+
+	
 }

@@ -5,9 +5,10 @@ import com.dnd.botTable.Action;
 public class StartTreeAction extends DndAction {
 
 
-	public static StartTreeAction create(long key)
+	public static StartTreeAction create(String name, long key)
 	{
 		StartTreeAction action = new StartTreeAction();
+		action.name = name;
 		action.key = key;
 		return action;
 		

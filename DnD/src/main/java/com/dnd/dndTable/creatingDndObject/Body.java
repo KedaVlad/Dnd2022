@@ -11,10 +11,12 @@ import java.util.regex.Pattern;
 import com.dnd.Log;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.ArrayAction;
+import com.dnd.botTable.actions.BotAction;
+import com.dnd.botTable.actions.WrappAction;
 import com.dnd.botTable.actions.dndAction.ChangeAction;
 import com.dnd.botTable.actions.dndAction.ComplexChenge;
-import com.dnd.botTable.actions.dndAction.HeroAction;
 import com.dnd.botTable.actions.dndAction.RegistrateAction;
+import com.dnd.botTable.actions.dndAction.StartTreeAction;
 import com.dnd.botTable.actions.factoryAction.FactoryAction;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.Rolls.MainStat;
@@ -43,69 +45,75 @@ public class Body implements ObjectDnd, Serializable
 	private List<MainStat> stats;
 
 
-
-	public Action getBodyMeny() 
+	Action stuff() 
 	{
-		String name = "BodyArray";
-		String status = "Active statuses";
-		for(String string: this.status)
-		{
-			status += string + "\n";
-		}
+		String instruction = "Some instruction for STUFF";
 
-		if(myBags.size() > 1)
-		{
-			String text = "Choose bag";
-			Action[][] buttons = new Action[myBags.size()][0];
-			for(int i = 0; i < myBags.size(); i++)
+		return WrappAction.create("BodyArray", BODY, instruction, new Action[][]
+				{{
+					StartTreeAction.create("PREPEARED", PREPEARED),
+					StartTreeAction.create("BAG", BAG),
+					StartTreeAction.create("WALLET", WALLET),
+				},
 			{
-				buttons[i][0] = RegistrateAction.create(myBags.get(i).getName(),myBags.get(i));
-			}
-			return ArrayAction.create("BodyArray", NO_ANSWER, new Action[]
-					{
-							getPrepeared(),
-							HeroAction.create(name, NO_ANSWER, status, null),
-							HeroAction.create(name, key(), text, buttons)
-					});
-		}
-		else
-		{
-			return ArrayAction.create("BodyArray", NO_ANSWER, new Action[]
-					{
-							getPrepeared(),
-							HeroAction.create(name, NO_ANSWER, status, null),
-							getBagMeny(RegistrateAction.create("BAG", myBags.get(0)))
-					});
-		}
+					BotAction.create("RETURN TO MENU", NO_ANSWER, true, false, null, null)
+			}}).replyButtons();
 	}
 
-
-	public Action walletMenu(RegistrateAction action)
-	{
-		Wallet wallet = (Wallet) action.getTarget();
-		return ChangeAction.create(action, wallet.toMenu() + "\n Choose currency..." , 
-				new String[][] {{"CP", "SP", "GP", "PP"}});
-	}
-
-	private Action getPrepeared()
+	Action getPrepearedMenu()
 	{
 		String name = "Prepeared";
 		String text;
 		if(prepearedWeapons.size() > 0)
 		{
 			Action[][] buttons = new Action[prepearedWeapons.size()][1];
-			text = "PREPEARED";
+			text = "Items in quick access (dressed armor, sword in scabbard, potion on belt, and so on...).";
 			for(int i = 0; i < prepearedWeapons.size(); i++)
 			{
 				buttons[i][0] = RegistrateAction.create(prepearedWeapons.get(i).getName(),prepearedWeapons.get(i)).key(PREPEARED);
 			}
-			return HeroAction.create(name, PREPEARED, text, buttons);
+			return WrappAction.create(name, PREPEARED, text, buttons);
 		}
-		text = "NO PREPEARED WEAPONS or ARMORS\nFor prepearing you shood choose some weapon in your bag and choose \"PREPEAR\"";
-		return HeroAction.create(name, PREPEARED, text, null);
+		text = "No prepeared or weared items yeat...\nFor prepearing you shood choose some item in your bag and choose \"PREPEAR\"";
+		return WrappAction.create(name, PREPEARED, text, null);
 	}
 
-	public Action getPrepearedMenu(RegistrateAction action) 
+	Action getBagMeny()
+	{
+		Bag bag = myBags.get(0);
+		String name = "BagMeny";
+		if(bag.getInsideBag().size() == 0)
+		{
+			String text = bag.getWallet().toString() + "\nYor bag is empty";
+			Action[][] buttons = new Action[1][2];
+			buttons[0] = new Action[] {
+					FactoryAction.create("ADD ITEM", 623478675, false, null, null)};
+			return WrappAction.create(name, key(), text, buttons);
+		}
+		else
+		{	
+			String text = bag.getWallet().toString() + "\nChoose item";
+			List<Items> insideBag = bag.getInsideBag();
+			Action[][] buttons = new Action[insideBag.size()+1][];
+			buttons[0] = new Action[] {
+					FactoryAction.create("ADD ITEM", 623478675, false, null, null)};
+			for(int i = 1; i < buttons.length; i++)
+			{
+				buttons[i] = new Action[] {RegistrateAction.create(insideBag.get(i-1).getName(),insideBag.get(i-1))};
+			}
+
+			return WrappAction.create(name, key(), text, buttons);
+		}
+	}
+
+	Action getWalletMenu()
+	{
+		return ChangeAction.create(RegistrateAction.create("Wallet", myBags.get(0).getWallet()), myBags.get(0).getWallet().toMenu() + "\n Choose currency..." , 
+				new String[][] {{"CP", "SP", "GP", "PP"}});
+	}
+
+
+	Action getPrepearedMenu(RegistrateAction action) 
 	{
 		Items item = (Items) action.getTarget();
 		if(item instanceof Weapon)
@@ -114,16 +122,16 @@ public class Body implements ObjectDnd, Serializable
 		}
 		return ChangeAction.create(action, "Return to bag?" , new String[][] {{"RETURN"}});
 	}
-	
-	public Action changePrepeared(ChangeAction action) 
+
+	Action changePrepeared(ChangeAction action) 
 	{
 		String answer = action.getAnswer();
 		Items item = (Items)action.getTarget();
 		if(answer.contains("RETURN"))
 		{
-		prepearedWeapons.remove(item);
-		myBags.get(0).add(item);
-		return action.beckKey("Menu").beckCall(100000002+"BAG");
+			prepearedWeapons.remove(item);
+			myBags.get(0).add(item);
+			return action.returnTo("Menu", 100000002+"BAG");
 		}
 		else if(answer.contains("ATTACK"))
 		{
@@ -132,37 +140,7 @@ public class Body implements ObjectDnd, Serializable
 		return null;
 	}
 
-	public Action getBagMeny(RegistrateAction action)
-	{
-		Bag bag = (Bag)action.getTarget();
-		String name = "BagMeny";
-		if(bag.getInsideBag().size() == 0)
-		{
-			String text = bag.getWallet().toString() + "\nYor bag is empty";
-			Action[][] buttons = new Action[1][2];
-			buttons[0] = new Action[] {
-					FactoryAction.create("ADD ITEM", 623478675, false, null, null),
-					RegistrateAction.create("WALLET", bag.getWallet())};
-			return HeroAction.create(name, key(), text, buttons);
-		}
-		else
-		{	
-			String text = bag.getWallet().toString() + "\nChoose item";
-			List<Items> insideBag = bag.getInsideBag();
-			Action[][] buttons = new Action[insideBag.size()+1][];
-			buttons[0] = new Action[] {
-					FactoryAction.create("ADD ITEM", 623478675, false, null, null),
-					RegistrateAction.create("WALLET", bag.getWallet())};
-			for(int i = 1; i < buttons.length; i++)
-			{
-				buttons[i] = new Action[] {RegistrateAction.create(insideBag.get(i-1).getName(),insideBag.get(i-1))};
-			}
-
-			return HeroAction.create(name, key(), text, buttons);
-		}
-	}
-
-	public Action getItemMenu(RegistrateAction action) 
+	Action getItemMenu(RegistrateAction action) 
 	{
 		Items item = (Items) action.getTarget();
 		if(item instanceof Armor)
@@ -186,11 +164,11 @@ public class Body implements ObjectDnd, Serializable
 			String name = item.getName();
 			String text = item.getDescription();
 			if(text == null || text == "") text = name;
-			return HeroAction.create(name, item.key(), text, null);
+			return WrappAction.create(name, item.key(), text, null);
 		}
 	}
 
-	public Action changeWallet(ChangeAction action)
+	Action changeWallet(ChangeAction action)
 	{
 		Wallet wallet = (Wallet) action.getTarget();
 		if(action instanceof ComplexChenge)
@@ -212,17 +190,17 @@ public class Body implements ObjectDnd, Serializable
 				if(target.getPoolAnswer().get(1).contains("+"))
 				{
 					wallet.addCoin(target.getPoolAnswer().get(0), value);
-					return action.beckKey("Menu").beckCall(100000002+"BAG");
+					return action.returnTo("Menu",100000002+"BAG");
 				}
 				else if(target.getPoolAnswer().get(1).contains("-"))
 				{
 					if(wallet.lostCoin(target.getPoolAnswer().get(0), value))
 					{
-						return action.beckKey("Menu").beckCall(100000002+"BAG");
+						return action.returnTo("Menu",100000002+"BAG");
 					}
 					else
 					{
-						return HeroAction.create("NoMoney", NO_ANSWER, "You don`t have enough coins for that ;(", null).beckKey("BodyArray");
+						return WrappAction.create("NoMoney", NO_ANSWER, "You don`t have enough coins for that ;(", null).returnTo("BodyArray");
 					}
 				}
 			}
@@ -234,7 +212,7 @@ public class Body implements ObjectDnd, Serializable
 		return null;
 	}
 
-	public Action change(ChangeAction action)
+	Action change(ChangeAction action)
 	{
 		ObjectDnd target = action.getTarget();
 		String answer = action.getAnswer();
@@ -242,20 +220,20 @@ public class Body implements ObjectDnd, Serializable
 		if(answer.equals("THROW OUT"))
 		{
 			myBags.get(0).getInsideBag().remove((Items)target);
-			return action.beckKey("Menu").beckCall(100000002+"BAG");
+			return action.returnTo("Menu", 100000002+"BAG");
 		}
 		else if(answer.equals("WEAR"))
 		{
 			wear((Armor)target);
 			prepearedWeapons.add((Armor) target);
 			myBags.get(0).getInsideBag().remove((Items)target);
-			return action.beckKey("Menu").beckCall(100000002+"BAG");
+			return action.returnTo("Menu", 100000002+"BAG");
 		}
 		else if(answer.equals("PREPEAR"))
 		{
 			prepearedWeapons.add((Weapon) target);
 			myBags.get(0).getInsideBag().remove(target);
-			return action.beckKey("Menu").beckCall(100000002+"BAG");
+			return action.returnTo("Menu", 100000002+"BAG");
 		}
 		else if(answer.equals("TOP UP"))
 		{
@@ -272,7 +250,7 @@ public class Body implements ObjectDnd, Serializable
 					value = ((Integer) Integer.parseInt(matcher.group()));
 				}
 				ammunition.addValue(value);
-				return action.beckKey("Menu").beckCall(100000002+"BAG");
+				return action.returnTo("Menu", 100000002+"BAG");
 			}
 			else
 			{
@@ -327,11 +305,7 @@ public class Body implements ObjectDnd, Serializable
 		return prepearedWeapons;
 	}
 
-	public void setPrepearedWepons(Weapon weapon) {
 
-
-
-	}
 
 	public List<Bag> getMyBags() {
 		return myBags;
@@ -397,8 +371,5 @@ public class Body implements ObjectDnd, Serializable
 		}
 		return answer;
 	}
-
-
-
 
 }

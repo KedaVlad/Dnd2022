@@ -5,8 +5,7 @@ import java.util.List;
 
 import com.dnd.Names.Stat;
 import com.dnd.botTable.Action;
-import com.dnd.dndTable.creatingDndObject.Rolls.Proficiency;
-import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
+import com.dnd.dndTable.creatingDndObject.workmanship.Possession.Proficiency;
 import com.dnd.dndTable.rolls.Dice;
 
 public class RollAction extends SimpleRollAction
@@ -19,7 +18,6 @@ public class RollAction extends SimpleRollAction
 		answer.key = key;
 		answer.setName(name);
 		answer.mainAct = true;
-		answer.setNextStep(nextStep);
 		answer.setDepends(depends);
 		answer.setProficiency(proficiency);
 		answer.setBase(base); 
@@ -32,7 +30,6 @@ public class RollAction extends SimpleRollAction
 		answer.key = key;
 		answer.setName(name);
 		answer.mainAct = true;
-		answer.setNextStep(nextStep);
 		answer.setDepends(depends);
 		answer.setProficiency(proficiency);
 		answer.setBase(new ArrayList<>()); 

@@ -4,7 +4,7 @@ import com.dnd.botTable.Action;
 import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
-public class PreRoll extends HeroAction
+public class PreRoll extends DndAction
 {
 	private static final long serialVersionUID = 1L;
 

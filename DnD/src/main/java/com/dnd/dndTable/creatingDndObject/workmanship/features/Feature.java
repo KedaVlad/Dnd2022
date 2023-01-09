@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.dndAction.HeroAction;
+import com.dnd.botTable.actions.WrappAction;
 import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
@@ -37,7 +37,7 @@ public class Feature implements Serializable, ActionObject, ObjectDnd
 
 	public Action makeAction()
 	{
-		return HeroAction.create(getName(), 000034234, getDescription(), null);
+		return WrappAction.create(getName(), 000034234, getDescription(), null);
 	}
 
 	public String toString() 

@@ -3,7 +3,6 @@ package com.dnd.botTable.actions;
 import com.dnd.Log;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.dndAction.ChangeAction;
-import com.dnd.botTable.actions.dndAction.HeroAction;
 import com.dnd.botTable.actions.dndAction.PreRoll;
 import com.dnd.botTable.actions.dndAction.RegistrateAction;
 import com.dnd.botTable.actions.factoryAction.FactoryAction;
@@ -37,18 +36,22 @@ public class ArrayAction extends Action
 	@Override
 	public Action continueAction(String key) 
 	{
-		
-		
 		String regex = "(\\d{9})(.+)";
-		String target = key.replaceAll(regex, "$1");
-		String callback = key.replaceAll(regex, "$2");
-
-		for(Action act: this.pool)
+		if(key.matches(regex))
 		{
-			if((act.getKey() + "").equals(target))
+			String target = key.replaceAll(regex, "$1");
+			String callback = key.replaceAll(regex, "$2");
+			for(Action act: this.pool)
 			{
-				return continueAction(act, callback);
+				if((act.getKey() + "").equals(target))
+				{
+					return continueAction(act, callback);
+				}
 			}
+		}
+		else
+		{
+			return continueAction(pool[0], key);
 		}
 		Log.add("BED BED BED ARRAY ACTION BED CONTIN");
 		return null;
@@ -66,9 +69,9 @@ public class ArrayAction extends Action
 			PreRoll action = (PreRoll)act;
 			return action.continueAction(callback);
 		}
-		else if(act instanceof HeroAction)
+		else if(act instanceof WrappAction)
 		{
-			HeroAction action = (HeroAction)act;
+			WrappAction action = (WrappAction)act;
 			return action.continueAction(callback);
 		}
 		else if(act instanceof FinalAction)
@@ -102,6 +105,18 @@ public class ArrayAction extends Action
 		return false;
 	}
 
+	public boolean isReplyButtons() 
+	{
+		return pool[0].isReplyButtons();
+	}
+	
+	public boolean replyContain(String string)
+	{
+		return pool[0].replyContain(string);
+	}
+	
+	
+	
 	public String toString()
 	{
 		String text = "";

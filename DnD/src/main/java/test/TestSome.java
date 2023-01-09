@@ -46,12 +46,7 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 public class TestSome {
 
-	public A a;
-	
-	
-	
-	
-	
+
 	static void chekStatRandomiser()
 	{
 		int i = 0;
@@ -71,48 +66,24 @@ public class TestSome {
 	
 	public static void main(String[] args) throws IOException
 	{
-		A a = new A();
-		a.name = "AAAAAAAAAAAAAAA";
-		System.out.println(a.name);
-		TestSome test = new TestSome();
-		test.a = a;
-		test.a.name = "BBBBBBBBBBBBBBBB";
-		System.out.println(a.name);
-		System.out.println(test.a.name);
-		B b = new B();
-		b.a = test.a;
-		b.a.name = "CCCCCCCCCCCCCCCCCC";
-		System.out.println(a.name);
-		System.out.println(b.a.name);
-		C c = new C();
-		c.t = test;
-		c.t.a.name = "DDDDDDDDDDDDDDDDDDDD";
-		System.out.println(a.name);
-		System.out.println(test.a.name);
-		System.out.println(c.t.a.name);
-		a.name = "EEEEEEEEEEEEEEE";
-		System.out.println(a.name);
-		System.out.println(test.a.name);
-		System.out.println(b.a.name);
-		System.out.println(c.t.a.name);
-		System.out.println(ClassArmor.HEAVY);
-		System.out.println(ClassArmor.HEAVY.toString());
+		String some = "012948375SOME";
+		String second = "asfasfafs";
+		String[] pool = {some, second};
+		
+		for(String key: pool)
+		{
+		String regex = "(\\d{9})(.+)";
+		
+		System.out.println(key);
+		if(key.matches(regex))
+		{
+			System.out.println(key.replaceAll(regex, "$2"));
+		}
+		else
+		{
+			System.out.println(key);
+		}
 	}
 }
-
-class A
-{
-	String name;
 }
 
-class B
-{
-	A a;
-	String second;
-	
-}
-
-class C
-{
-	TestSome t;
-}

@@ -88,8 +88,7 @@ abstract class ScriptReader implements DndKeyWallet, Names
 			else if(object instanceof Possession)
 			{
 				Possession target = (Possession) object;
-				character.getWorkmanship().addPossession(target);
-				execute(character, target.getInerComand());
+				character.getWorkmanship().getPossessions().add(target);
 			}
 		}
 	}

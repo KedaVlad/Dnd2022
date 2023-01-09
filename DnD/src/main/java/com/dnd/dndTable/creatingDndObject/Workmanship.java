@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.dndAction.HeroAction;
+import com.dnd.botTable.actions.BotAction;
+import com.dnd.botTable.actions.WrappAction;
 import com.dnd.botTable.actions.dndAction.RegistrateAction;
 import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.ObjectDnd;
+import com.dnd.dndTable.Refreshable;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
@@ -16,22 +18,57 @@ import com.dnd.dndTable.creatingDndObject.workmanship.features.Mechanics;
 import com.google.common.math.Stats;
 
 
-public class Workmanship implements Serializable, ObjectDnd 
+public class Workmanship implements Serializable, Refreshable, ObjectDnd 
 {
-	
+
 	private static final long serialVersionUID = -6541873819810645125L;
 	public final static long key = 348954892;
+	private MagicSoul magicSoul;
 	private List<Feature> myFeatures; 
 	private List<Spell> mySpells;
-	private List<Possession> myPossessions;
-	
-	HeroAction startAction(ObjectDnd object)
+	private Possessions possessions;
+
+	public Action ability() 
+	{
+		String instruction = "Some instruction for ABILITY interface";
+		Action[][] pool = null;
+		if(magicSoul == null)
+		{
+			pool = new Action[][]{ 
+				{
+					getFeatureMenu().returnTo("Ability"),
+					getPossessionMenu().returnTo("Ability"), 
+				},
+				{
+					BotAction.create("RETURN TO MENU", NO_ANSWER, true, false, null, null)
+				}
+			};
+		}
+		else
+		{
+			pool = new Action[][]{ 
+				{
+					getFeatureMenu().returnTo("Ability"),
+					getPossessionMenu().returnTo("Ability"), 
+					magicSoul.getSpellMenu().returnTo("Ability")
+				},
+				{
+					BotAction.create("RETURN TO MENU", NO_ANSWER, true, false, null, null)
+				}
+			};
+		}
+		return WrappAction.create("Ability", key, instruction, pool).replyButtons();
+	}
+
+
+
+	WrappAction startAction(ObjectDnd object)
 	{
 		if(object instanceof Feature)
 		{
 			if(object instanceof Mechanics)
 			{
-				
+
 			}
 			else
 			{
@@ -40,30 +77,30 @@ public class Workmanship implements Serializable, ObjectDnd
 		}
 		else if(object instanceof Spell)
 		{
-			
+
 		}
-		
+
 		return null;
 	}
-	
-	private HeroAction fetureAction(Feature object) {
-		
-	return null;
-		
+
+	private WrappAction fetureAction(Feature object) {
+
+		return null;
+
 	}
 
-	HeroAction execute(HeroAction action)
+	WrappAction execute(WrappAction action)
 	{
 		return null;
 	}
-		
+
 	public Workmanship()
 	{
 		myFeatures = new ArrayList<>();
 		mySpells = new ArrayList<>();
-		myPossessions = new ArrayList<>();
+		possessions = new Possessions();
 	}
-	
+
 	public List<Feature> getMyFeatures() 
 	{
 		return myFeatures;
@@ -85,7 +122,7 @@ public class Workmanship implements Serializable, ObjectDnd
 			}
 		}
 	}
-	
+
 	public List<Spell> getMySpells() 
 	{
 		return mySpells;
@@ -95,7 +132,7 @@ public class Workmanship implements Serializable, ObjectDnd
 	{
 		mySpells.add(spells);
 	}
-	
+
 	public void deleteSpell(String name)
 	{
 		for(Spell spell: mySpells)
@@ -108,37 +145,21 @@ public class Workmanship implements Serializable, ObjectDnd
 		}
 	}
 
-	public List<Possession> getMyPossessions() 
+	public Possessions getPossessions() 
 	{
-		return myPossessions;
+		return possessions;
 	}
-	
-	public void addPossession(Possession possession) 
-	{
-		myPossessions.add(possession);
-	}
-	
-	public void deletePossession(String name)
-	{
-		for(Possession possession: myPossessions)
-		{
-			if(possession.getName().equals(name)) 
-			{
-				myPossessions.remove(possession);
-				break;
-			}
-		}
-	}
-
 	
 	@Override
 	public long key() {
 		return key;
 	}
 
+
+
 	public Action getFeatureMenu() {
-		
-		String name = "FeatureMenu";
+
+		String name = "FEATURES";
 		String text = "This is your feature. Choose some for more infotmation";
 		Action[][] buttons = new Action[myFeatures.size()][1];
 		for(int i = 0; i < myFeatures.size(); i++)
@@ -146,25 +167,45 @@ public class Workmanship implements Serializable, ObjectDnd
 			Feature feature = myFeatures.get(i);
 			buttons[i][0] = RegistrateAction.create(feature.getName(),feature);
 		}
-		return HeroAction.create(name, key, text, buttons);
+		return WrappAction.create(name, key, text, buttons);
 	}
 
 	public Action featureCase(Feature object) {
-	
+
 		String name = object.getName();
 		String text = name + "\n" + object.getDescription();
-		return HeroAction.create(name, key, text, null);
+		return WrappAction.create(name, key, text, null);
 	}
 
-	public Action getPossessionMenu() {
-		String name = "FeatureMenu";
-		String text = "This is your possessions. \n";
-		
-		for(Possession possession: myPossessions)
-		{
-			text += possession.getName() + "\n";
-		}
-		return HeroAction.create(name, key, text, null);
-	}
 	
+	public Action getPossessionMenu() 
+	{
+		String name = "POSSESSIONS";
+		String text = "This is your possessions. \n";
+
+		for(Possession possession: possessions.getPossessions())
+		{
+			text += possession.toString() + "\n";
+		}
+		return WrappAction.create(name, key, text, null);
+	}
+
+		
+	public MagicSoul getMagicSoul() 
+{
+		return magicSoul;
+	}
+
+	public void setMagicSoul(MagicSoul magicSoul) 
+	{
+		this.magicSoul = magicSoul;
+	}
+
+	@Override
+	public void refresh(Time time) {
+		// TODO Auto-generated method stub
+
+	}
+
+
 }

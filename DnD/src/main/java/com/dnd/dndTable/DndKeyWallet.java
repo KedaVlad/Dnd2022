@@ -28,4 +28,10 @@ public interface DndKeyWallet
 	public final static long ROLL = 320000000;
 	public final static long PREPEARED = 330000000;
 	public final static long WALLET = 340000000;
+	public final static long STUFF = 350000000;
+	public final static long CHARACTERISTIC = 360000000;
+	public final static long ABILITY = 370000000;
+	public final static long DEBUFF = 380000000;
+	public final static long MEMOIRS = 390000000;
+	
 }

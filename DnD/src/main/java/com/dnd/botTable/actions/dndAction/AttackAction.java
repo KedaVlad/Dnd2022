@@ -1,16 +1,9 @@
 package com.dnd.botTable.actions.dndAction;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import com.dnd.Names.Stat;
-import com.dnd.dndTable.creatingDndObject.Rolls.Proficiency;
 import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
-import com.dnd.dndTable.rolls.Dice;
-import com.dnd.dndTable.rolls.Dice.Roll;
+import com.dnd.dndTable.creatingDndObject.workmanship.Possession.Proficiency;
 
 public class AttackAction extends RollAction
 {

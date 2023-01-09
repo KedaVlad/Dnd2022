@@ -78,25 +78,25 @@ public class ControlPanel implements Serializable {
 			gameTable.setActualGameCharacter(CharacterFactory.finish(action));
 			gameTable.getActualGameCharacter().addMemoirs(gameTable.getActualGameCharacter().getName()+"\n");
 			gameTable.save();
-			return ClassFactory.startCreate(action.getLocalData().get(0)).beckKey("START");
+			return ClassFactory.startCreate(action.getLocalData().get(0)).returnTo("START");
 		}
 		else if(key == ClassFactory.key)
 		{
 			ClassFactory.finish(action, gameTable.getActualGameCharacter());
 			gameTable.save();
-			return RaceFactory.startCreate().beckKey("START");
+			return RaceFactory.startCreate().returnTo("START");
 		}
 		else if(key == RaceFactory.key)
 		{
 			RaceFactory.finish(action, gameTable.getActualGameCharacter());
 			gameTable.save();
-			return finish().beckKey("START");
+			return finish().returnTo("START");
 		}
 		else if(key == ItemFactory.key)
 		{
 			ItemFactory.finish((FinalTargetAction)action, gameTable.getActualGameCharacter());
 			gameTable.save();
-			return action.beckKey("Menu").beckCall(100000002+"BAG");
+			return action.returnTo("Menu",100000002+"BAG");
 		}
 		return null;
 	}

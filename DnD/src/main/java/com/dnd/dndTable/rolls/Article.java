@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.dnd.Names.Stat;
 import com.dnd.dndTable.ObjectDnd;
-import com.dnd.dndTable.creatingDndObject.Rolls.Proficiency;
+import com.dnd.dndTable.creatingDndObject.workmanship.Possession.Proficiency;
 
 public class Article implements Serializable, ObjectDnd
 {

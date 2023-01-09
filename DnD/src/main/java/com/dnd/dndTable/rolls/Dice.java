@@ -211,7 +211,7 @@ public class Dice implements Serializable
 
 	public static int stableStartHp(CharacterDnd character)
 	{ 
-		int start = character.getClassDnd().getFirstHp() + character.getRolls().getValue(Stat.CONSTITUTION.toString());
+		int start = character.getClassDnd().getFirstHp() + character.getRolls().getMainStatValue(Stat.CONSTITUTION.toString());
 		
 		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
 		{
@@ -224,7 +224,7 @@ public class Dice implements Serializable
 	public static int randomStartHp(CharacterDnd character)
 	{
 
-		int start = character.getClassDnd().getFirstHp() + character.getRolls().getValue(Stat.CONSTITUTION.toString());
+		int start = character.getClassDnd().getFirstHp() + character.getRolls().getMainStatValue(Stat.CONSTITUTION.toString());
 
 		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
 		{

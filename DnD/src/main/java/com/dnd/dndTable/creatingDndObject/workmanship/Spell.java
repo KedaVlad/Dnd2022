@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.botTable.actions.dndAction.HeroAction;
+import com.dnd.botTable.actions.WrappAction;
 import com.dnd.dndTable.ActionObject;
 
 
@@ -13,7 +13,7 @@ public class Spell implements Serializable, ActionObject
 	private static final long serialVersionUID = -7876613939972469105L;
 	
 	private int lvlSpell;
-	private HeroAction cast;
+	private WrappAction cast;
 	private String name;
 	private String description;
 	private String applicationTime;
@@ -87,11 +87,11 @@ public class Spell implements Serializable, ActionObject
 		
 	}
 
-	public HeroAction getCast() {
+	public WrappAction getCast() {
 		return cast;
 	}
 
-	public void setCast(HeroAction cast) {
+	public void setCast(WrappAction cast) {
 		this.cast = cast;
 	}
 

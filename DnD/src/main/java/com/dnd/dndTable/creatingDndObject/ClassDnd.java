@@ -134,17 +134,17 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 
 		assasin.growMap[0] = new InerComand[] { 
 				AddComand.create(
-				new Possession("Light Armor", ARMOR),
-				new Possession("Simple Weapon", WEAPON),
-				new Possession("Hand Crossbows", WEAPON),
-				new Possession("Long Swords", WEAPON),
-				new Possession("Rapiers", WEAPON),
-				new Possession("Short Swords", WEAPON),
-				new Possession("Short Swords", WEAPON),
-				new Possession("Thieves' Tools", ITEM),
-				new Possession("SR Dexterity", STAT),
-				new Possession("SR Intelligense", STAT),
-				new Possession("SR Intelligense", STAT),
+				new Possession("Light Armor"),
+				new Possession("Simple Weapon"),
+				new Possession("Hand Crossbows"),
+				new Possession("Long Swords"),
+				new Possession("Rapiers"),
+				new Possession("Short Swords"),
+				new Possession("Short Swords"),
+				new Possession("Thieves' Tools"),
+				new Possession("SR Dexterity"),
+				new Possession("SR Intelligense"),
+				new Possession("SR Intelligense"),
 				new Armor(Armors.LEATHER_ARMOR),
 				new Weapon(Weapons.DAGGER),
 				new Tool(Tools.THIEVES)),
@@ -189,13 +189,13 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 				InerFeature.create("Thieves’ Cant", "During your rogue training you learned thieves’ cant, a secret mix of dialect, jargon, and code that allows you to hide messages in seemingly normal conversation. Only another creature that knows thieves’ cant understands such messages. It takes four times longer to convey such a message than it does to speak the same idea plainly.\n"
 						+ "\n"
 						+ "In addition, you understand a set of secret signs and symbols used to convey short, simple messages, such as whether an area is dangerous or the territory of a thieves’ guild, whether loot is nearby, or whether the people in an area are easy marks or will provide a safe house for thieves on the run.", 
-						AddComand.create(new Possession("Thieves Jargon", LANGUAGE))))};
+						AddComand.create(new Possession("Thieves Jargon"))))};
 
 		assasin.growMap[2] = new InerComand[] { AddComand.create(Feature.build().name("Cunning Action").description("Starting at 2nd level, your quick thinking and agility allow you to move and act quickly. You can take a bonus action on each of your turns in combat. This action can be used only to take the Dash, Disengage, or Hide action."))};
 
 		assasin.growMap[3] = new InerComand[] { AddComand.create(Feature.build().name("Fast Hands").description("Starting at 3rd level, you can use the bonus action granted by your Cunning Action to make a Dexterity (Sleight of Hand) check, use your thieves’ tools to disarm a trap or open a lock, or take the Use an Object action."),
-				new Possession("Poisn Tools", ITEM),
-				new Possession("Grimm Tools", ITEM),
+				new Possession("Poisn Tools"),
+				new Possession("Grimm Tools"),
 				InerFeature.build(Feature.build().name("Second-Story Work").description("When you choose this archetype at 3rd level, you gain the ability to climb faster than normal; climbing no longer costs you extra movement.\n"
 						+ "\n"
 						+ "In addition, when you make a running jump, the distance you cover increases by a number of feet equal to your Dexterity modifier.")).comand(
@@ -233,7 +233,7 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 		
 		assasin.growMap[15] = new InerComand[] { AddComand.create(
 				InerFeature.create("Slippery Mind", "By 15th level, you have acquired greater mental strength. You gain proficiency in Wisdom saving throws.", 
-						AddComand.create(new Possession("SR Wisdom", STAT))))};
+						AddComand.create(new Possession("SR Wisdom"))))};
 		
 		assasin.growMap[16] = new InerComand[] { CloudComand.create("lvl up 16", "(LVL 16)Up your 2 stats on 1 or 1 stat on 2")};
 		

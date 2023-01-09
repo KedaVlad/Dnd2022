@@ -65,9 +65,4 @@ public class BotAction extends Action{
 		return (nextStep != null) && (nextStep.length != 0);
 	}
 	
-	public String toString()
-	{
-		return "  | BOT ACTION :" + name + "|  ";
-	}
-	
 }

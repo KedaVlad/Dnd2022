@@ -16,14 +16,11 @@ import com.dnd.Log;
 import com.dnd.botTable.actions.ArrayAction;
 import com.dnd.botTable.actions.BotAction;
 import com.dnd.botTable.actions.CloudAction;
-import com.dnd.botTable.actions.RollsAction;
+import com.dnd.botTable.actions.WrappAction;
 import com.dnd.botTable.actions.dndAction.DndAction;
-import com.dnd.botTable.actions.dndAction.HeroAction;
-import com.dnd.botTable.actions.dndAction.RegistrateAction;
 import com.dnd.botTable.actions.dndAction.StartTreeAction;
 import com.dnd.botTable.actions.factoryAction.FactoryAction;
 import com.dnd.botTable.actions.factoryAction.FinalAction;
-import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.factory.ControlPanel;
 import com.dnd.dndTable.rolls.Dice;
@@ -39,12 +36,7 @@ public class GameTable implements KeyWallet, Serializable
 	private ActMachine script = new ActMachine();
 	List<CloudAction> clouds;
 
-	private void relocateClouds()
-	{
-		clouds = actualGameCharacter.getCloud();
-	}
-	
-	public Action makeAction(Action action)
+	Action makeAction(Action action)
 	{ 
 		Log.add("START MAKE ACTION IN GAME TABLE");
 		Action answer = null; 
@@ -54,7 +46,6 @@ public class GameTable implements KeyWallet, Serializable
 		}
 		else if(action instanceof FinalAction)
 		{
-			//script.beackTo(start);
 			return controlPanel.finish((FinalAction)action, this);
 		}
 		else if(action instanceof FactoryAction)
@@ -62,23 +53,28 @@ public class GameTable implements KeyWallet, Serializable
 			FactoryAction factory = (FactoryAction) action;
 			return controlPanel.act(factory);
 		}
-		else if(action instanceof RollsAction)
-		{
-			return rollsMenu((RollsAction)action);
-		}
 		else if(action instanceof BotAction)
 		{
 			return  execute((BotAction) action);
+		}
+		else if(action instanceof WrappAction)
+		{
+			return action;
 		}
 		relocateClouds();
 		save();
 		return answer;
 	}
 
+	private void relocateClouds()
+	{
+		clouds = actualGameCharacter.getCloud();
+	}
+
 	private Action execute(BotAction action)
 	{
 		long key = action.key;
-
+		Log.add(key);
 		if(key == ControlPanel.getKey())
 		{
 			return apruveStats(action);
@@ -87,29 +83,40 @@ public class GameTable implements KeyWallet, Serializable
 		{
 			return apruveHp(action);
 		}
-		else if(key == characterCase)
+		else if(key == createOrDelete)
 		{
-			return createOrDownload(action);
+			Log.add("Right place");
+			return createOrDelete(action);
+		}
+		else if(key == downloadHero)
+		{
+			Log.add("DOWNLOAD");
+			return download(action.getAnswer());
 		}
 		else if(key == toMenu)
 		{
 			return menu();
 		}
-		else if(key == menu)
+		else if(key == toRolls)
 		{
-			return inMenu(action);
+			return rollsMenu();
 		}
-
+		else if(key == rolls)
+		{
+			return rollsMenu(action);
+		}
+		Log.add("ERROR IN GAME TABLE EXECUTE");
 		return null;
 	}
 
-	private Action fightMenu() {
-		// TODO Auto-generated method stub
-		return BotAction.create("fightMenu", NO_ANSWER, true, false, "SORY BRO, I cant give you what u want ;(", null);
+	private Action fightMenu() 
+	{
+		return BotAction.create("FIGHT", NO_ANSWER, true, false, "SORY BRO, I cant give you what u want ;(", null);
 	}
 
-	private Action createOrDownload(BotAction action)
+	private Action createOrDelete(BotAction action)
 	{
+		script.beackTo("START");
 		String key = action.getAnswer();
 		if(key.equals("CREATE"))
 		{
@@ -119,13 +126,25 @@ public class GameTable implements KeyWallet, Serializable
 		{
 
 		}
-		else
-		{
-			return download(key);
-		}
-
 
 		return null;
+	}
+
+	boolean readiness()
+	{
+		Log.add("Check readiness");
+		if(getActualGameCharacter() == null)
+		{
+			return false;
+		}
+		else if(controlPanel.readiness(getActualGameCharacter()) == null)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	private Action download(String string)
@@ -133,112 +152,79 @@ public class GameTable implements KeyWallet, Serializable
 		setActualGameCharacter(savedCharacter.get(string));
 		if(controlPanel.readiness(getActualGameCharacter()) != null)
 		{
+			script.beackTo("START");
 			return controlPanel.readiness(getActualGameCharacter());
 		}
 		relocateClouds();
 		return menu();
 	}
 
-	public Action characterCase()
+	Action characterCase()
 	{
 
 		String name = "characterCase";
-		long key = characterCase;
-
 		if(getSavedCharacter().size() != 0) 
 		{
-			String text = "Choose a Hero or CREATE new one.";
-			String[][] buttons = new String[getSavedCharacter().size()+1][];
-			buttons[0] = new String[]{"CREATE", "DELETE"};
-			int i = 1;
+			String[][] buttons = new String[getSavedCharacter().size()][];
+			int i = 0;
 			for(String character: getSavedCharacter().keySet())
 			{
 				buttons[i] = new String[] {getSavedCharacter().get(character).getName()};
 				i++;
 			}
-			return BotAction.create(name, key, true, false, text, buttons);
+			Action[] pool = new Action[] {
+					BotAction.create("", createOrDelete, true, false, "Choose the Hero or CREATE new one... or DELETE some.", new String[][]{{"CREATE", "DELETE"}}).replyButtons(),
+					BotAction.create("", downloadHero, true, false, "Your Heroes", buttons),
+
+
+			};
+			return ArrayAction.create(name, NO_ANSWER, pool);
 		}	
 		else
 		{
 			String text = "You don't have a Hero yet, my friend. But after you CREATE them, you can find them here.";
 			String[][] buttons = new String[][]{{"CREATE"}};
-			return BotAction.create(name, key, true, false, text, buttons);
+			return BotAction.create(name, createOrDelete, true, false, text, buttons).replyButtons();
 		}
 
 	}
 
-	private Action menu()
+	Action menu()
 	{
 		save();
 		script.beackTo(start);
-		if(actualGameCharacter.getMagicSoul() == null)
-		{
-			return ArrayAction.create("Menu", toMenu, new BotAction[] {
-					BotAction.create("Menu", NO_ANSWER, true, false, actualGameCharacter.getStatus(), null), 
-					BotAction.create("Menu", menu, true, false, actualGameCharacter.getMenu(), new String[][]
-							{{"FETURE", "POSSESSION"},
-						{"STATS", "ROLLS"},
-						{"BAG", "MEMOIRS"},
-						{"REST","FIGHT"}
-							})});
-		}
-		else
-		{
+		Action[][] pool = new Action[][]
+				{
+			{
+				StartTreeAction.create("ABILITY", ABILITY),
+				StartTreeAction.create("CHARACTERISTIC", CHARACTERISTIC),
+				StartTreeAction.create("STUFF", STUFF)
+			},
+			{
+				BotAction.create("ROLLS", toRolls, true, false, null, null),
+				StartTreeAction.create("(DE)BUFF", DEBUFF)
+			},
+			{
+				StartTreeAction.create("REST", REST),
+				StartTreeAction.create("MEMOIRS", MEMOIRS),
+				fightMenu()
+			}
 
-			return ArrayAction.create("Menu", toMenu, new BotAction[] {
-					BotAction.create("Menu", NO_ANSWER, true, false, actualGameCharacter.getStatus(), null), 
-					BotAction.create("Menu", menu, true, false, actualGameCharacter.getMenu(), new String[][]
-							{{"SPELLS", "FETURE", "POSSESSION"},
-						{"STATS", "ROLLS"},
-						{"BAG", "MEMOIRS"},
-						{"REST","FIGHT"}
-							})});
-		}
+				};
+				return WrappAction.create("Menu", chatId, actualGameCharacter.getMenu(), pool).replyButtons();
 	}
 
-	private Action inMenu(BotAction action) 
+	private Action rollsMenu()
 	{
-		if(action.getAnswer().equals("SPELLS"))
-		{
-			return actualGameCharacter.act(StartTreeAction.create(SPELL));
-		} 
-		else if(action.getAnswer().equals("FETURE"))
-		{
-			return actualGameCharacter.act(StartTreeAction.create(FEATURE));
-		}
-		else if(action.getAnswer().equals("POSSESSION"))
-		{
-			return actualGameCharacter.act(StartTreeAction.create(POSSESSION));
-		}
-		else if(action.getAnswer().equals("STATS"))
-		{
-			return actualGameCharacter.act(StartTreeAction.create(ROLLS));
-		}
-		else if(action.getAnswer().equals("ROLLS"))
-		{
-			return new RollsAction();
-		}
-		else if(action.getAnswer().equals("BAG"))
-		{
-			return actualGameCharacter.act(StartTreeAction.create(BODY));
-		}
-		else if(action.getAnswer().equals("MEMOIRS"))
-		{
-			return actualGameCharacter.getMemoirsAct();
-		}
-		else if(action.getAnswer().equals("REST"))
-		{
-			return actualGameCharacter.act(StartTreeAction.create(REST));
-		}
-		else if(action.getAnswer().equals("FIGHT"))
-		{
-			return fightMenu();
-		}
-		return null;
-
+		String name = "ROLLS";
+		return BotAction.create(name, rolls, true, false, rollsText, new String[][] {
+			{
+				"D4","D6","D8","D10","D12","D20","D100"
+			}
+		});
 	}
 
-	private Action rollsMenu(RollsAction action)
+	private Action rollsMenu(BotAction action)
 	{
 		String text = "";
 		switch(action.getAnswer())
@@ -267,7 +253,7 @@ public class GameTable implements KeyWallet, Serializable
 		}
 		return BotAction.create("EndTree", NO_ANSWER, true, false, text, null);
 	}
-	
+
 	private Action apruveHp(BotAction action)
 	{
 		String name;
@@ -350,7 +336,7 @@ public class GameTable implements KeyWallet, Serializable
 		{
 			getActualGameCharacter().setMyStat(stats.get(0), stats.get(1), stats.get(2), stats.get(3), stats.get(4), stats.get(5));
 			getActualGameCharacter().addMemoirs("My start rolled stats: " + stats.get(0) + " " + stats.get(1) + " " + 
-			stats.get(2) + " " + stats.get(3) + " " + stats.get(4) + " " + stats.get(5));
+					stats.get(2) + " " + stats.get(3) + " " + stats.get(4) + " " + stats.get(5));
 			int stableHp = Dice.stableStartHp(getActualGameCharacter());
 			String[][] nextStep = {{"Stable " + stableHp, "Random ***"}};
 			text = "How much HP does your character have?\r\n"
@@ -363,7 +349,7 @@ public class GameTable implements KeyWallet, Serializable
 		}
 	}
 
-	public ControlPanel getControlPanel() 
+	ControlPanel getControlPanel() 
 	{
 		return controlPanel;
 	}
@@ -378,7 +364,7 @@ public class GameTable implements KeyWallet, Serializable
 
 	}
 
-	public Map<String, CharacterDnd> getSavedCharacter()
+	Map<String, CharacterDnd> getSavedCharacter()
 	{
 		return savedCharacter;
 	}

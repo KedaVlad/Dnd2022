@@ -10,25 +10,45 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 @JsonTypeName("POSSESSION")
 public class Possession implements Serializable, ObjectDnd
 {
-
+	public enum Proficiency
+	{
+		BASE, HALF, COMPETENSE
+	}
+	
 	private static final long serialVersionUID = 863271851968078819L;
-	
+
+	private Proficiency prof;
 	private String name;
-	private ProfComand inerComand;
-	
 	public Possession() {}
 	
-	public Possession(String name, long key) 
+	public Possession(String name) 
 	{
 	this.name = name;
-	this.inerComand = ProfComand.create(key, name);
+	this.prof = Proficiency.BASE;
 	}
 	
-	public Possession competence()
+	public Possession(String name, Proficiency prof)
 	{
-		this.inerComand.competence();
-		return this;
+		this.name = name;
+		this.prof = prof;
 	}
+	
+	public String toString()
+	{
+		if(prof.equals(Proficiency.HALF))
+		{
+			return name + " (half proficiency)";
+		}
+		else if(prof.equals(Proficiency.COMPETENSE))
+		{
+			return name + " (competense)";
+		}
+		else
+		{
+			return name;
+		}
+	}
+	
 	
 /*	public boolean equals(Object obj) 
 {
@@ -48,27 +68,26 @@ public class Possession implements Serializable, ObjectDnd
 
 }
 */
-	
-	public String getName() {
-		return name;
-	}
-
-	public InerComand getInerComand() {
-		return inerComand;
-	}
-
-	public void setInerComand(ProfComand inerComand) {
-		this.inerComand = inerComand;
-	}
-	
-	public static void main(String[] args) throws JsonProcessingException 
-	{
-		
-	}
 
 	@Override
 	public long key() {
 		// TODO Auto-generated method stub
 		return POSSESSION;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public Proficiency getProf() {
+		return prof;
+	}
+
+	public void setProf(Proficiency prof) {
+		this.prof = prof;
 	}
 }

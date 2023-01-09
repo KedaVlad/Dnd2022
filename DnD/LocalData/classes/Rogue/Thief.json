@@ -11,134 +11,68 @@
                   "target":[
                      {
                         "POSSESSION":{
-                           "name":"Light Armor",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":210000000,
-                                 "target":"Light Armor",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Light Armor"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Simple Weapon",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Simple Weapon",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Simple Weapon"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Hand Crossbows",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Hand Crossbows",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Hand Crossbows"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Long Swords",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Long Swords",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Long Swords"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Rapiers",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Rapiers",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Rapiers"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Short Swords",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Short Swords",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Short Swords"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Short Swords",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Short Swords",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Short Swords"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Thieves' Tools",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":200000000,
-                                 "target":"Thieves' Tools",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Thieves' Tools"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"SR Dexterity",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":180000000,
-                                 "target":"SR Dexterity",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"SR Dexterity"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"SR Intelligense",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":180000000,
-                                 "target":"SR Intelligense",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"SR Intelligense"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"SR Intelligense",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":180000000,
-                                 "target":"SR Intelligense",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"SR Intelligense"
                         }
                      },
                      {
@@ -323,14 +257,8 @@
                                     "target":[
                                        {
                                           "POSSESSION":{
-                                             "name":"Thieves Jargon",
-                                             "inerComand":{
-                                                "PROF_COMAND":{
-                                                   "key":240000000,
-                                                   "target":"Thieves Jargon",
-                                                   "competence":false
-                                                }
-                                             }
+                                             "prof":"BASE",
+                                             "name":"Thieves Jargon"
                                           }
                                        }
                                     ]
@@ -371,26 +299,14 @@
                      },
                      {
                         "POSSESSION":{
-                           "name":"Poisn Tools",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":200000000,
-                                 "target":"Poisn Tools",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Poisn Tools"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Grimm Tools",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":200000000,
-                                 "target":"Grimm Tools",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Grimm Tools"
                         }
                      },
                      {
@@ -598,14 +514,8 @@
                                     "target":[
                                        {
                                           "POSSESSION":{
-                                             "name":"SR Wisdom",
-                                             "inerComand":{
-                                                "PROF_COMAND":{
-                                                   "key":180000000,
-                                                   "target":"SR Wisdom",
-                                                   "competence":false
-                                                }
-                                             }
+                                             "prof":"BASE",
+                                             "name":"SR Wisdom"
                                           }
                                        }
                                     ]

@@ -10,12 +10,19 @@ import java.util.Optional;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
+import org.telegram.telegrambots.meta.api.methods.commands.GetMyCommands;
+import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage.SendMessageBuilder;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
+import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
+import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
+import org.telegram.telegrambots.meta.api.objects.menubutton.MenuButton;
+import org.telegram.telegrambots.meta.api.objects.menubutton.MenuButtonDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -38,7 +45,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	private GameTable initialize(Update update) throws TelegramApiException
 	{
 		Message message = null;
-
 		if(update.hasCallbackQuery())
 		{
 			message = update.getCallbackQuery().getMessage();
@@ -51,10 +57,17 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		if(!gameTables.containsKey(key))
 		{
 			gameTables.put(key, GameTable.create(message));
-			greetings(message, gameTables.get(key));
 		}
-		//create else if for size gameTables for control memory
-		return gameTables.get(key);
+		GameTable game = gameTables.get(key);
+		if(game.clouds.size() > 0)
+		{
+			for(CloudAction cloud: game.clouds)
+			{
+				templateExecuter(message, game, cloud);
+			}
+			game.clouds.clear();
+		}
+		return game;
 	}
 
 	public void onUpdateReceived(Update update) 
@@ -62,24 +75,8 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		try 
 		{
 			GameTable game = initialize(update);	
-			if(game.getActualGameCharacter() != null) Log.add(game.getActualGameCharacter().getHp() + " HPHPHPHPHPHPHPHPHP");
-			if(game.clouds.size() > 0)
-			{
-				Message target;
-				if(update.hasCallbackQuery())
-				{
-					target = update.getCallbackQuery().getMessage();
-				}
-				else
-				{
-					target = update.getMessage();
-				}
-				for(CloudAction cloud: game.clouds)
-				{
-					templateExecuter(target, game, cloud);
-				}
-				game.clouds.clear();
-			}
+
+			Log.add(game.getScript().getAction());
 			if(update.hasCallbackQuery())
 			{
 				handleCallback(update.getCallbackQuery(), game);
@@ -98,12 +95,12 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 
 	private void clean(GameTable game) throws InterruptedException, TelegramApiException
 	{
-
 		if(game.getScript().getTrash().size() > 0)
 		{
 			List<Integer> target = game.getScript().throwAwayTrash();
 			for(Integer message: target)
 			{
+				Log.add(message + "--- clean");
 				execute(DeleteMessage.builder()
 						.chatId(game.getChatId())
 						.messageId(message)
@@ -123,7 +120,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		{
 			String target = string.replaceAll("(.*)" + eliminationKey, "$1");
 			game.getScript().dateche(target);
-			return;
 		}
 		else if(string.contains(buttonsKey + ""))
 		{
@@ -138,8 +134,6 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			String regex = "([a-zA-Z]+)(.*)";
 			String target = string.replaceAll(regex, "$1");
 			String callback = string.replaceAll(regex, "$2");
-			Log.add("SHOOD BACK TO " + target);
-			Log.add("CALLBACK " + callback);
 			game.getScript().beackTo(target);
 			templateExecuter(callbackQuery.getMessage(), game, game.makeAction(game.getScript().getAction().continueAction(callback)));
 		}
@@ -164,7 +158,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 					game.getScript().prepare(message.getMessageId());	
 					templateExecuter(message, game, BotAction.create("START", start , true, false, startText, null));	
 					return;
-				case "/myCharacters":
+				case "/characters":
 					game.getScript().beackTo(start);
 					game.getScript().prepare(message.getMessageId());
 					templateExecuter(message, game, game.characterCase());
@@ -181,18 +175,45 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 		else
 		{
+			String text = message.getText();
+			Log.add(text);
+			Log.add(game.readiness());
 
-
-			if(game.getActualGameCharacter() != null)
+			if(text.equals("RETURN TO MENU"))
 			{
-				game.getActualGameCharacter().addMemoirs(message.getText());
-				Message toTrash = execute(SendMessage.builder()
-						.text("I will put it in your memoirs")
-						.chatId(message.getChatId().toString())
-						.build()
-						);
-				game.getScript().prepare(toTrash.getMessageId());
-				game.getScript().prepare(message.getMessageId());
+				game.getScript().toAct(message.getMessageId());
+				templateExecuter(message, game, game.menu());
+				return;
+			}
+			else if(game.getScript().findReply() != null && game.getScript().findReply().replyContain(text))
+			{
+				game.getScript().beackTo(text);
+				if(game.getScript().getAction().name.equals(text))
+				{
+				game.getScript().finishLast();
+				}
+				templateExecuter(message, game, game.makeAction(game.getScript().findReply().continueAction(text)));
+				game.getScript().toAct(message.getMessageId());
+				return;
+			}
+
+			if(game.readiness())
+			{
+				if(text.matches("^+\\d*"))
+				{
+
+				}
+				else 
+				{
+					game.getActualGameCharacter().addMemoirs(message.getText());
+					Message toTrash = execute(SendMessage.builder()
+							.text("I will put it in your memoirs")
+							.chatId(message.getChatId().toString())
+							.build()
+							);
+					game.getScript().prepare(toTrash.getMessageId());
+					game.getScript().prepare(message.getMessageId());
+				}
 			}
 			else
 			{
@@ -219,56 +240,64 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			}
 		}
 
-
-
 		if(target instanceof ArrayAction)
 		{
 			game.getScript().up(target);
 			ArrayAction array = (ArrayAction) target;
 			for(Action action: array.getPool())
 			{
-				Log.add(action + " --- " + action.hasButtons());
+				SendMessageBuilder builder = SendMessage.builder()
+						.text(action.text)
+						.chatId(message.getChatId().toString());
+
 				if(action.hasButtons())
 				{
-					List<List<InlineKeyboardButton>> buttons = buttons(action, action.key);
-					Message act = execute(SendMessage.builder()
-							.text(action.text)
-							.chatId(message.getChatId().toString())
-							.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
-							.build());
-					game.getScript().toAct(act.getMessageId());
-
+					if(action.isReplyButtons())
+					{
+						builder.replyMarkup(replyKeyboard(action));
+					}
+					else
+					{
+						builder.replyMarkup(inlineKeyboard(action, action.key));
+					}
 				}
-				else
+				else if(action.isReplyBreaker())
 				{
-					Message act = execute(SendMessage.builder()
-							.text(action.text)
-							.chatId(message.getChatId().toString())
-							.build());
-					game.getScript().toAct(act.getMessageId());
+					builder.replyMarkup(ReplyKeyboardMarkup.builder().clearKeyboard().build());
 				}
+				Message act = execute(builder
+						.build());
+				game.getScript().toAct(act.getMessageId());
 			}
 		}
 		else
 		{
-			if(target.mainAct && target.hasButtons())
-			{
-				game.getScript().up(target);
-				List<List<InlineKeyboardButton>> buttons = buttons(target, buttonsKey);
-				Message act = execute(SendMessage.builder()
-						.text(target.text)
-						.chatId(message.getChatId().toString())
-						.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
-						.build());
-				game.getScript().toAct(act.getMessageId());
 
-			}
-			else if(target.mainAct)
+			SendMessageBuilder builder = SendMessage.builder()
+					.text(target.text)
+					.chatId(message.getChatId().toString());
+			if(target.mainAct)
 			{
 				game.getScript().up(target);
-				Message act = execute(SendMessage.builder()
-						.text(target.text)
-						.chatId(message.getChatId().toString())
+
+				if(target.hasButtons())
+				{
+					Log.add(target.hasButtons() + " --- buttons");
+					if(target.isReplyButtons())
+					{
+						Log.add(target.isReplyButtons() + " --- reply");
+						builder.replyMarkup(replyKeyboard(target));
+					}
+					else
+					{
+						builder.replyMarkup(inlineKeyboard(target, buttonsKey));
+					}
+				}
+				if(target.isReplyBreaker())
+				{
+					builder.replyMarkup(ReplyKeyboardMarkup.builder().clearKeyboard().build());
+				}
+				Message act = execute(builder
 						.build());
 				game.getScript().toAct(act.getMessageId());
 			}
@@ -290,7 +319,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 	}
 
-	private List<List<InlineKeyboardButton>> buttons(Action action, long key)
+	private InlineKeyboardMarkup inlineKeyboard(Action action, long key)
 	{
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
 		String[][] target = action.buildButtons();
@@ -430,27 +459,62 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 						.build()));
 			}
 		}
-		return buttons;
+		return InlineKeyboardMarkup.builder().keyboard(buttons).build();
 	}
 
-	private void greetings(Message message, GameTable game) throws TelegramApiException
+	private ReplyKeyboardMarkup replyKeyboard(Action action)
 	{
 		List<KeyboardRow> buttons = new ArrayList<>();
-		KeyboardRow keyboardFirstRow = new KeyboardRow();
-		keyboardFirstRow.add(new KeyboardButton("/myCharacters"));
-		buttons.add(keyboardFirstRow);
-
-		Message act = execute(SendMessage.builder()
-				.text("Greetings!")
-				.replyMarkup(ReplyKeyboardMarkup.builder()
-						.oneTimeKeyboard(true)
-						.keyboard(buttons)
-						.resizeKeyboard(true)
-						.build())
-				.chatId(message.getChatId().toString())
-				.build());
-
-		game.getScript().toAct(act.getMessageId());
+		String[][] target = action.buildButtons();
+		for(String[] line: target)
+		{
+			if(line.length == 1)
+			{
+				KeyboardRow keyboardRow = new KeyboardRow();
+				List<KeyboardButton> row = new ArrayList<>();
+				row.add(
+						KeyboardButton.builder()
+						.text(line[0])
+						.build());
+				keyboardRow.addAll(row);
+				buttons.add(keyboardRow);
+			}
+			else if(line.length == 2)
+			{
+				KeyboardRow keyboardRow = new KeyboardRow();
+				List<KeyboardButton> row = new ArrayList<>();
+				row.add(
+						KeyboardButton.builder()
+						.text(line[0])
+						.build());
+				row.add(
+						KeyboardButton.builder()
+						.text(line[1])
+						.build());
+				keyboardRow.addAll(row);
+				buttons.add(keyboardRow);
+			}
+			else if(line.length == 3)
+			{
+				KeyboardRow keyboardRow = new KeyboardRow();
+				List<KeyboardButton> row = new ArrayList<>();
+				row.add(
+						KeyboardButton.builder()
+						.text(line[0])
+						.build());
+				row.add(
+						KeyboardButton.builder()
+						.text(line[1])
+						.build());
+				row.add(
+						KeyboardButton.builder()
+						.text(line[2])
+						.build());
+				keyboardRow.addAll(row);
+				buttons.add(keyboardRow);
+			}
+		}
+		return ReplyKeyboardMarkup.builder().keyboard(buttons).resizeKeyboard(true).build();
 	}
 
 	public String getBotUsername() 
@@ -468,9 +532,9 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	{
 		CharacterDndBot bot = new  CharacterDndBot();
 		TelegramBotsApi telegramBotsApi;
-
 		telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
 		telegramBotsApi.registerBot(bot);
+		bot.execute(new GetMyCommands());
 		bot.gameTables = Json.restor();
 		/*
 		while(true)

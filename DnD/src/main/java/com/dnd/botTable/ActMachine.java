@@ -15,8 +15,22 @@ class ActMachine implements Serializable
 	private List<Integer> prepeared = new ArrayList<>();
 	private List<Integer> trash = new ArrayList<>();
 
+	Action findReply()
+	{
+		for(int i = mainTree.size() - 1; i > 0; i--)
+		{
+			if(mainTree.get(i).isReplyButtons())
+			{
+				return mainTree.get(i);
+			}
+		}
+		return null;
+	}
+	
 	void finishLast()
 	{
+		Log.add("END " + mainTree.get(mainTree.size() - 1));
+		Log.add("*****************************************");
 		trash.addAll(mainTree.get(mainTree.size() - 1).end());
 		mainTree.remove(mainTree.size() - 1);
 	}
@@ -59,13 +73,13 @@ class ActMachine implements Serializable
 		Log.add("START BEACKING to "+name);
 		for(int i = 0; i < mainTree.size(); i++)
 		{
-			Log.add("CHECK ACTION #" + i + " - " + mainTree.get(i).name);
+			Log.add("CHECK ACTION #" + i + " - " + mainTree.get(i));
 			if(mainTree.get(i).name.equals(name))
 			{
-				Log.add("FIND " + name + " = " + mainTree.get(i).name);
+				Log.add("FIND " + name + " = " + mainTree.get(i));
 				for(int j = mainTree.size() - 1; j > i; j--)
 				{
-					Log.add("FINISH #" + j + mainTree.get(j).name);
+					Log.add("FINISH #" + j + mainTree.get(j));
 					trash.addAll(mainTree.get(j).end());
 					mainTree.remove(j);
 				}
@@ -86,6 +100,7 @@ class ActMachine implements Serializable
 
 	void up(Action action)
 	{
+		Log.add("Up " + action);
 		this.mainTree.add(action);
 	}
 

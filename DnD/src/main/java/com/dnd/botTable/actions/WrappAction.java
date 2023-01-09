@@ -1,12 +1,13 @@
-package com.dnd.botTable.actions.dndAction;
+package com.dnd.botTable.actions;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.dnd.botTable.Action;
+import com.dnd.botTable.actions.dndAction.DndAction;
 
-public class HeroAction extends DndAction
+public class WrappAction extends Action
 {
 	private static final long serialVersionUID = 1L;
 
@@ -22,9 +23,9 @@ public class HeroAction extends DndAction
 		return nextStep == null || nextStep.length == 0;
 	}
 	
-	public static HeroAction create(String name, long key, String text, Action[][] nextStep)
+	public static WrappAction create(String name, long key, String text, Action[][] nextStep)
 	{
-		HeroAction answer = new HeroAction();
+		WrappAction answer = new WrappAction();
 		answer.setName(name);
 		answer.key = key;
 		answer.mainAct = true;
@@ -88,18 +89,8 @@ public class HeroAction extends DndAction
 		return nextStep != null && nextStep.length > 0;
 	}
 	
-	public String toString()
-	{
-		return "  | HERO ACTION :" + name + "|  ";
-	}
 
 	public void setNextStep(Action[][] nextStep) {
 		this.nextStep = nextStep;
 	}
-	
-	public HeroAction rebuild()
-		{
-			return HeroAction.create(this.name, this.key, this.text, null);
-		}
-	
 }
