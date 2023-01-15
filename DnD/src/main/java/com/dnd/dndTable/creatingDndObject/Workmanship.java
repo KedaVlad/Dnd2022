@@ -7,12 +7,15 @@ import java.util.List;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.BotAction;
 import com.dnd.botTable.actions.WrappAction;
+import com.dnd.botTable.actions.dndAction.ChangeAction;
 import com.dnd.botTable.actions.dndAction.RegistrateAction;
+import com.dnd.botTable.actions.dndAction.StartTreeAction;
 import com.dnd.dndTable.ActionObject;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.Refreshable;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
+import com.dnd.dndTable.creatingDndObject.workmanship.features.ActiveFeature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Mechanics;
 import com.google.common.math.Stats;
@@ -174,7 +177,20 @@ public class Workmanship implements Serializable, Refreshable, ObjectDnd
 
 		String name = object.getName();
 		String text = name + "\n" + object.getDescription();
-		return WrappAction.create(name, key, text, null);
+		if(object instanceof ActiveFeature)
+		{
+			Action[][] pool = new Action[][]
+					{
+				{
+					
+				}
+					};
+			return WrappAction.create(name, key, text, null);
+		}
+		else
+		{
+			return WrappAction.create(name, key, text, null);
+		}
 	}
 
 	
@@ -187,7 +203,21 @@ public class Workmanship implements Serializable, Refreshable, ObjectDnd
 		{
 			text += possession.toString() + "\n";
 		}
-		return WrappAction.create(name, key, text, null);
+		
+		Action[][] pool = new Action[][]
+				{{
+			StartTreeAction.create("Add new possession", POSSESSION)
+				}};
+		
+		return WrappAction.create(name, key, text, pool);
+	}
+	
+	Action addPossession()
+	{
+		String text = "If you want to add possession of some Skill/Save roll from characteristics - you can do it right by using this pattern (CHARACTERISTIC > SKILLS > Up to proficiency)\n"
+				+ "If it`s possession of Weapon/Armor you shood to write ritht the type(correct spelling in Hint list)\n"
+				+ "But if it concerns something else(language or metier) write as you like.";
+		return ChangeAction.create(RegistrateAction.create("SomePossession", new Possession()), text, new String[][] {{"Hint list"},{"Return to abylity"}}).replyButtons().setMediator();
 	}
 
 		
@@ -198,6 +228,11 @@ public class Workmanship implements Serializable, Refreshable, ObjectDnd
 
 	public void setMagicSoul(MagicSoul magicSoul) 
 	{
+		if(this.magicSoul != null)
+		{
+			magicSoul.getPool().setActive(this.magicSoul.getPool().getActive());
+			magicSoul.getPoolCantrips().setActive(this.magicSoul.getPoolCantrips().getActive());
+		}
 		this.magicSoul = magicSoul;
 	}
 
@@ -205,6 +240,40 @@ public class Workmanship implements Serializable, Refreshable, ObjectDnd
 	public void refresh(Time time) {
 		// TODO Auto-generated method stub
 
+	}
+
+
+
+	public String info() 
+	{
+		String answer = "";
+		if(magicSoul != null)
+		{
+			answer += magicSoul.info() + "\n";
+		}
+		
+		return answer;
+	}
+
+
+
+	public Action addPossession(ChangeAction action) {
+		
+		String answer = action.getAnswer();
+		//"Hint list"
+		if(answer.equals("Return to abylity"))
+		{
+			return action.returnTo("Ability", "POSSESSIONS");
+		}
+		else if(answer.equals("Hint list"))
+		{
+			return BotAction.create("Hint list", NO_ANSWER, true, false, "Some list of possessions", null).returnTo("SomePossessionChange");
+		}
+		else
+		{
+			possessions.add(answer);
+			return action.returnTo("Ability", "POSSESSIONS");
+		}
 	}
 
 

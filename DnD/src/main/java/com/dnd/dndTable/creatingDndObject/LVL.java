@@ -19,13 +19,28 @@ public class LVL implements Serializable
 		this.experience = expPerLvl[lvl-1];
 	}
 
-	public void addExp(int value)
+	public boolean addExp(int value)
 	{
 		this.experience += value;
-		if(this.experience >= expPerLvl[lvl-1])
+		for(int i = expPerLvl.length - 1; i > 0; i--)
 		{
-			this.lvl =+1;
+			if(expPerLvl[i] <= experience)
+			{
+				if(lvl != i+1)
+				{
+				this.lvl = i + 1;
+				return true;
+				}
+				return false;
+			}
 		}
+		return false;
+	}
+
+	public String info() 
+	{
+		String answer = "LVL: " + lvl + "(" + experience + "|" + expPerLvl[lvl] + ")";
+		return answer + "\n";
 	}
 
 }

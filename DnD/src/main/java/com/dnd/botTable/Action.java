@@ -85,6 +85,11 @@ public abstract class Action implements Serializable {
 		actCircle.clear();
 		return end;
 	}
+	
+	Integer getMessageId()
+	{
+		return actCircle.get(0);
+	}
 
 	void toCircle(Integer act) 
 	{

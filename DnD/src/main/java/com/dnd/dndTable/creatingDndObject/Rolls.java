@@ -174,7 +174,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 		}
 	}
 
-	
+
 	public void spesialize(String name, String buff)
 	{
 		boolean breaker = false;
@@ -240,7 +240,7 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			return WrappAction.create("Characteristic", ROLLS, instruction, pool).replyButtons();
 	}
 
-	
+
 	Action statMenu()
 	{
 		String name = "statMenu";
@@ -471,7 +471,14 @@ public class Rolls implements Serializable, Names, KeyWallet {
 			proficiency.add(stat.getName());
 			break;
 		}
-		return action.returnTo("Characteristic");
+		if(stat.getName().matches("^SR.*"))
+		{
+			return action.returnTo("Characteristic", "SAVE ROLLS");
+		}
+		else
+		{
+			return action.returnTo("Characteristic", "SKILLS");
+		}
 	}
 
 

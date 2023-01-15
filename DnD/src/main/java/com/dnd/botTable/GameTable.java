@@ -24,6 +24,7 @@ import com.dnd.botTable.actions.factoryAction.FinalAction;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.factory.ControlPanel;
 import com.dnd.dndTable.rolls.Dice;
+import com.dnd.dndTable.rolls.Formalizer;
 
 
 public class GameTable implements KeyWallet, Serializable
@@ -85,12 +86,10 @@ public class GameTable implements KeyWallet, Serializable
 		}
 		else if(key == createOrDelete)
 		{
-			Log.add("Right place");
 			return createOrDelete(action);
 		}
 		else if(key == downloadHero)
 		{
-			Log.add("DOWNLOAD");
 			return download(action.getAnswer());
 		}
 		else if(key == toMenu)
@@ -105,13 +104,23 @@ public class GameTable implements KeyWallet, Serializable
 		{
 			return rollsMenu(action);
 		}
+		else if(key == DEBUFF)
+		{
+			return addDebuff(action);
+		}
 		Log.add("ERROR IN GAME TABLE EXECUTE");
 		return null;
 	}
 
-	private Action fightMenu() 
-	{
-		return BotAction.create("FIGHT", NO_ANSWER, true, false, "SORY BRO, I cant give you what u want ;(", null);
+	private Action addDebuff(BotAction action) {
+		if(action.getAnswer().equals("RETURN TO MENU"))
+		{
+			return menu();
+		}
+		else
+		{
+			return BotAction.create("Debuff#" + (script.getDatached().size() + 1), NO_ANSWER, false, false, action.getAnswer(), null);
+		}
 	}
 
 	private Action createOrDelete(BotAction action)
@@ -207,7 +216,6 @@ public class GameTable implements KeyWallet, Serializable
 			{
 				StartTreeAction.create("REST", REST),
 				StartTreeAction.create("MEMOIRS", MEMOIRS),
-				fightMenu()
 			}
 
 				};
@@ -218,40 +226,24 @@ public class GameTable implements KeyWallet, Serializable
 	{
 		String name = "ROLLS";
 		return BotAction.create(name, rolls, true, false, rollsText, new String[][] {
-			{
-				"D4","D6","D8","D10","D12","D20","D100"
-			}
-		});
+			{"D4","D6","D8","D10"},
+			{"D12","D20","D100"},
+			{"RETURN TO MENU"}
+		}).replyButtons().setMediator();
 	}
 
 	private Action rollsMenu(BotAction action)
 	{
-		String text = "";
-		switch(action.getAnswer())
+		if(action.getAnswer().equals("RETURN TO MENU"))
 		{
-		case "D4":
-			text = Dice.d4() + "";
-			break;
-		case "D6":
-			text = Dice.d6() + "";
-			break;
-		case "D8":
-			text = Dice.d8() + "";
-			break;
-		case "D10":
-			text = Dice.d10() + "";
-			break;
-		case "D12":
-			text = Dice.d12() + "";
-			break;
-		case "D20":
-			text = Dice.d20() + "";
-			break;
-		case "D100":
-			text = Dice.d20() + "";
-			break;
+			return menu();
 		}
+		else
+		{
+		String text = Formalizer.formalize(action.getAnswer());
+		
 		return BotAction.create("EndTree", NO_ANSWER, true, false, text, null);
+		}
 	}
 
 	private Action apruveHp(BotAction action)

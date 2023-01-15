@@ -4,8 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.WrappAction;
 import com.dnd.dndTable.ActionObject;
+import com.dnd.dndTable.creatingDndObject.workmanship.casts.Cast;
 
 
 public class Spell implements Serializable, ActionObject 
@@ -13,7 +15,7 @@ public class Spell implements Serializable, ActionObject
 	private static final long serialVersionUID = -7876613939972469105L;
 	
 	private int lvlSpell;
-	private WrappAction cast;
+	private Cast cast;
 	private String name;
 	private String description;
 	private String applicationTime;
@@ -28,6 +30,12 @@ public class Spell implements Serializable, ActionObject
 
 	}
 	private int id;
+	
+	
+	public Action cast()
+	{
+		return Caster.cast(cast);
+	}
 	
 	public boolean equals(Object obj) {
 		if(obj == this) return true;
@@ -87,18 +95,24 @@ public class Spell implements Serializable, ActionObject
 		
 	}
 
-	public WrappAction getCast() {
-		return cast;
-	}
-
-	public void setCast(WrappAction cast) {
-		this.cast = cast;
-	}
-
 	@Override
 	public long key() {
 		// TODO Auto-generated method stub
 		return SPELL;
+	}
+
+	/**
+	 * @return the cast
+	 */
+	public Cast getCast() {
+		return cast;
+	}
+
+	/**
+	 * @param cast the cast to set
+	 */
+	public void setCast(Cast cast) {
+		this.cast = cast;
 	}
 
 	

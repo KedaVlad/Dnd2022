@@ -17,9 +17,5 @@ public class GameTableTest {
 	BotAction action = BotAction.create("Menu", 2, false, false, null, null);
 	GameTable game = new GameTable();
 	
-	@Test
-	public void test() {
-		Assert.assertSame(action, game.);
-	}
-
+	
 }

@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.dnd.Names.Stat;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.Weapons;
@@ -16,14 +17,22 @@ public class AttackModification implements Serializable, ObjectDnd
 
 	private static final long serialVersionUID = 1L;
 	private String name;
-	//private WeaponType type;
 	private WeaponProperties[] requirement;
+	private boolean permanent;
 	private boolean postAttack;
 	private boolean permanentCrit;
 	private List<Dice> attack;
 	private List<Dice> damage;
 	private String ammunition;
-
+	private Stat statDepend;
+	private Stat secondStat;
+	
+	public AttackModification permanent()
+	{
+		this.permanent = true;
+		return this;
+	}
+	
 	public String toString()
 	{
 		String answer = "";
@@ -70,9 +79,10 @@ public class AttackModification implements Serializable, ObjectDnd
 		damage = new ArrayList<>();
 	}
 
-	public static AttackModification create(String name, DamageDice dice, WeaponProperties... requirment)
+	public static AttackModification create(String name, Stat statDepend, Dice dice , WeaponProperties... requirment)
 	{
 		AttackModification answer = new AttackModification();
+		answer.statDepend = statDepend;
 		answer.name = name;
 		answer.damage.add(dice);
 		answer.requirement = requirment;
@@ -84,19 +94,44 @@ public class AttackModification implements Serializable, ObjectDnd
 		if(obj == this) return true;
 		if(obj == null || obj.getClass() != this.getClass()) return false;
 		AttackModification target = (AttackModification) obj;
-		return this.name == target.name && this.requirement.equals(target.requirement);
+		boolean require = false;
+		if(this.requirement.length == target.requirement.length)
+		{
+			require = true;
+		for(int i = 0; i < this.requirement.length; i++)
+		{
+			if(this.requirement[i] == target.requirement[i])
+			{
+				require = true;
+			}
+			else
+			{
+				require = false;
+				break;
+			}
+		}
+		}
+		return this.name.equals(target.name) && require;
+	}
+	
+	public AttackModification secondStat(Stat stat)
+	{
+		this.secondStat = stat;
+		return this;
 	}
 
 
 	public AttackModification marger(AttackModification second)
 	{
 		AttackModification answer = new AttackModification();
-		answer.name = second.name;
+		answer.name = this.name;
+		answer.statDepend = this.statDepend;
 		answer.requirement = this.requirement;
 		answer.attack = this.attack;
 		answer.attack.addAll(second.attack);
 		answer.damage = this.damage;
 		answer.damage.addAll(second.damage);
+		answer.ammunition = this.ammunition;
 
 		return answer;
 	}
@@ -177,7 +212,7 @@ public class AttackModification implements Serializable, ObjectDnd
 	{
 		for(Dice dice: dices)
 		{
-			this.attack.add(dice);
+			this.damage.add(dice);
 		}
 		return this;
 	}
@@ -198,6 +233,27 @@ public class AttackModification implements Serializable, ObjectDnd
 
 	public String getAmmunition() {
 		return ammunition;
+	}
+
+	/**
+	 * @return the permanent
+	 */
+	public boolean isPermanent() {
+		return permanent;
+	}
+
+	/**
+	 * @return the statDepend
+	 */
+	public Stat getStatDepend() {
+		return statDepend;
+	}
+
+	/**
+	 * @return the secondStat
+	 */
+	public Stat getSecondStat() {
+		return secondStat;
 	}
 
 

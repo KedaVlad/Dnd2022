@@ -15,6 +15,7 @@ import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage.SendMessageBuilder;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
+import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
 import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.MessageEntity;
@@ -123,7 +124,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 		else if(string.contains(buttonsKey + ""))
 		{
-			String regex = "([a-zA-Z]+)" + buttonsKey + "(.+)";
+			String regex = "([a-zA-Z `-]+)" + buttonsKey + "(.+)";
 			String target = string.replaceAll(regex, "$1");
 			String callback = string.replaceAll(regex, "$2");
 			game.getScript().beackTo(target);
@@ -131,7 +132,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 		else
 		{
-			String regex = "([a-zA-Z]+)(.*)";
+			String regex = "([a-zA-Z `-]+)(.*)";
 			String target = string.replaceAll(regex, "$1");
 			String callback = string.replaceAll(regex, "$2");
 			game.getScript().beackTo(target);
@@ -183,7 +184,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 			{
 				game.getScript().toAct(message.getMessageId());
 				templateExecuter(message, game, game.menu());
-				return;
+			
 			}
 			else if(game.getScript().findReply() != null && game.getScript().findReply().replyContain(text))
 			{
@@ -194,13 +195,54 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				}
 				templateExecuter(message, game, game.makeAction(game.getScript().findReply().continueAction(text)));
 				game.getScript().toAct(message.getMessageId());
-				return;
+				
 			}
-
-			if(game.readiness())
+			else if(game.readiness())
 			{
-				if(text.matches("^+\\d*"))
+				if(text.matches("^\\+\\d+"))
 				{
+					int exp = (Integer) Integer.parseInt(text.replaceAll("^\\+(\\d+)", "$1"));
+					String textMessage = "Exp add";
+					if(game.getActualGameCharacter().getLvl().addExp(exp))
+					{
+						textMessage+="(lvl up)";
+					}
+					templateExecuter(message, game, game.menu());
+					Message toTrash = execute(SendMessage.builder()
+							.text(textMessage)
+							.chatId(message.getChatId().toString())
+							.build()
+							);
+					
+					game.getScript().prepare(toTrash.getMessageId());
+					game.getScript().prepare(message.getMessageId());
+
+				}
+				else if(text.matches("^(hp|Hp|HP|hP)(\\+|-)\\d+"))
+				{
+					String num = text.replaceAll("^(hp|Hp|HP|hP)(\\+|-)(\\d+)", "$3");
+					int value = (Integer) Integer.parseInt(num);
+					String texts = "You make something vrong... I dont understand what do whith " + value + " + or - ?";
+					if(text.contains("+"))
+					{
+						game.getActualGameCharacter().getHp().heal(value);
+						texts = "You get heal";
+					}
+					else if(text.contains("-"))
+						{
+							game.getActualGameCharacter().getHp().damaged(value);
+							texts = "You get damage";
+						}
+					templateExecuter(message, game, game.menu());
+					Message toTrash = execute(SendMessage.builder()
+							.text(texts)
+							.chatId(message.getChatId().toString())
+							.build()
+							);
+
+					game.getScript().prepare(toTrash.getMessageId());
+					game.getScript().prepare(message.getMessageId());
+					
 
 				}
 				else 
@@ -267,6 +309,7 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				}
 				Message act = execute(builder
 						.build());
+				
 				game.getScript().toAct(act.getMessageId());
 			}
 		}
@@ -509,6 +552,29 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 				row.add(
 						KeyboardButton.builder()
 						.text(line[2])
+						.build());
+				keyboardRow.addAll(row);
+				buttons.add(keyboardRow);
+			}
+			else if(line.length == 4)
+			{
+				KeyboardRow keyboardRow = new KeyboardRow();
+				List<KeyboardButton> row = new ArrayList<>();
+				row.add(
+						KeyboardButton.builder()
+						.text(line[0])
+						.build());
+				row.add(
+						KeyboardButton.builder()
+						.text(line[1])
+						.build());
+				row.add(
+						KeyboardButton.builder()
+						.text(line[2])
+						.build());
+				row.add(
+						KeyboardButton.builder()
+						.text(line[3])
 						.build());
 				keyboardRow.addAll(row);
 				buttons.add(keyboardRow);

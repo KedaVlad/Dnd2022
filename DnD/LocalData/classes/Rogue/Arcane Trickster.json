@@ -345,15 +345,58 @@
                   "target":[
                      {
                         "FEATURE":{
-                           "name":"Fast Hands",
-                           "description":"Starting at 3rd level, you can use the bonus action granted by your Cunning Action to make a Dexterity (Sleight of Hand) check, use your thieves' tools to disarm a trap or open a lock, or take the Use an Object action.",
+                           "name":"Spellcasting",
+                           "description":"When you reach 3rd level, you augment your martial prowess with the ability to cast spells.\n\nCantrips\nYou learn three cantrips: Mage Hand and two other cantrips of your choice from the wizard spell list. You learn another wizard cantrip of your choice at 10th level.\n\nSpell Slots\nThe Arcane Trickster Spellcasting table shows how many spell slots you have to cast your wizard spells of 1st level and higher. To cast one of these spells, you must expend a slot of the spell's level or higher. You regain all expended spell slots when you finish a long rest.\n\nFor example, if you know the 1st-level spell Charm Person and have a 1st-level and a 2nd-level spell slot available, you can cast Charm Person using either slot.\n\nSpells Known of 1st Level and Higher\nYou know three 1st-level wizard spells of your choice, two of which you must choose from the enchantment and illusion spells on the wizard spell list.\n\nThe Spells Known column of the Arcane Trickster Spellcasting table shows when you learn more wizard spells of 1st level or higher. Each of these spells must be an enchantment or illusion spell of your choice, and must be of a level for which you have spell slots. For instance, when you reach 7th level in this class, you can learn one new spell of 1st or 2nd level.\n\nThe spells you learn at 8th, 14th, and 20th level can come from any school of magic.\n\nWhenever you gain a level in this class, you can replace one of the wizard spells you know with another spell of your choice from the wizard spell list. The new spell must be of a level for which you have spell slots, and it must be an enchantment or illusion spell, unless you're replacing the spell you gained at 3rd, 8th, 14th, or 20th level from any school of magic.\n\nSpellcasting Ability\nIntelligence is your spellcasting ability for your wizard spells, since you learn your spells through dedicated study and memorization. You use your Intelligence whenever a spell refers to your spellcasting ability. In addition, you use your Intelligence modifier when setting the saving throw DC for a wizard spell you cast and when making an attack roll with one.\n\nSpell save DC = 8 + your proficiency bonus + your Intelligence modifier\n\nSpell attack modifier = your proficiency bonus + your Intelligence modifier",
                            "depend":null
                         }
                      },
                      {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    false,
+                                    false
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":3
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":3
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     },
+                     {
                         "FEATURE":{
-                           "name":"Second-Story Work",
-                           "description":"When you choose this archetype at 3rd level, you gain the ability to climb faster than normal; climbing no longer costs you extra movement.\n\nIn addition, when you make a running jump, the distance you cover increases by a number of feet equal to your Dexterity modifier.",
+                           "name":"Mage Hand Legerdemain",
+                           "description":"Starting at 3rd level, when you cast Mage Hand, you can make the spectral hand invisible, and you can perform the following additional tasks with it:\n\nYou can stow one object the hand is holding in a container worn or carried by another creature.\nYou can retrieve an object in a container worn or carried by another creature.\nYou can use thieves' tools to pick locks and disarm traps at range.\nYou can perform one of these tasks without being noticed by a creature if you succeed on a Dexterity (Sleight of Hand) check contested by the creature's Wisdom (Perception) check.\n\nIn addition, you can use the bonus action granted by your Cunning Action to control the hand.",
                            "depend":null
                         }
                      },
@@ -469,6 +512,56 @@
                "CLOUD_COMAND":{
                   "text":"(LVL 4)Up your 2 stats on 1 or 1 stat on 2",
                   "name":"lvl up 4"
+               }
+            },
+            {
+               "ADD_COMAND":{
+                  "target":[
+                     {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    false,
+                                    false,
+                                    false
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":3
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":3
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     }
+                  ]
                }
             }
          ],
@@ -602,6 +695,55 @@
                "ADD_COMAND":{
                   "target":[
                      {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":3
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":3
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     },
+                     {
                         "ATTACK_MODIFICATION":{
                            "name":"Sneak Attack",
                            "requirement":[
@@ -726,6 +868,61 @@
                   "text":"(LVL 8)Up your 2 stats on 1 or 1 stat on 2",
                   "name":"lvl up 8"
                }
+            },
+            {
+               "ADD_COMAND":{
+                  "target":[
+                     {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":3
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":3
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     }
+                  ]
+               }
             }
          ],
          [
@@ -848,8 +1045,8 @@
                      },
                      {
                         "FEATURE":{
-                           "name":"Supreme Sneak",
-                           "description":"Starting at 9th level, you have advantage on a Dexterity (Stealth) check if you move no more than half your speed on the same turn.",
+                           "name":"Magical Ambush",
+                           "description":"Starting at 9th level, if you are hidden from a creature when you cast a spell on it, the creature has disadvantage on any saving throw it makes against the spell this turn.",
                            "depend":null
                         }
                      }
@@ -863,12 +1060,118 @@
                   "text":"(LVL 10)Up your 2 stats on 1 or 1 stat on 2",
                   "name":"lvl up 10"
                }
+            },
+            {
+               "ADD_COMAND":{
+                  "target":[
+                     {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true,
+                                    true
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     }
+                  ]
+               }
             }
          ],
          [
             {
                "ADD_COMAND":{
                   "target":[
+                     {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true,
+                                    true
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     },
                      {
                         "ATTACK_MODIFICATION":{
                            "name":"Sneak Attack",
@@ -1013,6 +1316,60 @@
                "ADD_COMAND":{
                   "target":[
                      {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     },
+                     {
                         "ATTACK_MODIFICATION":{
                            "name":"Sneak Attack",
                            "requirement":[
@@ -1140,8 +1497,8 @@
                      },
                      {
                         "FEATURE":{
-                           "name":"Use Magic Device",
-                           "description":"By 13th level, you have learned enough about the workings of magic that you can improvise the use of items even when they are not intended for you. You ignore all class, race, and level requirements on the use of magic items.",
+                           "name":"Versatile Trickster",
+                           "description":"At 13th level, you gain the ability to distract targets with your Mage Hand. As a bonus action on your turn, you can designate a creature within 5 feet of the spectral hand created by the spell. Doing so gives you advantage on attack rolls against that creature until the end of the turn.",
                            "depend":null
                         }
                      }
@@ -1153,6 +1510,60 @@
             {
                "ADD_COMAND":{
                   "target":[
+                     {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     },
                      {
                         "FEATURE":{
                            "name":"Blindsense",
@@ -1477,8 +1888,8 @@
                      },
                      {
                         "FEATURE":{
-                           "name":"Thief's Reflexes",
-                           "description":"When you reach 17th level, you have become adept at laying ambushes and quickly escaping danger. You can take two turns during the first round of any combat. You take your first turn at your normal initiative and your second turn at your initiative minus 10. You can't use this feature when you are surprised.",
+                           "name":"Spell Thief",
+                           "description":"At 17th level, you gain the ability to magically steal the knowledge of how to cast a spell from another spellcaster.\n\nImmediately after a creature casts a spell that targets you or includes you in its area of effect, you can use your reaction to force the creature to make a saving throw with its spellcasting ability modifier. The DC equals your spell save DC. On a failed save, you negate the spell's effect against you, and you steal the knowledge of the spell if it is at least 1st level and of a level you can cast (it doesn't need to be a wizard spell). For the next 8 hours, you know the spell and can cast it using your spell slots. The creature can't cast that spell until the 8 hours have passed.\n\nOnce you use this feature, you can't use it again until you finish a long rest.",
                            "depend":null
                         }
                      }
@@ -1505,6 +1916,64 @@
             {
                "ADD_COMAND":{
                   "target":[
+                     {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     },
                      {
                         "ATTACK_MODIFICATION":{
                            "name":"Sneak Attack",
@@ -1663,6 +2132,64 @@
             {
                "ADD_COMAND":{
                   "target":[
+                     {
+                        "MAGIC_SOUL":{
+                           "cells":{
+                              "matrix":[
+                                 [
+                                    true,
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true,
+                                    true,
+                                    true
+                                 ],
+                                 [
+                                    true
+                                 ]
+                              ]
+                           },
+                           "poolCantrips":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "depends":"INTELLIGENSE",
+                           "pool":{
+                              "SIMPLE_POOL":{
+                                 "active":[
+                                    
+                                 ],
+                                 "activeMaxSize":4
+                              }
+                           },
+                           "time":{
+                              "Refreshable$Time":"LONG"
+                           },
+                           "spellMenu":{
+                              "key":290000000,
+                              "name":"SPELLS",
+                              "text":"This is your spells. Choose some for more infotmation",
+                              "replyBreaker":false,
+                              "replyButtons":false,
+                              "nextStep":[
+                                 
+                              ],
+                              "lastStep":true
+                           }
+                        }
+                     },
                      {
                         "FEATURE":{
                            "name":"Stroke of Luck",

@@ -10,8 +10,10 @@ import com.dnd.botTable.actions.CloudAction;
 import com.dnd.dndTable.DndKeyWallet;
 import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.dndTable.creatingDndObject.MagicSoul;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
+import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
@@ -33,7 +35,7 @@ abstract class ScriptReader implements DndKeyWallet, Names
 		}
 		else if(comand instanceof ProfComand)
 		{
-			prof(character, (ProfComand) comand);
+
 		}
 		else if(comand instanceof UpComand)
 		{
@@ -49,7 +51,7 @@ abstract class ScriptReader implements DndKeyWallet, Names
 	private static void cloud(CharacterDnd character, CloudComand comand) 
 	{
 		character.getCloud().add(CloudAction.create(comand.getName(), comand.getText()));
-		
+
 	}
 
 
@@ -60,7 +62,7 @@ abstract class ScriptReader implements DndKeyWallet, Names
 		{
 			character.getRolls().up(comand.getName(), comand.getValue());
 		}
-		
+
 	}
 
 
@@ -81,7 +83,7 @@ abstract class ScriptReader implements DndKeyWallet, Names
 					InerFeature target = (InerFeature) object;
 					for(InerComand inerComand: target.getComand())
 					{
-					execute(character, inerComand);
+						execute(character, inerComand);
 					}
 				}
 			}
@@ -90,17 +92,69 @@ abstract class ScriptReader implements DndKeyWallet, Names
 				Possession target = (Possession) object;
 				character.getWorkmanship().getPossessions().add(target);
 			}
+			else if(object instanceof MagicSoul)
+			{
+				MagicSoul target = (MagicSoul) object;
+				character.getWorkmanship().setMagicSoul(target);
+			}
+			else if(object instanceof Spell)
+			{
+				Spell target = (Spell) object;
+				if(character.getWorkmanship().getMagicSoul() != null)
+				{
+					if(target.getLvlSpell() == 0)
+					{
+						character.getWorkmanship().getMagicSoul().getPoolCantrips().add(target);
+					}
+					else
+					{
+						character.getWorkmanship().getMagicSoul().getPool().add(target);
+					}
+				}
+			}
+			else if(object instanceof AttackModification)
+			{
+
+				AttackModification target = (AttackModification) object;
+				if(target.isPostAttack())
+				{
+					if(character.getAttackMachine().getAfterAttak().contains(target))
+					{
+						character.getAttackMachine().getAfterAttak().remove(target);
+						character.getAttackMachine().getAfterAttak().add(target);
+					}
+					else
+					{
+						character.getAttackMachine().getAfterAttak().add(target);
+					}
+				}
+				else if(target.isPermanent())
+				{
+					if(character.getAttackMachine().getPermanent().contains(target))
+					{
+						character.getAttackMachine().getPermanent().remove(target);
+						character.getAttackMachine().getPermanent().add(target);
+					}
+					else
+					{
+						character.getAttackMachine().getPermanent().add(target);
+					}
+				}
+				else
+				{
+					if(character.getAttackMachine().getPreAttacks().contains(target))
+					{
+						character.getAttackMachine().getPreAttacks().remove(target);
+						character.getAttackMachine().getPreAttacks().add(target);
+					}
+					else
+					{
+						character.getAttackMachine().getPreAttacks().add(target);
+					}
+				}
+			}
 		}
 	}
 
-	private static void prof(CharacterDnd character, ProfComand comand)
-	{
-		long key = comand.getKey();
-		String target = comand.getTarget();
-		if(key == STAT)
-		{
-			
-		}
-	}
 
 }

@@ -15,7 +15,7 @@ import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class DiceTest {
 
-	CharacterDnd character = new CharacterDnd("Bober");
+	CharacterDnd character = CharacterDnd.create("Bober");
 	ClassDnd clazz = new ClassDnd();
 	int a;
 	int s;

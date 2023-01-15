@@ -96,7 +96,7 @@ public class ControlPanel implements Serializable {
 		{
 			ItemFactory.finish((FinalTargetAction)action, gameTable.getActualGameCharacter());
 			gameTable.save();
-			return action.returnTo("Menu",100000002+"BAG");
+			return action.returnTo("STUFF", "BAG");
 		}
 		return null;
 	}

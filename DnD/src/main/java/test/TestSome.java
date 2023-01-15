@@ -12,6 +12,7 @@ import javax.ws.rs.core.Response;
 
 import org.telegram.telegrambots.meta.api.objects.Message;
 
+import com.dnd.Log;
 import com.dnd.Names.TypeDamage;
 import com.dnd.botTable.Action;
 import com.dnd.botTable.CharacterDndBot;
@@ -22,6 +23,8 @@ import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.ClassDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor.ClassArmor;
+import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
+import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Mechanics;
@@ -31,6 +34,7 @@ import com.dnd.dndTable.factory.inerComands.InerComand;
 import com.dnd.dndTable.rolls.DamageDice;
 import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
+import com.dnd.dndTable.rolls.Formalizer;
 import com.dnd.dndTable.rolls.Formula;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonRootName;
@@ -59,31 +63,24 @@ public class TestSome {
 			if(i >= 1000) break;
 		}
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	public static void main(String[] args) throws IOException
 	{
-		String some = "012948375SOME";
-		String second = "asfasfafs";
-		String[] pool = {some, second};
-		
-		for(String key: pool)
+	
+		String[] array = 
+			{
+					"d4", "D6", "D8", "D10", "d12", "d200", "d20", "d100", "dsakma", "-d4",
+					"2d6", "12d8", "2d6 + 10"
+			};
+		for(String comand: array)
 		{
-		String regex = "(\\d{9})(.+)";
-		
-		System.out.println(key);
-		if(key.matches(regex))
-		{
-			System.out.println(key.replaceAll(regex, "$2"));
-		}
-		else
-		{
-			System.out.println(key);
+			System.out.println(Formalizer.formalize(comand));
 		}
 	}
-}
+
 }
 

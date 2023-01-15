@@ -9,7 +9,6 @@ import com.dnd.botTable.Action;
 import com.dnd.botTable.actions.BotAction;
 import com.dnd.botTable.actions.CloudAction;
 import com.dnd.botTable.actions.WrappAction;
-import com.dnd.botTable.actions.dndAction.AttackAction;
 import com.dnd.botTable.actions.dndAction.ChangeAction;
 import com.dnd.botTable.actions.dndAction.PreRoll;
 import com.dnd.botTable.actions.dndAction.RegistrateAction;
@@ -23,6 +22,7 @@ import com.dnd.dndTable.creatingDndObject.bagDnd.Bag;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Wallet;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
+import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.rolls.Article;
 import com.dnd.dndTable.rolls.Formula;
@@ -33,9 +33,8 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	private static final long serialVersionUID = -7781627593661723428L;
 
 	private String name;
-	private boolean fighting;
 	private LVL lvl;
-	private int speed;
+	private int speed = 25;
 	private String nature;
 	private HP hp;
 	private RaceDnd myRace;
@@ -73,7 +72,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		else if(action instanceof PreRoll) 
 		{
 			PreRoll roll = (PreRoll) action;
-			if(roll.getAction() instanceof AttackAction)
+			if(action.getKey() == attackMachine.key)
 			{
 				return attackMachine.postAttack(postRoll(roll));
 			}
@@ -84,10 +83,6 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		}
 		else if(action instanceof RollAction)
 		{
-			if(action instanceof AttackAction)
-			{
-				return PreRoll.create(action.getName() + "PreRoll", (AttackAction) action);
-			}
 			return WrappAction.create("EndRoll", NO_ANSWER, rolls.execute((RollAction) action).execute(), null);
 		}
 		Log.add("CHARACTER ACT ERROR");
@@ -119,6 +114,10 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 			{
 				return getMemoirsAct().returnTo("Menu");
 			}
+			else if(key == DEBUFF)
+			{
+				return debuff().returnTo("Menu");
+			}
 			else if(key == REST)
 			{
 				return rest().returnTo("Menu");
@@ -147,6 +146,10 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 			{
 				return myBody.getWalletMenu().returnTo("STUFF");
 			}
+			else if(key == POSSESSION)
+			{
+				return myBody.getWalletMenu().returnTo("STUFF");
+			}
 			Log.add("TREE ACTION ERROR");
 			return null;	
 		}
@@ -168,6 +171,18 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 				{
 					Weapon weapon = (Weapon) object;
 					return attackMachine.startAction(weapon);
+				}
+				else if(object instanceof AttackModification)
+				{
+					AttackModification attack = (AttackModification) object;
+					if(attack.isPermanentCrit())
+					{
+						return attackMachine.makeCrit(attack, "TRUE STRIKE CRIT");
+					}
+					else
+					{
+					return PreRoll.create(attack.getName(), attackMachine.makeAttack(attack));
+					}
 				}
 			}
 			else
@@ -232,8 +247,19 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		{
 			return myBody.changeWallet(action);
 		}
+		else if(key == POSSESSION)
+		{
+			return myWorkmanship.addPossession(action);
+		}
 		Log.add("ERROR CHANGE ACTION IN CHARACTER");
 		return null;
+	}
+	
+	private Action debuff() 
+	{
+		String name = "Debuff";
+		String text = "(Write) What is effect on you? After it will end ELIMINATE this...";
+		return BotAction.create(name, DEBUFF, true, true, text, new String[][] {{"RETURN TO MENU"}}).replyButtons();
 	}
 
 	private Action rest() 
@@ -254,7 +280,7 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		if(time == Time.SHORT)
 		{
 			String text = "Everything that depended on a short rest is reset.\n"
-					+ "You have "+lvl+" Hit Dice available to restore your health.";
+					+ "You have "+getLvl()+" Hit Dice available to restore your health.";
 			return WrappAction.create(name, NO_ANSWER, text, null);
 		}
 		else if(time.equals(Time.LONG))
@@ -269,18 +295,6 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	private PreRoll postRoll(PreRoll roll)
 	{
 		String text = "BED BED BED";
-		if(roll.getAction() instanceof AttackAction)
-		{
-			AttackAction attack = (AttackAction) roll.getAction();
-			if(attack.getAttack().isPermanentCrit())
-			{
-				text = "PERMANENT CRIT";
-				roll.setCriticalHit(true);
-				roll.setText(text);
-				return roll;
-			}
-		}
-
 		Formula formula = rolls.execute(roll.getAction());
 		String status = roll.getStatus();
 		if(status.equals("ADVENTURE"))
@@ -387,19 +401,19 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	{
 		int result = 0;
 
-		if(lvl.lvl>16) 
+		if(getLvl().lvl>16) 
 		{
 			result = 6;
 		} 
-		else if(lvl.lvl>12) 
+		else if(getLvl().lvl>12) 
 		{
 			result = 5;
 		} 
-		else if(lvl.lvl>8) 
+		else if(getLvl().lvl>8) 
 		{
 			result = 4;
 		} 
-		else if(lvl.lvl>4) 
+		else if(getLvl().lvl>4) 
 		{
 			result = 3;
 		} 
@@ -452,16 +466,6 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 		return attackMachine;
 	}
 
-	public boolean isFighting() 
-	{
-		return fighting;
-	}
-
-	public void setFighting(boolean fighting) 
-	{
-		this.fighting = fighting;
-	}
-
 	public Body getBody() 
 	{
 		return myBody;
@@ -481,7 +485,12 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 
 	public String getMenu()
 	{
-		return "Menu Some information of hero";
+		String answer = name + "\n\n";
+		answer += hp.info();
+		answer += lvl.info();
+		answer += myBody.info();
+		answer += myWorkmanship.info();
+		return answer;
 	}
 
 	public HP getHp() 
@@ -492,6 +501,13 @@ public class CharacterDnd implements Serializable, Refreshable, DndKeyWallet
 	public List<CloudAction> getCloud() 
 	{
 		return cloud;
+	}
+
+	/**
+	 * @return the lvl
+	 */
+	public LVL getLvl() {
+		return lvl;
 	}
 
 }

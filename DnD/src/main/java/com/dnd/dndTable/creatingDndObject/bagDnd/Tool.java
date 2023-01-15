@@ -18,7 +18,7 @@ public class Tool extends Items
 
 	public enum Tools
 	{
-		SMITH("Smith’s Tools", "Inside:\r\n"
+		SMITH("Smith`s Tools", "Inside:\r\n"
 				+ "• hammers,\r\n"
 				+ "• pincers,\r\n"
 				+ "• coal,\r\n"
@@ -40,7 +40,7 @@ public class Tool extends Items
 				+ "10 Sharpen a dull blade\r\n"
 				+ "15 Repair a set of armor\r\n"
 				+ "15 Dismantle non-magical metal object"),
-		NAVIGATOR("Navigator’s Tools", "Inside:\r\n"
+		NAVIGATOR("Navigator`s Tools", "Inside:\r\n"
 				+ "• sextant,\r\n"
 				+ "• compass,\r\n"
 				+ "• caliper,\r\n"
@@ -60,7 +60,7 @@ public class Tool extends Items
 				+ "Additional abilities based on roll results:\r\n"
 				+ "10 Plot a course\r\n"
 				+ "15 Determine your position on the marine navigation chart"),
-		THIEVES("Thieves’ Tools", "Inside:\r\n"
+		THIEVES("Thieve`s Tools", "Inside:\r\n"
 				+ "• a small file,\r\n"
 				+ "• a set of master keys,\r\n"
 				+ "• a small mirror with a long handle,\r\n"
@@ -96,7 +96,7 @@ public class Tool extends Items
 				+ "Additional abilities based on roll results:\r\n"
 				+ "15 Catch a player on a cheat\r\n"
 				+ "15 Understand the character of the opponent"),
-		ALCHEMIST("Alchemist’s Supplies","Inside:\r\n"
+		ALCHEMIST("Alchemist`s Supplies","Inside:\r\n"
 				+ "• two glass beakers,\r\n"
 				+ "• a metal frame that holds the beaker above an open flame,\r\n"
 				+ "• glass stick for stirring,\r\n"
@@ -136,7 +136,7 @@ public class Tool extends Items
 				+ "15 Identify the substance\r\n"
 				+ "15 Arson\r\n"
 				+ "20 Neutralize Acid"),
-		POTTER("Potter’s Tools","Inside:\r\n"
+		POTTER("Potter`s Tools","Inside:\r\n"
 				+ "• pottery needles,\r\n"
 				+ "• cycles,\r\n"
 				+ "• scrapers,\r\n"
@@ -162,7 +162,7 @@ public class Tool extends Items
 				+ "10 Determine what was in the vessel\r\n"
 				+ "15 Create a durable pot\r\n"
 				+ "20 Find the weak point of a ceramic object"),
-		CALIGRAF("Calligrapher’s Supplies","Inside:\r\n"
+		CALIGRAF("Calligrapher`s Supplies","Inside:\r\n"
 				+ "• ink,\r\n"
 				+ "• a lot of parchment sheets,\r\n"
 				+ "• three writing pens.\r\n"
@@ -186,7 +186,7 @@ public class Tool extends Items
 				+ "15 Determine the state of mind of the writer\r\n"
 				+ "15 Recognize fake text\r\n"
 				+ "20 Forge a signature"),
-		MASON("Mason’s Tools","Inside:\r\n"
+		MASON("Mason`s Tools","Inside:\r\n"
 				+ "• Master OK,\r\n"
 				+ "• hammer,\r\n"
 				+ "• chisel,\r\n"
@@ -212,7 +212,7 @@ public class Tool extends Items
 				+ "Additional abilities based on roll results:\r\n"
 				+ "10 Punch a small hole in the stone wall with a chisel\r\n"
 				+ "15 Find a weak spot in the stone wall"),
-		CARTOGRAPH("Cartographer’s Tools","Inside:\r\n"
+		CARTOGRAPH("Cartographer`s Tools","Inside:\r\n"
 				+ "• writing pen,\r\n"
 				+ "• ink,\r\n"
 				+ "• parchment,\r\n"
@@ -241,7 +241,7 @@ public class Tool extends Items
 				+ "15 Estimate the direction and distance to the landmark\r\n"
 				+ "15 Recognize that the card is fake\r\n"
 				+ "20 Draw the missing piece of the map"),
-		LEATHERWORK("Leatherworker’s Tools", "Inside:\r\n"
+		LEATHERWORK("Leatherworker`s Tools", "Inside:\r\n"
 				+ "• leather cutter (knife),\r\n"
 				+ "• a small mallet,\r\n"
 				+ "• groove cutter,\r\n"
@@ -265,7 +265,7 @@ public class Tool extends Items
 				+ "Additional abilities based on roll results:\r\n"
 				+ "10 Change the appearance of a leather item\r\n"
 				+ "20 Determine the past of a leather item"),
-		POISONER("Poisoner’s Kit","Inside:\r\n"
+		POISONER("Poisoner`s Kit","Inside:\r\n"
 				+ "• glass bottles,\r\n"
 				+ "• mortar\r\n"
 				+ "• pestle,\r\n"
@@ -294,7 +294,7 @@ public class Tool extends Items
 				+ "Additional abilities based on roll results:\r\n"
 				+ "10 Identify the poisoned object\r\n"
 				+ "20 Determine Poison Effect"),
-		BREWER("Brewer’s Supplies","Inside:\r\n"
+		BREWER("Brewer`s Supplies","Inside:\r\n"
 				+ "• a large glass bottle,\r\n"
 				+ "• some hops,\r\n"
 				+ "• siphon,\r\n"
@@ -321,7 +321,7 @@ public class Tool extends Items
 				+ "10 Detect poison or impurity in drink\r\n"
 				+ "15 Identify alcohol\r\n"
 				+ "20 Ignore the effect of alcohol"),
-		CARPENTER("Carpenter’s Tools","Inside:\r\n"
+		CARPENTER("Carpenter`s Tools","Inside:\r\n"
 				+ "• saw,\r\n"
 				+ "• hammer,\r\n"
 				+ "• nails,\r\n"
@@ -356,7 +356,7 @@ public class Tool extends Items
 				+ "15 Design a complex wooden structure\r\n"
 				+ "15 Find a weak spot in a wooden wall\r\n"
 				+ "20 Remove door from hinges"),
-		COOK("Cook’s Utensils","Inside:\r\n"
+		COOK("Cook`s Utensils","Inside:\r\n"
 				+ "• knife,\r\n"
 				+ "• chisel,\r\n"
 				+ "• small saw.\r\n\r\n"
@@ -381,7 +381,7 @@ public class Tool extends Items
 				+ "10 Repeat a dish10Detect a poison or impurity in food\r\n"
 				+ "15 Detect poison or impurities in food\r\n"
 				+ "15 Cook a gourmet meal"),
-		WOOD("Woodcarver’s Tools","Inside:\r\n"
+		WOOD("Woodcarver`s Tools","Inside:\r\n"
 				+ "• knife,\r\n"
 				+ "• chisel,\r\n"
 				+ "• small saw.\r\n"
@@ -405,7 +405,7 @@ public class Tool extends Items
 				+ "Additional abilities based on roll results:\r\n"
 				+ "10 Make a small wooden figurine\r\n"
 				+ "10 Carve an intricate pattern on wood"),
-		TINKER("Tinker’s Tools","Vnutri: • razlichnyye ruchnyye instrumenty, • nitki, • igolki, • tochil'nyy kamen', • kuski tkani i kozhi, • nebol'shuyu banku kleya (sinyuyu izolentu poka, uvy, ne pridumali). Kogda vy delayete proverku SKILOV vy mozhete poluchit' preimushchestva: Istoriya.  Vy mozhete opredelit' vozrast i proiskhozhdeniye predmeta, dazhe yesli u vas v nalichii vsego neskol'ko oskolkov, ostavshikhsya ot originala. Rassledovaniye.  Kogda Vy osmatrivayete povrezhdonnyy predmet, Vy uznayote, kak i naskol'ko davno on byl povrezhdon. A takzhe vy mozhet: Pochinka.  Vy mozhete vosstanovit' po 10 khitov povrezhdonnogo predmeta za kazhdyy chas raboty. Dlya pochinki lyubogo predmeta vam neobkhodim dostup k materialam, neobkhodimym dlya remonta. Dlya metallicheskikh predmetov vam nuzhen dostup k otkrytomu ognyu, zhara kotorogo dostatochno, chtoby sdelat' metall plastichnym. Dopolnitel'nyye vozmozhnosti po rezul'tatam broska: 10 Vremenno pochinit' povrezhdonnyy mekhanizm 15 Pochinit' predmet vdvoye bystreye 20 Smasterit' iz khlama vremennyy predmet\r\n"
+		TINKER("Tinker`s Tools","Vnutri: • razlichnyye ruchnyye instrumenty, • nitki, • igolki, • tochil'nyy kamen', • kuski tkani i kozhi, • nebol'shuyu banku kleya (sinyuyu izolentu poka, uvy, ne pridumali). Kogda vy delayete proverku SKILOV vy mozhete poluchit' preimushchestva: Istoriya.  Vy mozhete opredelit' vozrast i proiskhozhdeniye predmeta, dazhe yesli u vas v nalichii vsego neskol'ko oskolkov, ostavshikhsya ot originala. Rassledovaniye.  Kogda Vy osmatrivayete povrezhdonnyy predmet, Vy uznayote, kak i naskol'ko davno on byl povrezhdon. A takzhe vy mozhet: Pochinka.  Vy mozhete vosstanovit' po 10 khitov povrezhdonnogo predmeta za kazhdyy chas raboty. Dlya pochinki lyubogo predmeta vam neobkhodim dostup k materialam, neobkhodimym dlya remonta. Dlya metallicheskikh predmetov vam nuzhen dostup k otkrytomu ognyu, zhara kotorogo dostatochno, chtoby sdelat' metall plastichnym. Dopolnitel'nyye vozmozhnosti po rezul'tatam broska: 10 Vremenno pochinit' povrezhdonnyy mekhanizm 15 Pochinit' predmet vdvoye bystreye 20 Smasterit' iz khlama vremennyy predmet\r\n"
 				+ "Ещё\r\n"
 				+ "979 / 5 000\r\n"
 				+ "Результаты перевода\r\n"
@@ -436,7 +436,7 @@ public class Tool extends Items
 				+ "10 Temporarily repair the damaged mechanism\r\n"
 				+ "15 Repair an item twice as fast\r\n"
 				+ "20 Craft a temporary item out of junk"),
-		COBBLER("Cobbler’s Tools","Inside:\r\n"
+		COBBLER("Cobbler`s Tools","Inside:\r\n"
 				+ "• hammer,\r\n"
 				+ "• awl,\r\n"
 				+ "• knife,\r\n"
@@ -464,7 +464,7 @@ public class Tool extends Items
 				+ "Additional abilities based on roll results:\r\n"
 				+ "10 Determine the age and origin of shoes\r\n"
 				+ "15 Find the secret compartment in the heel"),
-		GLASS("Glassblower’s Tools","You need a heat source to work with glass.\r\n"
+		GLASS("Glassblower`s Tools","You need a heat source to work with glass.\r\n"
 				+ "\r\n"
 				+ "Inside:\r\n"
 				+ "• blowing tube,\r\n"
@@ -489,7 +489,7 @@ public class Tool extends Items
 				+ "Additional abilities based on roll results:\r\n"
 				+ "10 Determine the origin of the glass\r\n"
 				+ "20 Determine what a glass object once contained"),
-		WEAWER("Weaver’s Tools","Inside:\r\n"
+		WEAWER("Weaver`s Tools","Inside:\r\n"
 				+ "• threads,\r\n"
 				+ "• needles\r\n"
 				+ "• pieces of cloth.\r\n"
@@ -513,7 +513,7 @@ public class Tool extends Items
 				+ "10 Fabric reuse\r\n"
 				+ "10 Fabric reuse\r\n"
 				+ "15 Hem the outfit"),
-		PAINT("Painter’s Supplies","Inside:\r\n"
+		PAINT("Painter`s Supplies","Inside:\r\n"
 				+ "• easel,\r\n"
 				+ "• canvas,\r\n"
 				+ "• paints,\r\n"
@@ -537,7 +537,7 @@ public class Tool extends Items
 				+ "Additional abilities based on roll results:\r\n"
 				+ "10 Write an accurate portrait\r\n"
 				+ "20 Create a painting with a hidden message"),
-		JEWELER("Jeweler’s Tools","Inside:\r\n"
+		JEWELER("Jeweler`s Tools","Inside:\r\n"
 				+ "• small saw\r\n"
 				+ "• hammer,\r\n"
 				+ "• files,\r\n"

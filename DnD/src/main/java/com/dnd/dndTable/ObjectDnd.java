@@ -1,5 +1,6 @@
 package com.dnd.dndTable;
 
+import com.dnd.dndTable.creatingDndObject.MagicSoul;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
@@ -12,7 +13,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 	@JsonSubTypes.Type(value = Items.class, name = "ITEM"),
 	@JsonSubTypes.Type(value = Feature.class, name = "FEATURE"),
 	@JsonSubTypes.Type(value = Possession.class, name = "POSSESSION"),
-	@JsonSubTypes.Type(value = AttackModification.class, name = "ATTACK_MODIFICATION")})
+	@JsonSubTypes.Type(value = AttackModification.class, name = "ATTACK_MODIFICATION"),
+	@JsonSubTypes.Type(value = MagicSoul.class, name = "MAGIC_SOUL")})
 public interface ObjectDnd extends DndKeyWallet
 {
 	public abstract long key();

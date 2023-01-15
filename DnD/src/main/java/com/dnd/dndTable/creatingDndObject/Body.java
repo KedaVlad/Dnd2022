@@ -49,7 +49,7 @@ public class Body implements ObjectDnd, Serializable
 	{
 		String instruction = "Some instruction for STUFF";
 
-		return WrappAction.create("BodyArray", BODY, instruction, new Action[][]
+		return WrappAction.create("STUFF", BODY, instruction, new Action[][]
 				{{
 					StartTreeAction.create("PREPEARED", PREPEARED),
 					StartTreeAction.create("BAG", BAG),
@@ -131,7 +131,7 @@ public class Body implements ObjectDnd, Serializable
 		{
 			prepearedWeapons.remove(item);
 			myBags.get(0).add(item);
-			return action.returnTo("Menu", 100000002+"BAG");
+			return action.returnTo("STUFF", "PREPEARED");
 		}
 		else if(answer.contains("ATTACK"))
 		{
@@ -155,16 +155,9 @@ public class Body implements ObjectDnd, Serializable
 		{
 			return ammunitionMenu(action);
 		}
-		else if(item instanceof Ammunition)
-		{
-			return ammunitionMenu(action);
-		}
 		else
 		{
-			String name = item.getName();
-			String text = item.getDescription();
-			if(text == null || text == "") text = name;
-			return WrappAction.create(name, item.key(), text, null);
+			return itemMenu(action);
 		}
 	}
 
@@ -190,13 +183,13 @@ public class Body implements ObjectDnd, Serializable
 				if(target.getPoolAnswer().get(1).contains("+"))
 				{
 					wallet.addCoin(target.getPoolAnswer().get(0), value);
-					return action.returnTo("Menu",100000002+"BAG");
+					return action.returnTo("STUFF", "WALLET");
 				}
 				else if(target.getPoolAnswer().get(1).contains("-"))
 				{
 					if(wallet.lostCoin(target.getPoolAnswer().get(0), value))
 					{
-						return action.returnTo("Menu",100000002+"BAG");
+						return action.returnTo("STUFF", "WALLET");
 					}
 					else
 					{
@@ -216,24 +209,24 @@ public class Body implements ObjectDnd, Serializable
 	{
 		ObjectDnd target = action.getTarget();
 		String answer = action.getAnswer();
-
-		if(answer.equals("THROW OUT"))
+		Log.add("Change " + answer);
+		if(answer.contains("THROW OUT"))
 		{
 			myBags.get(0).getInsideBag().remove((Items)target);
-			return action.returnTo("Menu", 100000002+"BAG");
+			return action.returnTo("STUFF", "BAG");
 		}
 		else if(answer.equals("WEAR"))
 		{
 			wear((Armor)target);
 			prepearedWeapons.add((Armor) target);
 			myBags.get(0).getInsideBag().remove((Items)target);
-			return action.returnTo("Menu", 100000002+"BAG");
+			return action.returnTo("STUFF", "BAG");
 		}
 		else if(answer.equals("PREPEAR"))
 		{
 			prepearedWeapons.add((Weapon) target);
 			myBags.get(0).getInsideBag().remove(target);
-			return action.returnTo("Menu", 100000002+"BAG");
+			return action.returnTo("STUFF", "BAG");
 		}
 		else if(answer.equals("TOP UP"))
 		{
@@ -250,7 +243,7 @@ public class Body implements ObjectDnd, Serializable
 					value = ((Integer) Integer.parseInt(matcher.group()));
 				}
 				ammunition.addValue(value);
-				return action.returnTo("Menu", 100000002+"BAG");
+				return action.returnTo("STUFF", "BAG");
 			}
 			else
 			{
@@ -278,6 +271,13 @@ public class Body implements ObjectDnd, Serializable
 		Armor armor = (Armor) action.getTarget();
 		return ChangeAction.create(action, armor.toString() + ": " + armor.getType().getClazz() , new String[][] {{"WEAR", "THROW OUT"}});
 	}
+	
+	private Action itemMenu(RegistrateAction action)
+	{
+		Items item = (Items) action.getTarget();
+		return ChangeAction.create(action, item.toString() , new String[][] {{"THROW OUT"}});
+	}
+
 
 	private Action ammunitionMenu(RegistrateAction action)
 	{
@@ -370,6 +370,11 @@ public class Body implements ObjectDnd, Serializable
 			}
 		}
 		return answer;
+	}
+
+	public String info() {
+		// TODO Auto-generated method stub
+		return getAC() + "\n";
 	}
 
 }

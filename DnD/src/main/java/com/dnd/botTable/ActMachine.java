@@ -15,6 +15,19 @@ class ActMachine implements Serializable
 	private List<Integer> prepeared = new ArrayList<>();
 	private List<Integer> trash = new ArrayList<>();
 
+	Integer getMenuId()
+	{
+		if(mainTree.get(2).name.equals("Menu"))
+		{
+			return mainTree.get(2).getMessageId();
+		}
+		else
+		{
+			Log.add("Error menu Id");
+			return 0;
+		}
+	}
+	
 	Action findReply()
 	{
 		for(int i = mainTree.size() - 1; i > 0; i--)
@@ -37,12 +50,12 @@ class ActMachine implements Serializable
 
 	void dateche(String name)
 	{
-		for(Action dateche: datached)
+		for(Action dateche: getDatached())
 		{
 			if(dateche.name.equals(name)) {
 
 				trash.addAll(dateche.end());
-				datached.remove(dateche);
+				getDatached().remove(dateche);
 				break;
 			}
 		}
@@ -106,7 +119,7 @@ class ActMachine implements Serializable
 
 	void start(Action act)
 	{
-		datached.add(act);
+		getDatached().add(act);
 	}
 
 	List<Integer> throwAwayTrash() {
@@ -140,7 +153,7 @@ class ActMachine implements Serializable
 	}
 
 	void toDatached(String name, Integer messageId) {
-		for(Action action: datached)
+		for(Action action: getDatached())
 		{
 			if(action.name == name)
 			{
@@ -161,6 +174,13 @@ class ActMachine implements Serializable
 		}
 		
 		return answer;
+	}
+
+	/**
+	 * @return the datached
+	 */
+	public List<Action> getDatached() {
+		return datached;
 	}
 }
 

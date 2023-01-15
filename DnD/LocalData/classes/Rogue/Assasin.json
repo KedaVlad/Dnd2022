@@ -11,156 +11,158 @@
                   "target":[
                      {
                         "POSSESSION":{
-                           "name":"Light Armor",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":210000000,
-                                 "target":"Light Armor",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Light Armor"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Simple Weapon",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Simple Weapon",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Simple Weapon"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Hand Crossbows",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Hand Crossbows",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Hand Crossbows"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Long Swords",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Long Swords",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Long Swords"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Rapiers",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Rapiers",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Rapiers"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Short Swords",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Short Swords",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Short Swords"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Short Swords",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":120000000,
-                                 "target":"Short Swords",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Short Swords"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Thieves' Tools",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":200000000,
-                                 "target":"Thieves' Tools",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Thieves' Tools"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"SR Dexterity",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":180000000,
-                                 "target":"SR Dexterity",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"SR Dexterity"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"SR Intelligense",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":180000000,
-                                 "target":"SR Intelligense",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"SR Intelligense"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"SR Intelligense",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":180000000,
-                                 "target":"SR Intelligense",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"SR Intelligense"
                         }
                      },
                      {
                         "ARMOR":{
                            "name":"Leather Armor",
-                           "description":null
+                           "description":"Leather Armor\nType armor: LIGHT\nClass Armor(CA): 11 + DEXTERYTI",
+                           "type":"LEATHER_ARMOR"
                         }
                      },
                      {
                         "WEAPON":{
-                           "name":null,
-                           "description":null,
+                           "name":"Dagger",
+                           "description":"Dagger\nMelee range attak\nProperties: SIMPLE, MELEE, FENCING, LUNG, \nDamage dice:D4 (+0)\nLong range attak\nProperties: SIMPLE, THROWING, \nDamage dice:D4 (+0)\n",
                            "attack":0,
                            "damage":0,
-                           "firstType":null,
-                           "secondType":null
+                           "type":"DAGGER",
+                           "attacksTypes":[
+                              {
+                                 "ATTACK_MODIFICATION":{
+                                    "name":"Melee attack",
+                                    "requirement":[
+                                       "SIMPLE",
+                                       "MELEE",
+                                       "FENCING",
+                                       "LUNG"
+                                    ],
+                                    "permanent":false,
+                                    "postAttack":false,
+                                    "permanentCrit":false,
+                                    "attack":[
+                                       
+                                    ],
+                                    "damage":[
+                                       {
+                                          "name":"Weapon base",
+                                          "buff":0,
+                                          "combo":[
+                                             "D4"
+                                          ],
+                                          "results":[
+                                             0,
+                                             0
+                                          ],
+                                          "typeDamage":"STICKING"
+                                       }
+                                    ],
+                                    "ammunition":null,
+                                    "statDepend":"DEXTERITY",
+                                    "secondStat":null
+                                 }
+                              },
+                              {
+                                 "ATTACK_MODIFICATION":{
+                                    "name":"Throw",
+                                    "requirement":[
+                                       "SIMPLE",
+                                       "THROWING"
+                                    ],
+                                    "permanent":false,
+                                    "postAttack":false,
+                                    "permanentCrit":false,
+                                    "attack":[
+                                       
+                                    ],
+                                    "damage":[
+                                       {
+                                          "name":"Weapon base",
+                                          "buff":0,
+                                          "combo":[
+                                             "D4"
+                                          ],
+                                          "results":[
+                                             0,
+                                             0
+                                          ],
+                                          "typeDamage":"STICKING"
+                                       }
+                                    ],
+                                    "ammunition":null,
+                                    "statDepend":"DEXTERITY",
+                                    "secondStat":null
+                                 }
+                              }
+                           ]
                         }
                      },
                      {
-                        "PACK":{
-                           "name":"Thieves' Tools",
-                           "description":null
+                        "TOOL":{
+                           "name":"Thieves� Tools",
+                           "description":"Inside:\r\n� a small file,\r\n� a set of master keys,\r\n� a small mirror with a long handle,\r\n� a set of scissors with narrow blades,\r\n� a pair of tweezers.\r\n\r\nWhen you make a SKILL check you can gain the following benefits:\r\n\r\nHISTORY.\r\nYour knowledge of traps gives you additional knowledge when answering questions about places famous for their traps.\r\nRESEARCH and PERCEPTION.\r\nYou gain additional knowledge when looking for traps, because you know various simple signs that give away their presence.\r\n\r\nAnd also you can:\r\nSetting up a trap.\r\nYou can not only disable traps, but also set them. As part of a short rest, you can create a trap from improvised means. The result of your check becomes a challenge for anyone trying to detect or disable the trap. The trap deals damage equal to the materials used in its creation (such as poison or weapons), or damage equal to half the result of your check, whichever the DM deems more appropriate.\r\n\r\nAdditional abilities based on roll results:\r\nVarious Open the lock\r\nDisarm the trap"
                         }
                      }
                   ]
@@ -168,352 +170,8 @@
             },
             {
                "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Acrobatics",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Acrobatics",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Investigation",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Investigation",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Athletics",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Athletics",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Mindfulness",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Mindfulness",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Performance",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Performance",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Intimidation",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Intimidation",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Sleight of hand",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Sleight of hand",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Deception",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Deception",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Insight",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Insight",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Stelth",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Stelth",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Persuasion",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":180000000,
-                                                "target":"Persuasion",
-                                                "competence":false
-                                             }
-                                          }
-                                       }
-                                    }
-                                 ]
-                              }
-                           }
-                        ],
-                        "times":4
-                     }
-                  },
-                  "text":"Choose skill",
-                  "soft":false
-               }
-            },
-            {
-               "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "WEAPON":{
-                                          "name":null,
-                                          "description":null,
-                                          "attack":0,
-                                          "damage":0,
-                                          "firstType":null,
-                                          "secondType":null
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "WEAPON":{
-                                          "name":null,
-                                          "description":null,
-                                          "attack":0,
-                                          "damage":0,
-                                          "firstType":null,
-                                          "secondType":null
-                                       }
-                                    }
-                                 ]
-                              }
-                           }
-                        ],
-                        "times":1
-                     }
-                  },
-                  "text":"Choose item",
-                  "soft":false
-               }
-            },
-            {
-               "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "WEAPON":{
-                                          "name":null,
-                                          "description":null,
-                                          "attack":0,
-                                          "damage":0,
-                                          "firstType":null,
-                                          "secondType":null
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "WEAPON":{
-                                          "name":null,
-                                          "description":null,
-                                          "attack":0,
-                                          "damage":0,
-                                          "firstType":null,
-                                          "secondType":null
-                                       }
-                                    }
-                                 ]
-                              }
-                           }
-                        ],
-                        "times":1
-                     }
-                  },
-                  "text":"Choose item",
-                  "soft":false
-               }
-            },
-            {
-               "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "PACK":{
-                                          "name":"Dungeoneer's Pack",
-                                          "description":null
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "PACK":{
-                                          "name":"Burglar's Pack",
-                                          "description":null
-                                       }
-                                    }
-                                 ]
-                              }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "PACK":{
-                                          "name":"Explorer's Pack",
-                                          "description":null
-                                       }
-                                    }
-                                 ]
-                              }
-                           }
-                        ],
-                        "times":1
-                     }
-                  },
-                  "text":"Choose Pack",
-                  "soft":false
+                  "text":"Now let's finish with all the details, and get acquainted with the game menu.\n\n1. Choose 4 skills from list below in CHARACTERISTIC > STATS, from this list and Up them to Proficiency\nAcrobatics\nInvestigation\nAthletics\nMindfulness\nPerformance\nIntimidation\nSleight of hand\nDeception\nInsight\nStelth\nPersuasion\n2. In STUFF > BAG > ADD ITEM > WEAPON (Rapier or Shortsword)\n3. In STUFF > BAG > ADD ITEM > WEAPON (Shortsword or Shortbow and 20 Arrows)\n4. In STUFF > BAG > ADD ITEM >  PACK (Dungeoneer's Pack or Burglar's Pack or Explorer's Pack)\n\nAfter this message you will no longer need - ELIMINATE this.",
+                  "name":"End create"
                }
             }
          ],
@@ -523,57 +181,14 @@
                   "target":[
                      {
                         "INER_FEATURE":{
-                           "name":"Competence",
-                           "description":"Blavlavla",
+                           "name":"Expertise",
+                           "description":"At 1st level, choose two of your skill proficiencies, or one of your skill proficiencies and your proficiency with thieves� tools. Your proficiency bonus is doubled for any ability check you make that uses either of the chosen proficiencies.\n\nAt 6th level, you can choose two more of your proficiencies (in skills or with thieves� tools) to gain this benefit.",
                            "depend":null,
                            "comand":[
                               {
                                  "CLOUD_COMAND":{
-                                    "pool":{
-                                       "TIME_POOL":{
-                                          "active":[
-                                             {
-                                                "ADD_COMAND":{
-                                                   "target":[
-                                                      {
-                                                         "POSSESSION":{
-                                                            "name":"Thieves' Tools",
-                                                            "inerComand":{
-                                                               "PROF_COMAND":{
-                                                                  "key":200000000,
-                                                                  "target":"Thieves' Tools",
-                                                                  "competence":true
-                                                               }
-                                                            }
-                                                         }
-                                                      }
-                                                   ]
-                                                }
-                                             },
-                                             {
-                                                "ADD_COMAND":{
-                                                   "target":[
-                                                      {
-                                                         "POSSESSION":{
-                                                            "name":"",
-                                                            "inerComand":{
-                                                               "PROF_COMAND":{
-                                                                  "key":220000000,
-                                                                  "target":"",
-                                                                  "competence":true
-                                                               }
-                                                            }
-                                                         }
-                                                      }
-                                                   ]
-                                                }
-                                             }
-                                          ],
-                                          "times":2
-                                       }
-                                    },
-                                    "text":"Choose",
-                                    "soft":false
+                                    "text":"Choose 2 of yours SKILLS whith Proficiency and Up to competence",
+                                    "name":"Choose competense"
                                  }
                               }
                            ]
@@ -582,7 +197,7 @@
                      {
                         "INER_FEATURE":{
                            "name":"Sneak Attack",
-                           "description":"Y HIT WERY WELL",
+                           "description":"Beginning at 1st level, you know how to strike subtly and exploit a foe�s distraction. Once per turn, you can deal an extra 1d6 damage to one creature you hit with an attack if you have advantage on the attack roll. The attack must use a finesse or a ranged weapon.\n\nYou don�t need advantage on the attack roll if another enemy of the target is within 5 feet of it, that enemy isn�t incapacitated, and you don�t have disadvantage on the attack roll.\n\nThe amount of the extra damage increases as you gain levels in this class, as shown in the Sneak Attack column of the Rogue table.",
                            "depend":null,
                            "comand":[
                               {
@@ -591,13 +206,16 @@
                                        {
                                           "ATTACK_MODIFICATION":{
                                              "name":"Sneak Attack",
-                                             "type":null,
                                              "requirement":[
                                                 "FENCING"
                                              ],
+                                             "permanent":false,
                                              "postAttack":true,
                                              "permanentCrit":false,
                                              "attack":[
+                                                
+                                             ],
+                                             "damage":[
                                                 {
                                                    "name":"Sneak Attack",
                                                    "buff":0,
@@ -610,21 +228,24 @@
                                                    ]
                                                 }
                                              ],
-                                             "damage":[
-                                                
-                                             ]
+                                             "ammunition":null,
+                                             "statDepend":null,
+                                             "secondStat":null
                                           }
                                        },
                                        {
                                           "ATTACK_MODIFICATION":{
                                              "name":"Sneak Attack",
-                                             "type":null,
                                              "requirement":[
-                                                "THROWING"
+                                                "LONG_RANGE"
                                              ],
+                                             "permanent":false,
                                              "postAttack":true,
                                              "permanentCrit":false,
                                              "attack":[
+                                                
+                                             ],
+                                             "damage":[
                                                 {
                                                    "name":"Sneak Attack",
                                                    "buff":0,
@@ -637,9 +258,39 @@
                                                    ]
                                                 }
                                              ],
-                                             "damage":[
+                                             "ammunition":null,
+                                             "statDepend":null,
+                                             "secondStat":null
+                                          }
+                                       },
+                                       {
+                                          "ATTACK_MODIFICATION":{
+                                             "name":"Sneak Attack",
+                                             "requirement":[
+                                                "THROWING"
+                                             ],
+                                             "permanent":false,
+                                             "postAttack":true,
+                                             "permanentCrit":false,
+                                             "attack":[
                                                 
-                                             ]
+                                             ],
+                                             "damage":[
+                                                {
+                                                   "name":"Sneak Attack",
+                                                   "buff":0,
+                                                   "combo":[
+                                                      "D6"
+                                                   ],
+                                                   "results":[
+                                                      0,
+                                                      0
+                                                   ]
+                                                }
+                                             ],
+                                             "ammunition":null,
+                                             "statDepend":null,
+                                             "secondStat":null
                                           }
                                        }
                                     ]
@@ -650,8 +301,8 @@
                      },
                      {
                         "INER_FEATURE":{
-                           "name":"Thieves Jargon",
-                           "description":"Blaasfeefvla",
+                           "name":"Thieves� Cant",
+                           "description":"During your rogue training you learned thieves� cant, a secret mix of dialect, jargon, and code that allows you to hide messages in seemingly normal conversation. Only another creature that knows thieves� cant understands such messages. It takes four times longer to convey such a message than it does to speak the same idea plainly.\n\nIn addition, you understand a set of secret signs and symbols used to convey short, simple messages, such as whether an area is dangerous or the territory of a thieves� guild, whether loot is nearby, or whether the people in an area are easy marks or will provide a safe house for thieves on the run.",
                            "depend":null,
                            "comand":[
                               {
@@ -659,14 +310,8 @@
                                     "target":[
                                        {
                                           "POSSESSION":{
-                                             "name":"Thieves Jargon",
-                                             "inerComand":{
-                                                "PROF_COMAND":{
-                                                   "key":240000000,
-                                                   "target":"Thieves Jargon",
-                                                   "competence":false
-                                                }
-                                             }
+                                             "prof":"BASE",
+                                             "name":"Thieves Jargon"
                                           }
                                        }
                                     ]
@@ -685,8 +330,8 @@
                   "target":[
                      {
                         "FEATURE":{
-                           "name":"Tricky Action",
-                           "description":"Bimbombom",
+                           "name":"Cunning Action",
+                           "description":"Starting at 2nd level, your quick thinking and agility allow you to move and act quickly. You can take a bonus action on each of your turns in combat. This action can be used only to take the Dash, Disengage, or Hide action.",
                            "depend":null
                         }
                      }
@@ -700,88 +345,183 @@
                   "target":[
                      {
                         "FEATURE":{
-                           "name":"Additional Holdings",
-                           "description":"Bimweweom",
+                           "name":"Assassinate",
+                           "description":"Starting at 3rd level, you are at your deadliest when you get the drop on your enemies. You have advantage on attack rolls against any creature that hasn't taken a turn in the combat yet. In addition, any hit you score against a creature that is surprised is a critical hit.",
                            "depend":null
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Poisn Tools",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":200000000,
-                                 "target":"Poisn Tools",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Poisn Tools"
                         }
                      },
                      {
                         "POSSESSION":{
-                           "name":"Grimm Tools",
-                           "inerComand":{
-                              "PROF_COMAND":{
-                                 "key":200000000,
-                                 "target":"Grimm Tools",
-                                 "competence":false
-                              }
-                           }
+                           "prof":"BASE",
+                           "name":"Grimm Tools"
                         }
                      },
                      {
-                        "INER_FEATURE":{
-                           "name":"Liquidation",
-                           "description":"Liquidation dsksdlflkdsf",
-                           "depend":null,
-                           "comand":[
+                        "ATTACK_MODIFICATION":{
+                           "name":"Assassinate(Crit)",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":false,
+                           "permanentCrit":true,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Assassinate(Crit)",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":false,
+                           "permanentCrit":true,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Assassinate(Crit)",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":false,
+                           "permanentCrit":true,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
                               {
-                                 "ADD_COMAND":{
-                                    "target":[
-                                       {
-                                          "ATTACK_MODIFICATION":{
-                                             "name":"Liquidation",
-                                             "type":null,
-                                             "requirement":[
-                                                "FENCING"
-                                             ],
-                                             "postAttack":false,
-                                             "permanentCrit":true,
-                                             "attack":[
-                                                
-                                             ],
-                                             "damage":[
-                                                
-                                             ]
-                                          }
-                                       },
-                                       {
-                                          "ATTACK_MODIFICATION":{
-                                             "name":"Liquidation",
-                                             "type":null,
-                                             "requirement":[
-                                                "THROWING"
-                                             ],
-                                             "postAttack":false,
-                                             "permanentCrit":true,
-                                             "attack":[
-                                                
-                                             ],
-                                             "damage":[
-                                                
-                                             ]
-                                          }
-                                       }
-                                    ]
-                                 }
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0
+                                 ]
                               }
-                           ]
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
                         }
                      },
                      {
                         "FEATURE":{
                            "name":"Precise Aiming",
-                           "description":"Some des",
+                           "description":"As a bonus action, you give yourself advantage on your next attack roll this turn.\n\nYou can use this ability only if you haven't moved this turn, and after using it, your speed will be reduced to 0 until the end of the current turn.",
                            "depend":null
                         }
                      }
@@ -792,45 +532,8 @@
          [
             {
                "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "SOFT_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":2
-                                    }
-                                 },
-                                 "text":"STAT",
-                                 "key":180000000,
-                                 "soft":true
-                              }
-                           },
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "TIME_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":1
-                                    }
-                                 },
-                                 "text":"TRAIT",
-                                 "key":250000000,
-                                 "soft":false
-                              }
-                           }
-                        ],
-                        "times":1
-                     }
-                  },
-                  "text":"U shood to choose STATS or TRAIT",
-                  "soft":false
+                  "text":"(LVL 4)Up your 2 stats on 1 or 1 stat on 2",
+                  "name":"lvl up 4"
                }
             }
          ],
@@ -839,75 +542,111 @@
                "ADD_COMAND":{
                   "target":[
                      {
-                        "FEATURE":{
-                           "name":"Incredible Evasion",
-                           "description":"Y HasdIT WERY WasdELL",
-                           "depend":null
-                        }
-                     }
-                  ]
-               }
-            }
-         ],
-         [
-            {
-               "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"Thieves' Tools",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":200000000,
-                                                "target":"Thieves' Tools",
-                                                "competence":true
-                                             }
-                                          }
-                                       }
-                                    }
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0
                                  ]
                               }
-                           },
-                           {
-                              "ADD_COMAND":{
-                                 "target":[
-                                    {
-                                       "POSSESSION":{
-                                          "name":"",
-                                          "inerComand":{
-                                             "PROF_COMAND":{
-                                                "key":220000000,
-                                                "target":"",
-                                                "competence":true
-                                             }
-                                          }
-                                       }
-                                    }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0
                                  ]
                               }
-                           }
-                        ],
-                        "times":2
-                     }
-                  },
-                  "text":"Choose",
-                  "soft":false
-               }
-            }
-         ],
-         [
-            {
-               "ADD_COMAND":{
-                  "target":[
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
                      {
                         "FEATURE":{
-                           "name":"Evasiveness",
-                           "description":"Y HIT WEasdRY WELL",
+                           "name":"Uncanny Dodge",
+                           "description":"Starting at 5th level, when an attacker that you can see hits you with an attack, you can use your reaction to halve the attack�s damage against you.",
                            "depend":null
                         }
                      }
@@ -918,45 +657,8 @@
          [
             {
                "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "SOFT_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":2
-                                    }
-                                 },
-                                 "text":"STAT",
-                                 "key":180000000,
-                                 "soft":true
-                              }
-                           },
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "TIME_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":1
-                                    }
-                                 },
-                                 "text":"TRAIT",
-                                 "key":250000000,
-                                 "soft":false
-                              }
-                           }
-                        ],
-                        "times":1
-                     }
-                  },
-                  "text":"U shood to choose STATS or TRAIT",
-                  "soft":false
+                  "text":"(Expertise 6)Choose 2 of yours SKILLS whith Proficiency and Up to competence",
+                  "name":"Choose competense5"
                }
             }
          ],
@@ -965,9 +667,117 @@
                "ADD_COMAND":{
                   "target":[
                      {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
                         "FEATURE":{
-                           "name":"Penetration Master",
-                           "description":"Y HIT WEasweweewdRY WELL",
+                           "name":"Evasion",
+                           "description":"Beginning at 7th level, you can nimbly dodge out of the way of certain area effects, such as an ancient red dragon�s fiery breath or an ice storm spell. When you are subjected to an effect that allows you to make a Dexterity saving throw to take only half damage, you instead take no damage if you succeed on the saving throw, and only half damage if you fail.",
                            "depend":null
                         }
                      }
@@ -978,45 +788,8 @@
          [
             {
                "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "SOFT_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":2
-                                    }
-                                 },
-                                 "text":"STAT",
-                                 "key":180000000,
-                                 "soft":true
-                              }
-                           },
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "TIME_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":1
-                                    }
-                                 },
-                                 "text":"TRAIT",
-                                 "key":250000000,
-                                 "soft":false
-                              }
-                           }
-                        ],
-                        "times":1
-                     }
-                  },
-                  "text":"U shood to choose STATS or TRAIT",
-                  "soft":false
+                  "text":"(LVL 8)Up your 2 stats on 1 or 1 stat on 2",
+                  "name":"lvl up 8"
                }
             }
          ],
@@ -1024,10 +797,267 @@
             {
                "ADD_COMAND":{
                   "target":[
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "FEATURE":{
+                           "name":"Infiltration Expertise",
+                           "description":"Starting at 9th level, you can unfailingly create false identities for yourself. You must spend seven days and 25 gp to establish the history, profession, and affiliations for an identity. You can't establish an identity that belongs to someone else. For example, you might acquire appropriate clothing, letters of introduction, and official- looking certification to establish yourself as a member of a trading house from a remote city so you can insinuate yourself into the company of other wealthy merchants.\n\nThereafter, if you adopt the new identity as a disguise, other creatures believe you to be that person until given an obvious reason not to.",
+                           "depend":null
+                        }
+                     }
+                  ]
+               }
+            }
+         ],
+         [
+            {
+               "CLOUD_COMAND":{
+                  "text":"(LVL 10)Up your 2 stats on 1 or 1 stat on 2",
+                  "name":"lvl up 10"
+               }
+            }
+         ],
+         [
+            {
+               "ADD_COMAND":{
+                  "target":[
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
                      {
                         "FEATURE":{
                            "name":"Reliable Talent",
-                           "description":"Y HfefefeIT WEasdRY WELL",
+                           "description":"By 11th level, you have refined your chosen skills until they approach perfection. Whenever you make an ability check that lets you add your proficiency bonus, you can treat a d20 roll of 9 or lower as a 10.",
                            "depend":null
                         }
                      }
@@ -1038,45 +1068,8 @@
          [
             {
                "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "SOFT_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":2
-                                    }
-                                 },
-                                 "text":"STAT",
-                                 "key":180000000,
-                                 "soft":true
-                              }
-                           },
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "TIME_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":1
-                                    }
-                                 },
-                                 "text":"TRAIT",
-                                 "key":250000000,
-                                 "soft":false
-                              }
-                           }
-                        ],
-                        "times":1
-                     }
-                  },
-                  "text":"U shood to choose STATS or TRAIT",
-                  "soft":false
+                  "text":"(LVL 12)Up your 2 stats on 1 or 1 stat on 2",
+                  "name":"lvl up 12"
                }
             }
          ],
@@ -1084,10 +1077,136 @@
             {
                "ADD_COMAND":{
                   "target":[
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
                      {
                         "FEATURE":{
                            "name":"Impostor",
-                           "description":"Y HfefefeIT WEasdRY WELL",
+                           "description":"At 13th level, you gain the ability to unerringly mimic another person's speech, writing, and behavior. You must spend at least three hours studying these three components of the person's behavior, listening to speech, examining handwriting, and observing mannerisms.\n\nYour ruse is indiscernible to the casual observer. If a wary creature suspects something is amiss, you have advantage on any Charisma (Deception) check you make to avoid detection.",
                            "depend":null
                         }
                      }
@@ -1101,8 +1220,8 @@
                   "target":[
                      {
                         "FEATURE":{
-                           "name":"Blind Sight",
-                           "description":"Y HfefefeIT WEasdRY WELL",
+                           "name":"Blindsense",
+                           "description":"Starting at 14th level, if you are able to hear, you are aware of the location of any hidden or invisible creature within 10 feet of you.",
                            "depend":null
                         }
                      }
@@ -1115,9 +1234,141 @@
                "ADD_COMAND":{
                   "target":[
                      {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
                         "INER_FEATURE":{
                            "name":"Slippery Mind",
-                           "description":"Blavlavla",
+                           "description":"By 15th level, you have acquired greater mental strength. You gain proficiency in Wisdom saving throws.",
                            "depend":null,
                            "comand":[
                               {
@@ -1125,14 +1376,8 @@
                                     "target":[
                                        {
                                           "POSSESSION":{
-                                             "name":"SR Wisdom",
-                                             "inerComand":{
-                                                "PROF_COMAND":{
-                                                   "key":180000000,
-                                                   "target":"SR Wisdom",
-                                                   "competence":false
-                                                }
-                                             }
+                                             "prof":"BASE",
+                                             "name":"SR Wisdom"
                                           }
                                        }
                                     ]
@@ -1148,45 +1393,8 @@
          [
             {
                "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "SOFT_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":2
-                                    }
-                                 },
-                                 "text":"STAT",
-                                 "key":180000000,
-                                 "soft":true
-                              }
-                           },
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "TIME_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":1
-                                    }
-                                 },
-                                 "text":"TRAIT",
-                                 "key":250000000,
-                                 "soft":false
-                              }
-                           }
-                        ],
-                        "times":1
-                     }
-                  },
-                  "text":"U shood to choose STATS or TRAIT",
-                  "soft":false
+                  "text":"(LVL 16)Up your 2 stats on 1 or 1 stat on 2",
+                  "name":"lvl up 16"
                }
             }
          ],
@@ -1195,9 +1403,147 @@
                "ADD_COMAND":{
                   "target":[
                      {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
                         "FEATURE":{
-                           "name":"Death Blow",
-                           "description":"Y HfefefeIT WEasdRY WELL",
+                           "name":"Death Strike",
+                           "description":"Starting at 17th level, you become a master of instant death. When you attack and hit a creature that is surprised, it must make a Constitution saving throw (DC 8 + your Dexterity modifier + your proficiency bonus). On a failed save, double the damage of your attack against the creature.",
                            "depend":null
                         }
                      }
@@ -1211,8 +1557,8 @@
                   "target":[
                      {
                         "FEATURE":{
-                           "name":"Intangibility",
-                           "description":"Y HfefefeIT WEasdRY WELL",
+                           "name":"Elusive",
+                           "description":"Beginning at 18th level, you are so evasive that attackers rarely gain the upper hand against you. No attack roll has advantage against you while you aren�t incapacitated.",
                            "depend":null
                         }
                      }
@@ -1221,47 +1567,160 @@
             }
          ],
          [
+            {
+               "ADD_COMAND":{
+                  "target":[
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "FENCING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "LONG_RANGE"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     },
+                     {
+                        "ATTACK_MODIFICATION":{
+                           "name":"Sneak Attack",
+                           "requirement":[
+                              "THROWING"
+                           ],
+                           "permanent":false,
+                           "postAttack":true,
+                           "permanentCrit":false,
+                           "attack":[
+                              
+                           ],
+                           "damage":[
+                              {
+                                 "name":"Sneak Attack",
+                                 "buff":0,
+                                 "combo":[
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6",
+                                    "D6"
+                                 ],
+                                 "results":[
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0
+                                 ]
+                              }
+                           ],
+                           "ammunition":null,
+                           "statDepend":null,
+                           "secondStat":null
+                        }
+                     }
+                  ]
+               }
+            },
             {
                "CLOUD_COMAND":{
-                  "pool":{
-                     "TIME_POOL":{
-                        "active":[
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "SOFT_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":2
-                                    }
-                                 },
-                                 "text":"STAT",
-                                 "key":180000000,
-                                 "soft":true
-                              }
-                           },
-                           {
-                              "INEGRATE_CLOUD":{
-                                 "pool":{
-                                    "TIME_POOL":{
-                                       "active":[
-                                          
-                                       ],
-                                       "times":1
-                                    }
-                                 },
-                                 "text":"TRAIT",
-                                 "key":250000000,
-                                 "soft":false
-                              }
-                           }
-                        ],
-                        "times":1
-                     }
-                  },
-                  "text":"U shood to choose STATS or TRAIT",
-                  "soft":false
+                  "text":"(LVL 19)Up your 2 stats on 1 or 1 stat on 2",
+                  "name":"lvl up 19"
                }
             }
          ],
@@ -1271,8 +1730,8 @@
                   "target":[
                      {
                         "FEATURE":{
-                           "name":"Luck",
-                           "description":"Y HfefefeIT WEasdRY WELL",
+                           "name":"Stroke of Luck",
+                           "description":"At 20th level, you have an uncanny knack for succeeding when you need to. If your attack misses a target within range, you can turn the miss into a hit. Alternatively, if you fail an ability check, you can treat the d20 roll as a 20.\n\nOnce you use this feature, you can�t use it again until you finish a short or long rest.",
                            "depend":null
                         }
                      }

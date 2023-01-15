@@ -19,7 +19,9 @@ public interface KeyWallet extends DndKeyWallet {
 	final static String startText ="/characters - This command leads to your character library,"
 			+ " where you can create and choose which character you play.\n";
 	
-	final static String rollsText = "Some instruction of Rolls";
+	final static String rollsText = "Choose a dice to throw, or write your own formula.\n"
+			+ "To refer to a dice, use the D(or d) available dices you see in the console.\n"
+			+ "For example: -d4 + 10 + 6d6 - 12 + d100";
 	
 	
 	

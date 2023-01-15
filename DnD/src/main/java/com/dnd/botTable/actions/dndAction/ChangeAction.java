@@ -9,8 +9,8 @@ public class ChangeAction extends RegistrateAction
 	protected String[][] nextStep;
 	protected String answer;
 
-	
-	
+
+
 	public static ChangeAction create(RegistrateAction action, String text, String[][] nextStep) 
 	{
 		ChangeAction answer = new ChangeAction();
@@ -23,16 +23,17 @@ public class ChangeAction extends RegistrateAction
 		return answer;
 	}
 
-	public String getAnswer() {
+	public String getAnswer() 
+	{
 		return answer;
 	}
-	
+
 	@Override
-	public Action continueAction(String name) {
-		
-		
-				answer = name;
-		
+	public Action continueAction(String name) 
+	{
+
+		this.answer = name;
+
 		return this;
 	}
 

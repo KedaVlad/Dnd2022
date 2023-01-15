@@ -102,7 +102,7 @@ abstract class ClassFactory implements Source
 			clazz.setLvl(lvl);
 			character.setClassDnd(clazz);
 			character.addMemoirs(getObgectInfo(className, archetype));
-			for(int i = 0; i < lvl; i++)
+			for(int i = 0; i <= lvl; i++)
 			{
 				for(InerComand comand: character.getClassDnd().getGrowMap()[i])
 				{	

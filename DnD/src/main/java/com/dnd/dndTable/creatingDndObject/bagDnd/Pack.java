@@ -18,7 +18,7 @@ public Pack(Packs type)
 
 public enum Packs
 {
-	ENTERTAINER("Entertainer’s Pack", "Inside:\r\n"
+	ENTERTAINER("Entertainer`s Pack", "Inside:\r\n"
 			+ "• backpack,\r\n"
 			+ "• sleeping bag,\r\n"
 			+ "• 2 suits,\r\n"
@@ -26,7 +26,7 @@ public enum Packs
 			+ "• rations for 5 days,\r\n"
 			+ "• wineskin\r\n"
 			+ "• makeup kit."),
-	BURGLAR("Burglar’s Pack","Inside:\r\n"
+	BURGLAR("Burglar`s Pack","Inside:\r\n"
 			+ "• backpack,\r\n"
 			+ "• a bag with 1,000 metal balls,\r\n"
 			+ "• 10 feet of fishing line,\r\n"
@@ -41,7 +41,7 @@ public enum Packs
 			+ "• tinderbox\r\n"
 			+ "• wineskin.\r\n"
 			+ "The set also includes a 50-foot hemp rope attached to the side."),
-	DIPLOMAT("Diplomat’s Pack","Inside:\r\n"
+	DIPLOMAT("Diplomat`s Pack","Inside:\r\n"
 			+ "• box,\r\n"
 			+ "• 2 containers for cards and scrolls,\r\n"
 			+ "• a set of excellent clothes,\r\n"
@@ -53,7 +53,7 @@ public enum Packs
 			+ "• bottle of perfume,\r\n"
 			+ "• wax,\r\n"
 			+ "• soap."),
-	DUNGEON("Dungeoneer’s Pack","Inside:\r\n"
+	DUNGEON("Dungeoneer`s Pack","Inside:\r\n"
 			+ "• backpack,\r\n"
 			+ "• crowbar,\r\n"
 			+ "• hammer,\r\n"
@@ -63,7 +63,7 @@ public enum Packs
 			+ "• rations for 10 days\r\n"
 			+ "• wineskin.\r\n"
 			+ "The set also includes a 50-foot hemp rope attached to the side."),
-	EXPLORER("Explorer’s Pack","Inside:\r\n"
+	EXPLORER("Explorer`s Pack","Inside:\r\n"
 			+ "• backpack,\r\n"
 			+ "• sleeping bag,\r\n"
 			+ "• tableware,\r\n"
@@ -72,7 +72,7 @@ public enum Packs
 			+ "• rations for 10 days\r\n"
 			+ "• wineskin.\r\n"
 			+ "The set also includes a 50-foot hemp rope attached to the side."),
-	PRIEST("Priest’s Pack","Inside:\r\n"
+	PRIEST("Priest`s Pack","Inside:\r\n"
 			+ "• backpack,\r\n"
 			+ "• a blanket,\r\n"
 			+ "• 10 candles,\r\n"
@@ -83,7 +83,7 @@ public enum Packs
 			+ "• vestments,\r\n"
 			+ "• rations for 2 days,\r\n"
 			+ "• wineskin."),
-	SCHOLAR("Scholar’s Pack","Inside:\r\n"
+	SCHOLAR("Scholar`s Pack","Inside:\r\n"
 			+ "• backpack\r\n"
 			+ "• scientific book\r\n"
 			+ "• bottle of ink\r\n"

@@ -155,6 +155,8 @@ public class Formula implements Serializable
 			answer += dice.execute() + "\n";	
 		}
 		answer += "Result: " + summ();
+		if(getFormula().get(0).getCombo()!= null&& getFormula().get(0).getCombo()[0].equals(Roll.D20))
+		{
 		if(critCheck(getFormula().get(0)).equals(CritCheck.CRIT20))
 		{
 			this.natural20 = true;
@@ -164,6 +166,7 @@ public class Formula implements Serializable
 		{
 			this.natural1 = true;
 			answer += " !CRITICAL 1!";
+		}
 		}
 		return answer;
 	}
