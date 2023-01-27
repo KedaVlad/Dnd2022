@@ -1,9 +1,7 @@
 package com.dnd.dndTable.factory.inerComands;
 
-import com.dnd.dndTable.ObjectDnd;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.dnd.dndTable.creatingDndObject.ObjectDnd;
 import com.fasterxml.jackson.annotation.JsonTypeName;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 
 @JsonTypeName("ADD_COMAND")
 public class AddComand extends InerComand

@@ -1,7 +1,6 @@
 package com.dnd.dndTable.creatingDndObject.workmanship.features;
 
-import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.BotAction;
+import com.dnd.botTable.Act;
 import com.dnd.dndTable.Refreshable;
 import com.dnd.dndTable.Refreshable.Time;
 import com.dnd.dndTable.creatingDndObject.workmanship.Caster;
@@ -26,13 +25,13 @@ public class ActiveFeature extends Feature implements Refreshable
 		}
 	}
 	
-	public Action cast()
+	public Act cast()
 	{
 		targetCells--;
 		if(targetCells < 0)
 		{
 			targetCells = 0;
-			return BotAction.create("EndTree", this.key(), true, false, "You ran out of charges... You need " + time + " rest for use it again.", null);
+			return Act.builder().name("EndTree").text("You ran out of charges... You need " + time + " rest for use it again.").build();
 		}
 		return Caster.cast(cast);
 	}
@@ -82,6 +81,5 @@ public class ActiveFeature extends Feature implements Refreshable
 	public void setTargetCells(int targetCells) {
 		this.targetCells = targetCells;
 	}
-
 
 }

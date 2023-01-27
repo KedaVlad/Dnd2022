@@ -1,15 +1,8 @@
 package com.dnd.dndTable.rolls;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import com.dnd.Log;
-import com.dnd.Names.Stat;
-import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.rolls.Dice.Roll;
-
-public class Dice implements Serializable
+public class Dice extends Object implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 
@@ -51,7 +44,7 @@ public class Dice implements Serializable
 
 		for(int i = 0; i < this.getCombo().length; i++)
 		{
-			this.getResults()[i] = roll(this.getCombo()[i]);				
+			this.getResults()[i] = Formalizer.roll(this.getCombo()[i]);				
 		}
 		this.getResults()[this.getResults().length-1] = this.buff;
 		answer += summ();
@@ -95,7 +88,7 @@ public class Dice implements Serializable
 	{
 		for(int i = 0; i < this.getCombo().length; i++)
 		{
-			this.getResults()[i] = roll(this.getCombo()[i]);				
+			this.getResults()[i] = Formalizer.roll(this.getCombo()[i]);				
 		}
 		this.getResults()[this.getResults().length-1] = this.buff;
 		return summ();
@@ -116,124 +109,7 @@ public class Dice implements Serializable
 		return combo;
 	}
 
-	public static int roll(Roll roll)
-	{
-		switch(roll)
-		{
-		case D4:
-			return d4();
-		case D6:
-			return d6();
-		case D8:
-			return d8();
-		case D10:
-			return d10();
-		case D12:
-			return d12();
-		case D20:
-			return d20();
-		case D100:
-			return d100();
-		default:
-			break;
-		}
-
-		return 0;
-	}
-
-	public static int d4()
-	{
-		return (int) Math.round(Math.random()*3+1);
-	}
-
-	public static int d6()
-	{
-		return (int) Math.round(Math.random()*5+1);
-	}
-
-	public static int d8()
-	{
-		return (int) Math.round(Math.random()*7+1);
-	}
-
-	public static int d10()
-	{
-		return (int) Math.round(Math.random()*9+1);
-	}
-
-	public static int d12()
-	{
-		return (int) Math.round(Math.random()*11+1);
-	}
-
-	public static int d20()
-	{
-		return (int) Math.round(Math.random()*19+1);
-	}
-
-	public static int d100()
-	{
-		return (int) Math.round(Math.random()*99+1);
-	}
-
-	public static int randomStat()
-	{
-
-		int[] allDice = {d6(), d6(), d6(), d6()};
-
-		int answer = 0;
-		int smaller = 0;
-
-		for(int i = 0; i < allDice.length; i++)
-		{
-
-			if(i == 0)
-			{
-				smaller = allDice[i];
-
-			}
-			else if(smaller < allDice[i])
-			{
-				answer += allDice[i];
-			}
-			else 
-			{
-				answer += smaller;
-				smaller = allDice[i];
-			}
-
-
-		}
-
-		return answer;
-
-	}
-
-	public static int stableStartHp(CharacterDnd character)
-	{ 
-		int start = character.getClassDnd().getFirstHp() + character.getRolls().getMainStatValue(Stat.CONSTITUTION.toString());
-		
-		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
-		{
-			start += character.getRolls().rollHp(character.getClassDnd(), false);
-		}
-
-		return start;
-	}
-
-	public static int randomStartHp(CharacterDnd character)
-	{
-
-		int start = character.getClassDnd().getFirstHp() + character.getRolls().getMainStatValue(Stat.CONSTITUTION.toString());
-
-		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
-		{
-			start += character.getRolls().rollHp(character.getClassDnd(), true);
-		}
-
-		return start;
-	}
-
+	
 	public String getName() 
 	{
 		return name;
@@ -263,6 +139,37 @@ public class Dice implements Serializable
 		return results;
 	}
 
+	public void addRollToStart(Roll...rolls)
+	{
+		Roll[] result = new Roll[combo.length + rolls.length];
+		for(int i = 0; i < rolls.length; i++)
+		{
+			result[i] = rolls[i];
+		}
+		int treker = 0;
+		for(int i = rolls.length; i < result.length; i++)
+		{
+			result[i] = combo[treker];
+			treker++;
+		}
+		combo = result;
+	}
+
+	public void addRollToEnd(Roll...rolls)
+	{
+		Roll[] result = new Roll[combo.length + rolls.length];
+		for(int i = 0; i < combo.length; i++)
+		{
+			result[i] = combo[i];
+		}
+		int treker = 0;
+		for(int i = combo.length; i < result.length; i++)
+		{
+			result[i] = rolls[treker];
+			treker++;
+		}
+		combo = result;
+	}
 	
 	public void setCombo(Roll... combo) {
 		this.combo = combo;

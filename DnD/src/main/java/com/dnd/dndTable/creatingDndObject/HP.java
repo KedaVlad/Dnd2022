@@ -2,7 +2,6 @@ package com.dnd.dndTable.creatingDndObject;
 
 import java.io.Serializable;
 
-import com.dnd.Log;
 import com.dnd.dndTable.Refreshable;
 
 public class HP implements Refreshable, Serializable

@@ -2,28 +2,16 @@ package com.dnd.botTable;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.TelegramBotsApi;
 import org.telegram.telegrambots.meta.api.methods.commands.GetMyCommands;
-import org.telegram.telegrambots.meta.api.methods.commands.SetMyCommands;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage.SendMessageBuilder;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.DeleteMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText;
-import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
-import org.telegram.telegrambots.meta.api.objects.MessageEntity;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.commands.BotCommand;
-import org.telegram.telegrambots.meta.api.objects.commands.scope.BotCommandScopeDefault;
-import org.telegram.telegrambots.meta.api.objects.menubutton.MenuButton;
-import org.telegram.telegrambots.meta.api.objects.menubutton.MenuButtonDefault;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
@@ -32,61 +20,21 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.Keyboard
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 
+import com.dnd.ButtonName;
 import com.dnd.KeyWallet;
-import com.dnd.Log;
-import com.dnd.botTable.actions.ArrayAction;
-import com.dnd.botTable.actions.BotAction;
-import com.dnd.botTable.actions.CloudAction;
-import com.dnd.dndTable.factory.Json;
+import com.dnd.botTable.actions.BaseAction;
 
-public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
+public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet, ButtonName
 {
-	private Map<Long, GameTable> gameTables = new HashMap<>();
 
-	private GameTable initialize(Update update) throws TelegramApiException
-	{
-		Message message = null;
-		if(update.hasCallbackQuery())
-		{
-			message = update.getCallbackQuery().getMessage();
-		}
-		else
-		{
-			message = update.getMessage();
-		}
-		long key = message.getChatId();
-		if(!gameTables.containsKey(key))
-		{
-			gameTables.put(key, GameTable.create(message));
-		}
-		GameTable game = gameTables.get(key);
-		if(game.clouds.size() > 0)
-		{
-			for(CloudAction cloud: game.clouds)
-			{
-				templateExecuter(message, game, cloud);
-			}
-			game.clouds.clear();
-		}
-		return game;
-	}
+	private Session SESSION = Session.getInstance();
 
 	public void onUpdateReceived(Update update) 
 	{ 
 		try 
 		{
-			GameTable game = initialize(update);	
-
-			Log.add(game.getScript().getAction());
-			if(update.hasCallbackQuery())
-			{
-				handleCallback(update.getCallbackQuery(), game);
-			}	
-			else if(update.hasMessage()) 
-			{
-				handleMessage(update.getMessage(),game);
-			}
-			clean(game);
+			executor(SESSION.execute(update));	
+			DataControler.save();
 		}	
 		catch (Exception e) 
 		{		
@@ -94,491 +42,106 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 		}
 	}
 
-	private void clean(GameTable game) throws InterruptedException, TelegramApiException
+	private void cleanTrash(User user) throws TelegramApiException
 	{
-		if(game.getScript().getTrash().size() > 0)
+		for(Integer i: user.SCRIPT.trashThrowOut())
 		{
-			List<Integer> target = game.getScript().throwAwayTrash();
-			for(Integer message: target)
-			{
-				Log.add(message + "--- clean");
-				execute(DeleteMessage.builder()
-						.chatId(game.getChatId())
-						.messageId(message)
-						.build());
-			}
-		}
-		else
-		{
-			game.getScript().throwAwayTrash();
+			execute(DeleteMessage.builder()
+					.chatId(user.ID)
+					.messageId(i)
+					.build());
 		}
 	}
 
-	private void handleCallback(CallbackQuery callbackQuery, GameTable game) throws TelegramApiException
+	private void executor(User user) throws TelegramApiException
 	{
-		String string = callbackQuery.getData();
-		if(string.contains(eliminationKey + ""))
+		if(user.CHARACTERS.hasCloud())
 		{
-			String target = string.replaceAll("(.*)" + eliminationKey, "$1");
-			game.getScript().dateche(target);
+			for(Act act: user.CHARACTERS.clouds.clouds)
+			{
+				Message message = execute(buildMessage(act, user.ID, CLOUD_ACT));
+				act.toCircle(message.getMessageId());
+			}
+			user.CHARACTERS.clouds.cloudsWorked.addAll(user.CHARACTERS.clouds.clouds);
+			user.CHARACTERS.clouds.clouds.clear();
 		}
-		else if(string.contains(buttonsKey + ""))
+		Act act = user.SCRIPT.target;
+		if(act != null)
 		{
-			String regex = "([a-zA-Z `-]+)" + buttonsKey + "(.+)";
-			String target = string.replaceAll(regex, "$1");
-			String callback = string.replaceAll(regex, "$2");
-			game.getScript().beackTo(target);
-			templateExecuter(callbackQuery.getMessage(), game, game.makeAction(game.getScript().getAction().continueAction(callback)));
+				if(act instanceof ArrayActs)
+				{
+					ArrayActs array = (ArrayActs) act;
+					for(int i = 0; i < array.pool.length; i++)
+					{
+						Message arrAct = execute(buildMessage(array.pool[i], user.ID, array.keys[i]));
+						act.toCircle(arrAct.getMessageId());
+					}
+				}
+				else
+				{
+					Message message = execute(buildMessage(act, user.ID, MAIN_TREE));
+					act.toCircle(message.getMessageId());
+				}
 		}
-		else
-		{
-			String regex = "([a-zA-Z `-]+)(.*)";
-			String target = string.replaceAll(regex, "$1");
-			String callback = string.replaceAll(regex, "$2");
-			game.getScript().beackTo(target);
-			templateExecuter(callbackQuery.getMessage(), game, game.makeAction(game.getScript().getAction().continueAction(callback)));
-		}
+		cleanTrash(user);
 	}
 
-	private void handleMessage(Message message, GameTable game) throws TelegramApiException, InterruptedException
+	private SendMessage buildMessage(Act act, long chatId, long key)
 	{
-		if(message.hasText() && message.hasEntities()) 
-		{	
-			Optional<MessageEntity> commandEntity =
-					message.getEntities()
-					.stream()
-					.filter(e -> "bot_command".equals(e.getType())).findFirst();
+		SendMessageBuilder builder = SendMessage.builder()
+				.text(act.text)
+				.chatId(chatId);
 
-			if (commandEntity.isPresent())
-			{
-				String comand = message.getText().substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
-				switch (comand)
-				{
-				case "/start":
-					game.getScript().beackTo(message.getChatId());
-					game.getScript().prepare(message.getMessageId());	
-					templateExecuter(message, game, BotAction.create("START", start , true, false, startText, null));	
-					return;
-				case "/characters":
-					game.getScript().beackTo(start);
-					game.getScript().prepare(message.getMessageId());
-					templateExecuter(message, game, game.characterCase());
-					return;
-				}
-			}
-		}
-		else if(game.getScript().isMediator())
+		if(act.action != null && act.action.hasButtons())
 		{
-			Log.add("Mediator worked");
-			Log.add(game.getScript().getAction());
-			game.getScript().toAct(message.getMessageId());
-			templateExecuter(message, game, game.makeAction(game.getScript().getAction().continueAction(message.getText())));
-		}
-		else
-		{
-			String text = message.getText();
-			Log.add(text);
-			Log.add(game.readiness());
-
-			if(text.equals("RETURN TO MENU"))
+			if(act.action.isReplyButtons())
 			{
-				game.getScript().toAct(message.getMessageId());
-				templateExecuter(message, game, game.menu());
-			
-			}
-			else if(game.getScript().findReply() != null && game.getScript().findReply().replyContain(text))
-			{
-				game.getScript().beackTo(text);
-				if(game.getScript().getAction().name.equals(text))
-				{
-				game.getScript().finishLast();
-				}
-				templateExecuter(message, game, game.makeAction(game.getScript().findReply().continueAction(text)));
-				game.getScript().toAct(message.getMessageId());
-				
-			}
-			else if(game.readiness())
-			{
-				if(text.matches("^\\+\\d+"))
-				{
-					int exp = (Integer) Integer.parseInt(text.replaceAll("^\\+(\\d+)", "$1"));
-					String textMessage = "Exp add";
-					if(game.getActualGameCharacter().getLvl().addExp(exp))
-					{
-						textMessage+="(lvl up)";
-					}
-					templateExecuter(message, game, game.menu());
-					Message toTrash = execute(SendMessage.builder()
-							.text(textMessage)
-							.chatId(message.getChatId().toString())
-							.build()
-							);
-					
-					game.getScript().prepare(toTrash.getMessageId());
-					game.getScript().prepare(message.getMessageId());
-
-				}
-				else if(text.matches("^(hp|Hp|HP|hP)(\\+|-)\\d+"))
-				{
-					String num = text.replaceAll("^(hp|Hp|HP|hP)(\\+|-)(\\d+)", "$3");
-					int value = (Integer) Integer.parseInt(num);
-					String texts = "You make something vrong... I dont understand what do whith " + value + " + or - ?";
-					if(text.contains("+"))
-					{
-						game.getActualGameCharacter().getHp().heal(value);
-						texts = "You get heal";
-					}
-					else if(text.contains("-"))
-						{
-							game.getActualGameCharacter().getHp().damaged(value);
-							texts = "You get damage";
-						}
-					templateExecuter(message, game, game.menu());
-					Message toTrash = execute(SendMessage.builder()
-							.text(texts)
-							.chatId(message.getChatId().toString())
-							.build()
-							);
-
-					game.getScript().prepare(toTrash.getMessageId());
-					game.getScript().prepare(message.getMessageId());
-					
-
-				}
-				else 
-				{
-					game.getActualGameCharacter().addMemoirs(message.getText());
-					Message toTrash = execute(SendMessage.builder()
-							.text("I will put it in your memoirs")
-							.chatId(message.getChatId().toString())
-							.build()
-							);
-					game.getScript().prepare(toTrash.getMessageId());
-					game.getScript().prepare(message.getMessageId());
-				}
+				builder.replyMarkup(replyKeyboard(act.action));
 			}
 			else
 			{
-				Message toTrash = execute(SendMessage.builder()
-						.text("Until you have an active hero, you have no memoirs. Therefore, unfortunately, this message recognize oblivion.")
-						.chatId(message.getChatId().toString())
-						.build()
-						);
-				game.getScript().prepare(toTrash.getMessageId());
-				game.getScript().prepare(message.getMessageId());
-
+				builder.replyMarkup(inlineKeyboard(act, key));
 			}
 		}
+		return builder.build();
 	}
 
-	private void templateExecuter(Message message, GameTable game, Action target) throws TelegramApiException
-	{
-		if(target.hasBack())
-		{
-			game.getScript().beackTo(target.backTo()[0]);
-			if(target.backTo()[1] != null)
-			{
-				target = game.makeAction(game.getScript().getAction().continueAction(target.backTo()[1]));
-			}
-		}
-
-		if(target instanceof ArrayAction)
-		{
-			game.getScript().up(target);
-			ArrayAction array = (ArrayAction) target;
-			for(Action action: array.getPool())
-			{
-				SendMessageBuilder builder = SendMessage.builder()
-						.text(action.text)
-						.chatId(message.getChatId().toString());
-
-				if(action.hasButtons())
-				{
-					if(action.isReplyButtons())
-					{
-						builder.replyMarkup(replyKeyboard(action));
-					}
-					else
-					{
-						builder.replyMarkup(inlineKeyboard(action, action.key));
-					}
-				}
-				else if(action.isReplyBreaker())
-				{
-					builder.replyMarkup(ReplyKeyboardMarkup.builder().clearKeyboard().build());
-				}
-				Message act = execute(builder
-						.build());
-				
-				game.getScript().toAct(act.getMessageId());
-			}
-		}
-		else
-		{
-
-			SendMessageBuilder builder = SendMessage.builder()
-					.text(target.text)
-					.chatId(message.getChatId().toString());
-			if(target.mainAct)
-			{
-				game.getScript().up(target);
-
-				if(target.hasButtons())
-				{
-					Log.add(target.hasButtons() + " --- buttons");
-					if(target.isReplyButtons())
-					{
-						Log.add(target.isReplyButtons() + " --- reply");
-						builder.replyMarkup(replyKeyboard(target));
-					}
-					else
-					{
-						builder.replyMarkup(inlineKeyboard(target, buttonsKey));
-					}
-				}
-				if(target.isReplyBreaker())
-				{
-					builder.replyMarkup(ReplyKeyboardMarkup.builder().clearKeyboard().build());
-				}
-				Message act = execute(builder
-						.build());
-				game.getScript().toAct(act.getMessageId());
-			}
-			else
-			{
-				game.getScript().start(target);
-				List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-						.text("ELIMINATION")
-						.callbackData(target.name + eliminationKey)
-						.build()));
-				Message act = execute(SendMessage.builder()
-						.text(target.text)
-						.chatId(message.getChatId().toString())
-						.replyMarkup(InlineKeyboardMarkup.builder().keyboard(buttons).build())
-						.build());
-				game.getScript().toDatached(target.name, act.getMessageId());
-			}
-		}
-	}
-
-	private InlineKeyboardMarkup inlineKeyboard(Action action, long key)
+	private InlineKeyboardMarkup inlineKeyboard(Act act, long key)
 	{
 		List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-		String[][] target = action.buildButtons();
+		String[][] target = act.action.buildButtons();
 		for(String[] line: target)
 		{
-			if(line.length == 1)
+			List<InlineKeyboardButton> buttonLine = new ArrayList<>();
+			for(String button: line)
 			{
-				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-						.text(line[0])
-						.callbackData(action.getName() + key + line[0])
-						.build()));
+				buttonLine.add(InlineKeyboardButton.builder()
+						.text(button)
+						.callbackData(act.name + key + button)
+						.build());
 			}
-			else if(line.length == 2)
-			{
-				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-						.text(line[0])
-						.callbackData(action.getName() + key + line[0])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[1])
-						.callbackData(action.getName() + key + line[1])
-						.build()));
-			}
-			else if(line.length == 3)
-			{
-				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-						.text(line[0])
-						.callbackData(action.getName() + key + line[0])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[1])
-						.callbackData(action.getName() + key + line[1])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[2])
-						.callbackData(action.getName() + key + line[2])
-						.build()));
-			}
-			else if(line.length == 4)
-			{
-				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-						.text(line[0])
-						.callbackData(action.getName() + key + line[0])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[1])
-						.callbackData(action.getName() + key + line[1])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[2])
-						.callbackData(action.getName() + key + line[2])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[3])
-						.callbackData(action.getName() + key + line[3])
-						.build()));
-			}
-			else if(line.length == 5)
-			{
-				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-						.text(line[0])
-						.callbackData(action.getName() + key + line[0])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[1])
-						.callbackData(action.getName() + key + line[1])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[2])
-						.callbackData(action.getName() + key + line[2])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[3])
-						.callbackData(action.getName() + key + line[3])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[4])
-						.callbackData(action.getName() + key + line[4])
-						.build()));
-			}
-			else if(line.length == 6)
-			{
-				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-						.text(line[0])
-						.callbackData(action.getName() + key + line[0])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[1])
-						.callbackData(action.getName() + key + line[1])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[2])
-						.callbackData(action.getName() + key + line[2])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[3])
-						.callbackData(action.getName() + key + line[3])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[4])
-						.callbackData(action.getName() + key + line[4])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[5])
-						.callbackData(action.getName() + key + line[5])
-						.build()));
-			}
-			else if(line.length == 7)
-			{
-				buttons.add(Arrays.asList(InlineKeyboardButton.builder()
-						.text(line[0])
-						.callbackData(action.getName() + key + line[0])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[1])
-						.callbackData(action.getName() + key + line[1])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[2])
-						.callbackData(action.getName() + key + line[2])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[3])
-						.callbackData(action.getName() + key + line[3])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[4])
-						.callbackData(action.getName() + key + line[4])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[5])
-						.callbackData(action.getName() + key + line[5])
-						.build(),
-						InlineKeyboardButton.builder()
-						.text(line[6])
-						.callbackData(action.getName() + key + line[6])
-						.build()));
-			}
-		}
+			buttons.add(buttonLine);
+		}	
 		return InlineKeyboardMarkup.builder().keyboard(buttons).build();
 	}
 
-	private ReplyKeyboardMarkup replyKeyboard(Action action)
+	private ReplyKeyboardMarkup replyKeyboard(BaseAction action)
 	{
 		List<KeyboardRow> buttons = new ArrayList<>();
 		String[][] target = action.buildButtons();
 		for(String[] line: target)
 		{
-			if(line.length == 1)
+			KeyboardRow keyboardRow = new KeyboardRow();
+			List<KeyboardButton> row = new ArrayList<>();
+			for(String button: line)
 			{
-				KeyboardRow keyboardRow = new KeyboardRow();
-				List<KeyboardButton> row = new ArrayList<>();
-				row.add(
-						KeyboardButton.builder()
-						.text(line[0])
-						.build());
-				keyboardRow.addAll(row);
-				buttons.add(keyboardRow);
+			row.add(
+					KeyboardButton.builder()
+					.text(button)
+					.build());
 			}
-			else if(line.length == 2)
-			{
-				KeyboardRow keyboardRow = new KeyboardRow();
-				List<KeyboardButton> row = new ArrayList<>();
-				row.add(
-						KeyboardButton.builder()
-						.text(line[0])
-						.build());
-				row.add(
-						KeyboardButton.builder()
-						.text(line[1])
-						.build());
-				keyboardRow.addAll(row);
-				buttons.add(keyboardRow);
-			}
-			else if(line.length == 3)
-			{
-				KeyboardRow keyboardRow = new KeyboardRow();
-				List<KeyboardButton> row = new ArrayList<>();
-				row.add(
-						KeyboardButton.builder()
-						.text(line[0])
-						.build());
-				row.add(
-						KeyboardButton.builder()
-						.text(line[1])
-						.build());
-				row.add(
-						KeyboardButton.builder()
-						.text(line[2])
-						.build());
-				keyboardRow.addAll(row);
-				buttons.add(keyboardRow);
-			}
-			else if(line.length == 4)
-			{
-				KeyboardRow keyboardRow = new KeyboardRow();
-				List<KeyboardButton> row = new ArrayList<>();
-				row.add(
-						KeyboardButton.builder()
-						.text(line[0])
-						.build());
-				row.add(
-						KeyboardButton.builder()
-						.text(line[1])
-						.build());
-				row.add(
-						KeyboardButton.builder()
-						.text(line[2])
-						.build());
-				row.add(
-						KeyboardButton.builder()
-						.text(line[3])
-						.build());
-				keyboardRow.addAll(row);
-				buttons.add(keyboardRow);
-			}
+			keyboardRow.addAll(row);
+			buttons.add(keyboardRow);
 		}
 		return ReplyKeyboardMarkup.builder().keyboard(buttons).resizeKeyboard(true).build();
 	}
@@ -597,18 +160,9 @@ public class CharacterDndBot extends TelegramLongPollingBot implements KeyWallet
 	public static void main(String[] args) throws TelegramApiException, IOException, InterruptedException 
 	{
 		CharacterDndBot bot = new  CharacterDndBot();
-		TelegramBotsApi telegramBotsApi;
-		telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
+		TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
 		telegramBotsApi.registerBot(bot);
 		bot.execute(new GetMyCommands());
-		bot.gameTables = Json.restor();
-		/*
-		while(true)
-		{
-			Json.backup(bot.gameTables);
-			Thread.sleep(5000); 
-			System.out.println("*********************************************************************************************************************");
-		}
-		 */	
+		bot.SESSION.MODER.addTable(GameTable.create(123456789));
 	}
 }

@@ -4,11 +4,9 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Names.Stat;
-import com.dnd.dndTable.ObjectDnd;
+import com.dnd.dndTable.creatingDndObject.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.Weapons;
-import com.dnd.dndTable.rolls.DamageDice;
+import com.dnd.dndTable.creatingDndObject.characteristic.Stat.Stats;
 import com.dnd.dndTable.rolls.Dice;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 @JsonTypeName("ATTACK_MODIFICATION")
@@ -24,8 +22,8 @@ public class AttackModification implements Serializable, ObjectDnd
 	private List<Dice> attack;
 	private List<Dice> damage;
 	private String ammunition;
-	private Stat statDepend;
-	private Stat secondStat;
+	private Stats statDepend;
+	private Stats secondStat;
 	
 	public AttackModification permanent()
 	{
@@ -79,7 +77,7 @@ public class AttackModification implements Serializable, ObjectDnd
 		damage = new ArrayList<>();
 	}
 
-	public static AttackModification create(String name, Stat statDepend, Dice dice , WeaponProperties... requirment)
+	public static AttackModification create(String name, Stats statDepend, Dice dice , WeaponProperties... requirment)
 	{
 		AttackModification answer = new AttackModification();
 		answer.statDepend = statDepend;
@@ -114,7 +112,7 @@ public class AttackModification implements Serializable, ObjectDnd
 		return this.name.equals(target.name) && require;
 	}
 	
-	public AttackModification secondStat(Stat stat)
+	public AttackModification secondStat(Stats stat)
 	{
 		this.secondStat = stat;
 		return this;
@@ -124,6 +122,7 @@ public class AttackModification implements Serializable, ObjectDnd
 	public AttackModification marger(AttackModification second)
 	{
 		AttackModification answer = new AttackModification();
+		answer.postAttack = second.postAttack;
 		answer.name = this.name;
 		answer.statDepend = this.statDepend;
 		answer.requirement = this.requirement;
@@ -225,12 +224,6 @@ public class AttackModification implements Serializable, ObjectDnd
 		return permanentCrit;
 	}
 
-	@Override
-	public long key() {
-		// TODO Auto-generated method stub
-		return ATTACK_MODIFICATION;
-	}
-
 	public String getAmmunition() {
 		return ammunition;
 	}
@@ -245,14 +238,14 @@ public class AttackModification implements Serializable, ObjectDnd
 	/**
 	 * @return the statDepend
 	 */
-	public Stat getStatDepend() {
+	public Stats getStatDepend() {
 		return statDepend;
 	}
 
 	/**
 	 * @return the secondStat
 	 */
-	public Stat getSecondStat() {
+	public Stats getSecondStat() {
 		return secondStat;
 	}
 

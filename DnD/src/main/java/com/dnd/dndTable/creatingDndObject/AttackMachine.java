@@ -4,26 +4,27 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.dnd.Log;
-import com.dnd.Names.Stat;
-import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.WrappAction;
-import com.dnd.botTable.actions.dndAction.PreRoll;
-import com.dnd.botTable.actions.dndAction.RegistrateAction;
-import com.dnd.botTable.actions.dndAction.RollAction;
-import com.dnd.dndTable.DndKeyWallet;
+import com.dnd.Executor;
+import com.dnd.KeyWallet;
+import com.dnd.botTable.Act;
+import com.dnd.botTable.actions.Action;
+import com.dnd.botTable.actions.BaseAction;
+import com.dnd.botTable.actions.PoolActions;
+import com.dnd.botTable.actions.PreRoll;
+import com.dnd.botTable.actions.RollAction;
+import com.dnd.botTable.actions.Action.Location;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.Weapons;
 import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
+import com.dnd.dndTable.creatingDndObject.workmanship.Possessions;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession.Proficiency;
 import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
-public class AttackMachine implements Serializable, DndKeyWallet 
+public class AttackMachine implements Executor
 {
 	private static final long serialVersionUID = 1L;
-	final long key = ATTACK_MACHINE;
 
 	private Dice noWeapon = new Dice("No weapon attack", 1, Roll.NO_ROLL);
 	private int critX = 1;
@@ -35,37 +36,83 @@ public class AttackMachine implements Serializable, DndKeyWallet
 	private AttackModification targetAttack;
 	//private boolean warlock;
 
-	public WrappAction startAction(Weapon weapon)
+	@Override
+	public Act execute(Action action) 
 	{
-		Log.add("startAction in attack machine");
+		if(action.getObjectDnd() == null)
+		{
+			int condition = Executor.condition(action);
+			if(condition == 0)
+			{
+				return Act.builder().name("MISS").text("GOODLUCK NEXT TIME").build();
+			}
+			else
+			{
+				return postAttack(action);
+			}
+
+		}
+		else
+		{
+			if(action.getObjectDnd() instanceof Weapon)
+			{
+				return startAttack((Weapon) action.getObjectDnd());
+			}
+			else if(action.getObjectDnd() instanceof AttackModification)
+			{
+				AttackModification target = (AttackModification) action.getObjectDnd();
+				return makeAttack(target);
+				
+			}
+			else
+			{
+				return Act.builder().returnTo(MENU_B, MENU_B).build();
+			}
+		}
+	}
+
+	private Act startAttack(Weapon weapon)
+	{
 		targetWeapon = weapon;
 		List<AttackModification> attacks = buildAttacks();
-		Action[][] actions = new Action[attacks.size()][1];
+		BaseAction[][] pool = new BaseAction[attacks.size()][1];
 		for(int i = 0; i < attacks.size(); i++)
 		{
 			AttackModification target = attacks.get(i);
-			actions[i][0] = RegistrateAction.create(target.getName(), target).key(ATTACK_MACHINE);
+			pool[i][0] = Action.builder().location(Location.CHARACTER).name(target.getName()).key(ATTACK_MACHINE).objectDnd(target).build();
 		}
-		return WrappAction.create(weapon.getName(), key, weapon.getDescription(), actions);
+		return Act.builder()
+				.name(weapon.getName())
+				.text(weapon.getDescription())
+				.action(PoolActions.builder()
+						.actionsPool(pool)
+						.build())
+				.build();
 	}
-	
+
 	private List<AttackModification> buildAttacks()
 	{
 		List<AttackModification> answer = new ArrayList<>();
-		AttackModification base = AttackModification.build().name("Base attack")
-				.attack(new Dice("Weapon buff", targetWeapon.getAttack(), Roll.NO_ROLL))
-				.damage(new Dice("Weapon buff", targetWeapon.getDamage(), Roll.NO_ROLL));
+		AttackModification base = AttackModification.build().name("Base attack");
+				if(targetWeapon.getAttack() > 0)
+				{
+					base.attack(new Dice("Weapon buff", targetWeapon.getAttack(), Roll.NO_ROLL));
+				}
+				if(targetWeapon.getDamage() > 0)
+				{					
+					base.damage(new Dice("Weapon buff", targetWeapon.getDamage(), Roll.NO_ROLL));
+				}
 		for(AttackModification type: targetWeapon.getAttacksTypes())
 		{
 			AttackModification target = type.marger(base);
 			target = permanentBuff(target);
 			answer.addAll(buildSubAttacks(target , preAttacks));
-			
+
 		}
 		return answer;
 
 	}
-	
+
 	private AttackModification permanentBuff(AttackModification attack)
 	{
 		for(AttackModification type: permanent)
@@ -98,12 +145,9 @@ public class AttackMachine implements Serializable, DndKeyWallet
 	private List<AttackModification> buildSubAttacks(AttackModification attack, List<AttackModification> attacks)
 	{
 		List<AttackModification> answer = new ArrayList<>();
-
-		Log.add("---------- buildSubAttacks SIZE TARGET " + attack.getRequirement().length);
 		answer.add(attack);
 		for(AttackModification type: attacks)
 		{
-			Log.add("---------- buildSubAttacks SIZE TYPE " +  type.getRequirement().length);
 			int condition = type.getRequirement().length;
 			String typeAttak = "|";
 			for(WeaponProperties properties: type.getRequirement())
@@ -129,12 +173,23 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		return answer;
 	}
 
-	RollAction makeAttack(AttackModification attack) 
+	private Act makeAttack(AttackModification attack) 
 	{
 		targetAttack = attack;
-		return RollAction.create(attack.getName(), attack.getAttack(), key, null, attack.getStatDepend(), buildProf());
+		return Act.builder()
+				.name(attack.getName())
+				.text(attack.toString())
+				.action(PreRoll.builder()
+						.key(key())
+						.roll(RollAction.buider()								
+								.diceCombo(attack.getAttack().toArray(Dice[]::new))
+								.proficiency(buildProf())
+								.statDepend(attack.getStatDepend())
+								.build())
+						.build())
+				.build();
 	}
-	
+
 	private Proficiency buildProf()
 	{
 
@@ -146,7 +201,7 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		}
 		return null;
 	}
-	
+
 	private boolean simpleCheck()
 	{
 		for(WeaponProperties properties: targetWeapon.getAttacksTypes()[0].getRequirement())
@@ -155,47 +210,71 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		}
 		return false;
 	}
-	
- 	WrappAction postAttack(PreRoll attack)
+
+	private Act postAttack(Action action)
 	{
-		if(attack.isCriticalMiss())
+		int condition = Executor.condition(action);
+		if(condition == 1)
 		{
-			String text = attack.getText() + "\n\nNATURAL 1!!! GOODLUCK NEXT TIME";
-			return WrappAction.create(attack.getName(), key, text, null);
-		}
-		else if(attack.isCriticalHit())
-		{
-			return makeCrit(targetAttack, attack.getText());
+			return makeHit(action);
 		}
 		else
 		{
-			return makeHit(targetAttack, attack.getText());
+			return makeCrit(action);
 		}
 	}
 
-	private WrappAction makeHit(AttackModification attack, String text) 
+	private Act makeHit(Action action) 
 	{
-		List<AttackModification> attacks = buildSubAttacks(attack, afterAttak);
-		Action[][] nextSteps = new Action[attacks.size()+1][1];
+		List<AttackModification> attacks = buildSubAttacks(targetAttack, afterAttak);
+		BaseAction[][] nextSteps = new BaseAction[attacks.size()+1][1];
 		for(int i = 0; i < attacks.size(); i++)
 		{
 			AttackModification target = attacks.get(i);
-			nextSteps[i][0] = RollAction.create(target.getName(), target.getDamage(), key, null, attack.getStatDepend(), null);
+			nextSteps[i][0] = RollAction.buider()
+					.name(target.getName())
+					.diceCombo(target.getDamage().toArray(Dice[]::new))
+					.statDepend(target.getStatDepend())
+					.build();
 		}
-		nextSteps[nextSteps.length - 1][0] = WrappAction.create("MISS", key, "GOODLUCK NEXT TIME", null);
-		return WrappAction.create("Hit", key, text + "\nDid you hit?", nextSteps);
+		nextSteps[nextSteps.length - 1][0] = Action.builder().name("MISS").build();
+		return Act.builder()
+				.name("makeHit")
+				.text(action.getAnswers()[0])
+				.action(PoolActions.builder().actionsPool(nextSteps).build())
+				.build();
 	}
 
-	WrappAction makeCrit(AttackModification attack, String text) 
+	private Act makeCrit(Action action) 
 	{
-		List<AttackModification> attacks = buildSubAttacks(crit(attack), afterAttak);
-		Action[][] nextSteps = new Action[attacks.size()+1][1];
+		String crit = action.getAnswers()[1];
+		if(crit.equals(DELETE_B))
+		{
+			return Act.builder()
+					.name("criticalMiss")
+					.text(action.getAnswers()[0] + "\nGOODLUCK NEXT TIME")
+					.build();
+		}
+		else
+		{
+		List<AttackModification> attacks = buildSubAttacks(crit(targetAttack), afterAttak);
+		BaseAction[][] nextSteps = new BaseAction[attacks.size()][1];
 		for(int i = 0; i < attacks.size(); i++)
 		{
 			AttackModification target = attacks.get(i);
-			nextSteps[i][0] = RollAction.create(target.getName(), target.getDamage(),key, null, attack.getStatDepend(), null);
+			nextSteps[i][0] = RollAction.buider()
+					.name(target.getName())
+					.diceCombo((Dice[])target.getDamage().toArray())
+					.statDepend(target.getStatDepend())
+					.build();
 		}
-		return WrappAction.create(attack.getName(), key, text, nextSteps);
+		
+		return Act.builder()
+				.name("makeCrit")
+				.text(action.getAnswers()[0])
+				.action(PoolActions.builder().actionsPool(nextSteps).build())
+				.build();
+		}
 	}
 
 	private AttackModification crit(AttackModification attack) 
@@ -251,6 +330,11 @@ public class AttackMachine implements Serializable, DndKeyWallet
 		this.permanent = permanent;
 	}
 
+	@Override
+	public long key() 
+	{
+		return ATTACK_MACHINE;
+	}
 }
 
 

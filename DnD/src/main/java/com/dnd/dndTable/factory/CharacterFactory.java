@@ -1,44 +1,58 @@
 package com.dnd.dndTable.factory;
 
-import com.dnd.Log;
-import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.factoryAction.FactoryAction;
-import com.dnd.botTable.actions.factoryAction.FinalAction;
+import com.dnd.ButtonName;
+import com.dnd.KeyWallet;
+import com.dnd.botTable.Act;
+import com.dnd.botTable.actions.Action;
+import com.dnd.botTable.actions.Action.Location;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 
-abstract class CharacterFactory 
+abstract class CharacterFactory implements KeyWallet, ButtonName
 {
-	final static long key = 123456789;
+	final static long KEY = CHARACTER_FACTORY_K;
+	final static int END = 2;
 	
-	public static Action startCreate()
+	public static Act execute(Action action)
 	{
-		String name = "CreateCharacter";
-		String text = "Traveler, how should I call you?!\n(Write Hero name)";
-		return FactoryAction.create(name, key, true, text, null);
-	}
-
-	public static Action execute(FactoryAction action)
-	{
-		switch(action.getLocalData().size())
+		int condition = 0;
+		if(action.getAnswers() != null) condition = action.getAnswers().length;
+		switch(condition)
 		{
+		case 0:
+			return startCreate();
 		case 1:
 			return apruveAction(action);
 		}
 		return null;
 	}
 	
-	private static Action apruveAction(FactoryAction action)
+	private static Act startCreate()
 	{
-		action.setName("ApruveCharactersName");
-		action.setMediator(false);
-		action.setText("So can I call you - " + action.getLocalData().get(0) + "? If not, repeat your name.");
-		action.setNextStep(new String[][] {{"Yeah, right"}});
-		return  FinalAction.create(action);
+		return Act.builder()
+				.name("CreateCharacter")
+				.text("Traveler, how should I call you?!\n(Write Hero name)")
+				.action(Action.builder()
+						.location(Location.FACTORY)
+						.key(KEY)
+						.mediator()
+						.build())
+				.returnTo(START_B)
+				.build();
+	}
+
+	private static Act apruveAction(Action action)
+	{
+		action.setButtons(new String[][] {{"Yeah, right"}});
+		return Act.builder()
+				.name("ApruveCharactersName")
+				.text("So can I call you - " + action.getAnswers()[0] + "? If not, repeat your name.")
+				.action(action)
+				.build();
 	}
 	
-	public static CharacterDnd finish(FinalAction action)
+	public static CharacterDnd finish(Action action)
 	{
-		return CharacterDnd.create((String)action.getLocalData().get(0));
+		return CharacterDnd.create(action.getAnswers()[0]);
 	}
 	
 }

@@ -9,10 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.dnd.KeyWallet;
-import com.dnd.Log;
 import com.dnd.Source;
-import com.dnd.dndTable.DndKeyWallet;
-import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
@@ -24,7 +21,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 
 
-public class RaceDnd implements Serializable,  DndKeyWallet{
+public class RaceDnd implements Serializable, KeyWallet{
 
 	private static final long serialVersionUID = -7603608846317166137L;
 

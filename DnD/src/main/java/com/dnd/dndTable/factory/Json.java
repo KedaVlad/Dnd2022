@@ -13,7 +13,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 import com.dnd.Source;
-import com.dnd.botTable.GameTable;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -65,42 +64,6 @@ public class Json {
 		return objectWriter.writeValueAsString(node);
 	}
 
-	@SuppressWarnings("unchecked")
-	public static Map<Long, GameTable> restor()
-	{
-		Map<Long, GameTable> gameTable = null;
-		try 
-		{
-			FileInputStream fileInputStream = new FileInputStream("C:\\Users\\ALTRON\\git\\Dnd2022\\DnD\\LocalData\\reserve");
-			ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
-			gameTable = (Map<Long, GameTable>) objectInputStream.readObject();
-			objectInputStream.close();
-		}
-		catch (Exception e) 
-		{
-			e.printStackTrace();
-		}
-
-		return gameTable;
-	}
-
-	public static void backup(Map<Long, GameTable> gameTable) 
-	{
-		File file = new File("C:\\Users\\ALTRON\\git\\Dnd2022\\DnD\\LocalData\\reserve");
-		Map<Long, GameTable> reserve = gameTable;
-
-		try {
-
-			FileOutputStream fileOutputStream = new FileOutputStream(file);
-			ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
-			objectOutputStream.writeObject(reserve);
-			objectOutputStream.close();
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	private static ObjectMapper getObjectMapper()
 	{
 		ObjectMapper defaultObjectMapper = new ObjectMapper();
@@ -109,34 +72,13 @@ public class Json {
 		return defaultObjectMapper;
 	}
 
-	private static void cleanReserve()
-	{
-		Scanner scanner = new Scanner(System.in);
-		//if(scanner.nextInt() == 12345)
-		//{
-			Json.backup(new HashMap<Long, GameTable>());
-			System.out.println("cleaned");
-			scanner.close();
-		//}
-		//else
-		//{
-		//	scanner.close();
-		//	System.out.println("uncleaned");
-		//}
-	}
-
+	
 	public static Source fromJson(JsonNode node, Source source) throws IllegalArgumentException, IOException
 	{
 		String file = source.source();
 		Path filePath = Path.of(file);
 		String json = Files.readString(filePath) ;
 		return fromJson(parse(json), Source.class);
-	}
-
-	public static void main(String[] args) throws IOException {
-
-		cleanReserve();
-
 	}
 
 }

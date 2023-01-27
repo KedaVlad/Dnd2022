@@ -40,6 +40,10 @@ public class LVL implements Serializable
 	public String info() 
 	{
 		String answer = "LVL: " + lvl + "(" + experience + "|" + expPerLvl[lvl] + ")";
+		if(lvl == 20)
+		{
+			answer = "LVL: 20(MAX LVL)";
+		}
 		return answer + "\n";
 	}
 

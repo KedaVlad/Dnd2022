@@ -1,27 +1,17 @@
 package com.dnd.dndTable.creatingDndObject.workmanship.features;
 
 import java.io.Serializable;
-import java.util.List;
 
-import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.WrappAction;
-import com.dnd.dndTable.ActionObject;
-import com.dnd.dndTable.ObjectDnd;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Pack;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
-import com.dnd.dndTable.factory.Json;
-import com.dnd.dndTable.factory.inerComands.InerComand;
+import com.dnd.dndTable.creatingDndObject.ObjectDnd;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.JsonProcessingException;
 
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME,  property = "FEATURE")
 @JsonSubTypes({
 	@JsonSubTypes.Type(value = ActiveFeature.class, name = "ACTIVE_FEATURE"),
 	@JsonSubTypes.Type(value = InerFeature.class, name = "INER_FEATURE"),
 	@JsonSubTypes.Type(value = PassiveFeature.class, name = "PASSIVE_FEATURE")})
-public class Feature implements Serializable, ActionObject, ObjectDnd 
+public class Feature implements Serializable, ObjectDnd 
 {
 
 	private static final long serialVersionUID = 5053270361827778941L;
@@ -33,11 +23,6 @@ public class Feature implements Serializable, ActionObject, ObjectDnd
 	enum For 
 	{
 		BATTLE, SPELL, OTHER
-	}
-
-	public Action makeAction()
-	{
-		return WrappAction.create(getName(), 000034234, getDescription(), null);
 	}
 
 	public String toString() 
@@ -69,13 +54,6 @@ public class Feature implements Serializable, ActionObject, ObjectDnd
 		this.description = description;
 	}
 
-	@Override
-	public long key() {
-		// TODO Auto-generated method stub
-		return FEATURE;
-	}
-	
-	
 	public static Feature build()
 	{
 		return new Feature();

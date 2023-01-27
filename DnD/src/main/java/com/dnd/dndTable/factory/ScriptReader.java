@@ -1,19 +1,15 @@
 package com.dnd.dndTable.factory;
 
-import java.util.List;
-
-
 import com.dnd.KeyWallet;
-import com.dnd.Log;
 import com.dnd.Names;
-import com.dnd.botTable.actions.CloudAction;
-import com.dnd.dndTable.DndKeyWallet;
-import com.dnd.dndTable.ObjectDnd;
+import com.dnd.botTable.Act;
+import com.dnd.botTable.actions.Action;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.creatingDndObject.MagicSoul;
+import com.dnd.dndTable.creatingDndObject.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
+import com.dnd.dndTable.creatingDndObject.characteristic.Skill;
 import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
+import com.dnd.dndTable.creatingDndObject.workmanship.MagicSoul;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
@@ -21,10 +17,9 @@ import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
 import com.dnd.dndTable.factory.inerComands.AddComand;
 import com.dnd.dndTable.factory.inerComands.CloudComand;
 import com.dnd.dndTable.factory.inerComands.InerComand;
-import com.dnd.dndTable.factory.inerComands.ProfComand;
 import com.dnd.dndTable.factory.inerComands.UpComand;
 
-abstract class ScriptReader implements DndKeyWallet, Names
+abstract class ScriptReader implements KeyWallet, Names
 {
 
 	static void execute(CharacterDnd character, InerComand comand)
@@ -32,10 +27,6 @@ abstract class ScriptReader implements DndKeyWallet, Names
 		if(comand instanceof AddComand)
 		{
 			add(character, (AddComand) comand);
-		}
-		else if(comand instanceof ProfComand)
-		{
-
 		}
 		else if(comand instanceof UpComand)
 		{
@@ -50,7 +41,11 @@ abstract class ScriptReader implements DndKeyWallet, Names
 
 	private static void cloud(CharacterDnd character, CloudComand comand) 
 	{
-		character.getCloud().add(CloudAction.create(comand.getName(), comand.getText()));
+		character.getCloud().add(Act.builder()
+				.name(comand.getName())
+				.text(comand.getText())
+				.action(Action.builder().cloud().build())
+				.build());
 
 	}
 
@@ -73,7 +68,7 @@ abstract class ScriptReader implements DndKeyWallet, Names
 		{
 			if(object instanceof Items)
 			{
-				character.getBody().getMyBags().get(0).add((Items) object);
+				character.getBody().getBag().add((Items) object);
 			}
 			else if(object instanceof Feature)
 			{
@@ -90,6 +85,28 @@ abstract class ScriptReader implements DndKeyWallet, Names
 			else if(object instanceof Possession)
 			{
 				Possession target = (Possession) object;
+				if(target.getName().matches("^SR.*"))
+				{
+					for(Skill article: character.getRolls().getSaveRolls())
+					{
+						if(article.getName().equals(target.getName()))
+						{
+							article.setProficiency(target.getProf());
+							break;
+						}
+					}
+				}
+				else
+				{
+					for(Skill article: character.getRolls().getSkills())
+					{
+						if(article.getName().equals(target.getName()))
+						{
+							article.setProficiency(target.getProf());
+							break;
+						}
+					}
+				}
 				character.getWorkmanship().getPossessions().add(target);
 			}
 			else if(object instanceof MagicSoul)

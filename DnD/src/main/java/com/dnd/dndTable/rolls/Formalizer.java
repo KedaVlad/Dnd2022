@@ -5,7 +5,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.dnd.Log;
+import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.dndTable.creatingDndObject.characteristic.Stat.Stats;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
 
@@ -38,7 +39,8 @@ public class Formalizer
 			}
 		}
 		
-		Formula formula = new Formula(dices);
+		
+		Formula formula = new Formula(dices.toArray(Dice[]::new));
 	
 		return formula.execute();
 	}
@@ -69,7 +71,6 @@ public class Formalizer
 	private static Dice buildDice(String str)
 	{
 		Dice answer;
-		Log.add("BuildDice ------------ " + str);
 		if(str.matches("(\\+|-)(\\d+(d4|d6|d8|d10|d12|d20|d100))"))
 		{
 			int times = ((Integer) Integer.parseInt(str.replaceAll("(\\+|-)(\\d*)(d4|d6|d8|d10|d12|d20|d100)", "$2")));
@@ -126,5 +127,124 @@ public class Formalizer
 		return null;
 		}
 	}
+	
+	public static int roll(Roll roll)
+	{
+		switch(roll)
+		{
+		case D4:
+			return d4();
+		case D6:
+			return d6();
+		case D8:
+			return d8();
+		case D10:
+			return d10();
+		case D12:
+			return d12();
+		case D20:
+			return d20();
+		case D100:
+			return d100();
+		default:
+			break;
+		}
+
+		return 0;
+	}
+
+	public static int d4()
+	{
+		return (int) Math.round(Math.random()*3+1);
+	}
+
+	public static int d6()
+	{
+		return (int) Math.round(Math.random()*5+1);
+	}
+
+	public static int d8()
+	{
+		return (int) Math.round(Math.random()*7+1);
+	}
+
+	public static int d10()
+	{
+		return (int) Math.round(Math.random()*9+1);
+	}
+
+	public static int d12()
+	{
+		return (int) Math.round(Math.random()*11+1);
+	}
+
+	public static int d20()
+	{
+		return (int) Math.round(Math.random()*19+1);
+	}
+
+	public static int d100()
+	{
+		return (int) Math.round(Math.random()*99+1);
+	}
+
+	public static int randomStat()
+	{
+
+		int[] allDice = {d6(), d6(), d6(), d6()};
+
+		int answer = 0;
+		int smaller = 0;
+
+		for(int i = 0; i < allDice.length; i++)
+		{
+
+			if(i == 0)
+			{
+				smaller = allDice[i];
+
+			}
+			else if(smaller < allDice[i])
+			{
+				answer += allDice[i];
+			}
+			else 
+			{
+				answer += smaller;
+				smaller = allDice[i];
+			}
+
+
+		}
+
+		return answer;
+
+	}
+
+	public static int stableStartHp(CharacterDnd character)
+	{ 
+		int start = character.getClassDnd().getFirstHp() + character.getRolls().getMainStatValue(Stats.CONSTITUTION.toString());
+		
+		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
+		{
+			start += character.getRolls().rollHp(character.getClassDnd(), false);
+		}
+
+		return start;
+	}
+
+	public static int randomStartHp(CharacterDnd character)
+	{
+
+		int start = character.getClassDnd().getFirstHp() + character.getRolls().getMainStatValue(Stats.CONSTITUTION.toString());
+
+		for(int i = 1; i < character.getClassDnd().getLvl(); i++)
+		{
+			start += character.getRolls().rollHp(character.getClassDnd(), true);
+		}
+
+		return start;
+	}
+
 	
 }

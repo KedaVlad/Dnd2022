@@ -1,16 +1,17 @@
 package com.dnd.dndTable.creatingDndObject.workmanship;
 
+import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.WrappAction;
-import com.dnd.dndTable.ActionObject;
+import com.dnd.Names.SpellClass;
+import com.dnd.botTable.Act;
+import com.dnd.botTable.actions.Action;
+import com.dnd.dndTable.creatingDndObject.ObjectDnd;
 import com.dnd.dndTable.creatingDndObject.workmanship.casts.Cast;
+import com.dnd.dndTable.creatingDndObject.workmanship.casts.Summon;
+import com.fasterxml.jackson.annotation.JsonTypeName;
 
-
-public class Spell implements Serializable, ActionObject 
+@JsonTypeName("SPELL")
+public class Spell implements Serializable, ObjectDnd 
 {
 	private static final long serialVersionUID = -7876613939972469105L;
 	
@@ -19,41 +20,21 @@ public class Spell implements Serializable, ActionObject
 	private String name;
 	private String description;
 	private String applicationTime;
-	private int distanse;
-	private int duration;
-
-	private List<String> classFor;
+	private String distanse;
+	private String duration;
+	private SpellClass[] classFor;
+	private boolean concentration;
 	
-	public Spell(String name) {
-		this.name = name;
-		classFor = new ArrayList<>();
-
+	public Spell conentration()
+	{
+		this.concentration = true;
+		return this;
 	}
-	private int id;
 	
-	
-	public Action cast()
+	public Act cast()
 	{
 		return Caster.cast(cast);
 	}
-	
-	public boolean equals(Object obj) {
-		if(obj == this) return true;
-		if(obj == null || obj.getClass() != this.getClass()) return false;
-		Spell characterDnd = (Spell) obj;
-		return id == characterDnd.id && (name == characterDnd.name ||(name != null && name.equals(characterDnd.name)));
-	}
-
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());             
-		result = prime * result + id; 
-		return result;
-
-}
-	
-
 
 	public String getDescription() {
 		return description;
@@ -67,11 +48,11 @@ public class Spell implements Serializable, ActionObject
 		return applicationTime;
 	}
 
-	public int getDistanse() {
+	public String getDistanse() {
 		return distanse;
 	}
 
-	public int getDuration() {
+	public String getDuration() {
 		return duration;
 	}
 
@@ -83,39 +64,67 @@ public class Spell implements Serializable, ActionObject
 		return lvlSpell;
 	}
 
-	public List<String> getClassFor() {
+	public SpellClass[] getClassFor() {
 		return classFor;
 	}
-
-
-	public void setClassFor(String ... strings) {
-		for(String string: strings) {
-			this.classFor.add(string);
-		}
+	
+	public static Spell create(int lvlSpell, Cast cast, String name, String description, String applicationTime, String distanse, String duration, SpellClass...classes) 
+	{
+		Spell answer = new Spell();
+		answer.lvlSpell = lvlSpell;
+		answer.cast = cast;
+		answer.name = name;
+		answer.description = description;
+		answer.applicationTime = applicationTime;
+		answer.distanse = distanse;
+		answer.duration = duration;
+		answer.classFor = classes;
+		return answer;
 		
 	}
 
-	@Override
-	public long key() {
-		// TODO Auto-generated method stub
-		return SPELL;
-	}
-
-	/**
-	 * @return the cast
-	 */
-	public Cast getCast() {
+	public Cast getCast() 
+	{
 		return cast;
 	}
 
-	/**
-	 * @param cast the cast to set
-	 */
-	public void setCast(Cast cast) {
+	public void setCast(Cast cast) 
+	{
 		this.cast = cast;
 	}
 
-	
+	public static void main(String[] args) throws IOException 
+	{
+		Spell[] pool = new Spell[]
+				{
+						Spell.create(
+								0, 
+								Summon.create("Test sommon some info which need to reed for some time... adter no longer nee eliminate"), 
+								"Simple Summon" ,
+								"Some spell which sommon some simple effect", 
+								"reaction", 
+								"30 ft.",
+								"10 min.", 
+								SpellClass.ARTIFACER, SpellClass.SORCER, SpellClass.WIZARD),
+						Spell.create(
+								1, 
+								Summon.create("Test sommon some info which need to reed for some time... adter no longer nee eliminate"), 
+								"Simple Summon" ,
+								"Some spell which sommon some simple effect", 
+								"reaction", 
+								"30 ft.",
+								"10 min.", 
+								SpellClass.ARTIFACER, SpellClass.WIZARD),
+				};
+		
+	}
+
+	/**
+	 * @return the concentration
+	 */
+	public boolean isConcentration() {
+		return concentration;
+	}
 
 
 

@@ -1,17 +1,13 @@
 package com.dnd.dndTable.rolls;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import com.dnd.Log;
 import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class Formula implements Serializable
 {
 	private static final long serialVersionUID = 1L;
 	private String name = "";
-	private List<Dice> formula;
+	private Dice[] formula;
 
 	private boolean natural20;
 	private boolean natural1;
@@ -32,38 +28,15 @@ public class Formula implements Serializable
 		return answer;
 	}
 	
-	public Formula(Dice first, Dice... formula)
+	public Formula(Dice... formula)
 	{
-		this.formula = new ArrayList<>();
-		this.getFormula().add(first);
-		for(Dice dice: formula)
-		{
-			this.getFormula().add(dice);
-		}
-	}
-
-	public Formula(List<Dice> formula)
-	{
-		this.formula = new ArrayList<>();
-		this.getFormula().addAll(formula);
-
+		this.formula = formula;
 	}
 
 	public Formula(String name, Dice... formula)
 	{
 		this.name = name + "\n";
-		this.formula = new ArrayList<>();
-		for(Dice dice: formula)
-		{
-			this.getFormula().add(dice);
-		}
-	}
-
-	public Formula(String name, List<Dice> formula)
-	{
-		this.name = name + "\n";
-		this.formula = new ArrayList<>();
-		this.getFormula().addAll(formula);
+		this.formula = formula;
 	}
 
 	private CritCheck critCheck(Dice dice)
@@ -100,11 +73,11 @@ public class Formula implements Serializable
 		this.name = "First roll\n\n";
 		answer += this.execute() + "\n";
 		first = this.summ();
-		critFirst = critCheck(this.formula.get(0));
+		critFirst = critCheck(this.formula[0]);
 		
 		this.name = "\nSecond roll\n\n";
 		answer += this.execute() + "\n";
-		critSecond = critCheck(this.formula.get(0));
+		critSecond = critCheck(this.formula[0]);
 		
 		if(advanture == true)
 		{
@@ -155,14 +128,14 @@ public class Formula implements Serializable
 			answer += dice.execute() + "\n";	
 		}
 		answer += "Result: " + summ();
-		if(getFormula().get(0).getCombo()!= null&& getFormula().get(0).getCombo()[0].equals(Roll.D20))
+		if(formula[0].getCombo()!= null && formula[0].getCombo()[0].equals(Roll.D20))
 		{
-		if(critCheck(getFormula().get(0)).equals(CritCheck.CRIT20))
+		if(critCheck(formula[0]).equals(CritCheck.CRIT20))
 		{
 			this.natural20 = true;
 			answer += " !NATURAL 20!";
 		}
-		else if(critCheck(getFormula().get(0)).equals(CritCheck.CRIT1))
+		else if(critCheck(formula[0]).equals(CritCheck.CRIT1))
 		{
 			this.natural1 = true;
 			answer += " !CRITICAL 1!";
@@ -181,17 +154,56 @@ public class Formula implements Serializable
 		return result;
 	}
 
-
-	public List<Dice> getFormula() {
-		return formula;
+	public void addDicesToStart(Dice...dices)
+	{
+		Dice[] result = new Dice[formula.length + dices.length];
+		for(int i = 0; i < dices.length; i++)
+		{
+			result[i] = dices[i];
+		}
+		int treker = 0;
+		for(int i = dices.length; i < result.length; i++)
+		{
+			result[i] = formula[treker];
+			treker++;
+		}
+		formula = result;
 	}
 
-	public boolean isNatural20() {
+	public void addDicesToEnd(Dice...dices)
+	{
+		Dice[] result = new Dice[formula.length + dices.length];
+		for(int i = 0; i < formula.length; i++)
+		{
+			result[i] = formula[i];
+		}
+		int treker = 0;
+		for(int i = formula.length; i < result.length; i++)
+		{
+			result[i] = dices[treker];
+			treker++;
+		}
+		formula = result;
+	}
+	
+	public boolean isNatural20() 
+	{
 		return natural20;
 	}
 
-	public boolean isNatural1() {
+	public boolean isNatural1() 
+	{
 		return natural1;
+	}
+
+	public Dice[] getFormula() 
+	{
+		return formula;
+	}
+
+	public void setFormula(Dice[] formula) 
+	{
+		this.formula = formula;
 	}
 
 }

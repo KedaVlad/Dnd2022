@@ -1,7 +1,6 @@
 package com.dnd.dndTable.rolls;
 
 import com.dnd.Names.TypeDamage;
-import com.dnd.dndTable.rolls.Dice.Roll;
 
 public class DamageDice extends Dice
 {
@@ -26,7 +25,7 @@ public class DamageDice extends Dice
 		String answer = this.getName() + "(" + typeDamage.toString() + "): ";	
 		for(int i = 0; i < this.getCombo().length; i++)
 		{
-				this.getResults()[i] = roll(this.getCombo()[i]);				
+				this.getResults()[i] = Formalizer.roll(this.getCombo()[i]);				
 		}
 
 		this.getResults()[this.getResults().length-1] = this.getBuff();

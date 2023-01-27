@@ -1,35 +1,27 @@
 package com.dnd.dndTable.creatingDndObject;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.dnd.KeyWallet;
-import com.dnd.Log;
-import com.dnd.Names.Stat;
 import com.dnd.Source;
-import com.dnd.dndTable.DndKeyWallet;
-import com.dnd.dndTable.ObjectDnd;
 import com.dnd.dndTable.Refreshable.Time;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Armor.Armors;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Items;
-import com.dnd.dndTable.creatingDndObject.bagDnd.Pack;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Tool;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Tool.Tools;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.WeaponProperties;
 import com.dnd.dndTable.creatingDndObject.bagDnd.Weapon.Weapons;
+import com.dnd.dndTable.creatingDndObject.characteristic.Stat.Stats;
 import com.dnd.dndTable.creatingDndObject.modification.AttackModification;
 import com.dnd.dndTable.creatingDndObject.modification.Matrix;
 import com.dnd.dndTable.creatingDndObject.modification.pool.SimplePool;
+import com.dnd.dndTable.creatingDndObject.workmanship.MagicSoul;
 import com.dnd.dndTable.creatingDndObject.workmanship.Possession;
 import com.dnd.dndTable.creatingDndObject.workmanship.Spell;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.Feature;
 import com.dnd.dndTable.creatingDndObject.workmanship.features.InerFeature;
-import com.dnd.dndTable.creatingDndObject.workmanship.features.Mechanics;
 import com.dnd.dndTable.factory.Json;
 import com.dnd.dndTable.factory.inerComands.AddComand;
 import com.dnd.dndTable.factory.inerComands.CloudComand;
@@ -37,16 +29,13 @@ import com.dnd.dndTable.factory.inerComands.InerComand;
 import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Dice.Roll;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 
 
 @JsonTypeInfo(include = JsonTypeInfo.As.WRAPPER_OBJECT, use = JsonTypeInfo.Id.NAME,  property = "CLASS_DND")
-public class ClassDnd implements Serializable, DndKeyWallet, Source{
+public class ClassDnd implements Serializable, KeyWallet, Source{
 
 	private static final long serialVersionUID = 3219669745475635442L;
 
@@ -135,7 +124,7 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 		cells.setMatrix(new boolean[1][2]);
 		spellSoul.setTime(Time.LONG);
 		spellSoul.setCells(cells);
-		spellSoul.setDepends(Stat.INTELLIGENSE);
+		spellSoul.setDepends(Stats.INTELLIGENSE);
 		SimplePool<Spell> pool = new SimplePool<Spell>();
 		pool.setActiveMaxSize(3);
 		spellSoul.setPool(pool);
@@ -162,7 +151,7 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 				new Possession("Thieves' Tools"),
 				new Possession("SR Dexterity"),
 				new Possession("SR Intelligense"),
-				new Possession("SR Intelligense"),
+				new Possession("Thieves' Cant"),
 				new Armor(Armors.LEATHER_ARMOR),
 				new Weapon(Weapons.DAGGER),
 				new Tool(Tools.THIEVES)),
@@ -297,7 +286,7 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 				.requirement(WeaponProperties.THROWING),
 				Feature.build().name("Uncanny Dodge").description("Starting at 5th level, when an attacker that you can see hits you with an attack, you can use your reaction to halve the attack’s damage against you."))};
 
-		assasin.growMap[6] = new InerComand[] { CloudComand.create("Choose competense5", "(Expertise 6)Choose 2 of yours SKILLS whith Proficiency and Up to competence")};
+		assasin.growMap[6] = new InerComand[] { CloudComand.create("Choosecompetenseagain", "(Expertise 6)Choose 2 of yours SKILLS whith Proficiency and Up to competence")};
 		
 		cells.setMatrix(new boolean[][] {{true,true,true,true},{true,true}});
 		pool.setActiveMaxSize(5);
@@ -403,6 +392,7 @@ public class ClassDnd implements Serializable, DndKeyWallet, Source{
 				Feature.build().name("Blindsense").description("Starting at 14th level, if you are able to hear, you are aware of the location of any hidden or invisible creature within 10 feet of you."))};
 		
 		assasin.growMap[15] = new InerComand[] { AddComand.create(
+				new Possession("SR Wisdom"),
 				AttackModification.build()
 				.name("Sneak Attack")
 				.postAttack(true)

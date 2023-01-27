@@ -5,32 +5,32 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.dnd.Log;
+import com.dnd.ButtonName;
+import com.dnd.KeyWallet;
 import com.dnd.Source;
-import com.dnd.botTable.Action;
-import com.dnd.botTable.actions.factoryAction.FactoryAction;
-import com.dnd.botTable.actions.factoryAction.FinalAction;
+import com.dnd.botTable.Act;
+import com.dnd.botTable.actions.Action;
+import com.dnd.botTable.actions.Action.Location;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
 import com.dnd.dndTable.creatingDndObject.ClassDnd;
 import com.dnd.dndTable.factory.inerComands.InerComand;
 
-abstract class ClassFactory implements Source 
+abstract class ClassFactory implements Source, KeyWallet, ButtonName
 {
 	private final static File dirClass = new File(classSource);;
 	private static File dirArchetype;
-	static final long key = 432543654;
+	static final long KEY = CLASS_FACTORY_K;
+	final static int END = 4;
 
-	public static Action startCreate(String heroName)
+	
+	public static Act execute(Action action)
 	{
-		String name = "CreateClass";
-		String text = "What is your class, " + heroName + "?";
-		return FactoryAction.create(name, key, false, text, getClassArray());
-	}
-
-	public static Action execute(FactoryAction action)
-	{
-		switch(action.getLocalData().size())
+		int condition = 0;
+		if(action.getAnswers() != null) condition = action.getAnswers().length;
+		switch(condition)
 		{
+		case 0:
+			return  startCreate();
 		case 1:
 			return	chooseArchetype(action);
 		case 2:
@@ -41,28 +41,45 @@ abstract class ClassFactory implements Source
 		return null;
 	}
 
-	private static Action chooseArchetype(FactoryAction action)
+	private static Act startCreate()
 	{
-		action.setName("ChooseClassArchtype");
-		action.setText(action.getLocalData().get(0) +  ", realy? Which one?");
-		action.setNextStep(getArchetypeArray(action.getLocalData().get(0)));
-		return action;
+		return Act.builder()
+				.name("CreateClass")
+				.text("What is your class?")
+				.action(Action.builder()
+						.location(Location.FACTORY)
+						.key(KEY)
+						.buttons(getClassArray())
+						.build())
+				.returnTo(START_B)
+				.build();
+	}
+	
+	private static Act chooseArchetype(Action action)
+	{
+		action.setButtons(getArchetypeArray(action.getAnswers()[0]));
+		return Act.builder()
+				.name("ChooseClassArchtype")
+				.text(action.getAnswers()[0] +  ", realy? Which one?")
+				.action(action)
+				.build();
 	}
 
-	private static Action chooseLvl(FactoryAction action)
+	private static Act chooseLvl(Action action)
 	{
-		action.setName("ChooseClassLvl");
-		action.setText("What is your lvl?");
-		action.setNextStep(null);
-		action.setMediator(true);
-		return action;
+		action.setMediator();
+		return Act.builder()
+				.name("ChooseClassLvl")
+				.text("What is your lvl?")
+				.action(action)
+				.build();
 	}
 
-	private static Action checkCondition(FactoryAction action)
+	private static Act checkCondition(Action action)
 	{
 		int lvl = 0;
 		Pattern pat = Pattern.compile("[-]?[0-9]+(.[0-9]+)?");
-		Matcher matcher = pat.matcher(action.getLocalData().get(2));
+		Matcher matcher = pat.matcher(action.getAnswers()[2]);
 		while (matcher.find()) 
 		{
 			lvl = ((Integer) Integer.parseInt(matcher.group()));
@@ -70,34 +87,33 @@ abstract class ClassFactory implements Source
 
 		if(0 < lvl && lvl <= 20)
 		{
-			action.setName("checkCondition");
-			action.setText(getObgectInfo(action.getLocalData().get(0), action.getLocalData().get(1)) + "\nIf not, select another option above." );
-			action.setNextStep(new String[][] {{"Yeah, right"}});
-			return FinalAction.create(action);
+			action.setButtons(new String[][] {{"Yeah, right"}});
+			return Act.builder()
+					.name("checkClassCondition")
+					.text(getObgectInfo(action.getAnswers()[0], action.getAnswers()[1]) + "\nIf not, select another option above." )
+					.action(action)
+					.build();
 		}
 		else
 		{
-			action.setName("checkCondition");
-			action.setText(lvl + "??? I see you're new here. Let's start with lvl 1.\nAre you satisfied with this option?/n"
-					+  getObgectInfo(action.getLocalData().get(0), action.getLocalData().get(1)) + "\nIf not, select another option above." );
-			action.getLocalData().remove(2);
-			action.getLocalData().add(1+"");
-			action.setNextStep(new String[][] {{"Okey"}});
-			return FinalAction.create(action);
+			action.getAnswers()[2] = 1 + "";
+			action.setButtons(new String[][] {{"Okey"}});
+			return Act.builder()
+					.name("checkClassCondition")
+					.text(lvl + "??? I see you're new here. Let's start with lvl 1.\nAre you satisfied with this option?/n"
+							+  getObgectInfo(action.getAnswers()[0], action.getAnswers()[1]) + "\nIf not, select another option above." )
+					.action(action)
+					.build();
 		}
-
-
-
 	}
 
-	static void finish(FinalAction action, CharacterDnd character) 
+	static void finish(Action action, CharacterDnd character) 
 	{
-
 		try
 		{
-			String className = action.getLocalData().get(0);
-			String archetype = action.getLocalData().get(1);
-			int lvl = ((Integer) Integer.parseInt(action.getLocalData().get(2)));
+			String className = action.getAnswers()[0];
+			String archetype = action.getAnswers()[1];
+			int lvl = ((Integer) Integer.parseInt(action.getAnswers()[2]));
 			ClassDnd clazz = Json.fromFileJson(classSource + className + "\\" + archetype + ".json", ClassDnd.class);
 			clazz.setLvl(lvl);
 			character.setClassDnd(clazz);
@@ -117,7 +133,7 @@ abstract class ClassFactory implements Source
 		}
 	}
 
-	static String[][] getClassArray() 
+	private static String[][] getClassArray() 
 	{
 		String[] all = dirClass.list();
 		String[][] allClasses = new String[all.length][1];
@@ -128,7 +144,7 @@ abstract class ClassFactory implements Source
 		return allClasses;
 	}
 
-	static String[][] getArchetypeArray(String className) 
+	private static String[][] getArchetypeArray(String className) 
 	{
 		dirArchetype = new File(classSource + className);
 		String[] all = dirArchetype.list();
@@ -140,7 +156,7 @@ abstract class ClassFactory implements Source
 		return allArchetypes;
 	}
 
-	static String getObgectInfo(String classDnd, String archetype) {
+	private static String getObgectInfo(String classDnd, String archetype) {
 
 		String answer = classDnd + archetype;
 		return answer;

@@ -1,48 +1,74 @@
 package com.dnd.dndTable.factory;
 
-import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
-import com.dnd.Log;
-import com.dnd.botTable.Action;
-import com.dnd.botTable.GameTable;
-import com.dnd.botTable.actions.BotAction;
-import com.dnd.botTable.actions.factoryAction.FactoryAction;
-import com.dnd.botTable.actions.factoryAction.FinalAction;
-import com.dnd.botTable.actions.factoryAction.FinalTargetAction;
+import com.dnd.Executor;
+import com.dnd.botTable.Act;
+import com.dnd.botTable.CharactersPool;
+import com.dnd.botTable.actions.Action;
+import com.dnd.botTable.actions.Action.Location;
 import com.dnd.dndTable.creatingDndObject.CharacterDnd;
-import com.dnd.dndTable.rolls.Dice;
+import com.dnd.dndTable.rolls.Formalizer;
 
-public class ControlPanel implements Serializable {
+public class ControlPanel implements Executor
+{
 
 	private static final long serialVersionUID = -231330030795056098L;
-	private static final long key = 231330038;
+	private CharactersPool charactersPool;
 
-	public Action createHero()
+	public ControlPanel(CharactersPool charactersPool)
 	{
-		return CharacterFactory.startCreate();
+		this.charactersPool = charactersPool;
 	}
-
-	public Action act(FactoryAction action)
+	
+	@Override
+	public Act execute(Action action)
 	{
-		if(action.getKey() == CharacterFactory.key)
+		int condition = 0;
+		if(action.getAnswers() != null) condition = action.getAnswers().length;
+		if(action.getKey() == CharacterFactory.KEY)
 		{
+			if(condition == CharacterFactory.END)
+			{
+				charactersPool.setActualCharacter(CharacterFactory.finish(action));
+				charactersPool.getActualCharacter().addMemoirs(charactersPool.getActualCharacter().getName()+"\n");
+				charactersPool.save();
+				return RaceFactory.execute(Action.builder().build());
+			}
 			return CharacterFactory.execute(action);
 		}
-		else if(action.getKey() == ClassFactory.key)
+		else if(action.getKey() == RaceFactory.KEY)
 		{
-			return ClassFactory.execute(action);
-		}
-		else if(action.getKey() == RaceFactory.key)
-		{
+			if(condition == RaceFactory.END)
+			{
+				RaceFactory.finish(action, charactersPool.getActualCharacter());
+				return ClassFactory.execute(Action.builder().build());
+			}
 			return RaceFactory.execute(action);
 		}
-		else if(action.getKey() == ItemFactory.key)
+		else if(action.getKey() == ClassFactory.KEY)
 		{
-			if(action.getLocalData().size() == 0)
+			if(condition == ClassFactory.END)
 			{
-				return ItemFactory.startCreate();
+				ClassFactory.finish(action, charactersPool.getActualCharacter());
+				return  buildStat();
 			}
-			return ItemFactory.execute(action);
+			return ClassFactory.execute(action);
+		}
+		else if(action.getKey() == STAT)
+		{
+			return apruveStats(action);
+		}
+		else if(action.getKey() == hp)
+		{
+			return apruveHp(action);
+		}
+		else if(action.getKey() == ItemFactory.KEY)
+		{
+			return ItemFactory.execute(action, charactersPool.getActualCharacter());
 		}
 		else
 		{
@@ -50,19 +76,19 @@ public class ControlPanel implements Serializable {
 		}
 	}
 
-	public Action readiness(CharacterDnd character)
+	public Act readiness()
 	{
-		if(character.getClassDnd() == null)
+		if(charactersPool.getActualCharacter().getMyRace() == null)
 		{
-			return ClassFactory.startCreate(character.getName());
+			return RaceFactory.execute(Action.builder().build());
 		}
-		else if(character.getMyRace() == null)
+		else if(charactersPool.getActualCharacter().getClassDnd() == null)
 		{
-			return RaceFactory.startCreate();
+			return ClassFactory.execute(Action.builder().build());
 		}
-		else if(character.getHp().getNow() == 0)
+		else if(charactersPool.getActualCharacter().getHp().getNow() == 0)
 		{
-			return finish();
+			return buildStat();
 		}
 		else
 		{
@@ -70,43 +96,12 @@ public class ControlPanel implements Serializable {
 		}
 	}
 
-	public Action finish(FinalAction action, GameTable gameTable)
-	{
-		long key = action.getKey();
-		if(key == CharacterFactory.key)
-		{
-			gameTable.setActualGameCharacter(CharacterFactory.finish(action));
-			gameTable.getActualGameCharacter().addMemoirs(gameTable.getActualGameCharacter().getName()+"\n");
-			gameTable.save();
-			return ClassFactory.startCreate(action.getLocalData().get(0)).returnTo("START");
-		}
-		else if(key == ClassFactory.key)
-		{
-			ClassFactory.finish(action, gameTable.getActualGameCharacter());
-			gameTable.save();
-			return RaceFactory.startCreate().returnTo("START");
-		}
-		else if(key == RaceFactory.key)
-		{
-			RaceFactory.finish(action, gameTable.getActualGameCharacter());
-			gameTable.save();
-			return finish().returnTo("START");
-		}
-		else if(key == ItemFactory.key)
-		{
-			ItemFactory.finish((FinalTargetAction)action, gameTable.getActualGameCharacter());
-			gameTable.save();
-			return action.returnTo("STUFF", "BAG");
-		}
-		return null;
-	}
-
-	private Action finish()
+	private Act buildStat()
 	{
 		String name = "ChooseStat";
-		String godGift = Dice.randomStat() + ", " + Dice.randomStat() + ", " 
-				+ Dice.randomStat() + ", " + Dice.randomStat() + ", " 
-				+ Dice.randomStat() + ", " + Dice.randomStat();
+		String godGift = Formalizer.randomStat() + ", " + Formalizer.randomStat() + ", " 
+				+ Formalizer.randomStat() + ", " + Formalizer.randomStat() + ", " 
+				+ Formalizer.randomStat() + ", " + Formalizer.randomStat();
 
 		String text =  "Now let's see what you have in terms of characteristics.\r\n"
 				+ "\r\n"
@@ -122,12 +117,169 @@ public class ControlPanel implements Serializable {
 				+ " str 11 dex 12 con 13 int 14 wis 15 cha 16\r\n"
 				+ " 11, 12, 13, 14, 15, 16";
 
-		return BotAction.create(name, getKey(), true, true, text, null);
+		return Act.builder()
+				.name(name)
+				.text(text)
+				.action(Action.builder()
+						.location(Location.FACTORY)
+						.key(STAT)
+						.mediator()
+						.build())
+				.returnTo(START_B)
+				.build();
 	}
 
-	public static long getKey() 
+	private Act apruveStats(Action action) 
 	{
-		return key;
+
+		List<Integer> stats = new ArrayList<>();
+		Pattern pat = Pattern.compile(keyNumber);
+		Matcher matcher = pat.matcher(action.getAnswers()[0]);
+		while (matcher.find()) 
+		{
+			stats.add((Integer) Integer.parseInt(matcher.group()));
+		}
+
+		String name = "apruveStats";
+		String text;
+
+		if(stats.size() != 6)
+		{
+
+			text = "Instructions not followed, please try again. Make sure there are 6 values.\r\n"
+					+ "Examples:\r\n"
+					+ " 11, 12, 13, 14, 15, 16 \r\n"
+					+ " str 11 dex 12 con 13 int 14 wis 15 cha 16 ";
+
+			return Act.builder().name("DeadEnd").text(text).build();
+
+		}
+		else
+		{
+			charactersPool.getActualCharacter().setMyStat(stats.get(0), stats.get(1), stats.get(2), stats.get(3), stats.get(4), stats.get(5));
+			charactersPool.getActualCharacter().addMemoirs("My start rolled stats: " + stats.get(0) + " " + stats.get(1) + " " + 
+					stats.get(2) + " " + stats.get(3) + " " + stats.get(4) + " " + stats.get(5));
+			int stableHp = Formalizer.stableStartHp(charactersPool.getActualCharacter());
+			String[][] nextStep = {{"Stable " + stableHp, "Random ***"}};
+			text = "How much HP does your character have?\r\n"
+					+ "\r\n"
+					+ "You can choose stable or random HP count \r\n"
+					+ "\r\n"
+					+ "If you agreed with the game master on a different amount of HP, send its value. (Write the amount of HP)";
+
+			return Act.builder()
+					.name(name)
+					.text(text)
+					.action(Action.builder()
+							.mediator()
+							.buttons(nextStep)
+							.location(Location.FACTORY)
+							.key(hp)
+							.replyButtons()
+							.build())
+					.build();
+		}
 	}
+
+	private Act apruveHp(Action action)
+	{
+		String name;
+		String text;
+		String answer = action.getAnswers()[0];
+		CharacterDnd character = charactersPool.getActualCharacter();
+		if(answer.contains("Stable") || answer.contains("Random"))
+		{
+			if(answer.contains("Stable"))
+			{
+				character.getHp().grow(Formalizer.stableStartHp(character));
+			}
+			else
+			{
+				character.getHp().grow(Formalizer.randomStartHp(character));
+			}
+			name = "finishCreatingHero";
+			text = "Congratulations, you are ready for adventure.";
+			return Act.builder()
+					.name(name)
+					.text(text)
+					.action(Action.builder()
+							.location(Location.BOT)
+							.key(toMenu)
+							.buttons(new String[][]{{"Let's go"}})
+							.build())
+					.build();
+
+		}
+		else
+		{
+			Pattern pat = Pattern.compile(keyNumber);
+			Matcher matcher = pat.matcher(answer);
+			int hp = 0;
+			while (matcher.find()) 
+			{
+				hp = ((Integer) Integer.parseInt(matcher.group()));
+			}
+
+			if(hp <= 0)
+			{
+				hp = Formalizer.stableStartHp(character);
+				character.getHp().grow(Formalizer.stableStartHp(character));
+				name = "finishCreatingHero";
+				text = "Nice try... I see U very smart, but you will get stable " + hp + " HP. You are ready for adventure.";
+				return Act.builder()
+						.name(name)
+						.text(text)
+						.action(Action.builder()
+								.location(Location.BOT)
+								.key(toMenu)
+								.buttons(new String[][]{{"Let's go"}})
+								.build())
+						.build();
+
+			}
+			else
+			{
+				character.getHp().grow(hp);
+				name = "finishCreatingHero";
+				text = "Congratulations, you are ready for adventure.";
+				return Act.builder()
+						.name(name)
+						.text(text)
+						.action(Action.builder()
+								.location(Location.BOT)
+								.key(toMenu)
+								.buttons(new String[][]{{"Let's go"}})
+								.build())
+						.build();
+
+			}
+
+		}
+	}
+
+	
+	public Act inerAct(Action inerAction, CharacterDnd actualGameCharacter)
+	{
+		ScriptReader.execute(actualGameCharacter, inerAction.getComand());
+		return Act.builder()
+				.name("EndTree")
+				.text("casted")
+				.build();
+	}
+
+	public CharactersPool getCharactersPool() {
+		return charactersPool;
+	}
+
+	public void setCharactersPool(CharactersPool charactersPool) {
+		this.charactersPool = charactersPool;
+	}
+
+	@Override
+	public long key() {
+		// TODO Auto-generated method stub
+		return ControlPanel;
+	}
+
 
 }

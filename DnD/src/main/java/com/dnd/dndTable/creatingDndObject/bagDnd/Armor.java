@@ -1,6 +1,5 @@
 package com.dnd.dndTable.creatingDndObject.bagDnd;
 
-import com.dnd.Names.Stat;
 import com.fasterxml.jackson.annotation.JsonTypeName;
 
 @JsonTypeName("ARMOR")
@@ -41,6 +40,7 @@ public class Armor extends Items
 		
 		return answer;
 	}
+	
 	
 	public Armors getType() 
 	{

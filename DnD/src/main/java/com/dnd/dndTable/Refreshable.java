@@ -1,5 +1,7 @@
 package com.dnd.dndTable;
 
+import com.dnd.dndTable.creatingDndObject.ObjectDnd;
+
 public interface Refreshable {
 
 	public enum Time implements ObjectDnd
@@ -17,11 +19,7 @@ public interface Refreshable {
 		{
 			return name;
 		}
-		@Override
-		public long key() 
-		{
-			return REST;
-		}
+
 	}
 	
 	abstract void refresh(Time time);

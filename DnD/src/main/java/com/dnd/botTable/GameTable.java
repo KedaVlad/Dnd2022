@@ -1,96 +1,262 @@
 package com.dnd.botTable;
 
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.Optional;
 
+import org.telegram.telegrambots.meta.api.objects.CallbackQuery;
 import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.MessageEntity;
+import org.telegram.telegrambots.meta.api.objects.Update;
 
-import com.dnd.KeyWallet;
-import com.dnd.Log;
-import com.dnd.botTable.actions.ArrayAction;
-import com.dnd.botTable.actions.BotAction;
-import com.dnd.botTable.actions.CloudAction;
-import com.dnd.botTable.actions.WrappAction;
-import com.dnd.botTable.actions.dndAction.DndAction;
-import com.dnd.botTable.actions.dndAction.StartTreeAction;
-import com.dnd.botTable.actions.factoryAction.FactoryAction;
-import com.dnd.botTable.actions.factoryAction.FinalAction;
-import com.dnd.dndTable.creatingDndObject.CharacterDnd;
+import com.dnd.ButtonName;
+import com.dnd.botTable.actions.Action;
+import com.dnd.botTable.actions.Action.Location;
+import com.dnd.botTable.actions.BaseAction;
+import com.dnd.botTable.actions.PoolActions;
 import com.dnd.dndTable.factory.ControlPanel;
-import com.dnd.dndTable.rolls.Dice;
 import com.dnd.dndTable.rolls.Formalizer;
 
 
-public class GameTable implements KeyWallet, Serializable
+class GameTable extends Table 
 {
-	private static final long serialVersionUID = -8448308501857106456L;
-	private long chatId;
-	private Map<String, CharacterDnd> savedCharacter = new LinkedHashMap<>();
-	private CharacterDnd actualGameCharacter;
-	private ControlPanel controlPanel = new ControlPanel();
-	private ActMachine script = new ActMachine();
-	List<CloudAction> clouds;
+	CharactersPool characters;
+	ControlPanel controlPanel;
+	ScriptMachine scriptMachine;
+	CloudMachine cloudMachine;
 
-	Action makeAction(Action action)
-	{ 
-		Log.add("START MAKE ACTION IN GAME TABLE");
-		Action answer = null; 
-		if(action instanceof DndAction)
+	GameTable(long tableKey) 
+	{
+		super(tableKey);
+	}
+
+	@Override
+	protected boolean execute(User user, Update update) 
+	{
+		this.characters = user.CHARACTERS;
+		this.scriptMachine.initialize(user.SCRIPT);
+		this.controlPanel.setCharactersPool(user.CHARACTERS);
+		this.cloudMachine.setClouds(user.CHARACTERS.clouds);
+
+		Act act = null;
+
+		if(update.hasCallbackQuery())
 		{
-			answer = getActualGameCharacter().act(action);
+			act = handleCallback(update.getCallbackQuery());
 		}
-		else if(action instanceof FinalAction)
+		else
 		{
-			return controlPanel.finish((FinalAction)action, this);
+			act = handleMessage(update.getMessage());
 		}
-		else if(action instanceof FactoryAction)
+
+		if(act == null) 
+		{
+			return true;
+		}
+		else if(act.hasCloud())
+		{
+			cloudMachine.getClouds().clouds.add(act);
+			act = Act.builder().name("DeatEnd").text("ELIMINATE after no longer need").build();
+		}
+		
+		if(act.returnCall != null)
+		{
+			if(act.returnCall.equals(act.returnTarget))
+			{
+				scriptMachine.targetByName(act.returnTarget);
+				scriptMachine.toTarget();
+				scriptMachine.cleanTarget();
+				return true;
+			}
+			else
+			{
+				scriptMachine.targetByName(act.returnTarget);
+				act = makeAction(scriptMachine.script.target.action.continueAction(act.returnCall));
+				scriptMachine.toScript(act);
+				return true;
+			}
+		}
+		else
+		{
+			scriptMachine.toScript(act);
+			return true;
+		}
+	}
+
+	private Act handleCallback(CallbackQuery callbackQuery)
+	{
+		String target = callbackQuery.getData().replaceAll("([a-zA-Z `�-]+)(\\d{9})(.+)", "$1");
+		long key = Long.parseLong(callbackQuery.getData().replaceAll("([a-zA-Z `�-]+)(\\d{9})(.+)", "$2"));		
+		String callback = callbackQuery.getData().replaceAll("([a-zA-Z `�-]+)(\\d{9})(.+)", "$3");
+		if(key == CLOUD_ACT)
+		{
+			if(callback.equals(ELIMINATION))
+			{
+				cloudMachine.eliminate(target);
+				scriptMachine.script.target = null;
+				return null;
+			}
+			else
+			{
+				return makeAction(cloudMachine.compleat(target, callback));
+			}
+		}
+		else if(scriptMachine.targetByName(target))
+		{
+			if(key == MAIN_TREE)
+			{
+				return makeAction(scriptMachine.script.target.action.continueAction(callback));
+			}
+			else
+			{
+				ArrayActs pool = (ArrayActs) scriptMachine.script.target;
+				return makeAction(pool.getTarget(key).action.continueAction(callback));
+			}
+		}
+		return null;
+	}
+
+	private Act handleMessage(Message message)
+	{
+		if(message.hasEntities()) 
 		{	
-			FactoryAction factory = (FactoryAction) action;
-			return controlPanel.act(factory);
+			return comandPlay(message);
 		}
-		else if(action instanceof BotAction)
+		if(message.getText().equals(RETURN_TO_MENU) && readiness())
 		{
-			return  execute((BotAction) action);
+			scriptMachine.script.trash.add(message.getMessageId());
+			return menu();
+
 		}
-		else if(action instanceof WrappAction)
+		else if(scriptMachine.targetByText(message.getText()))
 		{
-			return action;
+			Act act = makeAction(scriptMachine.continueTarget(message.getText()));
+			if(act.returnCall != null || act.hasCloud())
+			{
+				scriptMachine.script.trash.add(message.getMessageId());
+			}
+			else
+			{
+			act.toCircle(message.getMessageId());
+			}
+			return act;
 		}
-		relocateClouds();
-		save();
-		return answer;
+		else if(readiness())
+		{
+			scriptMachine.script.trash.add(message.getMessageId());
+			return characterTextComand(message.getText());
+
+		}
+		else
+		{
+
+			return Act.builder()
+					.name("NoAnswer")
+					.text("Until you have an active hero, you have no memoirs. Therefore, unfortunately, this message recognize oblivion.")
+					.build();
+		}
 	}
 
-	private void relocateClouds()
+	private Act comandPlay(Message message)
 	{
-		clouds = actualGameCharacter.getCloud();
+		Optional<MessageEntity> commandEntity = message.getEntities().stream().filter(e -> "bot_command".equals(e.getType())).findFirst();
+
+		if (commandEntity.isPresent())
+		{
+			String comand = message.getText().substring(commandEntity.get().getOffset(), commandEntity.get().getLength());
+			switch (comand)
+			{
+			case "/start":
+				scriptMachine.script.trash.add(message.getMessageId());
+				return Act.builder().name(START_B).returnTo(message.getChatId()+"").text(startText).build();
+
+			case "/characters":
+				scriptMachine.script.trash.add(message.getMessageId());
+				return characterCase();
+			}
+		}
+		return null;
 	}
 
-	private Action execute(BotAction action)
+	private Act characterTextComand(String text)
 	{
-		long key = action.key;
-		Log.add(key);
-		if(key == ControlPanel.getKey())
+		if(text.matches("^\\+\\d+"))
 		{
-			return apruveStats(action);
+			int exp = (Integer) Integer.parseInt(text.replaceAll("^\\+(\\d+)", "$1"));
+			if(characters.actual.getLvl().addExp(exp))
+			{
+			}
+			return menu();
 		}
-		else if(key == hp)
+		else if(text.matches("^(hp|Hp|HP|hP)(\\+|-)\\d+"))
 		{
-			return apruveHp(action);
+			String num = text.replaceAll("^(hp|Hp|HP|hP)(\\+|-)(\\d+)", "$3");
+			int value = (Integer) Integer.parseInt(num);
+			if(text.contains("+"))
+			{
+				characters.actual.getHp().heal(value);
+			}
+			else if(text.contains("-"))
+			{
+				characters.actual.getHp().damaged(value);
+			}
+			else
+			{
+				return Act.builder()
+						.name("MissHpFormula")
+						.text("You make something vrong... I dont understand what do whith " + value + " heal(+) or damage(-)? Try again.")
+						.build();
+			}
+			return menu();
 		}
-		else if(key == createOrDelete)
+		else 
 		{
-			return createOrDelete(action);
+			characters.actual.addMemoirs(text);
+			return Act.builder()
+					.name("addMemoirs")
+					.text("I will put it in your memoirs")
+					.build();
+		}
+	}
+
+	private Act makeAction(BaseAction action)
+	{ 
+		Location location = action.getLocation();
+		if(action instanceof Action)
+		{
+			if(location == Location.BOT)
+			{
+				return execute((Action)action);
+			}
+			else if(location == Location.CHARACTER)
+			{
+				return characters.actual.executeAction(action);
+			}
+			else if(location == Location.FACTORY)
+			{
+				return controlPanel.execute((Action)action);
+			}
+			else
+			{
+				return null;
+			}
+		}
+		else
+		{
+			return characters.actual.executeAction(action);
+		}
+		
+	}
+
+	public Act execute(Action action) 
+	{
+		long key = action.getKey();
+		if(key == create)
+		{
+			return createCharacter(action);
 		}
 		else if(key == downloadHero)
 		{
-			return download(action.getAnswer());
+			return download(action);
 		}
 		else if(key == toMenu)
 		{
@@ -102,51 +268,62 @@ public class GameTable implements KeyWallet, Serializable
 		}
 		else if(key == rolls)
 		{
-			return rollsMenu(action);
+			return compleatRoll(action);
 		}
 		else if(key == DEBUFF)
 		{
 			return addDebuff(action);
 		}
-		Log.add("ERROR IN GAME TABLE EXECUTE");
 		return null;
 	}
 
-	private Action addDebuff(BotAction action) {
-		if(action.getAnswer().equals("RETURN TO MENU"))
+	private Act addDebuff(Action action) 
+	{
+		if(action.getAnswers()[0].equals(RETURN_TO_MENU))
 		{
 			return menu();
 		}
 		else
 		{
-			return BotAction.create("Debuff#" + (script.getDatached().size() + 1), NO_ANSWER, false, false, action.getAnswer(), null);
+			String name = "Debuff";
+			for(int i = 0; i < (cloudMachine.getClouds().cloudsWorked.size() + cloudMachine.getClouds().clouds.size()); i++)
+			{
+				name += "A";
+			}
+			
+			return Act.builder()
+					.name(name)
+					.text(action.getAnswers()[0])
+					.action(Action.builder()
+							.cloud()
+							.build())
+					.build();
 		}
 	}
 
-	private Action createOrDelete(BotAction action)
+	private Act createCharacter(Action action)  //!!!
 	{
-		script.beackTo("START");
-		String key = action.getAnswer();
-		if(key.equals("CREATE"))
+		String key = action.getAnswers()[0];
+		if(key.equals(CREATE_B))
 		{
-			return controlPanel.createHero();
+			return controlPanel.execute(Action.builder()
+					.key(action.getKey())
+					.build());
 		}
-		else if(key.equals("DELETE"))
+		else if(key.equals(DELETE_B))
 		{
 
 		}
-
 		return null;
 	}
 
-	boolean readiness()
+	private boolean readiness()
 	{
-		Log.add("Check readiness");
-		if(getActualGameCharacter() == null)
+		if(characters.actual == null)
 		{
 			return false;
 		}
-		else if(controlPanel.readiness(getActualGameCharacter()) == null)
+		else if(controlPanel.readiness() == null)
 		{
 			return true;
 		}
@@ -156,243 +333,321 @@ public class GameTable implements KeyWallet, Serializable
 		}
 	}
 
-	private Action download(String string)
+	private Act download(Action action)
 	{
-		setActualGameCharacter(savedCharacter.get(string));
-		if(controlPanel.readiness(getActualGameCharacter()) != null)
+		characters.download(action.getAnswers()[0]);
+		if(controlPanel.readiness() != null)
 		{
-			script.beackTo("START");
-			return controlPanel.readiness(getActualGameCharacter());
+			return controlPanel.readiness();
 		}
-		relocateClouds();
+
 		return menu();
 	}
 
-	Action characterCase()
+	private Act characterCase()
 	{
-
-		String name = "characterCase";
-		if(getSavedCharacter().size() != 0) 
+		String name = CHARACTER_CREATE_CASE_B;
+		if(characters.savedCharacters.size() != 0) 
 		{
-			String[][] buttons = new String[getSavedCharacter().size()][];
+			String[][] buttons = new String[characters.savedCharacters.size()][1];
 			int i = 0;
-			for(String character: getSavedCharacter().keySet())
+			for(String character: characters.savedCharacters.keySet())
 			{
-				buttons[i] = new String[] {getSavedCharacter().get(character).getName()};
+				buttons[i][0] = characters.savedCharacters.get(character).getName();
 				i++;
 			}
-			Action[] pool = new Action[] {
-					BotAction.create("", createOrDelete, true, false, "Choose the Hero or CREATE new one... or DELETE some.", new String[][]{{"CREATE", "DELETE"}}).replyButtons(),
-					BotAction.create("", downloadHero, true, false, "Your Heroes", buttons),
-
-
-			};
-			return ArrayAction.create(name, NO_ANSWER, pool);
+			return ArrayActsBuilder.builder()
+					.name(name)
+					.returnTo(START_B)
+					.pool(Act.builder()
+							.text("Choose the Hero or " + CREATE_B + " new one.")
+							.action(Action.builder()
+									.key(create)
+									.location(Location.BOT)
+									.buttons(new String[][]{{CREATE_B}})
+									.replyButtons()
+									.build())
+							.build(),
+							Act.builder()
+							.text("Your Heroes")
+							.action(Action.builder()
+									.key(downloadHero)
+									.location(Location.BOT)
+									.buttons(buttons)
+									.build())
+							.build())
+					.build();
 		}	
 		else
 		{
-			String text = "You don't have a Hero yet, my friend. But after you CREATE them, you can find them here.";
-			String[][] buttons = new String[][]{{"CREATE"}};
-			return BotAction.create(name, createOrDelete, true, false, text, buttons).replyButtons();
+			return Act.builder()
+					.name(name)
+					.text("You don't have a Hero yet, my friend. But after you " + CREATE_B + " them, you can find them here.")
+					.action(Action.builder()
+							.location(Location.BOT)
+							.key(create)
+							.buttons(new String[][]{{CREATE_B}})
+							.replyButtons()
+							.build())
+					.build();
 		}
 
 	}
 
-	Action menu()
+	private Act menu()
 	{
-		save();
-		script.beackTo(start);
+		characters.save();
 		Action[][] pool = new Action[][]
 				{
 			{
-				StartTreeAction.create("ABILITY", ABILITY),
-				StartTreeAction.create("CHARACTERISTIC", CHARACTERISTIC),
-				StartTreeAction.create("STUFF", STUFF)
+				Action.builder().name(ABILITY_B).key(ABILITY).location(Location.CHARACTER).build(),
+				Action.builder().name(CHARACTERISTIC_B).key(CHARACTERISTIC).location(Location.CHARACTER).build(),
+				Action.builder().name(STUFF_B).key(STUFF).location(Location.CHARACTER).build()
 			},
 			{
-				BotAction.create("ROLLS", toRolls, true, false, null, null),
-				StartTreeAction.create("(DE)BUFF", DEBUFF)
+				Action.builder().name(ROLLS_B).key(toRolls).location(Location.BOT).build(),
+				Action.builder().name(DEBUFF_B).key(DEBUFF).location(Location.CHARACTER).build()
 			},
 			{
-				StartTreeAction.create("REST", REST),
-				StartTreeAction.create("MEMOIRS", MEMOIRS),
+				Action.builder().name(REST_B).key(REST).location(Location.CHARACTER).build(),
+				Action.builder().name(MEMOIRS_B).key(MEMOIRS).location(Location.CHARACTER).build()
 			}
-
 				};
-				return WrappAction.create("Menu", chatId, actualGameCharacter.getMenu(), pool).replyButtons();
+				return Act.builder()
+						.name(MENU_B)
+						.text(characters.actual.info())
+						.action(PoolActions.builder()
+								.actionsPool(pool)
+								.replyButtons()
+								.build())
+						.returnTo(START_B)
+						.build();
 	}
 
-	private Action rollsMenu()
+	private Act rollsMenu()
 	{
-		String name = "ROLLS";
-		return BotAction.create(name, rolls, true, false, rollsText, new String[][] {
-			{"D4","D6","D8","D10"},
-			{"D12","D20","D100"},
-			{"RETURN TO MENU"}
-		}).replyButtons().setMediator();
+		return Act.builder()
+				.name(ROLLS_B)
+				.text(rollsText)
+				.action(Action.builder()
+						.location(Location.BOT)
+						.key(rolls)
+						.buttons(new String[][] {
+							{"D4","D6","D8","D10"},
+							{"D12","D20","D100"},
+							{RETURN_TO_MENU}})
+						.replyButtons()
+						.mediator()
+						.build())
+				.build();
 	}
 
-	private Action rollsMenu(BotAction action)
+	private Act compleatRoll(Action action)
 	{
-		if(action.getAnswer().equals("RETURN TO MENU"))
+		String answer = action.getAnswers()[0];
+		if(answer.equals(RETURN_TO_MENU))
 		{
 			return menu();
 		}
 		else
 		{
-		String text = Formalizer.formalize(action.getAnswer());
-		
-		return BotAction.create("EndTree", NO_ANSWER, true, false, text, null);
+			String text = Formalizer.formalize(answer);
+
+			return Act.builder()
+					.name("DeadEnd")
+					.text(text)
+					.build();
 		}
 	}
 
-	private Action apruveHp(BotAction action)
+	static GameTable create(long id) 
 	{
-		String name;
-		String text;
-		if(action.getAnswer().contains("Stable"))
-		{
-			getActualGameCharacter().getHp().grow(Dice.stableStartHp(getActualGameCharacter()));
-			name = "finishCreatingHero";
-			text = "Congratulations, you are ready for adventure.";
-			relocateClouds();
-			return BotAction.create(name, toMenu, true, false, text , new String[][]{{"Let's go"}});
-		}
-		else if(action.getAnswer().contains("Random"))
-		{
-			getActualGameCharacter().getHp().grow(Dice.randomStartHp(getActualGameCharacter()));
-			name = "finishCreatingHero";
-			text = "Congratulations, you are ready for adventure.";
-			relocateClouds();
-			return BotAction.create(name, toMenu, true, false, text, new String[][]{{"Let's go"}});
-		}
-		else
-		{
-			Pattern pat = Pattern.compile(keyNumber);
-			Matcher matcher = pat.matcher(action.getAnswer());
-			int hp = 0;
-			while (matcher.find()) 
-			{
-				hp = ((Integer) Integer.parseInt(matcher.group()));
-			}
-
-			if(hp <= 0)
-			{
-				hp = Dice.stableStartHp(getActualGameCharacter());
-				getActualGameCharacter().getHp().grow(Dice.stableStartHp(getActualGameCharacter()));
-				name = "finishCreatingHero";
-				text = "Nice try... I see U very smart, but you will get stable " + hp + " HP. You are ready for adventure.";
-				relocateClouds();
-				return BotAction.create(name, toMenu, true, false ,text , new String[][]{{"Let's go"}});
-
-			}
-			else
-			{
-				getActualGameCharacter().getHp().grow(hp);
-				name = "finishCreatingHero";
-				text = "Congratulations, you are ready for adventure.";
-				relocateClouds();
-				return BotAction.create(name, toMenu, true, false ,text , new String[][]{{"Let's go"}});
-
-			}
-
-		}
-	}
-
-	private Action apruveStats(BotAction action) 
-	{
-
-		List<Integer> stats = new ArrayList<>();
-		Pattern pat = Pattern.compile(keyNumber);
-		Matcher matcher = pat.matcher(action.getAnswer());
-		while (matcher.find()) 
-		{
-			stats.add((Integer) Integer.parseInt(matcher.group()));
-		}
-
-		String name = "apruveStats";
-		String text;
-
-		if(stats.size() != 6)
-		{
-
-			text = "Instructions not followed, please try again. Make sure there are 6 values.\r\n"
-					+ "Examples:\r\n"
-					+ " 11, 12, 13, 14, 15, 16 \r\n"
-					+ " str 11 dex 12 con 13 int 14 wis 15 cha 16 ";
-
-			return BotAction.create(name, 0 , true, true, text, null);
-
-		}
-		else
-		{
-			getActualGameCharacter().setMyStat(stats.get(0), stats.get(1), stats.get(2), stats.get(3), stats.get(4), stats.get(5));
-			getActualGameCharacter().addMemoirs("My start rolled stats: " + stats.get(0) + " " + stats.get(1) + " " + 
-					stats.get(2) + " " + stats.get(3) + " " + stats.get(4) + " " + stats.get(5));
-			int stableHp = Dice.stableStartHp(getActualGameCharacter());
-			String[][] nextStep = {{"Stable " + stableHp, "Random ***"}};
-			text = "How much HP does your character have?\r\n"
-					+ "\r\n"
-					+ "You can choose stable or random HP count \r\n"
-					+ "\r\n"
-					+ "If you agreed with the game master on a different amount of HP, send its value. (Write the amount of HP)";
-
-			return BotAction.create(name, hp , true, true, text, nextStep);
-		}
-	}
-
-	ControlPanel getControlPanel() 
-	{
-		return controlPanel;
-	}
-
-	static GameTable create(Message message) 
-	{
-		GameTable gameTable = new GameTable();
-		gameTable.clouds = new ArrayList<>();
-		gameTable.setChatId(message.getChatId());
-		gameTable.getScript().up(BotAction.create(message.getChatId()+"", message.getChatId() , true, false, null, null));	
+		GameTable gameTable = new GameTable(id);
+		gameTable.scriptMachine = new ScriptMachine();
+		gameTable.cloudMachine = new CloudMachine();
+		gameTable.controlPanel = new ControlPanel(gameTable.characters);
 		return gameTable;
 
 	}
 
-	Map<String, CharacterDnd> getSavedCharacter()
+}
+
+class CloudMachine implements ButtonName
+{
+	private Clouds clouds;
+
+	void eliminate(String actName)
 	{
-		return savedCharacter;
+		Act target = null;
+		for(Act act: clouds.cloudsWorked)
+		{
+			if(act.name.equals(actName))
+			{
+				target = act;
+				clouds.trash.addAll(act.end());
+				break;
+			}
+		}
+		if(target != null)
+		{
+		clouds.cloudsWorked.remove(target);
+		}
 	}
-
-	public void save() 
+	
+	BaseAction compleat(String actName, String callback)
 	{
-		savedCharacter.put(getActualGameCharacter().getName(), getActualGameCharacter());
+		for(Act act: clouds.cloudsWorked)
+		{
+			if(act.name.equals(actName))
+			{
+				return act.action.continueAction(callback);
+			}
+		}
+		return null;
 	}
 
-	public void delete(String name) 
+	public Clouds getClouds() 
 	{
-		savedCharacter.remove(name);
+		return clouds;
 	}
 
-	public ActMachine getScript() {
-		return script;
-	}
-
-	public long getChatId() 
+	public void setClouds(Clouds clouds) 
 	{
-		return chatId;
+		this.clouds = clouds;
 	}
 
-	public void setChatId(long chatId) 
+
+}
+
+class ScriptMachine
+{
+	Script script;
+
+	boolean targetByName(String actName)
 	{
-		this.chatId = chatId;
+		for(Act act: script.mainTree)
+		{
+			if(act.name.equals(actName))
+			{
+				script.target = act;
+				return true;
+			}
+		}
+		return false;
 	}
-
-	public CharacterDnd getActualGameCharacter() 
+	
+	public void initialize(Script script) 
 	{
-		return actualGameCharacter;
+		this.script = script;
+		if(this.script.target == null)
+		{
+			this.script.target = script.mainTree.get(script.mainTree.size()-1);
+		}
 	}
 
-	public void setActualGameCharacter(CharacterDnd actualGameCharacter) 
+	void cleanTarget()
 	{
-		this.actualGameCharacter = actualGameCharacter;
+		script.trash.addAll(script.target.end());
 	}
 
+	boolean targetByText(String text)
+	{
+		return findMediator() || findReply(text);
+	}
+
+	private boolean findReply(String string)
+	{
+
+		for(int i = script.mainTree.size() - 1; i > 0; i--)
+		{
+			if(script.mainTree.get(i).hasReply(string))
+			{
+					script.target = script.mainTree.get(i);
+					return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean findMediator()
+	{
+		if(script.mainTree.get(script.mainTree.size() - 1).hasMediator())
+		{
+			script.target = script.mainTree.get(script.mainTree.size() - 1);
+			return true;
+		}
+		else if(script.mainTree.size() > 1 && 
+				script.mainTree.get(script.mainTree.size() - 2).hasMediator())
+		{
+			script.target = script.mainTree.get(script.mainTree.size() -2);
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	void toScript(Act act)
+	{		
+		toTarget();
+		if(act.hasBack())
+		{
+			targetByName(act.returnTarget);
+			toTarget();
+		}
+		
+		if(targetByName(act.name))
+		{ 
+			targetPrevios();
+			toTarget();
+		}
+		up(act);
+	}
+
+	void targetPrevios()
+	{
+		for(int i = 1; i < script.mainTree.size(); i++)
+		{
+			if(script.mainTree.get(i).equals(script.target))
+			{
+				script.target = script.mainTree.get(i - 1);
+				return;
+			}
+		}
+	}
+
+	void toTarget()
+	{
+		for(int i = 0; i < script.mainTree.size(); i++)
+		{
+			if(script.mainTree.get(i).name.equals(script.target.name))
+			{
+				for(int j = script.mainTree.size() - 1; j > i; j--)
+				{
+					script.trash.addAll(script.mainTree.get(j).end());
+					script.mainTree.remove(j);
+				}
+			}
+		}
+	}
+	
+	BaseAction continueTarget(String string)
+	{
+		if(script.target instanceof ArrayActs)
+		{
+			ArrayActs target = (ArrayActs) script.target;
+			return target.pool[0].action.continueAction(string);
+		}
+		else
+		{
+			return script.target.action.continueAction(string);
+		}
+	}
+
+	void up(Act act)
+	{
+		this.script.mainTree.add(act);
+		this.script.target = act;
+	}
 }
